@@ -4,13 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.kern.inventor.tools</groupId>
+    <groupId>cn.kerninventor.tools</groupId>
     <artifactId>tools</artifactId>
     <version>1.0-RELEASE</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>file-format</module>
+        <module>poibox</module>
     </modules>
 
 

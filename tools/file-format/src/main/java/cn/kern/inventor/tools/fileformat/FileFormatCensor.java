@@ -15,20 +15,25 @@ import java.io.InputStream;
  * @Author Kern
  * @Date 2019/10/22 16:53
  */
-public final class FileFormatCensor extends FormatChecker {
+public final class FileFormatCensor extends CheckResult {
 
     protected FileFormatCensor() {
     }
 
-    public static FormatChecker check(FileFormatEnum formatEnum, InputStream stream) {
+    public static CheckResult check(InputStream stream, FileFormatEnum... fileFormatEnums) {
         String header = notBlank(getFileHeader(stream));
-        Boolean isPass = matchHeader(header, formatEnum);
-        return new FormatChecker(isPass, getTargetFileFormatWhenUnpass(isPass, header), formatEnum);
+        Boolean isPass = matchHeader(header, fileFormatEnums);
+        return new CheckResult(isPass, getTargetFileFormatWhenUnpass(isPass, header), fileFormatEnums);
     }
 
-    public static void checkE(FileFormatEnum fileFormatEnum, InputStream stream) {
-        if (!check(fileFormatEnum, stream).isPass())
-            throw new FileFormatException(FileFormatErrorEnum.FORMAT_ERROR_MSG.getMsg());
+    public static void checkE(InputStream stream, FileFormatEnum... fileFormatEnums) {
+        checkE(stream, FileFormatErrorEnum.FORMAT_ERROR_MSG.getMsg(), fileFormatEnums);
+    }
+
+    public static void checkE(InputStream stream, String errorMsg, FileFormatEnum... fileFormatEnums) {
+        if (check(stream, fileFormatEnums).unPass()){
+            throw new FileFormatException(errorMsg);
+        }
     }
 
     public static String getFileHeader(InputStream stream) {
@@ -72,9 +77,11 @@ public final class FileFormatCensor extends FormatChecker {
         return header;
     }
 
-    private static boolean matchHeader(String header, FileFormatEnum formatEnum){
-        if (header.contains(formatEnum.getHeader())){
-            return true;
+    private static boolean matchHeader(String header, FileFormatEnum... fileFormatEnums){
+        for (FileFormatEnum fileFormatEnum : fileFormatEnums){
+            if (header.contains(fileFormatEnum.getHeader())){
+                return true;
+            }
         }
         return false;
     }

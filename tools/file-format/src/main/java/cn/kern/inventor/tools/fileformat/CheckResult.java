@@ -12,20 +12,20 @@ import java.io.InputStream;
  * @Author Kern
  * @Date 2019/10/22 18:57
  */
-public class FormatChecker {
+public class CheckResult {
 
     private boolean pass;
 
     private FileFormatEnum targetFileFormat;
 
-    private FileFormatEnum correctFormat;
+    private FileFormatEnum[] correctFormats;
 
-    protected FormatChecker() {
+    protected CheckResult() {
     }
-    protected FormatChecker(boolean pass, FileFormatEnum targetFileFormat, FileFormatEnum correctFormat) {
+    protected CheckResult(boolean pass, FileFormatEnum targetFileFormat, FileFormatEnum[] correctFormats) {
         this.pass = pass;
         this.targetFileFormat = targetFileFormat;
-        this.correctFormat = correctFormat;
+        this.correctFormats = correctFormats;
     }
 
     public boolean isPass() {
@@ -36,8 +36,8 @@ public class FormatChecker {
         return !pass;
     }
 
-    public FileFormatEnum getCorrectFormat() {
-        return correctFormat;
+    public FileFormatEnum[] getCorrectFormats() {
+        return correctFormats;
     }
 
     public FileFormatEnum getTargetFileFormat() {
