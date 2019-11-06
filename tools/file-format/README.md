@@ -11,8 +11,8 @@ FormatChecker checker = FileFormatCensor.check(FileFormatEnum.PNG, stream);
 该方法在校验通过时将什么也不发生，校验不通过时将抛出一个默认的异常
 FileFormatCensor.checkE(FileFormatEnum.JPEG, stream);
 
-Exception in thread "main" cn.kern.inventor.tools.fileformat.exception.FileFormatException: 文件格式错误!
-	at cn.kern.inventor.tools.fileformat.FileFormatCensor.checkE(FileFormatCensor.java:31)
+Exception in thread "main" FileFormatException: 文件格式错误!
+	at FileFormatCensor.checkE(FileFormatCensor.java:31)
 	at cn.kern.inventor.tools.fileformat.Test.main(Test.java:22)
 
 
