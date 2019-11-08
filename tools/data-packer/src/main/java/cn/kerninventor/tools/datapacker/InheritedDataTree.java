@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.dataplanter;
+package cn.kerninventor.tools.datapacker;
 
 import com.alibaba.fastjson.annotation.JSONField;
 

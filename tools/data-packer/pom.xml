@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.kerninventor</groupId>
-    <artifactId>data-planter</artifactId>
+    <artifactId>data-packer</artifactId>
     <version>1.0-RELEASE</version>
 
     <properties>

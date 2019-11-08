@@ -12,7 +12,7 @@
     <modules>
         <module>file-format</module>
         <module>poibox</module>
-        <module>data-planter</module>
+        <module>data-packer</module>
     </modules>
 
 
