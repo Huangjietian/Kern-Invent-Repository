@@ -13,6 +13,7 @@
         <module>file-format</module>
         <module>poibox</module>
         <module>data-packer</module>
+        <module>data-diagramer</module>
     </modules>
 
 
