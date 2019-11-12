@@ -30,14 +30,6 @@ public class TestBody implements ToTreeDiagramAble<TestBody, Integer> {
     }
     private Integer id;
     private Integer pid;
-    @Override
-    public Integer getPrimaryKey() {
-        return id;
-    }
-    @Override
-    public Integer getParentKey() {
-        return pid;
-    }
 
     public Integer getId() {
         return id;
@@ -53,6 +45,15 @@ public class TestBody implements ToTreeDiagramAble<TestBody, Integer> {
 
     public void setPid(Integer pid) {
         this.pid = pid;
+    }
+
+    @Override
+    public Integer getPrimaryKey() {
+        return id;
+    }
+    @Override
+    public Integer getParentKey() {
+        return pid;
     }
 
     @Override
