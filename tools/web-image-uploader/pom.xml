@@ -5,9 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.kerninventor</groupId>
-    <artifactId>tools</artifactId>
+    <artifactId>web-image-uploader</artifactId>
     <version>1.0-RELEASE</version>
-    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -18,27 +17,17 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
 
-    <modules>
-        <module>file-format</module>
-        <module>poibox</module>
-        <module>data-packer</module>
-        <module>data-diagramer</module>
-        <module>web-image-uploader</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.1.10.RELEASE</version>
+        </dependency>
 
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <!--        以下配置和properties块中的效果一致，properties中的配置是该配置的简单写法-->
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>utf-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
+    </dependencies>
 </project>
