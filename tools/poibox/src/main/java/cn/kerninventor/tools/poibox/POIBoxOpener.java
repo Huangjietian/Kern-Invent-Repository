@@ -13,7 +13,7 @@ import java.io.*;
  * @Author Kern
  * @Date 2019/10/29 14:18
  */
-public class POIBoxOpener {
+public final class POIBoxOpener {
 
     public static POIBox open(InputStream source) throws IOException, InvalidFormatException {
         FileFormatCensor.checkE(source, "不支持的文件格式, File format error, upload xls file or xlsx file please", FileFormatEnum.XLSX_EXCEL, FileFormatEnum.XLS_EXCEL);

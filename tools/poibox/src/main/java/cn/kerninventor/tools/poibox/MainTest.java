@@ -42,13 +42,13 @@ public class MainTest{
                 .setFillPattern(StylerElements.FillPattern.SOLID_FOREGROUND)
                 .setFont(poiBox.fonter().reset().setFontName("宋体").setBold(true).setFontSize(12).setUnderline(FonterElements.UnderLine.DOUBLE).get())
                 .get());
-        poiBox.styler().putInStyle("表头风格", poiBox.styler().commonHeadLine(null));
-        poiBox.styler().putInStyle("正文风格", poiBox.styler().commonTextPart(null));
+        poiBox.styler().putInStyle("表头风格", poiBox.styler().usualHeadLine(null));
+        poiBox.styler().putInStyle("正文风格", poiBox.styler().usualTextPart(null));
 
         poiBox.layouter()
                 .mergedOneColumn(poiBox.working().createSheet(), 1, 1, 10)//合并该sheet页的一个区域
                 .setContent("大标题")//对该区域赋值
-                .setMergeRangeStyle(poiBox.styler().commonHeadLine(30));//对该区域设置风格
+                .setMergeRangeStyle(poiBox.styler().usualHeadLine(30));//对该区域设置风格
 
         System.out.println(POIGadget.TransferExcelColumnIndex(17));
     }

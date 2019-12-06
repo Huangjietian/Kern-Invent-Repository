@@ -7,7 +7,7 @@ package cn.kerninventor.tools.poibox.enums;
  * @Author Kern
  * @Date 2019/10/29 20:03
  */
-public class FonterElements {
+public final class FonterElements {
 
     /**
      * 字体颜色

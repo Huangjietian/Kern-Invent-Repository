@@ -132,20 +132,20 @@ public interface POIStyler {
      * @param fontSize
      * @return
      */
-    CellStyle commonHeadLine(Integer fontSize);
+    CellStyle usualHeadLine(Integer fontSize);
 
     /**
      * 常见的表头格式
      * @param fontSize
      * @return
      */
-    CellStyle commonTableHeader(Integer fontSize);
+    CellStyle usualTableHeader(Integer fontSize);
 
     /**
      * 常见的正文格式
      * @param fontSize
      * @return
      */
-    CellStyle commonTextPart(Integer fontSize);
+    CellStyle usualTextPart(Integer fontSize);
 
 }

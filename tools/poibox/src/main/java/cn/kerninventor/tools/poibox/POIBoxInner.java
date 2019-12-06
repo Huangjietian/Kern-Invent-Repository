@@ -20,7 +20,7 @@ import java.io.InputStream;
  * @Author Kern
  * @Date 2019/10/29 14:16
  */
-public class POIBoxInner implements POIBox {
+public final class POIBoxInner implements POIBox {
 
     private Workbook workbook;
 
@@ -42,10 +42,9 @@ public class POIBoxInner implements POIBox {
     }
 
     private void init(){
-
         styler = new POIStylerInner(this);
         fonter = new POIFonterInner(this);
-        layouter = new POILayouterInner();
+        layouter = new POILayouterInner(this);
     }
 
 

@@ -2,8 +2,6 @@ package cn.kerninventor.tools.data.diagramer.test;
 
 import cn.kerninventor.tools.data.diagramer.DataDiagramer;
 import cn.kerninventor.tools.data.diagramer.ToTreeDiagramAble;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

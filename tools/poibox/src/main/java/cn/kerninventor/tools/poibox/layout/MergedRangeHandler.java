@@ -14,7 +14,7 @@ import java.util.Date;
  * @Author Kern
  * @Date 2019/10/30 17:51
  */
-public class MergedRangeHandler {
+public final class MergedRangeHandler {
 
     private Sheet sheet;
 

@@ -15,7 +15,7 @@ import java.util.Objects;
  * @Author Kern
  * @Date 2019/10/29 19:53
  */
-public class POIFonterInner extends POICreator implements POIFonter {
+public final class POIFonterInner extends POICreator implements POIFonter {
 
     private Font font;
 

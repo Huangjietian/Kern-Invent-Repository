@@ -16,7 +16,7 @@ import java.util.Objects;
  * @Author Kern
  * @Date 2019/10/29 17:25
  */
-public class POIStylerInner extends POICreator implements POIStyler {
+public final class POIStylerInner extends POICreator implements POIStyler {
 
     private CellStyle cellStyle;
     HashMap<String, CellStyle> styleBox = new HashMap<>();
@@ -188,7 +188,7 @@ public class POIStylerInner extends POICreator implements POIStyler {
     }
 
     @Override
-    public CellStyle commonHeadLine(Integer fontSize) {
+    public CellStyle usualHeadLine(Integer fontSize) {
         return new POIStylerInner(getParent())
                 .setWholeCenter()
                 .setBorder(StylerElements.CellDirection.SURROUND, StylerElements.BorderLine.BORDER_THIN)
@@ -202,7 +202,7 @@ public class POIStylerInner extends POICreator implements POIStyler {
     }
 
     @Override
-    public CellStyle commonTableHeader(Integer fontSize) {
+    public CellStyle usualTableHeader(Integer fontSize) {
         return new POIStylerInner(getParent())
                 .setWholeCenter()
                 .setBorder(StylerElements.CellDirection.SURROUND, StylerElements.BorderLine.BORDER_THIN)
@@ -211,7 +211,7 @@ public class POIStylerInner extends POICreator implements POIStyler {
     }
 
     @Override
-    public CellStyle commonTextPart(Integer fontSize) {
+    public CellStyle usualTextPart(Integer fontSize) {
         return new POIStylerInner(getParent())
                 .setWholeCenter()
                 .setWrapText(true)

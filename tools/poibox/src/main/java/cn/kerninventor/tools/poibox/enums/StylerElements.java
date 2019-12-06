@@ -7,7 +7,7 @@ package cn.kerninventor.tools.poibox.enums;
  * @Author Kern
  * @Date 2019/10/29 16:57
  */
-public class StylerElements {
+public final class StylerElements {
 
     /**
      * 填充样式
