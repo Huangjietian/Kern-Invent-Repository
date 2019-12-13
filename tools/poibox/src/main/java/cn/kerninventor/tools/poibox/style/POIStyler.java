@@ -1,9 +1,8 @@
 package cn.kerninventor.tools.poibox.style;
 
-import cn.kerninventor.tools.poibox.enums.StylerElements;
+import cn.kerninventor.tools.poibox.elements.StylerElements;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.*;
 
 /**
  * @Title: POIStyleBox
@@ -38,53 +37,53 @@ public interface POIStyler {
     /**
      * 设置边框，颜色默认黑色
      * @param cellDirection  方位参数
-     * @param borderLine  边框线参数
+     * @param borderStyle  边框线参数
      * @return
      */
-    POIStyler setBorder(StylerElements.CellDirection cellDirection, StylerElements.BorderLine borderLine);
+    POIStyler setBorder(StylerElements.CellDirection cellDirection, BorderStyle borderStyle);
 
     /**
      * 设置边框颜色
      * @param cellDirection
-     * @param color
+     * @param hssfColorPredefined
      * @return
      */
-    POIStyler setBorderColor(StylerElements.CellDirection cellDirection, HSSFColor color);
+    POIStyler setBorderColor(StylerElements.CellDirection cellDirection, HSSFColor.HSSFColorPredefined hssfColorPredefined);
 
     /**
      * 设置单元格背景填充样式：全铺，斑点，砖块等
-     * @param fillPattern
+     * @param fillPatternType
      * @return
      */
-    POIStyler setFillPattern(StylerElements.FillPattern fillPattern);
+    POIStyler setFillPattern(FillPatternType fillPatternType);
 
     /**
      * 设置填充背景颜色，需要在此之后设置背景填充样式，否则无效
-     * @param color
+     * @param hssfColorPredefined
      * @return
      */
-    POIStyler setFillBackgroundColor(HSSFColor color);
+    POIStyler setFillBackgroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined);
 
     /**
      * 设置填充前景颜色，需要在此之后设置背景填充样式，否则无效
-     * @param color
+     * @param hssfColorPredefined
      * @return
      */
-    POIStyler setFillForegroundColor(HSSFColor color);
+    POIStyler setFillForegroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined);
 
     /**
      * 设置上下居中
-     * @param vertical
+     * @param verticalAlignment
      * @return
      */
-    POIStyler setVerticalAlignment(StylerElements.Vertical vertical);
+    POIStyler setVerticalAlignment(VerticalAlignment verticalAlignment);
 
     /**
      * 设置左右居中
-     * @param align
+     * @param horizontalAlignment
      * @return
      */
-    POIStyler setAlignment(StylerElements.Align align);
+    POIStyler setAlignment(HorizontalAlignment horizontalAlignment);
 
     /**
      * 设置完全居中

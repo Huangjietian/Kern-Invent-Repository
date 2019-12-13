@@ -13,15 +13,15 @@ import org.apache.poi.ss.util.CellRangeAddress;
 public interface POILayouter {
 
     /**
-     * 合并单元格
+     * merge cells
      * @param sheet
      * @param cellRangeAddress
      * @return
      */
-    MergedRangeHandler mergedRegion(Sheet sheet, CellRangeAddress cellRangeAddress);
+    MergedRange mergedRegion(Sheet sheet, CellRangeAddress cellRangeAddress);
 
     /**
-     * 合并单元格
+     * merge cells
      * @param sheet
      * @param topRow
      * @param footRow
@@ -29,32 +29,47 @@ public interface POILayouter {
      * @param rightColumn
      * @return
      */
-    MergedRangeHandler mergedRegion(Sheet sheet, int topRow, int footRow, int leftColumn, int rightColumn);
+    MergedRange mergedRegion(Sheet sheet, int topRow, int footRow, int leftColumn, int rightColumn);
 
     /**
-     * 合并单元格
+     * merge cells on one row
      * @param sheet
      * @param row
      * @param leftColumn
      * @param rightColumn
      * @return
      */
-    MergedRangeHandler mergedOneRow(Sheet sheet, int row, int leftColumn, int rightColumn);
+    MergedRange mergedOneRow(Sheet sheet, int row, int leftColumn, int rightColumn);
 
     /**
-     * 合并单元格
+     * merge cells on one column
      * @param sheet
      * @param column
      * @param topRow
      * @param footRow
      * @return
      */
-    MergedRangeHandler mergedOneColumn(Sheet sheet, int column, int topRow, int footRow);
+    MergedRange mergedOneColumn(Sheet sheet, int column, int topRow, int footRow);
 
     /**
-     * 按照内容合并单元格
+     * merge cells on one column by content
      * @param sheet
      * @param column
      */
     void mergedByColumnContent(Sheet sheet, int column);
+
+    /**
+     * merge cells on one row by content
+     * @param sheet
+     * @param row
+     */
+    void mergedByRowContent(Sheet sheet, int row);
+
+    /**
+     * set cells size (height and width)
+     * @param sheet
+     * @param height
+     * @param width
+     */
+    void setCellsSize(Sheet sheet, Float height, Integer width);
 }

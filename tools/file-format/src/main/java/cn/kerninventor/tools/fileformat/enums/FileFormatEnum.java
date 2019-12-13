@@ -57,4 +57,11 @@ public enum FileFormatEnum {
         }
         return null;
     }
+
+    public static boolean isCorrectSuffix(FileFormatEnum fileFormatEnum, String path) {
+        if (path == null || "".equals(path.trim()) || !path.contains(".")){
+            return false;
+        }
+        return path.substring(path.lastIndexOf(".")).equals(fileFormatEnum.suffix);
+    }
 }

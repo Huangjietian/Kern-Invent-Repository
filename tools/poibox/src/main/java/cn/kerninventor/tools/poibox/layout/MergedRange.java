@@ -14,53 +14,55 @@ import java.util.Date;
  * @Author Kern
  * @Date 2019/10/30 17:51
  */
-public final class MergedRangeHandler {
+public final class MergedRange {
 
     private Sheet sheet;
 
     private CellRangeAddress range;
 
-    public MergedRangeHandler(Sheet sheet, CellRangeAddress range) {
+    public MergedRange(Sheet sheet, CellRangeAddress range) {
         this.sheet = sheet;
         this.range = range;
     }
 
-    public MergedRangeHandler setContent(double d) {
+    public MergedRange setMergeRangeContent(double d) {
         POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(d);
         return this;
     }
 
-    public MergedRangeHandler setContent(String s) {
+    public MergedRange setMergeRangeContent(String s) {
         POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(s);
         return this;
     }
 
-    public MergedRangeHandler setContent(boolean b) {
+    public MergedRange setMergeRangeContent(boolean b) {
         POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(b);
         return this;
     }
 
-    public MergedRangeHandler setContent(Date date) {
+    public MergedRange setMergeRangeContent(Date date) {
         POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(date);
         return this;
     }
 
-    public MergedRangeHandler setContent(Calendar calendar) {
+    public MergedRange setMergeRangeContent(Calendar calendar) {
         POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(calendar);
         return this;
     }
 
-    public MergedRangeHandler setContent(RichTextString richTextString) {
+    public MergedRange setMergeRangeContent(RichTextString richTextString) {
         POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(richTextString);
         return this;
     }
 
-    public MergedRangeHandler setMergeRangeStyle(CellStyle style) {
+    public MergedRange setMergeRangeStyle(CellStyle style) {
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.cloneStyleFrom(style);
         for (int rowIdx = range.getFirstRow() ; rowIdx <= range.getLastRow() ; rowIdx++ ) {
             Row row = POIGadget.getRowForce(sheet, rowIdx);
             for (int columnIdx = range.getFirstColumn() ; columnIdx <= range.getLastColumn() ; columnIdx++ ) {
                 Cell cell = POIGadget.getCellForce(row, columnIdx);
-                cell.setCellStyle(style);
+                cell.setCellStyle(cellStyle);
             }
         }
         return this;

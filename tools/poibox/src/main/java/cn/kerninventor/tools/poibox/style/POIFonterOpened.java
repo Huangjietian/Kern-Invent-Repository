@@ -1,7 +1,8 @@
 package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.enums.FonterElements;
+import cn.kerninventor.tools.poibox.POIBoxLinker;
+import cn.kerninventor.tools.poibox.elements.FonterElements;
 import org.apache.poi.ss.usermodel.Font;
 
 import java.util.HashMap;
@@ -15,13 +16,13 @@ import java.util.Objects;
  * @Author Kern
  * @Date 2019/10/29 19:53
  */
-public final class POIFonterInner extends POICreator implements POIFonter {
+public final class POIFonterOpened extends POIBoxLinker implements POIFonter {
 
     private Font font;
 
     HashMap<String, Font> fontBox = new HashMap<>();
 
-    public POIFonterInner(POIBox poiBox) {
+    public POIFonterOpened(POIBox poiBox) {
         super(poiBox);
         font = getParent().working().createFont();
         fontBox.put(DEFAULT_KEY, font);
@@ -68,14 +69,14 @@ public final class POIFonterInner extends POICreator implements POIFonter {
 
     @Override
     public Font putInFont(String primaryKey, Font font) {
-        fontBox.put(Objects.requireNonNull(primaryKey,"字体唯一标识不能为空, Font primary key cannot be null"),
-                Objects.requireNonNull(font, "字体不能为空, The font cannot be null"));
+        fontBox.put(Objects.requireNonNull(primaryKey,"Font primary key cannot be null"),
+                Objects.requireNonNull(font, " The font cannot be null"));
         return font;
     }
 
     @Override
     public Font putOutFont(String primaryKey) {
-        return Objects.requireNonNull(fontBox.get(primaryKey), "该唯一标识的字体不存在， The font for the primary key does not exist");
+        return Objects.requireNonNull(fontBox.get(primaryKey), "The font for the primary key does not exist");
     }
 
     @Override
@@ -110,11 +111,7 @@ public final class POIFonterInner extends POICreator implements POIFonter {
 
     @Override
     public POIFonter setBold(boolean bold) {
-        if (bold){
-            font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-        } else {
-            font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
-        }
+        font.setBold(bold);
         return this;
     }
 

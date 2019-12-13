@@ -1,6 +1,7 @@
-package cn.kerninventor.tools.poibox.style;
+package cn.kerninventor.tools.poibox;
 
-import cn.kerninventor.tools.poibox.POIBox;
+
+import java.io.Serializable;
 
 /**
  * @Title: POICreator
@@ -9,11 +10,13 @@ import cn.kerninventor.tools.poibox.POIBox;
  * @Author Kern
  * @Date 2019/10/29 19:55
  */
-public class POICreator {
+public class POIBoxLinker implements Serializable {
+
+    protected static final long serialVersionUID = 1L;
 
     private POIBox poiBox;
 
-    public POICreator(POIBox poiBox) {
+    public POIBoxLinker(POIBox poiBox) {
         this.poiBox = poiBox;
     }
 

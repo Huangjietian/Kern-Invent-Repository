@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.style;
 
-import cn.kerninventor.tools.poibox.enums.FonterElements;
+import cn.kerninventor.tools.poibox.elements.FonterElements;
 import org.apache.poi.ss.usermodel.Font;
 
 /**

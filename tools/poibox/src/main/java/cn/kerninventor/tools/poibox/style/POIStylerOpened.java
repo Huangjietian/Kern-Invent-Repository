@@ -1,10 +1,10 @@
 package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.enums.StylerElements;
+import cn.kerninventor.tools.poibox.POIBoxLinker;
+import cn.kerninventor.tools.poibox.elements.StylerElements;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.*;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -16,12 +16,12 @@ import java.util.Objects;
  * @Author Kern
  * @Date 2019/10/29 17:25
  */
-public final class POIStylerInner extends POICreator implements POIStyler {
+public final class POIStylerOpened extends POIBoxLinker implements POIStyler {
 
     private CellStyle cellStyle;
     HashMap<String, CellStyle> styleBox = new HashMap<>();
 
-    public POIStylerInner(POIBox poiBox) {
+    public POIStylerOpened(POIBox poiBox) {
         super(poiBox);
         cellStyle = getParent().working().createCellStyle();
         styleBox.put(POIStyler.DEFAULT_KEY, cellStyle);
@@ -51,14 +51,14 @@ public final class POIStylerInner extends POICreator implements POIStyler {
 
     @Override
     public CellStyle putInStyle(String key, CellStyle style) {
-        styleBox.put(Objects.requireNonNull(key, "风格标识不能为空，Style key cannot be null"),
-                Objects.requireNonNull(style, "风格不能为空，The style cannot be null"));
+        styleBox.put(Objects.requireNonNull(key, "Style key cannot be null"),
+                Objects.requireNonNull(style, "The style cannot be null"));
         return style;
     }
 
     @Override
     public CellStyle putOutStyle(String key) {
-        return Objects.requireNonNull(styleBox.get(key), "该标识的风格不存在，The style for the key does not exist");
+        return Objects.requireNonNull(styleBox.get(key), "The style for the key does not exist");
     }
 
     @Override
@@ -68,25 +68,25 @@ public final class POIStylerInner extends POICreator implements POIStyler {
     }
 
     @Override
-    public POIStyler setBorder(StylerElements.CellDirection direction, StylerElements.BorderLine borderLine) {
+    public POIStyler setBorder(StylerElements.CellDirection direction, BorderStyle borderStyle) {
         switch (direction){
             case TOP :
-                cellStyle.setBorderTop(borderLine.getIndex());
+                cellStyle.setBorderTop(borderStyle);
                 break;
             case BOTTOM:
-                cellStyle.setBorderBottom(borderLine.getIndex());
+                cellStyle.setBorderBottom(borderStyle);
                 break;
             case LEFT:
-                cellStyle.setBorderLeft(borderLine.getIndex());
+                cellStyle.setBorderLeft(borderStyle);
                 break;
             case RIGHT:
-                cellStyle.setBorderRight(borderLine.getIndex());
+                cellStyle.setBorderRight(borderStyle);
                 break;
             case SURROUND:
-                cellStyle.setBorderTop(borderLine.getIndex());
-                cellStyle.setBorderBottom(borderLine.getIndex());
-                cellStyle.setBorderLeft(borderLine.getIndex());
-                cellStyle.setBorderRight(borderLine.getIndex());
+                cellStyle.setBorderTop(borderStyle);
+                cellStyle.setBorderBottom(borderStyle);
+                cellStyle.setBorderLeft(borderStyle);
+                cellStyle.setBorderRight(borderStyle);
                 break;
             default:
 
@@ -95,25 +95,25 @@ public final class POIStylerInner extends POICreator implements POIStyler {
     }
 
     @Override
-    public POIStyler setBorderColor(StylerElements.CellDirection direction, HSSFColor color) {
+    public POIStyler setBorderColor(StylerElements.CellDirection direction, HSSFColor.HSSFColorPredefined hssfColorPredefined) {
         switch (direction){
             case TOP :
-                cellStyle.setTopBorderColor(color.getIndex());
+                cellStyle.setTopBorderColor(hssfColorPredefined.getIndex());
                 break;
             case BOTTOM:
-                cellStyle.setBottomBorderColor(color.getIndex());
+                cellStyle.setBottomBorderColor(hssfColorPredefined.getIndex());
                 break;
             case LEFT:
-                cellStyle.setLeftBorderColor(color.getIndex());
+                cellStyle.setLeftBorderColor(hssfColorPredefined.getIndex());
                 break;
             case RIGHT:
-                cellStyle.setRightBorderColor(color.getIndex());
+                cellStyle.setRightBorderColor(hssfColorPredefined.getIndex());
                 break;
             case SURROUND:
-                cellStyle.setTopBorderColor(color.getIndex());
-                cellStyle.setBottomBorderColor(color.getIndex());
-                cellStyle.setLeftBorderColor(color.getIndex());
-                cellStyle.setRightBorderColor(color.getIndex());
+                cellStyle.setTopBorderColor(hssfColorPredefined.getIndex());
+                cellStyle.setBottomBorderColor(hssfColorPredefined.getIndex());
+                cellStyle.setLeftBorderColor(hssfColorPredefined.getIndex());
+                cellStyle.setRightBorderColor(hssfColorPredefined.getIndex());
                 break;
             default:
 
@@ -122,38 +122,38 @@ public final class POIStylerInner extends POICreator implements POIStyler {
     }
 
     @Override
-    public POIStyler setFillPattern(StylerElements.FillPattern fillPattern) {
-        cellStyle.setFillPattern(fillPattern.getIndex());
+    public POIStyler setFillPattern(FillPatternType fillPatternType) {
+        cellStyle.setFillPattern(fillPatternType);
         return this;
     }
 
     @Override
-    public POIStyler setFillBackgroundColor(HSSFColor color) {
-        cellStyle.setFillBackgroundColor(color.getIndex());
+    public POIStyler setFillBackgroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined) {
+        cellStyle.setFillBackgroundColor(hssfColorPredefined.getIndex());
         return this;
     }
 
     @Override
-    public POIStyler setFillForegroundColor(HSSFColor color) {
-        cellStyle.setFillForegroundColor(color.getIndex());
+    public POIStyler setFillForegroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined) {
+        cellStyle.setFillForegroundColor(hssfColorPredefined.getIndex());
         return this;
     }
 
     @Override
-    public POIStyler setVerticalAlignment(StylerElements.Vertical vertical) {
-        cellStyle.setVerticalAlignment(vertical.getIndex());
+    public POIStyler setVerticalAlignment(VerticalAlignment verticalAlignment) {
+        cellStyle.setVerticalAlignment(verticalAlignment);
         return this;
     }
 
     @Override
-    public POIStyler setAlignment(StylerElements.Align align) {
-        cellStyle.setAlignment(align.getIndex());
+    public POIStyler setAlignment(HorizontalAlignment horizontalAlignment) {
+        cellStyle.setAlignment(horizontalAlignment);
         return this;
     }
 
     @Override
     public POIStyler setWholeCenter() {
-        setVerticalAlignment(StylerElements.Vertical.VERTICAL_CENTER).setAlignment(StylerElements.Align.ALIGN_CENTER);
+        setVerticalAlignment(VerticalAlignment.CENTER).setAlignment(HorizontalAlignment.CENTER);
         return this;
     }
 
@@ -189,11 +189,12 @@ public final class POIStylerInner extends POICreator implements POIStyler {
 
     @Override
     public CellStyle usualHeadLine(Integer fontSize) {
-        return new POIStylerInner(getParent())
+        return new POIStylerOpened(getParent())
+                .reset()
                 .setWholeCenter()
-                .setBorder(StylerElements.CellDirection.SURROUND, StylerElements.BorderLine.BORDER_THIN)
+                .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.DOUBLE)
                 .setFont(
-                        new POIFonterInner(getParent())
+                        new POIFonterOpened(getParent())
                                 .setFontName(POIFonter.NAME_HEADER)
                                 .setFontSize(fontSize == null ? POIFonter.SIZE_HEADLINE : fontSize)
                                 .setBold(true)
@@ -203,20 +204,22 @@ public final class POIStylerInner extends POICreator implements POIStyler {
 
     @Override
     public CellStyle usualTableHeader(Integer fontSize) {
-        return new POIStylerInner(getParent())
+        return new POIStylerOpened(getParent())
+                .reset()
                 .setWholeCenter()
-                .setBorder(StylerElements.CellDirection.SURROUND, StylerElements.BorderLine.BORDER_THIN)
-                .setFont(new POIFonterInner(getParent()).newSimpleFont(POIFonter.NAME_HEADER, fontSize == null ? POIFonter.SIZE_TABLEHEADER : fontSize))
+                .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.THIN)
+                .setFont(new POIFonterOpened(getParent()).newSimpleFont(POIFonter.NAME_HEADER, fontSize == null ? POIFonter.SIZE_TABLEHEADER : fontSize))
                 .get();
     }
 
     @Override
     public CellStyle usualTextPart(Integer fontSize) {
-        return new POIStylerInner(getParent())
+        return new POIStylerOpened(getParent())
+                .reset()
                 .setWholeCenter()
                 .setWrapText(true)
-                .setBorder(StylerElements.CellDirection.SURROUND, StylerElements.BorderLine.BORDER_THIN)
-                .setFont(new POIFonterInner(getParent()).newSimpleFont(POIFonter.NAME_TEXTPART, fontSize == null ? POIFonter.SIZE_TEXTPART : fontSize))
+                .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.THIN)
+                .setFont(new POIFonterOpened(getParent()).newSimpleFont(POIFonter.NAME_TEXTPART, fontSize == null ? POIFonter.SIZE_TEXTPART : fontSize))
                 .get();
     }
 }
