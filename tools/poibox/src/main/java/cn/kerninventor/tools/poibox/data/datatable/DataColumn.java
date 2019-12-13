@@ -21,16 +21,22 @@ public class DataColumn implements Comparable<DataColumn> {
 
     private int columnWidth;
 
+    private String regEx;
+
+    private String dateFormat;
+
     private DataColumn() {
     }
 
-    public static DataColumn getInstance(Field field, String fieldName, String titleName, int columnIndex, int columnWidth) {
+    public static DataColumn getInstance(Field field, String fieldName, String titleName, int columnIndex, int columnWidth, String regEx, String dateFormat) {
         DataColumn dataColumn = new DataColumn();
         dataColumn.field = field;
         dataColumn.fieldName = fieldName;
         dataColumn.titleName = titleName;
         dataColumn.columnIndex = columnIndex;
         dataColumn.columnWidth = columnWidth;
+        dataColumn.regEx = regEx;
+        dataColumn.dateFormat = dateFormat;
         return dataColumn;
     }
 
@@ -56,6 +62,14 @@ public class DataColumn implements Comparable<DataColumn> {
 
     public int getColumnWidth() {
         return columnWidth;
+    }
+
+    public String getRegEx() {
+        return regEx;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
     }
 
     @Override

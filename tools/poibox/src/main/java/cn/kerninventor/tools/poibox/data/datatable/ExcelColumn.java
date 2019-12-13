@@ -35,4 +35,16 @@ public @interface ExcelColumn {
      */
     int columnWidth() default -1;
 
+    /**
+     * Regular validation at data upload.
+     * @return
+     */
+    String regEx() default "";
+
+    /**
+     * Conversion pattern for Date type fields.
+     * @return
+     */
+    String dateFormat() default "YYYY-MM-dd";
+
 }

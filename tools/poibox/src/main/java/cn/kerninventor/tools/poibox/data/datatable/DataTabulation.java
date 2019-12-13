@@ -135,7 +135,9 @@ public class DataTabulation {
                             field.getName(),
                             excelColumn.value(),
                             index++,
-                            excelColumn.columnWidth()
+                            excelColumn.columnWidth(),
+                            excelColumn.regEx(),
+                            excelColumn.dateFormat()
                     );
                     dataColumns.add(dataColumn);
                 }
@@ -150,7 +152,9 @@ public class DataTabulation {
                             field.getName(),
                             excelColumn.value(),
                             excelColumn.columnIndex(),
-                            excelColumn.columnWidth()
+                            excelColumn.columnWidth(),
+                            excelColumn.regEx(),
+                            excelColumn.dateFormat()
                     );
                     dataColumns.add(dataColumn);
                 }
