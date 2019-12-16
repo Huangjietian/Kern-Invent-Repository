@@ -66,6 +66,16 @@ public final class POIBoxOpened implements POIBox {
     }
 
     @Override
+    public POIDataBox dataBoxAt(int index) {
+        POIDataBox dataBox = dataBoxMap.get("index_" + index);
+        if (dataBox == null){
+            dataBox = new POIDataBoxOpened(this, index);
+            dataBoxMap.put("index_" + index, dataBox);
+        }
+        return dataBox;
+    }
+
+    @Override
     public POIStyler styler() {
         return styler;
     }
@@ -87,6 +97,11 @@ public final class POIBoxOpened implements POIBox {
     public void reset() {
         styler.reset();
         fonter.reset();
+        dataBoxMap.values().forEach(
+                e -> {
+                    workbook.removeSheetAt(workbook.getSheetIndex(e.getSheet()));
+                }
+        );
     }
 
     @Override

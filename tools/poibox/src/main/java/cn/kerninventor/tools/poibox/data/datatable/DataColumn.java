@@ -79,7 +79,7 @@ public class DataColumn implements Comparable<DataColumn> {
         } else if (columnIndex < o.columnIndex){
             return -1;
         } else {
-            throw new IllegalArgumentException("duplicate index!");
+            throw new IllegalArgumentException("Column definition duplicate index! Field: " + o.getFieldName());
         }
     }
 

@@ -1,9 +1,18 @@
 package cn.kerninventor.tools.poibox.data.datatable;
 
+import cn.kerninventor.tools.poibox.POIGadget;
+import cn.kerninventor.tools.poibox.data.POIDataBoxOpened;
+import cn.kerninventor.tools.poibox.data.datatable.validation.DataValidHandler;
+import cn.kerninventor.tools.poibox.data.datatable.validation.ExcelValid;
 import cn.kerninventor.tools.poibox.style.TabulationStyle;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @Title: DataTable
@@ -165,6 +174,62 @@ public class DataTabulation {
         }
         Collections.sort(dataColumns);
         return dataColumns;
+    }
+
+    public void tabulateTo(POIDataBoxOpened poiDataBox) {
+        Sheet sheet = poiDataBox.getSheet();
+        final int[] currentRowIndex = {getStartRowIndex()};
+        String headline = getHeadline();
+        /**
+         * draw headline
+         */
+        if (headline != null && !"".equals(headline)){
+            CellRangeAddress range = new CellRangeAddress(currentRowIndex[0], currentRowIndex[0], getFirstColumnIndex(), getLastColumnIndex());
+            poiDataBox.getParent().layouter()
+                    .mergedRegion(sheet, range)
+                    .setMergeRangeContent(headline)
+                    .setMergeRangeStyle(getTabulationStyle()
+                            .getHeadLineStyle());
+            currentRowIndex[0]++;
+        }
+
+        /**
+         * draw table
+         */
+        Row row = sheet.createRow(currentRowIndex[0]);
+        CellStyle cellStyle = poiDataBox.getParent().working().createCellStyle();
+        getColumnsContainer().forEach( e -> {
+            Cell cell = row.createCell(e.getColumnIndex());
+            //type
+            cell.setCellType(CellType.STRING);
+            //value
+            cell.setCellValue(e.getTitleName());
+            //style
+            cellStyle.cloneStyleFrom(getTabulationStyle().getTableHeadStyle());
+            cell.setCellStyle(cellStyle);
+            //column width
+            if (e.getColumnWidth() == -1 ){
+                sheet.setColumnWidth(e.getColumnIndex(), POIGadget.getCellWidthByStringContent(e.getTitleName()));
+            } else {
+                sheet.setColumnWidth(e.getColumnIndex(), e.getColumnWidth());
+            }
+
+            Annotation[] annotations = e.getField().getDeclaredAnnotations();
+            for (Annotation annotation : annotations){
+                if (annotation.annotationType().isAnnotationPresent(ExcelValid.class)){
+                    DataValidHandler handler = DataValidHandler.getInstance(annotation);
+                    handler.addValidation(this, e, sheet, annotation);
+                }
+            }
+
+            for (int i = currentRowIndex[0] + 1 ; i < getTextRowNum() + currentRowIndex[0] + 1 ; i ++){
+                Row textRow = POIGadget.getRowForce(sheet, i);
+                Cell textCell = textRow.createCell(e.getColumnIndex());
+                cellStyle.cloneStyleFrom(getTabulationStyle().getTextStyle());
+                textCell.setCellStyle(cellStyle);
+            }
+        });
+
     }
 
 

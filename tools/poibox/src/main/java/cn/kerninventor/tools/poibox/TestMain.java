@@ -23,6 +23,8 @@ public class TestMain {
     public static void main(String[] args) throws IOException, InvalidFormatException {
         POIBox poiBox = POIBox.open();
 
+
+
         CellStyle style = poiBox.styler().reset()
                 .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.THIN)
                 .setWholeCenter()

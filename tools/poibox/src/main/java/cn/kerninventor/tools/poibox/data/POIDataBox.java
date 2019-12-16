@@ -1,5 +1,7 @@
 package cn.kerninventor.tools.poibox.data;
 
+import org.apache.poi.ss.usermodel.Sheet;
+
 /**
  * @Title: POIDataProcessor
  * @ProjectName tools
@@ -10,6 +12,10 @@ package cn.kerninventor.tools.poibox.data;
  */
 public interface POIDataBox {
 
+
+    Sheet getSheet();
+
+    int getSheetIndex();
 
     void template(Class clazz);
 }

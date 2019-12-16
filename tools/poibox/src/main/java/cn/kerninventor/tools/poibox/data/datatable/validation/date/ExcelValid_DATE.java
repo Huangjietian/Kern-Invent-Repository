@@ -22,17 +22,19 @@ import java.lang.annotation.Target;
 public @interface ExcelValid_DATE {
 
     /**
-     * date format pattern
+     * date format pattern.
+     * Because of the poi bug, You will now not be able to support defining pattern, only setting the time in the year/month/day format
      */
-    String pattern() default "YYYY-MM-dd";
+//    @Deprecated
+//    String pattern() default "YYYY-MM-DD";
 
     /**
-     * required date value depend on compareType
+     * required date value depend on compareType, you can set "now()" to represent the current time.
      */
     String date() default "1900-01-01";
 
     /**
-     * this date attribution is optional, whether it makes sense or not depends on compareType attribution.
+     * this date attribution is optional, whether it makes sense or not depends on compareType attribution. you can set "now()" to represent the current time.
      */
     String optionalDate() default "";
 

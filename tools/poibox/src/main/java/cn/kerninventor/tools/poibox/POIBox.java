@@ -21,6 +21,7 @@ import java.io.*;
  */
 public interface POIBox {
     POIDataBox dataBox(String sheetName);
+    POIDataBox dataBoxAt(int index);
     POIStyler styler();
     POIFonter fonter();
     POILayouter layouter();
@@ -28,8 +29,6 @@ public interface POIBox {
     void reset();
     void wirteToHttp(HttpServletResponse response, String fileName) throws IOException;
     void wirteToLocal(String fileFullName) throws IOException;
-
-
 
     static POIBox open(InputStream source) throws IOException, InvalidFormatException {
         int available = 0;
