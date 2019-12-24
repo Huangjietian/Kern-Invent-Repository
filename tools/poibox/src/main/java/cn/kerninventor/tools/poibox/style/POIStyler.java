@@ -147,4 +147,9 @@ public interface POIStyler {
      */
     CellStyle usualTextPart(Integer fontSize);
 
+    static CellStyle cloneStyle(Workbook workbook, CellStyle sourceStyle) {
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.cloneStyleFrom(sourceStyle);
+        return cellStyle;
+    }
 }

@@ -2,11 +2,10 @@ package cn.kerninventor.tools.poibox;
 
 import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulation;
-import cn.kerninventor.tools.poibox.data.datatable.validation.CompareType;
-import cn.kerninventor.tools.poibox.data.datatable.validation.array.ExcelValid_ARRAY;
-import cn.kerninventor.tools.poibox.data.datatable.validation.date.ExcelValid_DATE;
-import cn.kerninventor.tools.poibox.data.datatable.validation.integer.ExcelValid_INT;
-import cn.kerninventor.tools.poibox.data.datatable.validation.textLength.ExcelValid_TEXTLENGTH;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.CompareType;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.ExcelValid_ARRAY;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.date.ExcelValid_DATE;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.textLength.ExcelValid_TEXTLENGTH;
 
 import java.util.Date;
 
@@ -18,7 +17,7 @@ import java.util.Date;
  * @Date 2019/12/13 18:05
  * @Description: TODO
  */
-@ExcelTabulation(headline = "测试页", style = TestStyle.class)
+@ExcelTabulation(headline = "人员信息导入模板", style = TestStyle.class)
 public class Test {
 
     @ExcelColumn("姓名")
@@ -30,15 +29,23 @@ public class Test {
 
     @ExcelValid_ARRAY(dictionary = TestGender.class)
     @ExcelColumn("性别")
-    private int sex;
+    private Integer sex;
 
     @ExcelValid_DATE(compareType = CompareType.LT, date = "now()")
     @ExcelColumn("出生日期")
     private Date birthDay;
 
-    @ExcelValid_INT(0)
     @ExcelColumn("身高")
     private Integer height;
+
+    @ExcelColumn("体重")
+    private Integer weight;
+
+    @ExcelValid_ARRAY(dictionary = TestCountryService.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
+    @ExcelColumn("国籍")
+    private Long nationalityId;
+
+
 
 }
 

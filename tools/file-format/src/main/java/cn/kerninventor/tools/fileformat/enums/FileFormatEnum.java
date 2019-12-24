@@ -58,10 +58,16 @@ public enum FileFormatEnum {
         return null;
     }
 
-    public static boolean isCorrectSuffix(FileFormatEnum fileFormatEnum, String path) {
+    public static boolean isCorrectSuffix(String path, FileFormatEnum... fileFormatEnums) {
         if (path == null || "".equals(path.trim()) || !path.contains(".")){
             return false;
         }
-        return path.substring(path.lastIndexOf(".")).equals(fileFormatEnum.suffix);
+        boolean isCorrect = false;
+        for (FileFormatEnum fileFormatEnum : fileFormatEnums){
+            if (path.substring(path.lastIndexOf(".")).equals(fileFormatEnum.suffix)){
+                isCorrect = true;
+            }
+        }
+        return isCorrect;
     }
 }

@@ -2,7 +2,7 @@ package cn.kerninventor.tools.poibox.layout;
 
 import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.POIBoxLinker;
-import cn.kerninventor.tools.poibox.data.CellValuer;
+import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -56,7 +56,7 @@ public final class POILayouterOpened extends POIBoxLinker implements POILayouter
             Cell cell = row.getCell(column);
             if (cell != null){
                 int rowIndex = row.getRowNum();
-                Object value = CellValuer.getCellValue(cell);
+                Object value = CellValueUtil.getCellValue(cell);
                 CellRangeAddress address = map.get(value);
                 //diverse value , to merge already recorded and reset map.
                 if (address == null){
@@ -96,7 +96,7 @@ public final class POILayouterOpened extends POIBoxLinker implements POILayouter
         Map<Object, CellRangeAddress> map = new HashMap<>();
         for (Cell cell : mergedRow){
             int cellIndex = cell.getColumnIndex();
-            Object value = CellValuer.getCellValue(cell);
+            Object value = CellValueUtil.getCellValue(cell);
             CellRangeAddress address = map.get(value);
             //diverse value , to merge already recorded and reset map.
             if (address == null){

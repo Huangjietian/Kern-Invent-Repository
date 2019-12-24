@@ -24,7 +24,8 @@ public final class POIStylerOpened extends POIBoxLinker implements POIStyler {
     public POIStylerOpened(POIBox poiBox) {
         super(poiBox);
         cellStyle = getParent().working().createCellStyle();
-        styleBox.put(POIStyler.DEFAULT_KEY, cellStyle);
+        CellStyle defaultStyle = getParent().working().createCellStyle();
+        styleBox.put(POIStyler.DEFAULT_KEY, defaultStyle);
     }
 
     @Override
@@ -34,7 +35,9 @@ public final class POIStylerOpened extends POIBoxLinker implements POIStyler {
 
     @Override
     public CellStyle get() {
-        return cellStyle;
+        CellStyle style = getParent().working().createCellStyle();
+        style.cloneStyleFrom(this.cellStyle);
+        return style;
     }
 
     @Override
@@ -45,14 +48,15 @@ public final class POIStylerOpened extends POIBoxLinker implements POIStyler {
 
     @Override
     public POIStyler reset() {
-        this.cellStyle = styleBox.get(POIStyler.DEFAULT_KEY);
+        this.cellStyle.cloneStyleFrom(styleBox.get(POIStyler.DEFAULT_KEY));
         return this;
     }
 
     @Override
     public CellStyle putInStyle(String key, CellStyle style) {
-        styleBox.put(Objects.requireNonNull(key, "Style key cannot be null"),
-                Objects.requireNonNull(style, "The style cannot be null"));
+        CellStyle cellStyle = getParent().working().createCellStyle();
+        cellStyle.cloneStyleFrom(Objects.requireNonNull(style, "The style cannot be null"));
+        styleBox.put(Objects.requireNonNull(key, "Style key cannot be null"), cellStyle);
         return style;
     }
 
@@ -195,6 +199,7 @@ public final class POIStylerOpened extends POIBoxLinker implements POIStyler {
                 .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.DOUBLE)
                 .setFont(
                         new POIFonterOpened(getParent())
+                                .produce()
                                 .setFontName(POIFonter.NAME_HEADER)
                                 .setFontSize(fontSize == null ? POIFonter.SIZE_HEADLINE : fontSize)
                                 .setBold(true)

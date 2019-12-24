@@ -18,7 +18,7 @@ public class TestStyle extends TabulationStyle {
     @Override
     public CellStyle getHeadLineStyle() {
         defaultStyleHeadLine.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        defaultStyleHeadLine.setFillForegroundColor(HSSFColor.HSSFColorPredefined.GREEN.getIndex());
+        defaultStyleHeadLine.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_BLUE.getIndex());
         return defaultStyleHeadLine;
     }
 

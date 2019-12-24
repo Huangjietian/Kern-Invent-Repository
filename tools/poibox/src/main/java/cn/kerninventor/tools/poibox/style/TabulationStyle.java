@@ -42,6 +42,6 @@ public abstract class TabulationStyle {
     }
 
     protected POIFonter getFonter() {
-        return fonter.reset();
+        return fonter;
     }
 }

@@ -1,9 +1,6 @@
 package cn.kerninventor.tools.poibox;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
 import java.io.UnsupportedEncodingException;
 
@@ -41,13 +38,22 @@ public class POIGadget {
         return row.getCell(cellIdx) == null ? row.createCell(cellIdx) : row.getCell(cellIdx);
     }
 
-    public static int getCellWidthByStringContent(String str) {
+    public static int getCellWidthByStringContent(String str, int fontHeightInPoints) {
+        final int DFHIP = 12;
         int size = 0;
         try {
             size = str.getBytes(DEFAULT_CHARSET).length;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return ((int)(size + 2 + 0.72)) * 256;
+        return (int) (getExcelCellWidth(size + 2) * fontHeightInPoints / DFHIP);
+    }
+
+    public static int getExcelCellWidth(int characterSize) {
+        return (int) ((characterSize + 0.82) * 256);
+    }
+
+    public static Font getFontFrom(CellStyle cellStyle, Workbook workbook) {
+        return workbook.getFontAt(cellStyle.getFontIndexAsInt());
     }
 }

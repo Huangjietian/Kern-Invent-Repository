@@ -18,31 +18,17 @@ import java.util.Objects;
  */
 public final class POIFonterOpened extends POIBoxLinker implements POIFonter {
 
-    private Font font;
-
     HashMap<String, Font> fontBox = new HashMap<>();
 
     public POIFonterOpened(POIBox poiBox) {
         super(poiBox);
-        font = getParent().working().createFont();
-        fontBox.put(DEFAULT_KEY, font);
+        fontBox.put(DEFAULT_KEY, getParent().working().createFont());
     }
 
     @Override
-    public Font get() {
-        return font;
-    }
-
-    @Override
-    public POIFonter set(Font font) {
-        this.font = font;
-        return this;
-    }
-
-    @Override
-    public POIFonter reset() {
-        this.font = fontBox.get(DEFAULT_KEY);
-        return this;
+    public POIFontProducer produce() {
+        Font font = getParent().working().createFont();
+        return new POIFontProducer(font);
     }
 
     @Override
@@ -79,51 +65,5 @@ public final class POIFonterOpened extends POIBoxLinker implements POIFonter {
         return Objects.requireNonNull(fontBox.get(primaryKey), "The font for the primary key does not exist");
     }
 
-    @Override
-    public POIFonter setFontName(String fontName) {
-        font.setFontName(fontName);
-        return this;
-    }
 
-    @Override
-    public POIFonter setFontSize(int fontSize) {
-        font.setFontHeightInPoints((short) fontSize);
-        return this;
-    }
-
-    @Override
-    public POIFonter setFontColor(FonterElements.FontColor fontColor) {
-        font.setColor(fontColor.getIndex());
-        return this;
-    }
-
-    @Override
-    public POIFonter setItalic(boolean italic) {
-        font.setItalic(italic);
-        return this;
-    }
-
-    @Override
-    public POIFonter setStrikeout(boolean strikeout) {
-        font.setStrikeout(strikeout);
-        return this;
-    }
-
-    @Override
-    public POIFonter setBold(boolean bold) {
-        font.setBold(bold);
-        return this;
-    }
-
-    @Override
-    public POIFonter setUnderline(FonterElements.UnderLine underline) {
-        font.setUnderline(underline.getIndex());
-        return this;
-    }
-
-    @Override
-    public POIFonter setCharSet(FonterElements.Charset charSet) {
-        font.setCharSet(charSet.getIndex());
-        return this;
-    }
 }

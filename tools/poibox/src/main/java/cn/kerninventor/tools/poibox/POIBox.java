@@ -2,7 +2,7 @@ package cn.kerninventor.tools.poibox;
 
 import cn.kerninventor.tools.fileformat.FileFormatCensor;
 import cn.kerninventor.tools.fileformat.enums.FileFormatEnum;
-import cn.kerninventor.tools.poibox.data.POIDataBox;
+import cn.kerninventor.tools.poibox.data.POIDataProcessor;
 import cn.kerninventor.tools.poibox.layout.POILayouter;
 import cn.kerninventor.tools.poibox.style.POIFonter;
 import cn.kerninventor.tools.poibox.style.POIStyler;
@@ -20,8 +20,7 @@ import java.io.*;
  * @Date 2019/10/29 19:06
  */
 public interface POIBox {
-    POIDataBox dataBox(String sheetName);
-    POIDataBox dataBoxAt(int index);
+    POIDataProcessor dataProcessor();
     POIStyler styler();
     POIFonter fonter();
     POILayouter layouter();
