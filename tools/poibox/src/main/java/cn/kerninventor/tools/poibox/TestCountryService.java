@@ -16,6 +16,7 @@ import java.util.List;
 public class TestCountryService extends MetaViewDictionaryCover<TestCountryBO> {
     @Override
     public List<TestCountryBO> obtainData() {
+        //
         List<TestCountryBO> countries = new ArrayList<>();
         countries.add(new TestCountryBO(1L, "中国"));
         countries.add(new TestCountryBO(2L, "美国"));

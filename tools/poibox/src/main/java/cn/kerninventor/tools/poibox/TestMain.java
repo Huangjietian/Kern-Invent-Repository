@@ -20,51 +20,12 @@ import java.io.IOException;
 public class TestMain {
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
-        POIBox poiBox = POIBox.open();
-
-        CellStyle style = poiBox.styler().reset()
-                .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.THIN)
-                .setWholeCenter()
-                .setFillPattern(FillPatternType.SOLID_FOREGROUND)
-                .setFont(poiBox.fonter().produce().setFontName("黑体").setBold(true).setFontSize(20).setUnderline(FonterElements.UnderLine.DOUBLE).get())
-                .get();
-        poiBox.styler().putInStyle("title style", style);
-        style = poiBox.styler().putOutStyle("title style");
-
-        CellStyle style1 = poiBox.styler().putInStyle("表头风格", poiBox.styler().reset()
-                .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.THIN)
-                .setWholeCenter()
-                .setFillPattern(FillPatternType.SOLID_FOREGROUND)
-                .setFont(poiBox.fonter().produce().setFontName("黑体").setBold(true).setFontSize(20).setUnderline(FonterElements.UnderLine.DOUBLE).get())
-                .get());
-
-        poiBox.styler().putInStyle("正文风格", poiBox.styler().reset()
-                .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.THIN)
-                .setWrapText(true)
-                .setWholeCenter()
-                .setFillPattern(FillPatternType.SOLID_FOREGROUND)
-                .setFont(poiBox.fonter().produce().setFontName("宋体").setBold(true).setFontSize(12).setUnderline(FonterElements.UnderLine.DOUBLE).get())
-                .get());
-        poiBox.styler().putInStyle("表头风格", poiBox.styler().usualHeadLine(null));
-        poiBox.styler().putInStyle("正文风格", poiBox.styler().usualTextPart(null));
-
-        poiBox.layouter()
-                .mergedOneColumn(poiBox.working().createSheet(), 1, 1, 10)//合并该sheet页的一个区域
-                .setMergeRangeContent("大标题")//对该区域赋值
-                .setMergeRangeStyle(poiBox.styler().usualHeadLine(30));//对该区域设置风格
-
-        //getFirstCellNum 指向 index  getLastCellNum 指向 数量
 
         POIBox myBox = POIBox.open();
         myBox.dataProcessor().templateTo("人员信息导入模板1", Test.class);
         myBox.dataProcessor().templateTo("人员信息导入模板2", Test.class);
-        myBox.wirteToLocal("C:\\Users\\kern\\Desktop\\人员信息导入模板.xlxs");
+        myBox.wirteToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板.xlxs");
 
-//        try {
-//            List<Test> list = myBox.dataProcessor().readDatasFrom("测试页面", Test.class);
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        }
     }
 }
 
