@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public abstract class AsynTaskExecutor <T> {
 
     public abstract Object customTask(T t) throws Exception;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW, timeout = 60)
     public TaskExecuteResult asynExecute(List<T> args) {
         if (args == null || args.size() == 0){
             return null;
@@ -35,9 +36,10 @@ public abstract class AsynTaskExecutor <T> {
         CountDownLatch branceCDL = new CountDownLatch(args.size());
         BlockingDeque<TaskExecuteResult> taskExecuteResults = new LinkedBlockingDeque<>(args.size());
         Rollback rollback = new Rollback(false);
-        args.forEach(t -> {
-            this.execute(mainCDL, branceCDL, taskExecuteResults, rollback, t);
-        });
+        for (T t : args){
+//            asynTaskExecutorBranches.execute(mainCDL,branceCDL,taskExecuteResults,rollback,this,t);
+            new Thread(new AsynTaskExecuteRunner(mainCDL,branceCDL,taskExecuteResults,rollback,this,t)).start();
+        }
         //等待分线程执行
         try {
             branceCDL.await();
@@ -61,41 +63,41 @@ public abstract class AsynTaskExecutor <T> {
         return executeResult;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, timeout = 30)
-    public void execute(CountDownLatch mainCDL,
-                           CountDownLatch branceCDL,
-                           BlockingDeque<TaskExecuteResult> taskExecuteResults,
-                           Rollback rollback,
-                           T t){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                TaskExecuteResult executeResult = new TaskExecuteResult();
-                try {
-                    executeResult.setInvokeReturn(customTask(t));
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                    executeResult.setError(true);
-                    executeResult.setExc(ex);
-                }
-                taskExecuteResults.add(executeResult);
-                //计数， 等待其他子线程执行官完毕
-                branceCDL.countDown();
-                //子线程执行完毕，等待主线程回调
-                try {
-                    mainCDL.await();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                if (rollback.getNeedRollback()){
-                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    System.out.println("事务回滚");
-                } else {
-                    System.out.println("事务提交");
-                }
-            }
-        }).start();
-    }
+//    @Transactional(timeout = 30)
+//    public void execute(CountDownLatch mainCDL,
+//                           CountDownLatch branceCDL,
+//                           BlockingDeque<TaskExecuteResult> taskExecuteResults,
+//                           Rollback rollback,
+//                           T t){
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                TaskExecuteResult executeResult = new TaskExecuteResult();
+//                try {
+//                    executeResult.setInvokeReturn(customTask(t));
+//                } catch (Exception ex) {
+//                    System.out.println(ex.getMessage());
+//                    executeResult.setError(true);
+//                    executeResult.setExc(ex);
+//                }
+//                taskExecuteResults.add(executeResult);
+//                //计数， 等待其他子线程执行官完毕
+//                branceCDL.countDown();
+//                //子线程执行完毕，等待主线程回调
+//                try {
+//                    mainCDL.await();
+//                } catch (InterruptedException ex) {
+//                    ex.printStackTrace();
+//                }
+//                if (rollback.getNeedRollback()){
+//                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//                    System.out.println("事务回滚");
+//                } else {
+//                    System.out.println("事务提交");
+//                }
+//            }
+//        }).start();
+//    }
 
 
 
