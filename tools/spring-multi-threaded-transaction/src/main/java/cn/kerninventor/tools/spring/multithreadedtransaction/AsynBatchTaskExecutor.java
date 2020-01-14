@@ -1,12 +1,10 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.CountDownLatch;
@@ -22,23 +20,23 @@ import java.util.stream.Collectors;
  * @Description TODO
  */
 @Component
-public abstract class AsynTaskExecutor <T> {
+public abstract class AsynBatchTaskExecutor<T> {
 
     public abstract Object customTask(T t) throws Exception;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, timeout = 60)
-    public TaskExecuteResult asynExecute(List<T> args) {
+    public AsynBatchTaskExecuteResult asynExecute(List<T> args) {
         if (args == null || args.size() == 0){
             return null;
         }
         TransactionAspectSupport.currentTransactionStatus();
         CountDownLatch mainCDL = new CountDownLatch(1);
         CountDownLatch branceCDL = new CountDownLatch(args.size());
-        BlockingDeque<TaskExecuteResult> taskExecuteResults = new LinkedBlockingDeque<>(args.size());
+        BlockingDeque<AsynBatchTaskExecuteResult> asynBatchTaskExecuteResults = new LinkedBlockingDeque<>(args.size());
         Rollback rollback = new Rollback(false);
         for (T t : args){
 //            asynTaskExecutorBranches.execute(mainCDL,branceCDL,taskExecuteResults,rollback,this,t);
-            new Thread(new AsynTaskExecuteRunner(mainCDL,branceCDL,taskExecuteResults,rollback,this,t)).start();
+//            new Thread(new AsynTaskExecuteRunner(mainCDL,branceCDL,taskExecuteResults,rollback,this,t)).start();
         }
         //等待分线程执行
         try {
@@ -46,19 +44,19 @@ public abstract class AsynTaskExecutor <T> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        taskExecuteResults.forEach( e -> {
+        asynBatchTaskExecuteResults.forEach(e -> {
             if (e.getError()){
                 rollback.setNeedRollback(true);
             }
         });
         //主线程执行完毕，回调分线程
         mainCDL.countDown();
-        TaskExecuteResult executeResult = new TaskExecuteResult();
+        AsynBatchTaskExecuteResult executeResult = new AsynBatchTaskExecuteResult();
         if (rollback.getNeedRollback()){
             executeResult.setError(true);
-            executeResult.setExcs(taskExecuteResults.stream().filter( e -> e.getExc() != null).map(e -> e.getExc()).collect(Collectors.toList()));
+            executeResult.setExcs(asynBatchTaskExecuteResults.stream().filter(e -> e.getExc() != null).map(e -> e.getExc()).collect(Collectors.toList()));
         } else {
-            executeResult.setInvokeReturns(taskExecuteResults.stream().filter( e -> e.getInvokeReturn() != null).map(e -> e.getInvokeReturn()).collect(Collectors.toList()));
+            executeResult.setInvokeReturns(asynBatchTaskExecuteResults.stream().filter(e -> e.getInvokeReturn() != null).map(e -> e.getInvokeReturn()).collect(Collectors.toList()));
         }
         return executeResult;
     }

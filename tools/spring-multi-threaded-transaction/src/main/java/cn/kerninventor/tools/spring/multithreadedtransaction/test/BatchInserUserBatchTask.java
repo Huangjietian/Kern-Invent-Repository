@@ -1,9 +1,7 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction.test;
 
-import cn.kerninventor.tools.spring.multithreadedtransaction.AsynTaskExecutor;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.kerninventor.tools.spring.multithreadedtransaction.AsynBatchTaskExecutor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.List;
  * @Description TODO
  */
 @Component
-public class BatchInserUserTask extends AsynTaskExecutor<List<User>> {
+public class BatchInserUserBatchTask extends AsynBatchTaskExecutor<List<User>> {
 
     @Resource
     private UserMapper userMapper;

@@ -10,17 +10,17 @@ package cn.kerninventor.tools.spring.multithreadedtransaction;
  */
 public class Rollback {
 
-    private Boolean needRollback;
+    private Boolean isRollback;
 
-    public Rollback(Boolean needRollback) {
-        this.needRollback = needRollback;
+    public Rollback(Boolean isRollback) {
+        this.isRollback = isRollback;
     }
 
-    public Boolean getNeedRollback() {
-        return needRollback;
+    public Boolean isRollback() {
+        return isRollback;
     }
 
-    public void setNeedRollback(Boolean needRollback) {
-        this.needRollback = needRollback;
+    public void setRollback(Boolean rollback) {
+        isRollback = rollback;
     }
 }

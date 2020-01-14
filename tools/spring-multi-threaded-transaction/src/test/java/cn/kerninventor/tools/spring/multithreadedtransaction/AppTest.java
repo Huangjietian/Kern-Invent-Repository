@@ -1,8 +1,7 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
-import cn.kerninventor.tools.spring.multithreadedtransaction.test.BatchInserUserTask;
+import cn.kerninventor.tools.spring.multithreadedtransaction.test.BatchInserUserBatchTask;
 import cn.kerninventor.tools.spring.multithreadedtransaction.test.User;
-import javafx.application.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ import java.util.List;
 public class AppTest {
 
     @Autowired
-    private BatchInserUserTask batchInserUserTask;
+    private BatchInserUserBatchTask batchInserUserTask;
     @Autowired
     private ApplicationContext applicationContext;
 

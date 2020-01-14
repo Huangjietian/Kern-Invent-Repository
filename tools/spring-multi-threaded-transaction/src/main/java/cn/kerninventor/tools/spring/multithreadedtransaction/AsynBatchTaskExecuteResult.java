@@ -10,24 +10,24 @@ import java.util.List;
  * @Date 2020/1/6 14:53
  * @Description TODO
  */
-public class TaskExecuteResult {
+public class AsynBatchTaskExecuteResult {
 
     private Boolean isError;
     private Exception exc;
     private List<Exception> excs;
     private List invokeReturns;
-    private Object invokeReturn;
+    private Object ntstatus;
 
-    public TaskExecuteResult() {
+    public AsynBatchTaskExecuteResult() {
         this.isError = false;
     }
 
-    public Boolean getError() {
+    public Boolean isError() {
         return isError;
     }
 
-    public void setError(Boolean error) {
-        isError = error;
+    public void setError() {
+        isError = true;
     }
 
     public Exception getExc() {
@@ -54,11 +54,5 @@ public class TaskExecuteResult {
         this.invokeReturns = invokeReturns;
     }
 
-    public Object getInvokeReturn() {
-        return invokeReturn;
-    }
 
-    public void setInvokeReturn(Object invokeReturn) {
-        this.invokeReturn = invokeReturn;
-    }
 }
