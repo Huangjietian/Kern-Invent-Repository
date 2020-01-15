@@ -1,10 +1,10 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.CountDownLatch;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class AysncTaskThread extends Thread {
 
-    private ApplicationContext applicationContext;
+    private DataSourceTransactionManager transactionManager;
     private CountDownLatch mainCDL;
     private CountDownLatch branceCDL;
     private BlockingDeque<ExecuteResult> executeResults;
@@ -26,8 +26,8 @@ public class AysncTaskThread extends Thread {
     private AysncTask aysncTask;
     private Object[] args;
 
-    AysncTaskThread(ApplicationContext applicationContext, CountDownLatch mainCDL, CountDownLatch branceCDL, BlockingDeque<ExecuteResult> executeResults, Rollback rollback, AysncTask aysncTask, Object[] args) {
-        this.applicationContext = applicationContext;
+    AysncTaskThread(DataSourceTransactionManager transactionManager, CountDownLatch mainCDL, CountDownLatch branceCDL, BlockingDeque<ExecuteResult> executeResults, Rollback rollback, AysncTask aysncTask, Object[] args) {
+        this.transactionManager = transactionManager;
         this.mainCDL = mainCDL;
         this.branceCDL = branceCDL;
         this.executeResults = executeResults;
@@ -37,8 +37,8 @@ public class AysncTaskThread extends Thread {
     }
 
     private void invoke(){
-        DataSourceTransactionManager transactionManager = applicationContext.getBean(DataSourceTransactionManager.class);
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setTimeout(30);
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
 
@@ -51,9 +51,7 @@ public class AysncTaskThread extends Thread {
             executeResult.setExc(ex);
         }
         executeResults.add(executeResult);
-        //计数， 等待其他子线程执行官完毕
         branceCDL.countDown();
-        //子线程执行完毕，等待主线程回调
         try {
             mainCDL.await();
         } catch (InterruptedException ex) {

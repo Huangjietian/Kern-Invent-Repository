@@ -2,8 +2,11 @@ package cn.kerninventor.tools.spring.multithreadedtransaction;
 
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -18,10 +21,12 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public class AysncTasksExecutor {
 
-    private ApplicationContext applicationContext;
+    private DataSourceTransactionManager transactionManager;
 
     public AysncTasksExecutor(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+        this.transactionManager = Objects.requireNonNull(
+                Objects.requireNonNull(applicationContext, "Invalid spring application context.").getBean(DataSourceTransactionManager.class),
+                "Can't found DataSourceTransactionManager from ApplicationContext.");
     }
 
     //添加任务 executor.addedittask(task1, args).addedittask(task2, args)...;
@@ -35,19 +40,22 @@ public class AysncTasksExecutor {
         if (asyncTaskCoverers.size() == 0){
             new LinkedBlockingDeque<>(0);
         }
-
         CountDownLatch mainCDL = new CountDownLatch(1);
         CountDownLatch branceCDL = new CountDownLatch(asyncTaskCoverers.size());
         BlockingDeque<ExecuteResult> executeResults = new LinkedBlockingDeque<>(asyncTaskCoverers.size());
         Rollback rollback = new Rollback(false);
-
         new ArrayList<AsyncTaskCoverer>(asyncTaskCoverers).forEach( e -> {
-                Thread thread = new AysncTaskThread(applicationContext,mainCDL, branceCDL, executeResults, rollback, e.getAysncTask(), e.getArgs());
-                thread.start();
+                new AysncTaskThread(
+                        transactionManager,
+                        mainCDL,
+                        branceCDL,
+                        executeResults,
+                        rollback,
+                        e.getAysncTask(),
+                        e.getArgs()
+                ).start();
            }
         );
-
-        //等待分线程执行
         try {
             branceCDL.await();
         } catch (InterruptedException e) {
@@ -58,7 +66,6 @@ public class AysncTasksExecutor {
                 rollback.setRollback(true);
             }
         });
-        //主线程执行完毕，回调分线程
         mainCDL.countDown();
         return executeResults;
     }
