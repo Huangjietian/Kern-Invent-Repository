@@ -78,14 +78,6 @@ public final class CellValueUtil extends POIGadget {
         }
     }
 
-
-
-
-    public static void main(String[] args) {
-        Date d = new Date();
-        System.out.println(String.valueOf(d));
-    }
-
     /**
      * This method transfer excel column index to english form.
      * @param cellIndex
