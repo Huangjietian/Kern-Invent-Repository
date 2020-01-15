@@ -31,7 +31,8 @@ public class AppTest {
     private SaveUserTask saveUserTask;
     @Autowired
     private ApplicationContext applicationContext;
-
+    @Resource
+    private UserMapper userMapper;
     @Test
     public void test() {
 
@@ -44,9 +45,14 @@ public class AppTest {
             for (int j = 0 ; j < 100 ; j ++){
                 users.add(new User());
             }
-//            users.add(users.get(0));
-            executor.addedittask(saveUserTask, users);
+            users.add(users.get(0));
+            executor.addedittask(arr -> {
+                userMapper.saveBatch((List<User>) arr[0]);
+                return null;
+            }, users);
         }
         BlockingDeque<ExecuteResult> blockingDeque = executor.execute();
     }
+
+
 }
