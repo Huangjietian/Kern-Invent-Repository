@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
-import java.util.List;
 
 /**
  * @Title TaskExecuteResult
@@ -10,15 +9,13 @@ import java.util.List;
  * @Date 2020/1/6 14:53
  * @Description TODO
  */
-public class AsynBatchTaskExecuteResult {
+public class ExecuteResult {
 
     private Boolean isError;
     private Exception exc;
-    private List<Exception> excs;
-    private List invokeReturns;
-    private Object ntstatus;
+    private Object result;
 
-    public AsynBatchTaskExecuteResult() {
+    public ExecuteResult() {
         this.isError = false;
     }
 
@@ -38,21 +35,11 @@ public class AsynBatchTaskExecuteResult {
         this.exc = exc;
     }
 
-    public List<Exception> getExcs() {
-        return excs;
+    public Object getResult() {
+        return result;
     }
 
-    public void setExcs(List<Exception> excs) {
-        this.excs = excs;
+    public void setResult(Object result) {
+        this.result = result;
     }
-
-    public List getInvokeReturns() {
-        return invokeReturns;
-    }
-
-    public void setInvokeReturns(List invokeReturns) {
-        this.invokeReturns = invokeReturns;
-    }
-
-
 }
