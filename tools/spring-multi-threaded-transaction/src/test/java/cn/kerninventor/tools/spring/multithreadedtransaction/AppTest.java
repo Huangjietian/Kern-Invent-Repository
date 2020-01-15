@@ -34,7 +34,7 @@ public class AppTest {
     @Resource
     private UserMapper userMapper;
     @Test
-    public void test() {
+    public void test1() {
 
         AysncTasksExecutor executor = new AysncTasksExecutor(applicationContext);
 
@@ -45,11 +45,17 @@ public class AppTest {
             for (int j = 0 ; j < 100 ; j ++){
                 users.add(new User());
             }
-            users.add(users.get(0));
-            executor.addedittask(arr -> {
-                userMapper.saveBatch((List<User>) arr[0]);
-                return null;
-            }, users);
+            //添加错误数据
+//            users.add(users.get(0));
+
+            //lambda表达式
+//            executor.addedittask(arr -> {
+//                userMapper.saveBatch((List<User>) arr[0]);
+//                return null;
+//            }, users);
+
+            //正常实现接口
+            executor.addedittask(saveUserTask, users);
         }
         BlockingDeque<ExecuteResult> blockingDeque = executor.execute();
     }
