@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @Description TODO
  */
 @FunctionalInterface
-public interface AysncTask {
+public interface AsyncTask {
 
-    @Transactional(timeout = 30)
     Object task(Object... args);
 
 }

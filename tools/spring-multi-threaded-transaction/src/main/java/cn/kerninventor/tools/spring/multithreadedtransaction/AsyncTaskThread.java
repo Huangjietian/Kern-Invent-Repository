@@ -16,23 +16,23 @@ import java.util.concurrent.CountDownLatch;
  * @Date 2020/1/15 14:21
  * @Description TODO
  */
-public class AysncTaskThread extends Thread {
+public class AsyncTaskThread extends Thread {
 
     private DataSourceTransactionManager transactionManager;
     private CountDownLatch mainCDL;
     private CountDownLatch branceCDL;
     private BlockingDeque<ExecuteResult> executeResults;
     private Rollback rollback;
-    private AysncTask aysncTask;
+    private AsyncTask asyncTask;
     private Object[] args;
 
-    AysncTaskThread(DataSourceTransactionManager transactionManager, CountDownLatch mainCDL, CountDownLatch branceCDL, BlockingDeque<ExecuteResult> executeResults, Rollback rollback, AysncTask aysncTask, Object[] args) {
+    AsyncTaskThread(DataSourceTransactionManager transactionManager, CountDownLatch mainCDL, CountDownLatch branceCDL, BlockingDeque<ExecuteResult> executeResults, Rollback rollback, AsyncTask asyncTask, Object[] args) {
         this.transactionManager = transactionManager;
         this.mainCDL = mainCDL;
         this.branceCDL = branceCDL;
         this.executeResults = executeResults;
         this.rollback = rollback;
-        this.aysncTask = aysncTask;
+        this.asyncTask = asyncTask;
         this.args = args;
     }
 
@@ -44,7 +44,7 @@ public class AysncTaskThread extends Thread {
 
         ExecuteResult executeResult = new ExecuteResult();
         try {
-            executeResult.setResult(aysncTask.task(args));
+            executeResult.setResult(asyncTask.task(args));
         } catch (Exception ex) {
             System.out.println("发生异常啦" + ex.getMessage());
             executeResult.setError();

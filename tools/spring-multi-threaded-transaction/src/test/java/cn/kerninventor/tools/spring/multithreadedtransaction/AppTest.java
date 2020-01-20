@@ -36,7 +36,7 @@ public class AppTest {
     @Test
     public void test1() {
 
-        AysncTasksExecutor executor = new AysncTasksExecutor(applicationContext);
+        AsyncTasksExecutor executor = new AsyncTasksExecutor(applicationContext);
 
         //假设我们把一个User数据进行分组
         List<List<User>> userLists = new ArrayList<>();
@@ -46,7 +46,7 @@ public class AppTest {
                 users.add(new User());
             }
             //添加错误数据
-//            users.add(users.get(0));
+            users.add(users.get(0));
 
             //lambda表达式
 //            executor.addedittask(arr -> {
@@ -57,7 +57,8 @@ public class AppTest {
             //正常实现接口
             executor.addedittask(saveUserTask, users);
         }
-        BlockingDeque<ExecuteResult> blockingDeque = executor.execute();
+        ExecuteResultBlockingDeque blockingDeque = executor.execute();
+        blockingDeque.throwingWhenError();
     }
 
 

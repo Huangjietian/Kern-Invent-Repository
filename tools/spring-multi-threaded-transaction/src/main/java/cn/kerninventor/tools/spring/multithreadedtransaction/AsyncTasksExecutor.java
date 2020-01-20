@@ -19,39 +19,48 @@ import java.util.concurrent.LinkedBlockingDeque;
  * @Date 2020/1/6 14:48
  * @Description TODO
  */
-public class AysncTasksExecutor {
+public class AsyncTasksExecutor {
 
     private DataSourceTransactionManager transactionManager;
 
-    public AysncTasksExecutor(ApplicationContext applicationContext) {
+    public AsyncTasksExecutor(ApplicationContext applicationContext) {
         this.transactionManager = Objects.requireNonNull(
                 Objects.requireNonNull(applicationContext, "Invalid spring application context.").getBean(DataSourceTransactionManager.class),
                 "Can't found DataSourceTransactionManager from ApplicationContext.");
     }
 
+    public AsyncTasksExecutor(DataSourceTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
     //添加任务 executor.addedittask(task1, args).addedittask(task2, args)...;
     private List<AsyncTaskCoverer> asyncTaskCoverers = new ArrayList<>();
-    public AysncTasksExecutor addedittask(AysncTask aysncTask, Object... args) {
-        asyncTaskCoverers.add(new AsyncTaskCoverer(aysncTask,args));
+    public AsyncTasksExecutor addedittask(AsyncTask asyncTask, Object... args) {
+        asyncTaskCoverers.add(new AsyncTaskCoverer(asyncTask,args));
         return this;
     }
 
-    public BlockingDeque<ExecuteResult> execute() {
+    public AsyncTasksExecutor cleanTasks(){
+        asyncTaskCoverers.clear();
+        return this;
+    }
+
+    public ExecuteResultBlockingDeque execute() {
         if (asyncTaskCoverers.size() == 0){
-            new LinkedBlockingDeque<>(0);
+            return new ExecuteResultBlockingDeque(new LinkedBlockingDeque<ExecuteResult>());
         }
         CountDownLatch mainCDL = new CountDownLatch(1);
         CountDownLatch branceCDL = new CountDownLatch(asyncTaskCoverers.size());
         BlockingDeque<ExecuteResult> executeResults = new LinkedBlockingDeque<>(asyncTaskCoverers.size());
         Rollback rollback = new Rollback(false);
         new ArrayList<AsyncTaskCoverer>(asyncTaskCoverers).forEach( e -> {
-                new AysncTaskThread(
+                new AsyncTaskThread(
                         transactionManager,
                         mainCDL,
                         branceCDL,
                         executeResults,
                         rollback,
-                        e.getAysncTask(),
+                        e.getAsyncTask(),
                         e.getArgs()
                 ).start();
            }
@@ -67,25 +76,25 @@ public class AysncTasksExecutor {
             }
         });
         mainCDL.countDown();
-        return executeResults;
+        return new ExecuteResultBlockingDeque(executeResults);
     }
 
     private class AsyncTaskCoverer {
 
-        private AysncTask aysncTask;
+        private AsyncTask asyncTask;
         private Object[] args;
 
-        public AsyncTaskCoverer(AysncTask aysncTask, Object[] args) {
-            this.aysncTask = aysncTask;
+        public AsyncTaskCoverer(AsyncTask asyncTask, Object[] args) {
+            this.asyncTask = asyncTask;
             this.args = args;
         }
 
-        public AysncTask getAysncTask() {
-            return aysncTask;
+        public AsyncTask getAsyncTask() {
+            return asyncTask;
         }
 
-        public void setAysncTask(AysncTask aysncTask) {
-            this.aysncTask = aysncTask;
+        public void setAsyncTask(AsyncTask asyncTask) {
+            this.asyncTask = asyncTask;
         }
 
         public Object[] getArgs() {

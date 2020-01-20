@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction.test;
 
-import cn.kerninventor.tools.spring.multithreadedtransaction.AysncTask;
+import cn.kerninventor.tools.spring.multithreadedtransaction.AsyncTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @Description TODO
  */
 @Service
-public class SaveUserTask implements AysncTask {
+public class SaveUserTask implements AsyncTask {
 
     @Autowired
     private UserMapper userMapper;
