@@ -2,7 +2,6 @@ package cn.kerninventor.tools.spring.multithreadedtransaction.test;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @Description TODO
  */
 @Mapper
-public interface UserMapper {
+public interface TestUserMapper {
 
-    void saveBatch(@Param("list") List<User> user);
+    void saveBatch(@Param("list") List<TestUserPO> testUserPO);
 }

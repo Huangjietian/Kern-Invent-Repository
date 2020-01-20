@@ -23,14 +23,24 @@ public class ExecuteResultBlockingDeque {
         this.executeResults = executeResults;
     }
 
+    public ExecuteResult getExecuteResult(int taskId) {
+        ExecuteResult executeResult = null;
+        for (ExecuteResult e : executeResults){
+            if (e.taskId == taskId)
+                executeResult = e;
+        }
+        return executeResult;
+    }
+
     public boolean hasError(){
         return executeResults.stream().anyMatch(e -> e.isError());
     }
 
-    public void throwingWhenError() throws RuntimeException {
+    public ExecuteResultBlockingDeque throwingWhenError() throws RuntimeException {
         if (hasError()){
             Set<String> execMsgSet = executeResults.stream().filter(e -> e.getExc() != null).map(e -> e.getExc().getMessage() + System.lineSeparator()).collect(Collectors.toSet());
             throw new RuntimeException(execMsgSet.toString());
         }
+        return this;
     }
 }

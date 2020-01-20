@@ -11,13 +11,15 @@ package cn.kerninventor.tools.spring.multithreadedtransaction;
  */
 public class ExecuteResult {
 
+    public ExecuteResult(int taskId) {
+        this.isError = false;
+        this.taskId = taskId;
+    }
+
+    int taskId;
     private Boolean isError;
     private Exception exc;
     private Object result;
-
-    public ExecuteResult() {
-        this.isError = false;
-    }
 
     public Boolean isError() {
         return isError;

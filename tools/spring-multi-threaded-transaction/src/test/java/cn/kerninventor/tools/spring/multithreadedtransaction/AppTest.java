@@ -1,8 +1,6 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
-import cn.kerninventor.tools.spring.multithreadedtransaction.test.SaveUserTask;
-import cn.kerninventor.tools.spring.multithreadedtransaction.test.User;
-import cn.kerninventor.tools.spring.multithreadedtransaction.test.UserMapper;
+import cn.kerninventor.tools.spring.multithreadedtransaction.test.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingDeque;
 
 /**
  * @Title AppTest
@@ -28,38 +25,38 @@ import java.util.concurrent.BlockingDeque;
 public class AppTest {
 
     @Autowired
-    private SaveUserTask saveUserTask;
-    @Autowired
     private ApplicationContext applicationContext;
     @Resource
-    private UserMapper userMapper;
+    private TestUserMapper testUserMapper;
     @Test
-    public void test1() {
-
-        AsyncTasksExecutor executor = new AsyncTasksExecutor(applicationContext);
+    public void testBatchInsert() {
+        AsyncTasksExecutor executor = new AsyncTasksExecutor(applicationContext, true);
 
         //假设我们把一个User数据进行分组
-        List<List<User>> userLists = new ArrayList<>();
         for (int i = 0 ; i < 10 ; i ++){
-            List<User> users = new ArrayList<>();
+            List<TestUserPO> users = new ArrayList<>();
             for (int j = 0 ; j < 100 ; j ++){
-                users.add(new User());
+                users.add(new TestUserPO());
             }
             //添加错误数据
-            users.add(users.get(0));
-
+//            users.add(users.get(0));
             //lambda表达式
-//            executor.addedittask(arr -> {
-//                userMapper.saveBatch((List<User>) arr[0]);
-//                return null;
-//            }, users);
-
-            //正常实现接口
-            executor.addedittask(saveUserTask, users);
+            executor.addedittask(null, arr -> { testUserMapper.saveBatch((List<TestUserPO>) arr[0]);return null; }, users);
         }
-        ExecuteResultBlockingDeque blockingDeque = executor.execute();
-        blockingDeque.throwingWhenError();
+        ExecuteResultBlockingDeque blockingDeque = executor.execute().throwingWhenError();
     }
 
-
+    @Resource
+    private TestAreaMapper areaMapper;
+    @Test
+    public void testDiffFind() {
+        AsyncTasksExecutor executor = new AsyncTasksExecutor(applicationContext, false);
+        executor.addedittask(1, e -> {return areaMapper.findTestCountries();}, null)
+                .addedittask(2, e -> {return areaMapper.findTestProvinces();}, null);
+        ExecuteResultBlockingDeque blockingDeque = executor.execute().throwingWhenError();
+        List<TestCountryPO> countries = (List<TestCountryPO>) blockingDeque.getExecuteResult(1).getResult();
+        System.out.println(countries.toString());
+        List<TestProvincePO> provinces = (List<TestProvincePO>) blockingDeque.getExecuteResult(2).getResult();
+        System.out.println(provinces.toString());
+    }
 }

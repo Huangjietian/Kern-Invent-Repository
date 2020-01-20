@@ -23,17 +23,16 @@ public class AsyncTaskThread extends Thread {
     private CountDownLatch branceCDL;
     private BlockingDeque<ExecuteResult> executeResults;
     private Rollback rollback;
-    private AsyncTask asyncTask;
-    private Object[] args;
+    private AsyncTaskCoverer taskCoverer;
 
-    AsyncTaskThread(DataSourceTransactionManager transactionManager, CountDownLatch mainCDL, CountDownLatch branceCDL, BlockingDeque<ExecuteResult> executeResults, Rollback rollback, AsyncTask asyncTask, Object[] args) {
+
+    public AsyncTaskThread(DataSourceTransactionManager transactionManager, CountDownLatch mainCDL, CountDownLatch branceCDL, BlockingDeque<ExecuteResult> executeResults, Rollback rollback, AsyncTaskCoverer taskCoverer) {
         this.transactionManager = transactionManager;
         this.mainCDL = mainCDL;
         this.branceCDL = branceCDL;
         this.executeResults = executeResults;
         this.rollback = rollback;
-        this.asyncTask = asyncTask;
-        this.args = args;
+        this.taskCoverer = taskCoverer;
     }
 
     private void invoke(){
@@ -42,11 +41,10 @@ public class AsyncTaskThread extends Thread {
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
 
-        ExecuteResult executeResult = new ExecuteResult();
+        ExecuteResult executeResult = new ExecuteResult(taskCoverer.getTaskId());
         try {
-            executeResult.setResult(asyncTask.task(args));
+            executeResult.setResult(taskCoverer.getAsyncTask().task(taskCoverer.getArgs()));
         } catch (Exception ex) {
-            System.out.println("发生异常啦" + ex.getMessage());
             executeResult.setError();
             executeResult.setExc(ex);
         }
@@ -58,10 +56,8 @@ public class AsyncTaskThread extends Thread {
             ex.printStackTrace();
         }
         if (rollback.isRollback()){
-            System.out.println("事务回滚");
             transactionManager.rollback(transactionStatus);
         } else {
-            System.out.println("事务提交");
             transactionManager.commit(transactionStatus);
         }
     }

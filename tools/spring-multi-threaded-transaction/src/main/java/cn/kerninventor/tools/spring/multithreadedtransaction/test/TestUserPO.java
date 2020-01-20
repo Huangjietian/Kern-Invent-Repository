@@ -8,11 +8,11 @@ package cn.kerninventor.tools.spring.multithreadedtransaction.test;
  * @Date 2020/1/10 15:29
  * @Description TODO
  */
-public class User {
+public class TestUserPO {
 
     private Long id;
 
-    public User() {
+    public TestUserPO() {
         id = System.nanoTime();
     }
 

@@ -22,6 +22,8 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class AsyncTasksExecutor {
 
     private DataSourceTransactionManager transactionManager;
+    private boolean automaticScheduling;
+    private int automaticTaskId;
 
     public AsyncTasksExecutor(ApplicationContext applicationContext) {
         this.transactionManager = Objects.requireNonNull(
@@ -29,19 +31,42 @@ public class AsyncTasksExecutor {
                 "Can't found DataSourceTransactionManager from ApplicationContext.");
     }
 
+    public AsyncTasksExecutor(ApplicationContext applicationContext, boolean automaticScheduling) {
+        this.transactionManager = Objects.requireNonNull(
+                Objects.requireNonNull(applicationContext, "Invalid spring application context.").getBean(DataSourceTransactionManager.class),
+                "Can't found DataSourceTransactionManager from ApplicationContext.");
+        this.automaticScheduling = automaticScheduling;
+    }
+
     public AsyncTasksExecutor(DataSourceTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
-    //添加任务 executor.addedittask(task1, args).addedittask(task2, args)...;
+    public AsyncTasksExecutor(DataSourceTransactionManager transactionManager, boolean automaticScheduling) {
+        this.transactionManager = transactionManager;
+        this.automaticScheduling = automaticScheduling;
+    }
+
+    //添加任务 executor.addedittask(1, task1, args).addedittask(2, task2, args)...;
     private List<AsyncTaskCoverer> asyncTaskCoverers = new ArrayList<>();
-    public AsyncTasksExecutor addedittask(AsyncTask asyncTask, Object... args) {
-        asyncTaskCoverers.add(new AsyncTaskCoverer(asyncTask,args));
+    public AsyncTasksExecutor addedittask(Integer taskId, AsyncTask asyncTask, Object... args) {
+        if (automaticScheduling){
+            asyncTaskCoverers.add(new AsyncTaskCoverer(automaticTaskId++, asyncTask, args));
+            return this;
+        }
+        if (taskId == null) {
+            throw new IllegalArgumentException("TaskId is required when tasks are not automatically sorted!");
+        }
+        if (asyncTaskCoverers.parallelStream().anyMatch(e -> taskId == e.getTaskId())){
+            throw new IllegalArgumentException("TaskId cannot be repeated when tasks are not automatically sorted");
+        }
+        asyncTaskCoverers.add(new AsyncTaskCoverer(taskId, asyncTask,args));
         return this;
     }
 
     public AsyncTasksExecutor cleanTasks(){
         asyncTaskCoverers.clear();
+        automaticTaskId = 0;
         return this;
     }
 
@@ -52,7 +77,7 @@ public class AsyncTasksExecutor {
         CountDownLatch mainCDL = new CountDownLatch(1);
         CountDownLatch branceCDL = new CountDownLatch(asyncTaskCoverers.size());
         BlockingDeque<ExecuteResult> executeResults = new LinkedBlockingDeque<>(asyncTaskCoverers.size());
-        Rollback rollback = new Rollback(false);
+        Rollback rollback = new Rollback();
         new ArrayList<AsyncTaskCoverer>(asyncTaskCoverers).forEach( e -> {
                 new AsyncTaskThread(
                         transactionManager,
@@ -60,8 +85,7 @@ public class AsyncTasksExecutor {
                         branceCDL,
                         executeResults,
                         rollback,
-                        e.getAsyncTask(),
-                        e.getArgs()
+                        e
                 ).start();
            }
         );
@@ -78,34 +102,6 @@ public class AsyncTasksExecutor {
         mainCDL.countDown();
         return new ExecuteResultBlockingDeque(executeResults);
     }
-
-    private class AsyncTaskCoverer {
-
-        private AsyncTask asyncTask;
-        private Object[] args;
-
-        public AsyncTaskCoverer(AsyncTask asyncTask, Object[] args) {
-            this.asyncTask = asyncTask;
-            this.args = args;
-        }
-
-        public AsyncTask getAsyncTask() {
-            return asyncTask;
-        }
-
-        public void setAsyncTask(AsyncTask asyncTask) {
-            this.asyncTask = asyncTask;
-        }
-
-        public Object[] getArgs() {
-            return args;
-        }
-
-        public void setArgs(Object[] args) {
-            this.args = args;
-        }
-    }
-
 
 
 }

@@ -12,8 +12,8 @@ public class Rollback {
 
     private Boolean isRollback;
 
-    public Rollback(Boolean isRollback) {
-        this.isRollback = isRollback;
+    public Rollback() {
+        this.isRollback = false;
     }
 
     public Boolean isRollback() {
