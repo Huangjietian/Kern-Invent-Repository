@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>cn.kerninventor</groupId>
-    <artifactId>spring-multi-threaded-transaction</artifactId>
+    <artifactId>spring-async-transaction-manager</artifactId>
     <version>1.0-RELEASE</version>
 
     <dependencies>

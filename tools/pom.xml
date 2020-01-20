@@ -25,7 +25,7 @@
         <module>data-diagramer</module>
         <module>web-image-uploader</module>
         <module>web-develop-utils</module>
-        <module>spring-multi-threaded-transaction</module>
+        <module>spring-async-transaction-manager</module>
     </modules>
 
 
