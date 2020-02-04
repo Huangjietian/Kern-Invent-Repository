@@ -26,6 +26,7 @@
         <module>web-image-uploader</module>
         <module>web-develop-utils</module>
         <module>spring-async-transaction-manager</module>
+        <module>spring-beanvalidation-catcher</module>
     </modules>
 
 

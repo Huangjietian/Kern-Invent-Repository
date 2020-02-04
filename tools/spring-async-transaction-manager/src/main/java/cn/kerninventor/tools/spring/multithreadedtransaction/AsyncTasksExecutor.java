@@ -49,7 +49,15 @@ public class AsyncTasksExecutor {
 
     //添加任务 executor.addedittask(1, task1, args).addedittask(2, task2, args)...;
     private List<AsyncTaskCoverer> asyncTaskCoverers = new ArrayList<>();
-    public AsyncTasksExecutor addedittask(Integer taskId, AsyncTask asyncTask, Object... args) {
+    public AsyncTasksExecutor addeditTask(AsyncTask asyncTask, Object... args) {
+        if (!automaticScheduling) {
+            throw new IllegalArgumentException("TaskId is required when tasks are not automatically sorted!");
+        }
+        asyncTaskCoverers.add(new AsyncTaskCoverer(automaticTaskId++, asyncTask, args));
+        return this;
+    }
+
+    public AsyncTasksExecutor addeditTask(Integer taskId, AsyncTask asyncTask, Object... args) {
         if (automaticScheduling){
             asyncTaskCoverers.add(new AsyncTaskCoverer(automaticTaskId++, asyncTask, args));
             return this;
