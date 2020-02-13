@@ -41,7 +41,7 @@ public class AppTest {
             //添加错误数据
 //            users.add(users.get(0));
             //lambda表达式
-            executor.addedittask(null, args -> { testUserMapper.saveBatch((List<TestUserPO>) args[0]);return null; }, users);
+            executor.addeditTask(args -> { testUserMapper.saveBatch((List<TestUserPO>) args[0]);return null; }, users);
         }
         ExecuteResultBlockingDeque blockingDeque = executor.execute().throwingWhenError();
     }
@@ -51,8 +51,8 @@ public class AppTest {
     @Test
     public void testDiffFind() {
         AsyncTasksExecutor executor = new AsyncTasksExecutor(applicationContext, false);
-        executor.addedittask(1, args ->  areaMapper.findTestCountries(), null)
-                .addedittask(2, args ->  areaMapper.findTestProvinces(), null);
+        executor.addeditTask(1, args ->  areaMapper.findTestCountries(), null)
+                .addeditTask(2, args ->  areaMapper.findTestProvinces(), null);
         ExecuteResultBlockingDeque blockingDeque = executor.execute().throwingWhenError();
         List<TestCountryPO> countries = (List<TestCountryPO>) blockingDeque.getExecuteResult(1).getResult();
         System.out.println("countries information : " + countries.toString());

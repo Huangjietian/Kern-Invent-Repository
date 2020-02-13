@@ -1,8 +1,5 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingDeque;
 import java.util.stream.Collectors;

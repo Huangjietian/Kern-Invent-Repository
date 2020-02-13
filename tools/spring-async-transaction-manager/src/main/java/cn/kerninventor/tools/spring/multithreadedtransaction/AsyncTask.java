@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.spring.multithreadedtransaction;
 
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Title AysnTask
