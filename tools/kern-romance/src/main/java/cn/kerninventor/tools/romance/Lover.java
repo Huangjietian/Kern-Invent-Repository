@@ -7,7 +7,6 @@ package cn.kerninventor.tools.romance;
 @FunctionalInterface
 public interface Lover {
 
-
     void love();
 
 
