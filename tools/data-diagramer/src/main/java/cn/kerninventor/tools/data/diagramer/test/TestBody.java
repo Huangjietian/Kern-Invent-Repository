@@ -81,5 +81,22 @@ public class TestBody implements ToTreeDiagramAble<TestBody, Integer> {
         List list0 = DataDiagramer.tree(list).getResult(null);
         List list1 = DataDiagramer.tree(list).getResult(new TestBody(2,1));
         System.out.println("   ===  ");
+
+        /**
+         * 完成一个组装层级结构的工具类
+         * 要求
+         * 1.层级结构的节点新增和删除要便捷，
+         * 2.返回的结构要更灵活，
+         * 3.支持从某个节点下拉去数据，
+         * 4.最终数据展示要符合一般前端需求
+         * 5.要能够排序，且能定义排序规则
+         * 6.一定程度的结构定制化入口
+         */
+        /**
+         * 实现
+         * 1。 继承  劣势：往往业务PO原本都有继承一个公用的超类，这导致需要新建一个信息类似的PO
+         * 2.  接口  劣势：实现接口感觉很傻逼
+         * 3.  注解  劣势：类型检查
+         */
     }
 }
