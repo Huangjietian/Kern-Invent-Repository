@@ -29,6 +29,8 @@ public interface Lover {
 
 
 
+
+
     /**
      * Love is an illusion，love is blind, love is not asking for return.
      *
