@@ -44,7 +44,7 @@ public abstract class Memory {
 
 
     /**
-     *  Human memory is a strange, imprecise thing.
+     *  Human's memory is a strange, imprecise thing.
      *
      *                                              --- Alan Clements
      *
