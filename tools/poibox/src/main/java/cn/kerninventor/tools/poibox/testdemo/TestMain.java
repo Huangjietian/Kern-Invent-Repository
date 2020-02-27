@@ -1,11 +1,7 @@
-package cn.kerninventor.tools.poibox;
+package cn.kerninventor.tools.poibox.testdemo;
 
-import cn.kerninventor.tools.poibox.elements.FonterElements;
-import cn.kerninventor.tools.poibox.elements.StylerElements;
+import cn.kerninventor.tools.poibox.POIBox;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
 
 import java.io.IOException;
 
@@ -24,6 +20,7 @@ public class TestMain {
         POIBox myBox = POIBox.open();
         myBox.dataProcessor().templateTo("人员信息导入模板1", Test.class);
         myBox.dataProcessor().templateTo("人员信息导入模板2", Test.class);
+
         myBox.wirteToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板.xlxs");
 
     }
