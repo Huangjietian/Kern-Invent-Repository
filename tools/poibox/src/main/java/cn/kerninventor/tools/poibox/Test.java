@@ -24,7 +24,7 @@ public class Test {
     private String name;
 
     @ExcelValid_TEXTLENGTH(compareType = CompareType.ET, value = 18, optionalVal = 18)
-    @ExcelColumn("身份证")
+    @ExcelColumn(value = "身份证", regEx = "@")
     private String iddentity;
 
     @ExcelValid_ARRAY(dictionary = TestGender.class)
@@ -32,7 +32,7 @@ public class Test {
     private Integer sex;
 
     @ExcelValid_DATE(compareType = CompareType.LT, date = "now()")
-    @ExcelColumn("出生日期")
+    @ExcelColumn(value = "出生日期",regEx = "yyyy-MM-dd")
     private Date birthDay;
 
     @ExcelColumn("身高")

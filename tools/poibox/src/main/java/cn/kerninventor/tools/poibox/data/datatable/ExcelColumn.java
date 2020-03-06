@@ -37,14 +37,23 @@ public @interface ExcelColumn {
 
     /**
      * Regular validation at data upload.
+     * TODO 改为 dataFormatEx
      * @return
      */
     String regEx() default "";
 
     /**
      * Conversion pattern for Date type fields.
+     * TODO 删掉，统一由regEx处理
      * @return
      */
+    @Deprecated
     String dateFormat() default "YYYY-MM-dd";
 
+
+    /**
+     * TODO 是否根据内容合并
+     * @return
+     */
+    boolean mergeByContext() default false;
 }

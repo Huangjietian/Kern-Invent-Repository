@@ -181,7 +181,8 @@ public class ExcelTabulationDataProcessor<T> {
         return excelcolumnDataAccepters;
     }
 
-    public void tabulateTo(Sheet sheet, POIBox poiBox, @Nullable List<T> datas) {
+    public void tabulateTo(Sheet sheet, POIBox poiBox, List<T> datas) {
+        Workbook workbook = sheet.getWorkbook();
         final int[] currentRowIndex = {getStartRowIndex()};
         String headline = getHeadline();
         /**
@@ -205,10 +206,9 @@ public class ExcelTabulationDataProcessor<T> {
         Font tableHeadFont = sheet.getWorkbook().getFontAt(tableHeadStyle.getFontIndexAsInt());
         CellStyle tableTextStyle = POIStyler.cloneStyle(poiBox.working(), getTabulationStyle().getTextStyle());
         Font tableTextFont = sheet.getWorkbook().getFontAt(tableTextStyle.getFontIndexAsInt());
+        DataFormat dataFormat = workbook.createDataFormat();
         getColumnsContainer().forEach( e -> {
             Cell cell = row.createCell(e.getColumnIndex());
-            //type
-            cell.setCellType(CellType.STRING);
             //value
             cell.setCellValue(e.getTitleName());
             //style
@@ -220,20 +220,25 @@ public class ExcelTabulationDataProcessor<T> {
             } else {
                 sheet.setColumnWidth(e.getColumnIndex(), e.getColumnWidth());
             }
+
+
             //data validation
             if (e.getValidAnnotation() != null) {
-                DataValidHandler.getInstance(e.getValidAnnotation()).addValidation(this, e, sheet, e.getValidAnnotation());
+                DataValidHandler.getInstance(e.getValidAnnotation())
+                        .addValidation(this, e, sheet, e.getValidAnnotation());
             } else {
                 DataValidHandler.qualifiedTypeValidHandler(this, e, sheet);
             }
-
             //text style
+            CellStyle columNStyle = workbook.createCellStyle();
+            columNStyle.cloneStyleFrom(tableTextStyle);
+            if (e.getRegEx() != null){
+                columNStyle.setDataFormat(dataFormat.getFormat(e.getRegEx()));
+            }
             for (int i = 0 ; i < getTextRowNum(); i ++){
                 Row textRow = POIGadget.getRowForce(sheet, i + currentRowIndex[0] + 1);
                 Cell textCell = textRow.createCell(e.getColumnIndex());
-                textCell.setCellType(CellType.STRING);
-                textCell.setCellStyle(tableTextStyle);
-
+                textCell.setCellStyle(columNStyle);
                 if (datas != null && datas.size() > 0){
                     T t = datas.get(i);
                     Object obj = null;

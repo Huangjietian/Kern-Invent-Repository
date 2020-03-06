@@ -20,12 +20,10 @@ import java.io.IOException;
 public class TestMain {
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
-
         POIBox myBox = POIBox.open();
         myBox.dataProcessor().templateTo("人员信息导入模板1", Test.class);
         myBox.dataProcessor().templateTo("人员信息导入模板2", Test.class);
         myBox.wirteToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板.xlxs");
-
     }
 }
 

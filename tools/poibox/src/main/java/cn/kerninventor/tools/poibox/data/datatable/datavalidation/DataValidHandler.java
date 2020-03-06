@@ -72,11 +72,14 @@ public interface DataValidHandler <T extends Annotation> {
     static void qualifiedTypeValidHandler(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter columnDataAccepter, Sheet sheet) {
         Class fieldType = columnDataAccepter.getFieldType();
         if (DataTypeGroupUtil.isMemberOfIntType(fieldType)) {
-            DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefInt()).addValidation(processor,columnDataAccepter,sheet,ExcelQualifiedTypeValidType.getDefInt());
+            DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefInt())
+                    .addValidation(processor,columnDataAccepter,sheet,ExcelQualifiedTypeValidType.getDefInt());
         } else if (DataTypeGroupUtil.isMemberOfNumberType(fieldType)){
-            DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefDecimal()).addValidation(processor, columnDataAccepter, sheet, ExcelQualifiedTypeValidType.getDefDecimal());
+            DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefDecimal())
+                    .addValidation(processor, columnDataAccepter, sheet, ExcelQualifiedTypeValidType.getDefDecimal());
         } else if (DataTypeGroupUtil.isMemberOfDateType(fieldType)) {
-            DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefDate()).addValidation(processor, columnDataAccepter, sheet, ExcelQualifiedTypeValidType.getDefDate());
+            DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefDate())
+                    .addValidation(processor, columnDataAccepter, sheet, ExcelQualifiedTypeValidType.getDefDate());
         }
     }
 
