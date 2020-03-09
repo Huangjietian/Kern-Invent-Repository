@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
  * @Author Kern
  * @Date 2019/10/30 17:58
  */
-public class POIGadget {
+public class BoxGadget {
 
     private static POIBox rootBox = POIBox.open();
 

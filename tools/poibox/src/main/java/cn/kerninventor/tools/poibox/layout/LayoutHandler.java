@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.layout;
 
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.POIBoxLinker;
+import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,9 +18,9 @@ import java.util.Map;
  * @Author Kern
  * @Date 2019/10/30 18:34
  */
-public final class POILayouterOpened extends POIBoxLinker implements POILayouter {
+public final class LayoutHandler extends BoxBracket implements Layouter {
 
-    public POILayouterOpened(POIBox poiBox) {
+    public LayoutHandler(POIBox poiBox) {
         super(poiBox);
     }
 

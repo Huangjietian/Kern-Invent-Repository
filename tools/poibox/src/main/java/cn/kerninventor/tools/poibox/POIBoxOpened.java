@@ -1,13 +1,13 @@
 package cn.kerninventor.tools.poibox;
 
-import cn.kerninventor.tools.poibox.data.POIDataProcessor;
-import cn.kerninventor.tools.poibox.data.POIDataProcessorOpened;
-import cn.kerninventor.tools.poibox.layout.POILayouter;
-import cn.kerninventor.tools.poibox.layout.POILayouterOpened;
-import cn.kerninventor.tools.poibox.style.POIFonter;
-import cn.kerninventor.tools.poibox.style.POIFonterOpened;
-import cn.kerninventor.tools.poibox.style.POIStyler;
-import cn.kerninventor.tools.poibox.style.POIStylerOpened;
+import cn.kerninventor.tools.poibox.data.DataTabulator;
+import cn.kerninventor.tools.poibox.data.DataTabulationHandler;
+import cn.kerninventor.tools.poibox.layout.Layouter;
+import cn.kerninventor.tools.poibox.layout.LayoutHandler;
+import cn.kerninventor.tools.poibox.style.Fonter;
+import cn.kerninventor.tools.poibox.style.FontHandler;
+import cn.kerninventor.tools.poibox.style.Styler;
+import cn.kerninventor.tools.poibox.style.StyleHandler;
 import cn.kerninventor.tools.poibox.utils.ExcelDownloader;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -29,13 +29,13 @@ public final class POIBoxOpened implements POIBox {
 
     private Workbook workbook;
 
-    private POIStyler styler;
+    private Styler styler;
 
-    private POIFonter fonter;
+    private Fonter fonter;
 
-    private POILayouter layouter;
+    private Layouter layouter;
 
-    private POIDataProcessor dataProcessor;
+    private DataTabulator dataTabulator;
 
     protected POIBoxOpened() {
         workbook = new HSSFWorkbook();
@@ -48,32 +48,32 @@ public final class POIBoxOpened implements POIBox {
     }
 
     private void init(){
-        styler = new POIStylerOpened(this);
-        fonter = new POIFonterOpened(this);
-        layouter = new POILayouterOpened(this);
-        dataProcessor = new POIDataProcessorOpened(this);
+        styler = new StyleHandler(this);
+        fonter = new FontHandler(this);
+        layouter = new LayoutHandler(this);
+        dataTabulator = new DataTabulationHandler(this);
     }
 
     @Override
-    public POIDataProcessor dataProcessor() {
-        return dataProcessor;
+    public DataTabulator dataTabulator() {
+        return dataTabulator;
     }
 
     @Override
-    public POIStyler styler() {
+    public Styler styler() {
         return styler;
     }
 
     @Override
-    public POIFonter fonter() {
+    public Fonter fonter() {
         return fonter;
     }
 
     @Override
-    public POILayouter layouter() { return layouter; }
+    public Layouter layouter() { return layouter; }
 
     @Override
-    public Workbook working() {
+    public Workbook workbook() {
         return workbook;
     }
 

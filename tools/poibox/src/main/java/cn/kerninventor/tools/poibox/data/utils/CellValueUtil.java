@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.utils;
 
-import cn.kerninventor.tools.poibox.POIGadget;
+import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.exception.IllegalTypeOfCellValueException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -8,7 +8,10 @@ import org.apache.poi.ss.usermodel.DateUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Title: CellValuer
@@ -18,7 +21,25 @@ import java.util.Date;
  * @Date 2019/12/6 10:07
  * @Description: TODO
  */
-public final class CellValueUtil extends POIGadget {
+public final class CellValueUtil extends BoxGadget {
+
+    public static void setCellValue(Cell cell, Object value) {
+        if (value == null) {
+            return;
+        }
+        if (value instanceof Date) {
+            cell.setCellValue((Date) value);
+        } else if (value instanceof List) {
+            List list = (List) value;
+            String strList = list.toString();
+            value = strList.substring(1, strList.length() - 1);
+            cell.setCellValue(value.toString());
+        } else if (value instanceof LocalDateTime) {
+            cell.setCellValue((LocalDateTime) value);
+        }  else {
+            cell.setCellValue(value.toString());
+        }
+    }
 
     /**
      * This method returns the string value of the cell's value

@@ -7,6 +7,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.text.SimpleDateFormat;
 
 /**
  * @Title: ExcelValid_DATE
@@ -20,13 +21,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelValid_DATE {
-
-    /**
-     * date format pattern.
-     * Because of the poi bug, You will now not be able to support defining pattern, only setting the time in the year/month/day format
-     */
-//    @Deprecated
-//    String pattern() default "YYYY-MM-DD";
 
     /**
      * required date value depend on compareType, you can set "now()" to represent the current time.

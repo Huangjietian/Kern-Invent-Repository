@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.Font;
  * @Author Kern
  * @Date 2019/10/29 19:52
  */
-public interface POIFonter {
+public interface Fonter {
 
     String DEFAULT_KEY = "DEFAULT_FONT";
     String NAME_HEADER = "黑体";
@@ -20,7 +20,7 @@ public interface POIFonter {
     int SIZE_TABLEHEADER = 16;
     int SIZE_TEXTPART = 12;
 
-    POIFontProducer produce();
+    FontProducer produce();
 
     Font getDefault();
 

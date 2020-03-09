@@ -10,7 +10,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
  * @Author Kern
  * @Date 2019/10/30 17:38
  */
-public interface POILayouter {
+public interface Layouter {
 
     /**
      * merge cells

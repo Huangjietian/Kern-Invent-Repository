@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.style;
 
-import cn.kerninventor.tools.poibox.POIGadget;
+import cn.kerninventor.tools.poibox.BoxGadget;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
@@ -11,37 +11,12 @@ import org.apache.poi.ss.usermodel.CellStyle;
  * @Date 2019/12/9 19:28
  * @Description:
  */
-public abstract class TabulationStyle {
+public interface TabulationStyle {
 
-    private POIStyler styler;
+    CellStyle getHeadLineStyle();
 
-    private POIFonter fonter;
+    CellStyle getTableHeadStyle();
 
-    protected CellStyle defaultStyleHeadLine;
+    CellStyle getTextStyle();
 
-    protected CellStyle defaultStyleTableHead;
-
-    protected CellStyle defaultStyleText;
-
-    {
-        styler = POIGadget.root().styler();
-        fonter = POIGadget.root().fonter();
-        defaultStyleHeadLine = styler.usualHeadLine(null);
-        defaultStyleTableHead = styler.usualTableHeader(null);
-        defaultStyleText = styler.usualTextPart(null);
-    }
-
-    public abstract CellStyle getHeadLineStyle();
-
-    public abstract CellStyle getTableHeadStyle();
-
-    public abstract CellStyle getTextStyle();
-
-    protected POIStyler getStyler() {
-        return styler.reset();
-    }
-
-    protected POIFonter getFonter() {
-        return fonter;
-    }
 }

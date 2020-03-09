@@ -1,23 +1,19 @@
 package cn.kerninventor.tools.poibox.data.datatable;
 
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.POIGadget;
+import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidHandler;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.exception.IllegalTypeOfCellValueException;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
-import cn.kerninventor.tools.poibox.style.POIStyler;
+import cn.kerninventor.tools.poibox.style.Styler;
 import cn.kerninventor.tools.poibox.style.TabulationStyle;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
-import com.sun.istack.internal.Nullable;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -26,7 +22,7 @@ import java.util.regex.Pattern;
  * @PackageName cn.kerninventor.tools.poibox.data.datatable
  * @Author Kern
  * @Date 2019/12/9 15:25
- * @Description: TODO
+ * @Description: excel 数据表解析处理类
  */
 public class ExcelTabulationDataProcessor<T> {
 
@@ -41,7 +37,7 @@ public class ExcelTabulationDataProcessor<T> {
     /**
      * Table start row index, default 0.
      */
-    private int startRowIndex = 0;
+    private int startRowIndex;
     /**
      * The first body row index.
      */
@@ -49,11 +45,11 @@ public class ExcelTabulationDataProcessor<T> {
     /**
      * The number of lines in the body.
      */
-    private int textRowNum = 20;
+    private int textRowNum;
     /**
      * Default value is true, poibox adopt auto index in default.
      */
-    private boolean autoColumnIndex = true;
+    private boolean autoColumnIndex;
     /**
      * NullAble, no styles are added to the cells when this attribution is null.
      */
@@ -133,44 +129,17 @@ public class ExcelTabulationDataProcessor<T> {
         List<ExcelcolumnDataAccepter> excelcolumnDataAccepters = new ArrayList();
         Field[] fields = tableClass.getDeclaredFields();
         ExcelColumn excelColumn;
-        /**
-         * auto index schema, the first column index is 0
-         */
         if (autoColumnIndex){
             int index = 0 ;
             for (Field field : fields){
-                if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null
-                        && excelColumn.value() != null
-                        && !"".equals(excelColumn.value().trim())) {
-                    ExcelcolumnDataAccepter excelcolumnDataAccepter = ExcelcolumnDataAccepter.getInstance(
-                            field,
-                            field.getName(),
-                            excelColumn.value(),
-                            index++,
-                            excelColumn.columnWidth(),
-                            excelColumn.regEx(),
-                            excelColumn.dateFormat(),
-                            DataValidHandler.findAnnotationForm(field)
-                    );
-                    excelcolumnDataAccepters.add(excelcolumnDataAccepter);
+                if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
+                    excelcolumnDataAccepters.add(ExcelcolumnDataAccepter.getInstance(field, excelColumn, index++));
                 }
             }
         } else {
             for (Field field : fields){
-                if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null
-                        && excelColumn.value() != null
-                        && !"".equals(excelColumn.value().trim())) {
-                    ExcelcolumnDataAccepter excelcolumnDataAccepter = ExcelcolumnDataAccepter.getInstance(
-                            field,
-                            field.getName(),
-                            excelColumn.value(),
-                            excelColumn.columnIndex(),
-                            excelColumn.columnWidth(),
-                            excelColumn.regEx(),
-                            excelColumn.dateFormat(),
-                            DataValidHandler.findAnnotationForm(field)
-                    );
-                    excelcolumnDataAccepters.add(excelcolumnDataAccepter);
+                if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
+                    excelcolumnDataAccepters.add(ExcelcolumnDataAccepter.getInstance(field, excelColumn,excelColumn.columnIndex()));
                 }
             }
         }
@@ -193,21 +162,21 @@ public class ExcelTabulationDataProcessor<T> {
             poiBox.layouter()
                     .mergedRegion(sheet, range)
                     .setMergeRangeContent(headline)
-                    .setMergeRangeStyle(getTabulationStyle()
-                            .getHeadLineStyle());
+                    .setMergeRangeStyle(tabulationStyle.getHeadLineStyle());
             currentRowIndex[0]++;
         }
 
         /**
          * draw table
          */
-        Row row = sheet.createRow(currentRowIndex[0]);
-        CellStyle tableHeadStyle = POIStyler.cloneStyle(poiBox.working(), getTabulationStyle().getTableHeadStyle());
+        Row row = sheet.createRow(currentRowIndex[0]++);
+        CellStyle tableHeadStyle = Styler.cloneStyle(poiBox.workbook(), tabulationStyle.getTableHeadStyle());
         Font tableHeadFont = sheet.getWorkbook().getFontAt(tableHeadStyle.getFontIndexAsInt());
-        CellStyle tableTextStyle = POIStyler.cloneStyle(poiBox.working(), getTabulationStyle().getTextStyle());
+        CellStyle tableTextStyle = Styler.cloneStyle(poiBox.workbook(), tabulationStyle.getTextStyle());
         Font tableTextFont = sheet.getWorkbook().getFontAt(tableTextStyle.getFontIndexAsInt());
         DataFormat dataFormat = workbook.createDataFormat();
-        getColumnsContainer().forEach( e -> {
+
+        columnsContainer.forEach( e -> {
             Cell cell = row.createCell(e.getColumnIndex());
             //value
             cell.setCellValue(e.getTitleName());
@@ -215,7 +184,7 @@ public class ExcelTabulationDataProcessor<T> {
             cell.setCellStyle(tableHeadStyle);
             //column width
             if (e.getColumnWidth() == -1 ){
-                int columnWidth = POIGadget.getCellWidthByStringContent(e.getTitleName(), tableHeadFont.getFontHeightInPoints());
+                int columnWidth = BoxGadget.getCellWidthByStringContent(e.getTitleName(), tableHeadFont.getFontHeightInPoints());
                 sheet.setColumnWidth(e.getColumnIndex(), columnWidth);
             } else {
                 sheet.setColumnWidth(e.getColumnIndex(), e.getColumnWidth());
@@ -230,47 +199,25 @@ public class ExcelTabulationDataProcessor<T> {
                 DataValidHandler.qualifiedTypeValidHandler(this, e, sheet);
             }
             //text style
-            CellStyle columNStyle = workbook.createCellStyle();
-            columNStyle.cloneStyleFrom(tableTextStyle);
-            if (e.getRegEx() != null){
-                columNStyle.setDataFormat(dataFormat.getFormat(e.getRegEx()));
+            CellStyle columnStyle = workbook.createCellStyle();
+            columnStyle.cloneStyleFrom(tableTextStyle);
+            if (e.getDataFormatEx() != null){
+                columnStyle.setDataFormat(dataFormat.getFormat(e.getDataFormatEx()));
             }
             for (int i = 0 ; i < getTextRowNum(); i ++){
-                Row textRow = POIGadget.getRowForce(sheet, i + currentRowIndex[0] + 1);
+                Row textRow = BoxGadget.getRowForce(sheet, i + currentRowIndex[0]);
                 Cell textCell = textRow.createCell(e.getColumnIndex());
-                textCell.setCellStyle(columNStyle);
-                if (datas != null && datas.size() > 0){
-                    T t = datas.get(i);
-                    Object obj = null;
-                    try {
-                        obj = ReflectUtil.getFieldValue(e.getField(), t);
-                    } catch (IllegalAccessException ex) {
-                        ex.printStackTrace();
-                    }
-                    if (obj == null){
-                        continue;
-                    } else if (obj instanceof Date){
-                        cell.setCellValue(e.getSimpleDateFormat().format(obj));
-                    } else if (obj instanceof List){
-                        List list = (List)obj;
-                        String strList = list.toString();
-                        obj = strList.substring(1,strList.length()-1);
-                        cell.setCellValue(obj.toString());
-                    } else {
-                        cell.setCellValue(obj.toString());
-                    }
-
-                    int columnWidth = POIGadget.getCellWidthByStringContent(obj.toString(), tableTextFont.getFontHeightInPoints());
-                    int maxValue = sheet.getColumnWidth(textCell.getColumnIndex());
-                    if (columnWidth > maxValue){
-                        sheet.setColumnWidth(e.getColumnIndex(), columnWidth);
-                    }
-                }
+                textCell.setCellStyle(columnStyle);
             }
         });
 
     }
 
+    /**
+     * TODO 提取数据未完成
+     * @param sheet
+     * @return
+     */
     public List<T> extractDatasFrom(Sheet sheet) {
         //错误提示字体
         Font errorFont = sheet.getWorkbook().createFont();

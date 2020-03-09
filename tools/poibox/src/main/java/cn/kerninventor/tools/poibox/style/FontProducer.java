@@ -11,11 +11,11 @@ import org.apache.poi.ss.usermodel.Font;
  * @Date 2019/12/17 15:51
  * @Description: TODO
  */
-public final class POIFontProducer {
+public final class FontProducer {
 
     private Font font;
 
-    public POIFontProducer(Font font) {
+    public FontProducer(Font font) {
         this.font = font;
     }
 
@@ -24,7 +24,7 @@ public final class POIFontProducer {
      * @param fontName
      * @return
      */
-    public POIFontProducer setFontName(String fontName) {
+    public FontProducer setFontName(String fontName) {
         font.setFontName(fontName);
         return this;
     }
@@ -34,7 +34,7 @@ public final class POIFontProducer {
      * @param fontSize
      * @return
      */
-    public POIFontProducer setFontSize(int fontSize) {
+    public FontProducer setFontSize(int fontSize) {
         font.setFontHeightInPoints((short) fontSize);
         return this;
     }
@@ -44,7 +44,7 @@ public final class POIFontProducer {
      * @param fontColor
      * @return
      */
-    public POIFontProducer setFontColor(FonterElements.FontColor fontColor) {
+    public FontProducer setFontColor(FonterElements.FontColor fontColor) {
         font.setColor(fontColor.getIndex());
         return this;
     }
@@ -54,7 +54,7 @@ public final class POIFontProducer {
      * @param italic
      * @return
      */
-    public POIFontProducer setItalic(boolean italic) {
+    public FontProducer setItalic(boolean italic) {
         font.setItalic(italic);
         return this;
     }
@@ -64,7 +64,7 @@ public final class POIFontProducer {
      * @param strikeout
      * @return
      */
-    public POIFontProducer setStrikeout(boolean strikeout) {
+    public FontProducer setStrikeout(boolean strikeout) {
         font.setStrikeout(strikeout);
         return this;
     }
@@ -74,7 +74,7 @@ public final class POIFontProducer {
      * @param bold
      * @return
      */
-    public POIFontProducer setBold(boolean bold) {
+    public FontProducer setBold(boolean bold) {
         font.setBold(bold);
         return this;
     }
@@ -84,7 +84,7 @@ public final class POIFontProducer {
      * @param underline
      * @return
      */
-    public POIFontProducer setUnderline(FonterElements.UnderLine underline) {
+    public FontProducer setUnderline(FonterElements.UnderLine underline) {
         font.setUnderline(underline.getIndex());
         return this;
     }
@@ -94,7 +94,7 @@ public final class POIFontProducer {
      * @param charSet
      * @return
      */
-    public POIFontProducer setCharSet(FonterElements.Charset charSet) {
+    public FontProducer setCharSet(FonterElements.Charset charSet) {
         font.setCharSet(charSet.getIndex());
         return this;
     }

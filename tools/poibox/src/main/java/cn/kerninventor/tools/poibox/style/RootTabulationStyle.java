@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.style;
 
+import cn.kerninventor.tools.poibox.BoxGadget;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
@@ -10,21 +11,21 @@ import org.apache.poi.ss.usermodel.CellStyle;
  * @Date 2019/12/9 20:15
  * @Description: TODO
  */
-public final class RootTabulationStyle extends TabulationStyle {
+public final class RootTabulationStyle implements TabulationStyle {
 
     @Override
     public CellStyle getHeadLineStyle() {
-        return getStyler().get();
+        return BoxGadget.root().styler().usualHeadLine(null);
     }
 
     @Override
     public CellStyle getTableHeadStyle() {
-        return getStyler().get();
+        return BoxGadget.root().styler().usualTableHeader(null);
     }
 
     @Override
     public CellStyle getTextStyle() {
-        return getStyler().get();
+        return BoxGadget.root().styler().usualTextPart(null);
     }
 
 }

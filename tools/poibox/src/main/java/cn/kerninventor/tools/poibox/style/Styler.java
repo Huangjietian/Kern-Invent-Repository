@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.*;
  * @Author Kern
  * @Date 2019/10/29 14:57
  */
-public interface POIStyler {
+public interface Styler {
 
     String DEFAULT_KEY = "DEFAULT_STYLE";
 
@@ -19,9 +19,9 @@ public interface POIStyler {
 
     CellStyle get();
 
-    POIStyler set(CellStyle style);
+    Styler set(CellStyle style);
 
-    POIStyler reset();
+    Styler reset();
 
     CellStyle putInStyle(String key, CellStyle style);
 
@@ -32,7 +32,7 @@ public interface POIStyler {
      * @param font
      * @return
      */
-    POIStyler setFont(Font font);
+    Styler setFont(Font font);
 
     /**
      * 设置边框，颜色默认黑色
@@ -40,7 +40,7 @@ public interface POIStyler {
      * @param borderStyle  边框线参数
      * @return
      */
-    POIStyler setBorder(StylerElements.CellDirection cellDirection, BorderStyle borderStyle);
+    Styler setBorder(StylerElements.CellDirection cellDirection, BorderStyle borderStyle);
 
     /**
      * 设置边框颜色
@@ -48,83 +48,83 @@ public interface POIStyler {
      * @param hssfColorPredefined
      * @return
      */
-    POIStyler setBorderColor(StylerElements.CellDirection cellDirection, HSSFColor.HSSFColorPredefined hssfColorPredefined);
+    Styler setBorderColor(StylerElements.CellDirection cellDirection, HSSFColor.HSSFColorPredefined hssfColorPredefined);
 
     /**
      * 设置单元格背景填充样式：全铺，斑点，砖块等
      * @param fillPatternType
      * @return
      */
-    POIStyler setFillPattern(FillPatternType fillPatternType);
+    Styler setFillPattern(FillPatternType fillPatternType);
 
     /**
      * 设置填充背景颜色，需要在此之后设置背景填充样式，否则无效
      * @param hssfColorPredefined
      * @return
      */
-    POIStyler setFillBackgroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined);
+    Styler setFillBackgroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined);
 
     /**
      * 设置填充前景颜色，需要在此之后设置背景填充样式，否则无效
      * @param hssfColorPredefined
      * @return
      */
-    POIStyler setFillForegroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined);
+    Styler setFillForegroundColor(HSSFColor.HSSFColorPredefined hssfColorPredefined);
 
     /**
      * 设置上下居中
      * @param verticalAlignment
      * @return
      */
-    POIStyler setVerticalAlignment(VerticalAlignment verticalAlignment);
+    Styler setVerticalAlignment(VerticalAlignment verticalAlignment);
 
     /**
      * 设置左右居中
      * @param horizontalAlignment
      * @return
      */
-    POIStyler setAlignment(HorizontalAlignment horizontalAlignment);
+    Styler setAlignment(HorizontalAlignment horizontalAlignment);
 
     /**
      * 设置完全居中
      * @return
      */
-    POIStyler setWholeCenter();
+    Styler setWholeCenter();
 
     /**
      * 设置单元格内容超出时是否自动换行
      * @param wrapText
      * @return
      */
-    POIStyler setWrapText(boolean wrapText);
+    Styler setWrapText(boolean wrapText);
 
     /**
      * 设置单元格锁，此操作后生成的单元格无法在Excel中修改
      * @param locked
      * @return
      */
-    POIStyler setLocked(boolean locked);
+    Styler setLocked(boolean locked);
 
     /**
      * 根据short参数设置内容紧缩程度
      * @param indention
      * @return
      */
-    POIStyler setIndention(short indention);
+    Styler setIndention(short indention);
 
     /**
      * 设置隐藏
      * @param hidden
      * @return
      */
-    POIStyler setHidden(Boolean hidden);
+    Styler setHidden(Boolean hidden);
 
     /**
      * 设置数据格式
      * @param index
      * @return
      */
-    POIStyler setDataFormat(short index);
+    Styler setDataFormat(short index);
 
     /**
      * 常见的大标题格式

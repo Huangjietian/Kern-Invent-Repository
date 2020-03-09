@@ -24,7 +24,4 @@ public class ExcelTemplate {
         sheetAt = workbook.getSheetIndex(sheet);
     }
 
-    public static void main(String[] args) {
-        XSSFWorkbook workbook = new XSSFWorkbook();
-    }
 }

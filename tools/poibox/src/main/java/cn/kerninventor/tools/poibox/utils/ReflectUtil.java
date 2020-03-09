@@ -52,9 +52,9 @@ public class ReflectUtil {
 
     public static boolean isWrapClass(Class clazz) {
         try {
-            return ((Class) clazz.getField("TYPE").get(null)).isPrimitive();
+            return !((Class) clazz.getField("TYPE").get(null)).isPrimitive();
         } catch (Exception e) {
-            return false;
+            return true;
         }
     }
 }

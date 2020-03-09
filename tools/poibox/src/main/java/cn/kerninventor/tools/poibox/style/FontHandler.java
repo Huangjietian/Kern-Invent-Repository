@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.POIBoxLinker;
+import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.elements.FonterElements;
 import org.apache.poi.ss.usermodel.Font;
 
@@ -16,19 +16,19 @@ import java.util.Objects;
  * @Author Kern
  * @Date 2019/10/29 19:53
  */
-public final class POIFonterOpened extends POIBoxLinker implements POIFonter {
+public final class FontHandler extends BoxBracket implements Fonter {
 
     HashMap<String, Font> fontBox = new HashMap<>();
 
-    public POIFonterOpened(POIBox poiBox) {
+    public FontHandler(POIBox poiBox) {
         super(poiBox);
-        fontBox.put(DEFAULT_KEY, getParent().working().createFont());
+        fontBox.put(DEFAULT_KEY, getParent().workbook().createFont());
     }
 
     @Override
-    public POIFontProducer produce() {
-        Font font = getParent().working().createFont();
-        return new POIFontProducer(font);
+    public FontProducer produce() {
+        Font font = getParent().workbook().createFont();
+        return new FontProducer(font);
     }
 
     @Override
@@ -38,7 +38,7 @@ public final class POIFonterOpened extends POIBoxLinker implements POIFonter {
 
     @Override
     public Font newSimpleFont(String fontName, int fontSize) {
-        Font font = getParent().working().createFont();
+        Font font = getParent().workbook().createFont();
         font.setFontName(fontName);
         font.setFontHeightInPoints((short) fontSize);
         return font;
@@ -46,7 +46,7 @@ public final class POIFonterOpened extends POIBoxLinker implements POIFonter {
 
     @Override
     public Font newSimpleFont(String fontName, int fontSize, FonterElements.FontColor fontColor) {
-        Font font = getParent().working().createFont();
+        Font font = getParent().workbook().createFont();
         font.setFontName(fontName);
         font.setFontHeightInPoints((short)fontSize);
         font.setColor(fontColor.getIndex());

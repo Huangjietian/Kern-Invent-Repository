@@ -1,9 +1,8 @@
 package cn.kerninventor.tools.poibox.data.datatable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
+
+import java.lang.annotation.*;
 
 /**
  * @Title: POIColumn
@@ -37,23 +36,20 @@ public @interface ExcelColumn {
 
     /**
      * Regular validation at data upload.
-     * TODO 改为 dataFormatEx
      * @return
      */
     String regEx() default "";
 
     /**
-     * Conversion pattern for Date type fields.
-     * TODO 删掉，统一由regEx处理
+     * Excel data format expression.
      * @return
      */
-    @Deprecated
-    String dateFormat() default "YYYY-MM-dd";
-
+    String dataFormatEx() default "";
 
     /**
-     * TODO 是否根据内容合并
+     * If ture, poibox will merge by content In this column When download data.
      * @return
      */
-    boolean mergeByContext() default false;
+    boolean mergeByContent() default false;
+
 }

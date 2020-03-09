@@ -2,10 +2,10 @@ package cn.kerninventor.tools.poibox;
 
 import cn.kerninventor.tools.fileformat.FileFormatCensor;
 import cn.kerninventor.tools.fileformat.enums.FileFormatEnum;
-import cn.kerninventor.tools.poibox.data.POIDataProcessor;
-import cn.kerninventor.tools.poibox.layout.POILayouter;
-import cn.kerninventor.tools.poibox.style.POIFonter;
-import cn.kerninventor.tools.poibox.style.POIStyler;
+import cn.kerninventor.tools.poibox.data.DataTabulator;
+import cn.kerninventor.tools.poibox.layout.Layouter;
+import cn.kerninventor.tools.poibox.style.Fonter;
+import cn.kerninventor.tools.poibox.style.Styler;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -20,11 +20,12 @@ import java.io.*;
  * @Date 2019/10/29 19:06
  */
 public interface POIBox {
-    POIDataProcessor dataProcessor();
-    POIStyler styler();
-    POIFonter fonter();
-    POILayouter layouter();
-    Workbook working();
+
+    DataTabulator dataTabulator();
+    Styler styler();
+    Fonter fonter();
+    Layouter layouter();
+    Workbook workbook();
     void reset();
     void wirteToHttp(HttpServletResponse response, String fileName) throws IOException;
     void wirteToLocal(String fileFullName) throws IOException;

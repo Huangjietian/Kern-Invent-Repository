@@ -17,14 +17,14 @@ import java.util.Date;
  * @Date 2019/12/13 18:05
  * @Description: TODO
  */
-@ExcelTabulation(headline = "人员信息导入模板", style = TestStyle.class)
+@ExcelTabulation(headline = "人员信息", style = TestStyle.class)
 public class Test {
 
     @ExcelColumn("姓名")
     private String name;
 
     @ExcelValid_TEXTLENGTH(compareType = CompareType.ET, value = 18, optionalVal = 18)
-    @ExcelColumn(value = "身份证", regEx = "@")
+    @ExcelColumn(value = "身份证", dataFormatEx = "@")
     private String iddentity;
 
     @ExcelValid_ARRAY(dictionary = TestGender.class)
@@ -32,7 +32,7 @@ public class Test {
     private Integer sex;
 
     @ExcelValid_DATE(compareType = CompareType.LT, date = "now()")
-    @ExcelColumn(value = "出生日期",regEx = "yyyy-MM-dd")
+    @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-MM-dd")
     private Date birthDay;
 
     @ExcelColumn("身高")
@@ -45,8 +45,15 @@ public class Test {
     @ExcelColumn("国籍")
     private Long nationalityId;
 
-
-
+    public Test(String name, String iddentity, Integer sex, Date birthDay, Integer height, Integer weight, Long nationalityId) {
+        this.name = name;
+        this.iddentity = iddentity;
+        this.sex = sex;
+        this.birthDay = birthDay;
+        this.height = height;
+        this.weight = weight;
+        this.nationalityId = nationalityId;
+    }
 }
 
 

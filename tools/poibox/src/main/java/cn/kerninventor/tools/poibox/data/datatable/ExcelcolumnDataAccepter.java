@@ -1,10 +1,15 @@
 package cn.kerninventor.tools.poibox.data.datatable;
 
-import cn.kerninventor.tools.poibox.POIGadget;
+import cn.kerninventor.tools.poibox.BoxGadget;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidHandler;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
+import org.apache.poi.ss.usermodel.DataFormat;
 
+import javax.swing.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 /**
  * @Title: DataColumn
@@ -27,27 +32,27 @@ public class ExcelcolumnDataAccepter implements Comparable<ExcelcolumnDataAccept
 
     private String regEx;
 
-    private String dateFormat;
+    private String dataFormatEx;
 
-    private SimpleDateFormat simpleDateFormat;
+    private boolean mergeByContent;
 
     private Annotation validAnnotation;
 
     private ExcelcolumnDataAccepter() {
     }
 
-    public static ExcelcolumnDataAccepter getInstance(Field field, String fieldName, String titleName, int columnIndex, int columnWidth, String regEx, String dateFormat, Annotation annotation) {
-        ExcelcolumnDataAccepter excelcolumnDataAccepter = new ExcelcolumnDataAccepter();
-        excelcolumnDataAccepter.field = field;
-        excelcolumnDataAccepter.fieldName = fieldName;
-        excelcolumnDataAccepter.titleName = titleName;
-        excelcolumnDataAccepter.columnIndex = columnIndex;
-        excelcolumnDataAccepter.columnWidth = columnWidth == -1 ? -1 : POIGadget.getExcelCellWidth(columnWidth);
-        excelcolumnDataAccepter.regEx = "".equals(regEx.trim()) ? null : regEx;
-        excelcolumnDataAccepter.dateFormat = dateFormat;
-        excelcolumnDataAccepter.simpleDateFormat = new SimpleDateFormat(dateFormat);
-        excelcolumnDataAccepter.validAnnotation = annotation;
-        return excelcolumnDataAccepter;
+    public static ExcelcolumnDataAccepter getInstance(Field field, ExcelColumn excelColumn, int columnIndex){
+        ExcelcolumnDataAccepter accepter = new ExcelcolumnDataAccepter();
+        accepter.field = field;
+        accepter.fieldName = field.getName();
+        accepter.titleName = excelColumn.value();
+        accepter.columnIndex = columnIndex;
+        accepter.columnWidth = excelColumn.columnWidth() == -1 ? -1 : BoxGadget.getExcelCellWidth(excelColumn.columnWidth());
+        accepter.regEx = "".equals(excelColumn.regEx().trim()) ? null : excelColumn.regEx();
+        accepter.dataFormatEx = "".equals(excelColumn.dataFormatEx().trim()) ? null : excelColumn.dataFormatEx();
+        accepter.mergeByContent = excelColumn.mergeByContent();
+        accepter.validAnnotation = DataValidHandler.findAnnotationForm(field);
+        return accepter;
     }
 
     public Field getField() {
@@ -78,12 +83,12 @@ public class ExcelcolumnDataAccepter implements Comparable<ExcelcolumnDataAccept
         return regEx;
     }
 
-    public String getDateFormat() {
-        return dateFormat;
+    public String getDataFormatEx() {
+        return dataFormatEx;
     }
 
-    public SimpleDateFormat getSimpleDateFormat() {
-        return simpleDateFormat;
+    public boolean isMergeByContent() {
+        return mergeByContent;
     }
 
     public Annotation getValidAnnotation() {

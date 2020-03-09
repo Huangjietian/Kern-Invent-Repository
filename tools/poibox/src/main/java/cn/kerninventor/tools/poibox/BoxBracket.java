@@ -10,13 +10,13 @@ import java.io.Serializable;
  * @Author Kern
  * @Date 2019/10/29 19:55
  */
-public class POIBoxLinker implements Serializable {
+public class BoxBracket implements Serializable {
 
     protected static final long serialVersionUID = 1L;
 
     private POIBox poiBox;
 
-    public POIBoxLinker(POIBox poiBox) {
+    public BoxBracket(POIBox poiBox) {
         this.poiBox = poiBox;
     }
 

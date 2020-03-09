@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.layout;
 
-import cn.kerninventor.tools.poibox.POIGadget;
+import cn.kerninventor.tools.poibox.BoxGadget;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
@@ -26,32 +26,32 @@ public final class MergedRange {
     }
 
     public MergedRange setMergeRangeContent(double d) {
-        POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(d);
+        BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(d);
         return this;
     }
 
     public MergedRange setMergeRangeContent(String s) {
-        POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(s);
+        BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(s);
         return this;
     }
 
     public MergedRange setMergeRangeContent(boolean b) {
-        POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(b);
+        BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(b);
         return this;
     }
 
     public MergedRange setMergeRangeContent(Date date) {
-        POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(date);
+        BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(date);
         return this;
     }
 
     public MergedRange setMergeRangeContent(Calendar calendar) {
-        POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(calendar);
+        BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(calendar);
         return this;
     }
 
     public MergedRange setMergeRangeContent(RichTextString richTextString) {
-        POIGadget.getCellForce(POIGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(richTextString);
+        BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(richTextString);
         return this;
     }
 
@@ -59,9 +59,9 @@ public final class MergedRange {
         CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
         cellStyle.cloneStyleFrom(style);
         for (int rowIdx = range.getFirstRow() ; rowIdx <= range.getLastRow() ; rowIdx++ ) {
-            Row row = POIGadget.getRowForce(sheet, rowIdx);
+            Row row = BoxGadget.getRowForce(sheet, rowIdx);
             for (int columnIdx = range.getFirstColumn() ; columnIdx <= range.getLastColumn() ; columnIdx++ ) {
-                Cell cell = POIGadget.getCellForce(row, columnIdx);
+                Cell cell = BoxGadget.getCellForce(row, columnIdx);
                 cell.setCellStyle(cellStyle);
             }
         }

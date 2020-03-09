@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2019/12/9 14:50
  * @Description: TODO
  */
-public interface POIDataProcessor {
+public interface DataTabulator {
 
     /**
      * Generate template to specified name sheet
@@ -29,6 +29,10 @@ public interface POIDataProcessor {
      * @return
      */
     ExcelTemplate templateTo(int sheetIndex, Class sourceClass);
+
+
+
+    ExcelTemplate templateTo(String sheetName, Class sourceClass, List datas);
 
     /**
      * Extract datas from specified name sheet
