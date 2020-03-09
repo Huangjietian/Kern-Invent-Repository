@@ -39,9 +39,9 @@ public class ExcelTabulationDataProcessor<T> {
      */
     private int startRowIndex;
     /**
-     * The first body row index.
+     * headline / table head/ table text row index.
      */
-    private int startTextRowIndex;
+    private int headlineRdx, tableHeadRdx, tableTextRdx;
     /**
      * The number of lines in the body.
      */
@@ -84,8 +84,28 @@ public class ExcelTabulationDataProcessor<T> {
         return startRowIndex;
     }
 
-    public int getStartTextRowIndex() {
-        return startTextRowIndex;
+    public int getHeadlineRdx() {
+        return headlineRdx;
+    }
+
+    public void setHeadlineRdx(int headlineRdx) {
+        this.headlineRdx = headlineRdx;
+    }
+
+    public int getTableHeadRdx() {
+        return tableHeadRdx;
+    }
+
+    public void setTableHeadRdx(int tableHeadRdx) {
+        this.tableHeadRdx = tableHeadRdx;
+    }
+
+    public int getTableTextRdx() {
+        return tableTextRdx;
+    }
+
+    public void setTableTextRdx(int tableTextRdx) {
+        this.tableTextRdx = tableTextRdx;
     }
 
     public int getTextRowNum() {
@@ -104,6 +124,8 @@ public class ExcelTabulationDataProcessor<T> {
         return columnsContainer;
     }
 
+
+
     /**
      * Annotation way
      * @param tableClass
@@ -112,10 +134,15 @@ public class ExcelTabulationDataProcessor<T> {
         dataTabulationSourceClassValidate(tableClass);
         ExcelTabulation excelTabulation = tableClass.getAnnotation(ExcelTabulation.class);
         tabulationClass = tableClass;
+
+        //row index calc and headline set value.
         headline = "".equals(excelTabulation.headline().trim()) ? null : excelTabulation.headline();
         startRowIndex = excelTabulation.startRowIndex();
-        startTextRowIndex = headline == null ? startRowIndex + 1 : startRowIndex + 2;
+        headlineRdx = headline == null ? startRowIndex - 1 : startRowIndex;
+        tableHeadRdx = headlineRdx + 1;
+        tableTextRdx = tableHeadRdx + 1;
         textRowNum = excelTabulation.textRowNum();
+
         autoColumnIndex = excelTabulation.autoColumnIndex();
         try {
             tabulationStyle = excelTabulation.style().newInstance();
@@ -150,30 +177,27 @@ public class ExcelTabulationDataProcessor<T> {
         return excelcolumnDataAccepters;
     }
 
-    public void tabulateTo(Sheet sheet, POIBox poiBox, List<T> datas) {
+    public void tabulateTo(Sheet sheet, POIBox poiBox) {
         Workbook workbook = sheet.getWorkbook();
-        final int[] currentRowIndex = {getStartRowIndex()};
         String headline = getHeadline();
         /**
          * draw headline
          */
-        if (headline != null && !"".equals(headline)){
-            CellRangeAddress range = new CellRangeAddress(currentRowIndex[0], currentRowIndex[0], getFirstColumnIndex(), getLastColumnIndex());
+        if (startRowIndex == headlineRdx){
+            CellRangeAddress range = new CellRangeAddress(headlineRdx, headlineRdx, getFirstColumnIndex(), getLastColumnIndex());
             poiBox.layouter()
                     .mergedRegion(sheet, range)
                     .setMergeRangeContent(headline)
                     .setMergeRangeStyle(tabulationStyle.getHeadLineStyle());
-            currentRowIndex[0]++;
         }
 
         /**
          * draw table
          */
-        Row row = sheet.createRow(currentRowIndex[0]++);
+        Row row = sheet.createRow(tableHeadRdx);
         CellStyle tableHeadStyle = Styler.cloneStyle(poiBox.workbook(), tabulationStyle.getTableHeadStyle());
         Font tableHeadFont = sheet.getWorkbook().getFontAt(tableHeadStyle.getFontIndexAsInt());
         CellStyle tableTextStyle = Styler.cloneStyle(poiBox.workbook(), tabulationStyle.getTextStyle());
-        Font tableTextFont = sheet.getWorkbook().getFontAt(tableTextStyle.getFontIndexAsInt());
         DataFormat dataFormat = workbook.createDataFormat();
 
         columnsContainer.forEach( e -> {
@@ -189,15 +213,15 @@ public class ExcelTabulationDataProcessor<T> {
             } else {
                 sheet.setColumnWidth(e.getColumnIndex(), e.getColumnWidth());
             }
-
-
             //data validation
             if (e.getValidAnnotation() != null) {
                 DataValidHandler.getInstance(e.getValidAnnotation())
                         .addValidation(this, e, sheet, e.getValidAnnotation());
-            } else {
+            }
+            else {
                 DataValidHandler.qualifiedTypeValidHandler(this, e, sheet);
             }
+
             //text style
             CellStyle columnStyle = workbook.createCellStyle();
             columnStyle.cloneStyleFrom(tableTextStyle);
@@ -205,12 +229,11 @@ public class ExcelTabulationDataProcessor<T> {
                 columnStyle.setDataFormat(dataFormat.getFormat(e.getDataFormatEx()));
             }
             for (int i = 0 ; i < getTextRowNum(); i ++){
-                Row textRow = BoxGadget.getRowForce(sheet, i + currentRowIndex[0]);
+                Row textRow = BoxGadget.getRowForce(sheet, i + tableTextRdx);
                 Cell textCell = textRow.createCell(e.getColumnIndex());
                 textCell.setCellStyle(columnStyle);
             }
         });
-
     }
 
     /**
@@ -219,56 +242,7 @@ public class ExcelTabulationDataProcessor<T> {
      * @return
      */
     public List<T> extractDatasFrom(Sheet sheet) {
-        //错误提示字体
-        Font errorFont = sheet.getWorkbook().createFont();
-        errorFont.setColor(Font.COLOR_RED);
-
-        int tableWidth = columnsContainer.size();
-        List<T> dataList = new ArrayList<>();
-        //TODO 应该是数据起始行开始，到单元格的最后一个有效行
-        for (int i = startTextRowIndex ; i < sheet.getLastRowNum() ; i ++){
-            T t;
-            try {
-                t = (T) tabulationClass.newInstance();
-            } catch (Exception e) {
-                throw new IllegalSourceClassOfTabulationException("An explicit, parameterless constructor is required in Tabulation");
-            }
-
-            Row row = sheet.getRow(i);
-            if (row != null){
-                columnsContainer.forEach(e -> {
-                    Cell cell = row.getCell(e.getColumnIndex());
-                    //TODO 1. 进行取值(根据类型，根据字典) 2. 对所取值进行校验  3. 赋值
-                    Object o = null;
-                    try {
-                        o = CellValueUtil.getSpecifiedTypeCellValue(cell, e.getFieldType());
-                    } catch (IllegalTypeOfCellValueException ex) {
-                        //TODO ,拼装error对象
-                        ex.printStackTrace();
-                    }
-
-                    //数据校验再看下.
-                    if (e.getRegEx() != null) {
-                        boolean b = Pattern.matches(e.getRegEx(), o.toString());
-                    }
-
-                    //校验失败时 cell 字体标红
-//                    cell.getCellStyle().setFont(errorFont);
-                    //校验成功时， 设置正常风格
-//                    cell.setCellStyle(tabulationStyle.getTextStyle());
-
-                    //赋值
-                    try {
-                        ReflectUtil.setFieldValue(e.getField(), t, o);
-                    } catch (Exception ex) {
-                        //TODO 异常消息
-                        throw new IllegalArgumentException(ex.getMessage(), ex.getCause());
-                    }
-                });
-                dataList.add(t);
-            }
-        }
-        return dataList;
+        return null;
     }
 
 

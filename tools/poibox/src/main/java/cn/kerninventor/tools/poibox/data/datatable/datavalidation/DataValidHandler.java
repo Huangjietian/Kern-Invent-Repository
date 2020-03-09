@@ -32,12 +32,12 @@ public interface DataValidHandler <T extends Annotation> {
 
     /**
      * handler main method.
-     * @param excelTabulationDataProcessor
-     * @param excelcolumnDataAccepter
+     * @param processor
+     * @param accepter
      * @param sheet
      * @param excelValid
      */
-    void addValidation(ExcelTabulationDataProcessor excelTabulationDataProcessor, ExcelcolumnDataAccepter excelcolumnDataAccepter, Sheet sheet, T excelValid);
+    void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet, T excelValid);
 
     /**
      * handler factory.
@@ -69,17 +69,17 @@ public interface DataValidHandler <T extends Annotation> {
         }
     }
 
-    static void qualifiedTypeValidHandler(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter columnDataAccepter, Sheet sheet) {
-        Class fieldType = columnDataAccepter.getFieldType();
+    static void qualifiedTypeValidHandler(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet) {
+        Class fieldType = accepter.getFieldType();
         if (DataTypeGroupUtil.isMemberOfIntType(fieldType)) {
             DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefInt())
-                    .addValidation(processor,columnDataAccepter,sheet,ExcelQualifiedTypeValidType.getDefInt());
+                    .addValidation(processor,accepter,sheet,ExcelQualifiedTypeValidType.getDefInt());
         } else if (DataTypeGroupUtil.isMemberOfNumberType(fieldType)){
             DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefDecimal())
-                    .addValidation(processor, columnDataAccepter, sheet, ExcelQualifiedTypeValidType.getDefDecimal());
+                    .addValidation(processor, accepter, sheet, ExcelQualifiedTypeValidType.getDefDecimal());
         } else if (DataTypeGroupUtil.isMemberOfDateType(fieldType)) {
             DataValidHandler.getInstance(ExcelQualifiedTypeValidType.getDefDate())
-                    .addValidation(processor, columnDataAccepter, sheet, ExcelQualifiedTypeValidType.getDefDate());
+                    .addValidation(processor, accepter, sheet, ExcelQualifiedTypeValidType.getDefDate());
         }
     }
 

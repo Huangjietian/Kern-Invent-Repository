@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 public class ExcelArrayValidHandler implements DataValidHandler<ExcelValid_ARRAY> {
 
     @Override
-    public void addValidation(ExcelTabulationDataProcessor excelTabulationDataProcessor, ExcelcolumnDataAccepter excelcolumnDataAccepter, Sheet sheet, ExcelValid_ARRAY excelValid) {
-        annotationValid(excelcolumnDataAccepter, excelValid);
+    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet, ExcelValid_ARRAY excelValid) {
+        annotationValid(accepter, excelValid);
         Class clazz = excelValid.dictionary();
         List<ViewBody> view;
         if (MetaViewDictionary.class.isAssignableFrom(clazz)){
@@ -49,26 +49,27 @@ public class ExcelArrayValidHandler implements DataValidHandler<ExcelValid_ARRAY
             viewDatas.add("NO DATA");
         }
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
-        CellRangeAddressList dvRange = new CellRangeAddressList(
-                excelTabulationDataProcessor.getStartRowIndex(),
-                (excelTabulationDataProcessor.getStartTextRowIndex() + excelTabulationDataProcessor.getTextRowNum()) * 50,
-                excelcolumnDataAccepter.getColumnIndex(),
-                excelcolumnDataAccepter.getColumnIndex()
-        );
         DataValidationConstraint dvConstraint ;
         if (viewDatas.toString().length() <= 255){
             dvConstraint = dvHelper.createExplicitListConstraint(viewDatas.toArray(new String[viewDatas.size()]));
         } else {
-            String nameName = NameManegeUtil.addNameManage(sheet, "hidden", excelcolumnDataAccepter.getFieldName(), excelcolumnDataAccepter.getTitleName(), viewDatas.toArray(new String[viewDatas.size()]));
+            String nameName = NameManegeUtil.addNameManage(sheet, "hidden", accepter.getFieldName(), accepter.getTitleName(), viewDatas.toArray(new String[viewDatas.size()]));
             dvConstraint = dvHelper.createFormulaListConstraint(nameName);
         }
+
+        CellRangeAddressList dvRange = new CellRangeAddressList(
+                processor.getTableTextRdx(),
+                (processor.getTableTextRdx() + processor.getTextRowNum()) * 50,
+                accepter.getColumnIndex(),
+                accepter.getColumnIndex()
+        );
         DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
         MessageBoxUtil.setPrompBoxMessage(dataValidation, excelValid.prompMessage());
         MessageBoxUtil.setErrorBoxMessage(dataValidation, excelValid.errorMessage());
         sheet.addValidationData(dataValidation);
     }
 
-    private void annotationValid(ExcelcolumnDataAccepter excelcolumnDataAccepter, ExcelValid_ARRAY excelValid) {
+    private void annotationValid(ExcelcolumnDataAccepter accepter, ExcelValid_ARRAY excelValid) {
 //        if (!java.util.List.class.isAssignableFrom(dataColumn.getFieldClass())){
 //            throw new IllegalArgumentException("The field Annotated @ExcelValid_ARRAY must be Inheritance in java.util.List! Field: " + dataColumn.getFieldName());
 //        }

@@ -30,10 +30,6 @@ public interface DataTabulator {
      */
     ExcelTemplate templateTo(int sheetIndex, Class sourceClass);
 
-
-
-    ExcelTemplate templateTo(String sheetName, Class sourceClass, List datas);
-
     /**
      * Extract datas from specified name sheet
      * @param sheetName

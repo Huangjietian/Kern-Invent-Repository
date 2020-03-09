@@ -3,6 +3,7 @@ package cn.kerninventor.tools.poibox.data.datatable.datavalidation;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.date.ExcelValid_DATE;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.decimal.ExcelValid_DECIMAL;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.integer.ExcelValid_INT;
+import org.apache.poi.hpsf.Decimal;
 
 import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
@@ -23,10 +24,10 @@ public enum ExcelQualifiedTypeValidType {
     INTEGER()
     ;
 
-    @ExcelValid_INT
+    @ExcelValid_INT(value = Integer.MIN_VALUE, optionalVal = Integer.MAX_VALUE, compareType = CompareType.BET)
     private Integer defInt;
 
-    @ExcelValid_DECIMAL
+    @ExcelValid_DECIMAL(value = - Double.MAX_VALUE, optionalVal = Double.MAX_VALUE, compareType = CompareType.BET)
     private BigDecimal defDecimal;
 
     @ExcelValid_DATE

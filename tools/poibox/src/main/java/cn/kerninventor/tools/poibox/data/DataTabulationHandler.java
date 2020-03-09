@@ -26,23 +26,17 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
     @Override
     public ExcelTemplate templateTo(String sheetName, Class sourceClass) {
         Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetName);
-        new ExcelTabulationDataProcessor(sourceClass).tabulateTo(sheet, getParent(),null);
+        new ExcelTabulationDataProcessor(sourceClass).tabulateTo(sheet, getParent());
         return new ExcelTemplate(sheet);
     }
 
     @Override
     public ExcelTemplate templateTo(int sheetIndex, Class sourceClass) {
         Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetIndex);
-        new ExcelTabulationDataProcessor(sourceClass).tabulateTo(sheet, getParent(),null);
+        new ExcelTabulationDataProcessor(sourceClass).tabulateTo(sheet, getParent());
         return new ExcelTemplate(sheet);
     }
 
-    @Override
-    public ExcelTemplate templateTo(String sheetName, Class sourceClass, List datas) {
-        Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetName);
-        new ExcelTabulationDataProcessor(sourceClass).tabulateTo(sheet, getParent(),datas);
-        return new ExcelTemplate(sheet);
-    }
 
     @Override
     public <T> List<T> readDatasFrom(String sheetName, Class<T> clazz) {

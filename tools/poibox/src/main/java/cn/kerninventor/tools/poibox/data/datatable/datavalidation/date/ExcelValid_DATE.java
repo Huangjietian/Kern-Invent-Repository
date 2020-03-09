@@ -22,6 +22,10 @@ import java.text.SimpleDateFormat;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelValid_DATE {
 
+    String NOW = "now()";
+
+    String parseFormat() default "yyyy-MM-dd";
+
     /**
      * required date value depend on compareType, you can set "now()" to represent the current time.
      */

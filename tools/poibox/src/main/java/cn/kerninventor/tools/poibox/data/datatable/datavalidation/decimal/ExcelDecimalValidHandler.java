@@ -21,8 +21,8 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 public class ExcelDecimalValidHandler implements DataValidHandler<ExcelValid_DECIMAL> {
 
     @Override
-    public void addValidation(ExcelTabulationDataProcessor excelTabulationDataProcessor, ExcelcolumnDataAccepter excelcolumnDataAccepter, Sheet sheet, ExcelValid_DECIMAL excelValid) {
-        annotationValid(excelcolumnDataAccepter, excelValid);
+    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet, ExcelValid_DECIMAL excelValid) {
+        annotationValid(accepter, excelValid);
         String var1 = excelValid.value() + "";
         String var2 = excelValid.optionalVal() == -1.00 ? null : excelValid.optionalVal() + "";
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
@@ -32,10 +32,10 @@ public class ExcelDecimalValidHandler implements DataValidHandler<ExcelValid_DEC
                 var2
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                excelTabulationDataProcessor.getStartRowIndex(),
-                excelTabulationDataProcessor.getStartTextRowIndex() + excelTabulationDataProcessor.getTextRowNum(),
-                excelcolumnDataAccepter.getColumnIndex(),
-                excelcolumnDataAccepter.getColumnIndex()
+                processor.getTableTextRdx() ,
+                processor.getTableTextRdx() + processor.getTextRowNum(),
+                accepter.getColumnIndex(),
+                accepter.getColumnIndex()
         );
         DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
         MessageBoxUtil.setPrompBoxMessage(dataValidation, excelValid.prompMessage());
@@ -43,10 +43,10 @@ public class ExcelDecimalValidHandler implements DataValidHandler<ExcelValid_DEC
         sheet.addValidationData(dataValidation);
     }
 
-    private void annotationValid(ExcelcolumnDataAccepter excelcolumnDataAccepter, ExcelValid_DECIMAL excelValid) {
+    private void annotationValid(ExcelcolumnDataAccepter accepter, ExcelValid_DECIMAL excelValid) {
         if (excelValid.compareType().isOptionalValueValidity()){
             if (excelValid.value() > excelValid.optionalVal()){
-                throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + excelcolumnDataAccepter.getFieldName());
+                throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + accepter.getFieldName());
             }
         }
     }

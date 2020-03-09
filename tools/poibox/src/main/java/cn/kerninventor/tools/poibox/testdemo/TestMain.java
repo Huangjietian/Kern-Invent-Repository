@@ -23,7 +23,7 @@ public class TestMain {
 
         List<Test> tests = new ArrayList<>();
         tests.add(new Test("name1","123", 3 , new Date(), 123456, 21324, 1L));
-        myBox.dataTabulator().templateTo("人员信息导入模板1", Test.class, tests);
+        myBox.dataTabulator().templateTo("人员信息导入模板1", Test.class);
         myBox.dataTabulator().templateTo("人员信息导入模板2", Test.class);
 
         myBox.wirteToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板.xlxs");

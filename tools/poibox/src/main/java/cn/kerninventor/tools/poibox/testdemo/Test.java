@@ -31,8 +31,9 @@ public class Test {
     @ExcelColumn("性别")
     private Integer sex;
 
-    @ExcelValid_DATE(compareType = CompareType.LT, date = "now()")
-    @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-MM-dd")
+    @ExcelValid_DATE(compareType = CompareType.BET, parseFormat = "dd/MM/yyyy", date = "01/01/2020", optionalDate = "31/12/2020",
+    prompMessage = "请输入2020-01-01 至 2020-12-31 之间的日期",errorMessage = "输入错误，请检查格式是否正确")
+    @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-mm-dd")
     private Date birthDay;
 
     @ExcelColumn("身高")
@@ -44,6 +45,12 @@ public class Test {
     @ExcelValid_ARRAY(dictionary = TestCountryService.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
     @ExcelColumn("国籍")
     private Long nationalityId;
+
+    @ExcelColumn("身高(英寸)")
+    private Double heightInch;
+
+    @ExcelColumn("体重(磅)")
+    private Double weightPound;
 
     public Test(String name, String iddentity, Integer sex, Date birthDay, Integer height, Integer weight, Long nationalityId) {
         this.name = name;
