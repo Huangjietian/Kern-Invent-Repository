@@ -46,12 +46,6 @@ public class Test {
     @ExcelColumn("国籍")
     private Long nationalityId;
 
-    @ExcelColumn("身高(英寸)")
-    private Double heightInch;
-
-    @ExcelColumn("体重(磅)")
-    private Double weightPound;
-
     public Test(String name, String iddentity, Integer sex, Date birthDay, Integer height, Integer weight, Long nationalityId) {
         this.name = name;
         this.iddentity = iddentity;

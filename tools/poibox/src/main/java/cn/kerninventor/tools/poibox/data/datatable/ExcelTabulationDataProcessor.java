@@ -218,9 +218,9 @@ public class ExcelTabulationDataProcessor<T> {
                 DataValidHandler.getInstance(e.getValidAnnotation())
                         .addValidation(this, e, sheet, e.getValidAnnotation());
             }
-            else {
-                DataValidHandler.qualifiedTypeValidHandler(this, e, sheet);
-            }
+//            else {
+//                DataValidHandler.qualifiedTypeValidHandler(this, e, sheet);
+//            }
 
             //text style
             CellStyle columnStyle = workbook.createCellStyle();
