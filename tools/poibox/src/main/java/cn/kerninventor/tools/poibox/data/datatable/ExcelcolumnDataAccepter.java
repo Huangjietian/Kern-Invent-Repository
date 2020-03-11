@@ -1,15 +1,11 @@
 package cn.kerninventor.tools.poibox.data.datatable;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidHandler;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
-import org.apache.poi.ss.usermodel.DataFormat;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
+import cn.kerninventor.tools.poibox.utils.SupportedType;
 
-import javax.swing.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Objects;
 
 /**
  * @Title: DataColumn
@@ -43,7 +39,7 @@ public class ExcelcolumnDataAccepter implements Comparable<ExcelcolumnDataAccept
 
     public static ExcelcolumnDataAccepter getInstance(Field field, ExcelColumn excelColumn, int columnIndex){
         ExcelcolumnDataAccepter accepter = new ExcelcolumnDataAccepter();
-        accepter.field = field;
+        accepter.field = SupportedType.checkSupportability(field);
         accepter.fieldName = field.getName();
         accepter.titleName = excelColumn.value();
         accepter.columnIndex = columnIndex;
@@ -51,7 +47,7 @@ public class ExcelcolumnDataAccepter implements Comparable<ExcelcolumnDataAccept
         accepter.regEx = "".equals(excelColumn.regEx().trim()) ? null : excelColumn.regEx();
         accepter.dataFormatEx = "".equals(excelColumn.dataFormatEx().trim()) ? null : excelColumn.dataFormatEx();
         accepter.mergeByContent = excelColumn.mergeByContent();
-        accepter.validAnnotation = DataValidHandler.findAnnotationForm(field);
+        accepter.validAnnotation = DataValidBuilder.findAnnotationForm(field);
         return accepter;
     }
 

@@ -1,8 +1,8 @@
-package cn.kerninventor.tools.poibox.data.datatable.datavalidation.integer;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.decimal;
 
 import cn.kerninventor.tools.poibox.data.datatable.ExcelcolumnDataAccepter;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidHandler;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.MessageBoxUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
@@ -18,15 +18,21 @@ import org.apache.poi.ss.util.CellRangeAddressList;
  * @Date 2019/12/13 14:31
  * @Description: TODO
  */
-public class ExcelIntValidHandler implements DataValidHandler<ExcelValid_INT> {
+public class ExcelValidDecimalBuilder implements DataValidBuilder<ExcelValidDecimal> {
+
+    private ExcelValidDecimal excelValid;
+
+    public ExcelValidDecimalBuilder(ExcelValidDecimal excelValid) {
+        this.excelValid = excelValid;
+    }
 
     @Override
-    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet, ExcelValid_INT excelValid) {
-        annotationValid(accepter, excelValid);
+    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet) {
+        annotationValid(accepter);
         String var1 = excelValid.value() + "";
-        String var2 = excelValid.optionalVal() == -1 ? null : excelValid.optionalVal() + "";
+        String var2 = excelValid.optionalVal() == -1.00 ? null : excelValid.optionalVal() + "";
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
-        DataValidationConstraint dvConstraint = dvHelper.createIntegerConstraint(
+        DataValidationConstraint dvConstraint = dvHelper.createDecimalConstraint(
                 excelValid.compareType().getCode(),
                 var1,
                 var2
@@ -43,15 +49,13 @@ public class ExcelIntValidHandler implements DataValidHandler<ExcelValid_INT> {
         sheet.addValidationData(dataValidation);
     }
 
-    private void annotationValid(ExcelcolumnDataAccepter accepter, ExcelValid_INT excelValid) {
+    private void annotationValid(ExcelcolumnDataAccepter accepter) {
         if (excelValid.compareType().isOptionalValueValidity()){
             if (excelValid.value() > excelValid.optionalVal()){
                 throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + accepter.getFieldName());
             }
         }
     }
-
-
 
 
 }

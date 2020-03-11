@@ -56,4 +56,22 @@ public class BoxGadget {
     public static Font getFontFrom(CellStyle cellStyle, Workbook workbook) {
         return workbook.getFontAt(cellStyle.getFontIndexAsInt());
     }
+
+    /**
+     * This method transfer excel column index to english form.
+     * @param cellIndex
+     * @return
+     */
+    public static String TransferExcelColumnIndex(int cellIndex){
+        String cellStrIndex = "";
+        int iHead = (cellIndex - 1) / 26;
+        int iLeftOver = (cellIndex - 1) % 26;
+        if (iHead >= 26) {
+            cellStrIndex = TransferExcelColumnIndex(iHead);
+        } else if (iHead > 0) {
+            cellStrIndex += (char)(64 + iHead);
+        }
+        cellStrIndex += (char)(65 + iLeftOver);
+        return cellStrIndex;
+    }
 }

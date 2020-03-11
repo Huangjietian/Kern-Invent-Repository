@@ -2,8 +2,7 @@ package cn.kerninventor.tools.poibox.data.datatable.datavalidation.date;
 
 import cn.kerninventor.tools.poibox.data.datatable.ExcelcolumnDataAccepter;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.CompareType;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidHandler;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.MessageBoxUtil;
 import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -24,19 +23,23 @@ import java.util.Objects;
  * @Date 2019/12/13 11:30
  * @Description: TODO
  */
-public class ExcelDateValidHandler implements DataValidHandler<ExcelValid_DATE> {
+public class ExcelValidDateBuilder implements DataValidBuilder<ExcelValidDate> {
 
+    private ExcelValidDate excelValid;
     private SimpleDateFormat sdf;
     private String dateEx;
     private String optionalDateEx;
     private Date date;
     private Date optionalDate;
 
+    public ExcelValidDateBuilder(ExcelValidDate excelValid) {
+        this.excelValid = excelValid;
+    }
 
-    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet, ExcelValid_DATE excelValid) {
+    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet) {
         //TODO 解析格式验证时间字段的有效性
         try {
-            annotationValid(accepter, excelValid);
+            annotationValid(accepter);
         } catch (ParseException e) {
             throw new IllegalArgumentException("ExcelVCalid_DATE parse date failed! parseFormat, please check your configuration of field : " + accepter.getFieldName());
         }
@@ -61,16 +64,16 @@ public class ExcelDateValidHandler implements DataValidHandler<ExcelValid_DATE> 
     }
 
 
-    private void annotationValid(ExcelcolumnDataAccepter accepter, ExcelValid_DATE excelValid) throws ParseException {
+    private void annotationValid(ExcelcolumnDataAccepter accepter) throws ParseException {
         sdf = new SimpleDateFormat(excelValid.parseFormat());
         Date current = new Date();
-        if (ExcelValid_DATE.NOW.equals(excelValid.date())) {
+        if (ExcelValidDate.NOW.equals(excelValid.date())) {
             date = current;
             dateEx = sdf.format(date);
         } else {
             date = sdf.parse(dateEx = excelValid.date().trim());
         }
-        if (ExcelValid_DATE.NOW.equals(excelValid.optionalDate().trim())) {
+        if (ExcelValidDate.NOW.equals(excelValid.optionalDate().trim())) {
             optionalDate = current;
             optionalDateEx = sdf.format(optionalDate);
         } else if (!"".equals(excelValid.optionalDate().trim())){

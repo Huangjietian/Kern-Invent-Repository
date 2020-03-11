@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2019/12/10 18:33
  * @Description: TODO
  */
-public abstract class MetaViewDictionaryCover<T extends MetaViewBody> implements MetaViewDictionary {
+public abstract class MetaViewDictionaryCover<T extends MetaViewBody> implements MetaViewDictionary<T> {
 
     public MetaViewDictionaryCover() {
         ExcelDictionaryLibrary.attach(this);

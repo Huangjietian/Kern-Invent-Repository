@@ -12,16 +12,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @Date 2019/12/17 10:25
  * @Description: TODO
  */
-public class ExcelTemplate {
+public class SheetTemplate {
 
-    private Workbook workbook;
     private Sheet sheet;
-    private int sheetAt;
 
-    public ExcelTemplate(Sheet sheet) {
+
+    public SheetTemplate(Sheet sheet) {
         this.sheet = sheet;
-        workbook = sheet.getWorkbook();
-        sheetAt = workbook.getSheetIndex(sheet);
     }
+
+
 
 }

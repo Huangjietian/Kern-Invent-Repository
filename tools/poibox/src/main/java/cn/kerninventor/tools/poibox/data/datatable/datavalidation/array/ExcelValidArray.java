@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array;
 
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionary;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
+import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -19,13 +19,15 @@ import java.lang.annotation.Target;
 @ExcelValid
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExcelValid_ARRAY {
+public @interface ExcelValidArray {
+
+    boolean coverness = true;
 
     /**
      * The field value can be translated based on metadata and viewdata by configuring the property
      * @return
      */
-    Class<? extends ExcelDictionary> dictionary();
+    Class<? extends ViewDictionary> dictionary();
 
     /**
      * Prompt message when a cell is selected

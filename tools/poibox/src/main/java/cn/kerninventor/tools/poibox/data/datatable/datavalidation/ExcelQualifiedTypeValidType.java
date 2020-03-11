@@ -1,9 +1,9 @@
 package cn.kerninventor.tools.poibox.data.datatable.datavalidation;
 
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.date.ExcelValid_DATE;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.decimal.ExcelValid_DECIMAL;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.integer.ExcelValid_INT;
-import org.apache.poi.hpsf.Decimal;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.date.ExcelValidDate;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.decimal.ExcelValidDecimal;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.integer.ExcelValidInt;
+import cn.kerninventor.tools.poibox.utils.DataTypeGroupUtil;
 
 import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
@@ -24,36 +24,53 @@ public enum ExcelQualifiedTypeValidType {
     INTEGER()
     ;
 
-    @ExcelValid_INT(value = Integer.MIN_VALUE, optionalVal = Integer.MAX_VALUE, compareType = CompareType.BET)
+    @ExcelValidInt(value = Integer.MIN_VALUE, optionalVal = Integer.MAX_VALUE, compareType = CompareType.BET)
     private Integer defInt;
 
-    @ExcelValid_DECIMAL(value = - Double.MAX_VALUE, optionalVal = Double.MAX_VALUE, compareType = CompareType.BET)
+    @ExcelValidDecimal(value = - Double.MAX_VALUE, optionalVal = Double.MAX_VALUE, compareType = CompareType.BET)
     private BigDecimal defDecimal;
 
-    @ExcelValid_DATE
+    @ExcelValidDate
     private Date defDate;
 
-    public static Annotation getDefInt() {
+    private static Annotation getDefInt() {
         try {
-            return ExcelQualifiedTypeValidType.class.getDeclaredField("defInt").getDeclaredAnnotation(ExcelValid_INT.class);
+            return ExcelQualifiedTypeValidType.class.getDeclaredField("defInt").getDeclaredAnnotation(ExcelValidInt.class);
         } catch (NoSuchFieldException e) {
             throw new IllegalArgumentException();
         }
     }
 
-    public static Annotation getDefDecimal() {
+    private static Annotation getDefDecimal() {
         try {
-            return ExcelQualifiedTypeValidType.class.getDeclaredField("defDecimal").getDeclaredAnnotation(ExcelValid_DECIMAL.class);
+            return ExcelQualifiedTypeValidType.class.getDeclaredField("defDecimal").getDeclaredAnnotation(ExcelValidDecimal.class);
         } catch (NoSuchFieldException e) {
             throw new IllegalArgumentException();
         }
     }
 
-    public static Annotation getDefDate() {
+    private static Annotation getDefDate() {
         try {
-            return ExcelQualifiedTypeValidType.class.getDeclaredField("defDate").getDeclaredAnnotation(ExcelValid_DATE.class);
+            return ExcelQualifiedTypeValidType.class.getDeclaredField("defDate").getDeclaredAnnotation(ExcelValidDate.class);
         } catch (NoSuchFieldException e) {
             throw new IllegalArgumentException();
         }
     }
-}
+
+    public static DataValidBuilder getQualifiedTypeValidHandler(Class type) {
+        if (DataTypeGroupUtil.isMemberOfIntType(type)) {
+            return DataValidBuilder.getInstance(ExcelQualifiedTypeValidType.getDefInt());
+        } else if (DataTypeGroupUtil.isMemberOfNumberType(type)){
+            return DataValidBuilder.getInstance(ExcelQualifiedTypeValidType.getDefDecimal());
+        } else if (DataTypeGroupUtil.isMemberOfDateType(type)) {
+            return DataValidBuilder.getInstance(ExcelQualifiedTypeValidType.getDefDate());
+        } else {
+            return (p, a, s) -> {
+                /**
+                 * TO DO NOTHING
+                 */
+            };
+        }
+    }
+
+ }

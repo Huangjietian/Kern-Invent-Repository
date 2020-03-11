@@ -3,10 +3,15 @@ package cn.kerninventor.tools.poibox.testdemo;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.CompareType;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.ExcelValid_ARRAY;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.date.ExcelValid_DATE;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.textLength.ExcelValid_TEXTLENGTH;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.ExcelValidArray;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.date.ExcelValidDate;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.decimal.ExcelValidDecimal;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.integer.ExcelValidInt;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.textLength.ExcelValidTextlength;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -20,40 +25,61 @@ import java.util.Date;
 @ExcelTabulation(headline = "人员信息", style = TestStyle.class)
 public class Test {
 
-    @ExcelColumn("姓名")
+    @ExcelValidTextlength(value = 30, compareType = CompareType.LTE)
+    @ExcelColumn(value = "姓名", dataFormatEx = "@")
     private String name;
 
-    @ExcelValid_TEXTLENGTH(compareType = CompareType.ET, value = 18, optionalVal = 18)
+    @ExcelValidTextlength(compareType = CompareType.ET, value = 18)
     @ExcelColumn(value = "身份证", dataFormatEx = "@")
     private String iddentity;
 
-    @ExcelValid_ARRAY(dictionary = TestGender.class)
+    @ExcelValidArray(dictionary = TestGender.class)
     @ExcelColumn("性别")
     private Integer sex;
 
-    @ExcelValid_DATE(compareType = CompareType.BET, parseFormat = "dd/MM/yyyy", date = "01/01/2020", optionalDate = "31/12/2020",
+    @ExcelValidDate(compareType = CompareType.BET, parseFormat = "dd/MM/yyyy", date = "01/01/2020", optionalDate = "31/12/2020",
     prompMessage = "请输入2020-01-01 至 2020-12-31 之间的日期",errorMessage = "输入错误，请检查格式是否正确")
-    @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-mm-dd")
+    @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-MM-dd")
     private Date birthDay;
 
+    @ExcelValidDate(compareType = CompareType.BET, parseFormat = "dd/MM/yyyy", date = "01/01/2020", optionalDate = "31/12/2020",
+            prompMessage = "请输入2020-01-01 至 2020-12-31 之间的日期",errorMessage = "输入错误，请检查格式是否正确")
+    @ExcelColumn(value = "加入日期", dataFormatEx = "yyyy-MM-dd HH:mm:ss", columnWidth = 26)
+    private LocalDateTime joinDate;
+
+    @ExcelValidInt(value = 0, optionalVal = 300, compareType = CompareType.BET)
     @ExcelColumn("身高")
     private Integer height;
 
+    @ExcelValidInt(value = 0, compareType = CompareType.GT)
     @ExcelColumn("体重")
     private Integer weight;
 
-    @ExcelValid_ARRAY(dictionary = TestCountryService.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
+    @ExcelValidDecimal(value = 11.12)
+    @ExcelColumn(value = "臂长")
+    private BigDecimal brachium;
+
+    @ExcelValidArray(dictionary = TestCountryService.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
     @ExcelColumn("国籍")
     private Long nationalityId;
 
-    public Test(String name, String iddentity, Integer sex, Date birthDay, Integer height, Integer weight, Long nationalityId) {
+    @ExcelColumn("有效性")
+    private Boolean availability;
+
+    public Test(String name, String iddentity, Integer sex, Date birthDay, LocalDateTime joinDate, Integer height, Integer weight, BigDecimal brachium, Long nationalityId, Boolean availability) {
         this.name = name;
         this.iddentity = iddentity;
         this.sex = sex;
         this.birthDay = birthDay;
+        this.joinDate = joinDate;
         this.height = height;
         this.weight = weight;
+        this.brachium = brachium;
         this.nationalityId = nationalityId;
+        this.availability = availability;
+    }
+
+    public Test() {
     }
 }
 

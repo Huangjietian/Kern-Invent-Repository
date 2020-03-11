@@ -2,7 +2,7 @@ package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array;
 
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelcolumnDataAccepter;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidHandler;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.MessageBoxUtil;
 import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionaryLibrary;
 import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewDictionary;
@@ -27,33 +27,33 @@ import java.util.stream.Collectors;
  * @Date 2019/12/13 15:39
  * @Description: TODO
  */
-public class ExcelArrayValidHandler implements DataValidHandler<ExcelValid_ARRAY> {
+public class ExcelValidArrayBuilder implements DataValidBuilder<ExcelValidArray> {
+
+    private ExcelValidArray excelValid;
+
+    public ExcelValidArrayBuilder(ExcelValidArray excelValid) {
+        this.excelValid = excelValid;
+    }
 
     @Override
-    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet, ExcelValid_ARRAY excelValid) {
-        annotationValid(accepter, excelValid);
-        Class clazz = excelValid.dictionary();
-        List<ViewBody> view;
-        if (MetaViewDictionary.class.isAssignableFrom(clazz)){
-            view = ExcelDictionaryLibrary.referMetaViewDict(clazz);
-        } else if (ViewDictionary.class.isAssignableFrom(clazz)){
-            view = ExcelDictionaryLibrary.referViewDict(clazz);
-        } else {
-            throw new IllegalArgumentException("The dictionary must be an enumeration that implements the interface MetaViewEnum or a concrete implementation that inherits the abstarct class MetaViewDictionaryCover / ViewDictionaryCover.");
-        }
+    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet) {
+        List<ViewBody> view = ExcelDictionaryLibrary.referDict(excelValid.dictionary());
         if (view == null){
             view = new ArrayList<>();
+            view.add(new ViewBody() {
+                @Override
+                public Object getViewdata() {
+                    return "NO DATA";
+                }
+            });
         }
         List<String> viewDatas = view.stream().map(e -> e.getViewdata().toString()).collect(Collectors.toList());
-        if (viewDatas.size() == 0){
-            viewDatas.add("NO DATA");
-        }
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
         DataValidationConstraint dvConstraint ;
         if (viewDatas.toString().length() <= 255){
             dvConstraint = dvHelper.createExplicitListConstraint(viewDatas.toArray(new String[viewDatas.size()]));
         } else {
-            String nameName = NameManegeUtil.addNameManage(sheet, "hidden", accepter.getFieldName(), accepter.getTitleName(), viewDatas.toArray(new String[viewDatas.size()]));
+            String nameName = NameManegeUtil.addNameManage(sheet, "hidden", accepter.getTitleName(), accepter.getFieldName(), viewDatas.toArray(new String[viewDatas.size()]));
             dvConstraint = dvHelper.createFormulaListConstraint(nameName);
         }
 
@@ -67,12 +67,6 @@ public class ExcelArrayValidHandler implements DataValidHandler<ExcelValid_ARRAY
         MessageBoxUtil.setPrompBoxMessage(dataValidation, excelValid.prompMessage());
         MessageBoxUtil.setErrorBoxMessage(dataValidation, excelValid.errorMessage());
         sheet.addValidationData(dataValidation);
-    }
-
-    private void annotationValid(ExcelcolumnDataAccepter accepter, ExcelValid_ARRAY excelValid) {
-//        if (!java.util.List.class.isAssignableFrom(dataColumn.getFieldClass())){
-//            throw new IllegalArgumentException("The field Annotated @ExcelValid_ARRAY must be Inheritance in java.util.List! Field: " + dataColumn.getFieldName());
-//        }
     }
 
 }

@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.datatable.datavalidation.decimal;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.date;
 
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.CompareType;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
@@ -7,31 +7,34 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.text.SimpleDateFormat;
 
 /**
- * @Title: ExcelValid_DECIMAL
+ * @Title: ExcelValid_DATE
  * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation.decimal
+ * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation
  * @Author Kern
- * @Date 2019/12/13 15:18
+ * @Date 2019/12/13 11:10
  * @Description: TODO
  */
 @ExcelValid
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExcelValid_DECIMAL {
+public @interface ExcelValidDate {
+
+    String NOW = "now()";
+
+    String parseFormat() default "yyyy-MM-dd";
 
     /**
-     * Depending on the qualified unique value or minimum value of the comparison type
-     * @return
+     * required date value depend on compareType, you can set "now()" to represent the current time.
      */
-    double value() default 0.00;
+    String date() default "1900-01-01";
 
     /**
-     * The maximum value, whether or not it makes sense depends on the comparison type
-     * @return
+     * this date attribution is optional, whether it makes sense or not depends on compareType attribution. you can set "now()" to represent the current time.
      */
-    double optionalVal() default -1.00;
+    String optionalDate() default "";
 
     /**
      * Prompt message when a cell is selected
@@ -49,4 +52,5 @@ public @interface ExcelValid_DECIMAL {
      * compare type , default greater than.
      */
     CompareType compareType() default CompareType.GT;
+
 }

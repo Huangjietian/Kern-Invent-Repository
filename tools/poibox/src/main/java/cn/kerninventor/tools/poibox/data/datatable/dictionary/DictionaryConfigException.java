@@ -1,5 +1,7 @@
 package cn.kerninventor.tools.poibox.data.datatable.dictionary;
 
+import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
+
 /**
  * @Title: DictionaryConfigException
  * @ProjectName tools
@@ -17,7 +19,7 @@ public class DictionaryConfigException extends RuntimeException {
         super(message);
     }
 
-    public DictionaryConfigException(String message, Class<? extends ExcelDictionary> dictionaryClass) {
+    public DictionaryConfigException(String message, Class<? extends ViewDictionary> dictionaryClass) {
         super(message + "  Class: " + dictionaryClass.getName());
     }
 

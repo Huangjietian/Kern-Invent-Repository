@@ -1,6 +1,7 @@
 package cn.kerninventor.tools.poibox.data;
 
-import cn.kerninventor.tools.poibox.data.datatable.result.ExcelTemplate;
+import cn.kerninventor.tools.poibox.data.datatable.result.SheetTemplate;
+import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface DataTabulator {
      * @param sourceClass
      * @return
      */
-    ExcelTemplate templateTo(String sheetName, Class sourceClass);
+    SheetTemplate templateTo(String sheetName, Class sourceClass);
 
     /**
      * Generate template to specified index sheet
@@ -28,7 +29,17 @@ public interface DataTabulator {
      * @param sourceClass
      * @return
      */
-    ExcelTemplate templateTo(int sheetIndex, Class sourceClass);
+    SheetTemplate templateTo(int sheetIndex, Class sourceClass);
+
+    /**
+     * Generate template to specified index sheet
+     * @param sheet
+     * @param sourceClass
+     * @return
+     */
+    SheetTemplate templateTo(Sheet sheet, Class sourceClass);
+
+    <T> void writeTo(Sheet sheet, Class<T> sourceClass, List<T> datas);
 
     /**
      * Extract datas from specified name sheet
@@ -38,7 +49,7 @@ public interface DataTabulator {
      * @return
      * @throws NoSuchMethodException
      */
-    <T> List<T> readDatasFrom(String sheetName, Class<T> clazz) throws NoSuchMethodException;
+    <T> List<T> readDatasFrom(String sheetName, Class<T> clazz);
 
     /**
      * Extract datas from specified index sheet
@@ -48,5 +59,5 @@ public interface DataTabulator {
      * @return
      * @throws NoSuchMethodException
      */
-    <T> List<T> readDatasFrom(int sheetIndex, Class<T> clazz) throws NoSuchMethodException;
+    <T> List<T> readDatasFrom(int sheetIndex, Class<T> clazz) ;
 }

@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @ExcelValid
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExcelValid_TEXTLENGTH {
+public @interface ExcelValidTextlength {
 
     /**
      * Depending on the qualified unique value or minimum value of the comparison type

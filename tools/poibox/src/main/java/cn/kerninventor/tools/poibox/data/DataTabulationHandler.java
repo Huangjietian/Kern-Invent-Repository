@@ -4,8 +4,9 @@ import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
-import cn.kerninventor.tools.poibox.data.datatable.result.ExcelTemplate;
+import cn.kerninventor.tools.poibox.data.datatable.result.SheetTemplate;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.omg.CosNaming.IstringHelper;
 
 import java.util.List;
 
@@ -24,17 +25,28 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
     }
 
     @Override
-    public ExcelTemplate templateTo(String sheetName, Class sourceClass) {
+    public SheetTemplate templateTo(String sheetName, Class sourceClass) {
         Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetName);
-        new ExcelTabulationDataProcessor(sourceClass).tabulateTo(sheet, getParent());
-        return new ExcelTemplate(sheet);
+        return templateTo(sheet, sourceClass);
     }
 
     @Override
-    public ExcelTemplate templateTo(int sheetIndex, Class sourceClass) {
+    public SheetTemplate templateTo(int sheetIndex, Class sourceClass) {
         Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetIndex);
-        new ExcelTabulationDataProcessor(sourceClass).tabulateTo(sheet, getParent());
-        return new ExcelTemplate(sheet);
+        return templateTo(sheet, sourceClass);
+    }
+
+    @Override
+    public SheetTemplate templateTo(Sheet sheet, Class sourceClass) {
+        ExcelTabulationDataProcessor processor = new ExcelTabulationDataProcessor(sourceClass);
+        processor.tabulateTo(sheet, getParent(), true);
+        return new SheetTemplate(sheet);
+    }
+
+    @Override
+    public <T> void writeTo(Sheet sheet, Class<T> sourceClass , List<T> datas) {
+        ExcelTabulationDataProcessor processor = new ExcelTabulationDataProcessor(sourceClass);
+        processor.writeDatasTo(sheet, getParent(), datas, false);
     }
 
 
@@ -44,16 +56,17 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
         if (sheet == null) {
             throw new NullPointerException("The worksheet data cannot be read because the worksheet with the name " + sheetName + " is empty");
         }
-        return new ExcelTabulationDataProcessor(clazz).extractDatasFrom(sheet);
+        return new ExcelTabulationDataProcessor(clazz).readFrom(sheet, getParent());
     }
 
     @Override
-    public <T> List<T> readDatasFrom(int sheetIndex, Class<T> clazz) throws NoSuchMethodException {
+    public <T> List<T> readDatasFrom(int sheetIndex, Class<T> clazz) {
         Sheet sheet = getParent().workbook().getSheetAt(sheetIndex);
         if (sheet == null) {
             throw new NullPointerException("The worksheet data cannot be read because the worksheet with the index " + sheetIndex + " is empty");
         }
-        return new ExcelTabulationDataProcessor(clazz).extractDatasFrom(sheet);
+//        return new ExcelTabulationDataProcessor(clazz).extractDatasFrom(sheet);
+        return null;
     }
 
 }

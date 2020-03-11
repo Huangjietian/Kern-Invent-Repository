@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2019/12/13 16:01
  * @Description: TODO
  */
-public abstract class ViewDictionaryCover<T extends ViewBody> implements ViewDictionary {
+public abstract class ViewDictionaryCover<T extends ViewBody> implements ViewDictionary<T> {
 
     public ViewDictionaryCover() {
         ExcelDictionaryLibrary.attach(this);

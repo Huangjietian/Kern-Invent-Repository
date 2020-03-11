@@ -14,6 +14,7 @@ import java.util.List;
  * @Description: TODO
  */
 public class TestCountryService extends MetaViewDictionaryCover<TestCountryBO> {
+
     @Override
     public List<TestCountryBO> obtainData() {
         //

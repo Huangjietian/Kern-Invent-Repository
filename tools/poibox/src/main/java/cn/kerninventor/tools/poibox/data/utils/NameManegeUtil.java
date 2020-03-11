@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.data.utils;
 
+import cn.kerninventor.tools.poibox.BoxGadget;
 import org.apache.poi.ss.usermodel.Name;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -32,8 +33,17 @@ public class NameManegeUtil {
         Name nameManager = wb.createName();
         nameManager.setNameName(UKEY + nameName);
         //创建引用
-        String endCellEnIndex = CellValueUtil.TransferExcelColumnIndex(dataRow.getLastCellNum());
-        nameManager.setRefersToFormula(hiddenSheetName+"!$A$"+(dataRowNum+1)+":$"+endCellEnIndex+"$"+(dataRowNum+1));
+        String endCellEnIndex = BoxGadget.TransferExcelColumnIndex(dataRow.getLastCellNum());
+        StringBuilder formulaExBulder = new StringBuilder();
+        formulaExBulder
+                .append(hiddenSheetName)
+                .append("!$A$")
+                .append((dataRowNum + 1))
+                .append(":$")
+                .append(endCellEnIndex)
+                .append("$")
+                .append((dataRowNum + 1));
+        nameManager.setRefersToFormula(formulaExBulder.toString());
         return nameName;
     }
 }

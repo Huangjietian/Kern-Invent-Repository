@@ -15,15 +15,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelValid {
 
-    /**
-     * Prompt message when a cell is selected
-     * @return
-     */
-    String prompMessage() default "";
+    boolean coverness = false;
 
-    /**
-     * Prompt message when a constraint is violated
-     * @return
-     */
-    String errorMessage() default "";
+
 }

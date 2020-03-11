@@ -6,6 +6,7 @@ import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewD
 import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewBody;
 import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
 import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionaryCover;
+import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 
 import java.util.*;
 
@@ -16,15 +17,25 @@ import java.util.*;
  * @Author Kern
  * @Date 2019/12/10 18:58
  */
-public final class ExcelDictionaryLibrary<T extends MetaViewDictionaryCover> {
+public final class ExcelDictionaryLibrary {
 
-    private static Map<Class<? extends ExcelDictionary>, ExcelDictionary> dictionaryMap = new HashMap<>();
+    private static Map<Class<? extends ViewDictionary>, ViewDictionary> dictionaryMap = new HashMap<>();
 
-    public static void attach(ExcelDictionary dictionary){
+    public static void attach(ViewDictionary dictionary){
         dictionaryMap.put(dictionary.getClass(), dictionary);
     }
 
-    public static List<MetaViewBody> referMetaViewDict(Class<? extends MetaViewDictionary> dictionaryClass) {
+    public static <T extends ViewBody> List<T> referDict(Class<? extends ViewDictionary> dictionaryClass) {
+        if (MetaViewDictionary.class.isAssignableFrom(dictionaryClass)) {
+            return referMetaViewDict((Class<? extends MetaViewDictionary>) dictionaryClass);
+        } else if (ViewDictionary.class.isAssignableFrom(dictionaryClass)){
+            return referViewDict(dictionaryClass);
+        } else {
+            return null;
+        }
+    }
+
+    private static <T extends ViewBody> List<T> referMetaViewDict(Class<? extends MetaViewDictionary> dictionaryClass) {
         /**
          * load data into container.
          */
@@ -47,7 +58,7 @@ public final class ExcelDictionaryLibrary<T extends MetaViewDictionaryCover> {
          */
         if (dictionary == null){
             try {
-                dictionary = (MetaViewDictionaryCover) dictionaryClass.newInstance();
+                dictionary = (MetaViewDictionaryCover) ReflectUtil.newInstance(dictionaryClass);
                 dictionaryMap.put(dictionaryClass, dictionary);
             } catch (Exception e) {
                 throw new DictionaryConfigException("Dictionary instantiation failed. Check for an unparameterized constructor! ", dictionaryClass);
@@ -56,7 +67,7 @@ public final class ExcelDictionaryLibrary<T extends MetaViewDictionaryCover> {
         return dictionary.obtainData();
     }
 
-    public static List<ViewBody> referViewDict(Class<? extends ViewDictionary> dictionaryClass) {
+    private static <T extends ViewBody> List<T> referViewDict(Class<? extends ViewDictionary> dictionaryClass) {
         /**
          * load data into container.
          */
@@ -77,7 +88,7 @@ public final class ExcelDictionaryLibrary<T extends MetaViewDictionaryCover> {
          */
         if (dictionary == null){
             try {
-                dictionary = (ViewDictionaryCover) dictionaryClass.newInstance();
+                dictionary = (ViewDictionaryCover) ReflectUtil.newInstance(dictionaryClass);
                 dictionaryMap.put(dictionaryClass, dictionary);
             } catch (Exception e) {
                 throw new DictionaryConfigException("Dictionary instantiation failed. Check for an unparameterized constructor! ", dictionaryClass);

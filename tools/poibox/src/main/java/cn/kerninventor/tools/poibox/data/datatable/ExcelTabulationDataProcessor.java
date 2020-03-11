@@ -2,9 +2,13 @@ package cn.kerninventor.tools.poibox.data.datatable;
 
 import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidHandler;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.ExcelValidArray;
+import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionaryLibrary;
+import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewBody;
+import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewDictionary;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
-import cn.kerninventor.tools.poibox.data.exception.IllegalTypeOfCellValueException;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.style.Styler;
 import cn.kerninventor.tools.poibox.style.TabulationStyle;
@@ -13,8 +17,9 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @Title: DataTable
@@ -124,8 +129,6 @@ public class ExcelTabulationDataProcessor<T> {
         return columnsContainer;
     }
 
-
-
     /**
      * Annotation way
      * @param tableClass
@@ -177,7 +180,7 @@ public class ExcelTabulationDataProcessor<T> {
         return excelcolumnDataAccepters;
     }
 
-    public void tabulateTo(Sheet sheet, POIBox poiBox) {
+    public void tabulateTo(Sheet sheet, POIBox poiBox, boolean valid) {
         Workbook workbook = sheet.getWorkbook();
         String headline = getHeadline();
         /**
@@ -214,12 +217,13 @@ public class ExcelTabulationDataProcessor<T> {
                 sheet.setColumnWidth(e.getColumnIndex(), e.getColumnWidth());
             }
             //data validation
-            if (e.getValidAnnotation() != null) {
-                DataValidHandler.getInstance(e.getValidAnnotation())
-                        .addValidation(this, e, sheet, e.getValidAnnotation());
+            if (valid && e.getValidAnnotation() != null) {
+                DataValidBuilder.getInstance(e.getValidAnnotation())
+                        .addValidation(this, e, sheet);
             }
 //            else {
-//                DataValidHandler.qualifiedTypeValidHandler(this, e, sheet);
+//                ExcelQualifiedTypeValidType.getQualifiedTypeValidHandler(e.getFieldType())
+//                        .addValidation(this,e,sheet);
 //            }
 
             //text style
@@ -236,13 +240,86 @@ public class ExcelTabulationDataProcessor<T> {
         });
     }
 
-    /**
-     * TODO 提取数据未完成
-     * @param sheet
-     * @return
-     */
-    public List<T> extractDatasFrom(Sheet sheet) {
-        return null;
+    public void writeDatasTo(Sheet sheet, POIBox poiBox, List<T> datas, boolean templateless){
+        int start = 0 ;
+        if (!templateless){
+            tabulateTo(sheet, poiBox, false);
+            start = tableTextRdx;
+        }
+        CellStyle errorStyle = Styler.cloneStyle(sheet.getWorkbook(), tabulationStyle.getTextStyle());
+        Font errorFont = sheet.getWorkbook().getFontAt(errorStyle.getFontIndexAsInt());
+        errorFont.setColor(Font.COLOR_RED);
+        errorStyle.setFont(errorFont);
+
+        for (int i = 0; i < datas.size() ; i ++ ){
+            Row row = BoxGadget.getRowForce(sheet , start++);
+            T t = datas.get(i);
+            columnsContainer.forEach(c -> {
+                Cell cell = BoxGadget.getCellForce(row, c.getColumnIndex());
+                Object value = null;
+                try {
+                    value = ReflectUtil.getFieldValue(c.getField(), t);
+                } catch (IllegalAccessException e) {
+                    throw new IllegalArgumentException("没有按照标准的方法给出get方法");
+                }
+                //如果使用校验，将校验源数据的有效性。
+                if (c.getValidAnnotation() instanceof ExcelValidArray) {
+                    ExcelValidArray excelValidArray = (ExcelValidArray) c.getValidAnnotation();
+                    List<MetaViewBody> metaViewBodies = ExcelDictionaryLibrary.referDict(excelValidArray.dictionary());
+                    MetaViewBody metaViewBody = null;
+                    for (MetaViewBody body : metaViewBodies){
+                        if (body.getMetadata().equals(value)){
+                            metaViewBody = new MetaViewBody() {
+                                @Override
+                                public Object getMetadata() {
+                                    return body.getMetadata();
+                                }
+                                @Override
+                                public Object getViewdata() {
+                                    return body.getViewdata();
+                                }
+                            };
+                            break;
+                        }
+                    }
+                    if (metaViewBody == null) {
+                        cell.setCellStyle(errorStyle);
+                    } else {
+                        value = metaViewBody.getViewdata();
+                    }
+                }
+                CellValueUtil.setCellValue(cell, value);
+            });
+        }
+    }
+
+    public List<T> readFrom(Sheet sheet, POIBox poiBox) {
+        List<T> list = new ArrayList();
+
+        for (int i = tableTextRdx; i <= sheet.getLastRowNum() ; i ++) {
+            T t = null;
+            try {
+                t = (T) ReflectUtil.newInstance(tabulationClass);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("The tabulation Class Missing parameterless constructor!");
+            }
+
+            Row row = BoxGadget.getRowForce(sheet, i);
+            for (ExcelcolumnDataAccepter accepter : columnsContainer){
+                Cell cell = BoxGadget.getCellForce(row, accepter.getColumnIndex());
+                //TODO 如果需要翻译的话如何处理
+                Object value = CellValueUtil.getCellValue(cell, accepter.getFieldType());
+
+                //TODO null 计数
+                try {
+                    ReflectUtil.setFieldValue(accepter.getField(), t, value);
+                } catch (IllegalAccessException e) {
+                    throw new IllegalArgumentException("Set value to Field error! Field: " + accepter.getFieldName());
+                }
+            }
+            list.add(t);
+        }
+        return list;
     }
 
 

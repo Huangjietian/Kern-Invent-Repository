@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView;
 
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
 
 /**
  * @Title: MetaViewDictionary
@@ -10,5 +10,5 @@ import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionary;
  * @Date 2019/12/13 16:27
  * @Description: TODO
  */
-public interface MetaViewDictionary extends ExcelDictionary {
+public interface MetaViewDictionary<T extends MetaViewBody> extends ViewDictionary<T> {
 }

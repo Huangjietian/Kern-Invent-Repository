@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.datatable.datavalidation.integer;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.decimal;
 
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.CompareType;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
@@ -9,29 +9,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Title: ExcelValid_INTEGER
+ * @Title: ExcelValid_DECIMAL
  * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation.integer
+ * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation.decimal
  * @Author Kern
- * @Date 2019/12/13 14:25
+ * @Date 2019/12/13 15:18
  * @Description: TODO
  */
 @ExcelValid
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExcelValid_INT {
+public @interface ExcelValidDecimal {
 
     /**
      * Depending on the qualified unique value or minimum value of the comparison type
      * @return
      */
-    int value() default 0;
+    double value() default 0.00;
 
     /**
      * The maximum value, whether or not it makes sense depends on the comparison type
      * @return
      */
-    int optionalVal() default -1;
+    double optionalVal() default -1.00;
 
     /**
      * Prompt message when a cell is selected

@@ -1,7 +1,9 @@
 package cn.kerninventor.tools.poibox.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -50,11 +52,20 @@ public class ReflectUtil {
         field.set(target, value);
     }
 
-    public static boolean isWrapClass(Class clazz) {
+    public static Object newInstance(Class clazz, Object... paramters) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class[] paramTypes = new Class[paramters.length];
+        for (int i = 0 ; i < paramters.length ; i ++) {
+            paramTypes[i] = paramters[i].getClass();
+        }
+        return clazz.getDeclaredConstructor(paramTypes).newInstance(paramters);
+    }
+
+    public static boolean isBasicWrapperType(Class clazz) {
         try {
-            return !((Class) clazz.getField("TYPE").get(null)).isPrimitive();
+            return ((Class) clazz.getField("TYPE").get(null)).isPrimitive();
         } catch (Exception e) {
-            return true;
+            return false;
         }
     }
+
 }
