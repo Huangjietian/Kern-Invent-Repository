@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.datatable.dictionary.view;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view;
 
 /**
  * @Title: ViewEnum
@@ -8,7 +8,7 @@ package cn.kerninventor.tools.poibox.data.datatable.dictionary.view;
  * @Date 2019/12/13 15:47
  * @Description: TODO
  */
-public interface ViewEnum extends ViewDictionary, ViewBody {
+public interface ViewEnum<V> extends ViewDictionary, ViewBody<V> {
 
 
 

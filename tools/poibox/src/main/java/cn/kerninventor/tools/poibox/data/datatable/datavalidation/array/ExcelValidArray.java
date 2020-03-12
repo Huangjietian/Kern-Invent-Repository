@@ -1,7 +1,8 @@
 package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array;
 
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view.ViewBody;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view.ViewDictionary;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,6 +29,12 @@ public @interface ExcelValidArray {
      * @return
      */
     Class<? extends ViewDictionary> dictionary();
+
+    /**
+     *
+     * @return
+     */
+    Class<? extends ViewBody> body();
 
     /**
      * Prompt message when a cell is selected

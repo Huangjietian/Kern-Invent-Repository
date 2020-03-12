@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewBody;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewBody;
 
 /**
  * @Title: TestCountry
@@ -10,7 +10,7 @@ import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewB
  * @Date 2019/12/18 10:39
  * @Description: TODO
  */
-public class TestCountryBO implements MetaViewBody {
+public class TestCountryBO implements MetaViewBody<Long, String> {
 
     private Long id;
 
@@ -21,13 +21,14 @@ public class TestCountryBO implements MetaViewBody {
         this.name = name;
     }
 
+
     @Override
-    public Object getMetadata() {
+    public Long getMetadata() {
         return id;
     }
 
     @Override
-    public Object getViewdata() {
+    public String getViewdata() {
         return name;
     }
 }

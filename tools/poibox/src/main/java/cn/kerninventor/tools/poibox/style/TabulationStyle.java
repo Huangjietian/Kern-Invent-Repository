@@ -3,6 +3,8 @@ package cn.kerninventor.tools.poibox.style;
 import cn.kerninventor.tools.poibox.BoxGadget;
 import org.apache.poi.ss.usermodel.CellStyle;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * @Title: TabulationStyle
  * @ProjectName tools
@@ -13,10 +15,16 @@ import org.apache.poi.ss.usermodel.CellStyle;
  */
 public interface TabulationStyle {
 
-    CellStyle getHeadLineStyle();
+    default CellStyle getHeadLineStyle() {
+        return BoxGadget.root().styler().usualHeadLine(null);
+    }
 
-    CellStyle getTableHeadStyle();
+    default CellStyle getTableHeadStyle() {
+        return BoxGadget.root().styler().usualTableHeader(null);
+    }
 
-    CellStyle getTextStyle();
+    default CellStyle getTextStyle() {
+        return BoxGadget.root().styler().usualTextPart(null);
+    }
 
 }

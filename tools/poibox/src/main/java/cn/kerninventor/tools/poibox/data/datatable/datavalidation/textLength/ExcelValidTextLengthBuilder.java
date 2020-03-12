@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.datatable.datavalidation.textLength;
 
-import cn.kerninventor.tools.poibox.data.datatable.ExcelcolumnDataAccepter;
-import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.MessageBoxUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -27,8 +27,8 @@ public class ExcelValidTextLengthBuilder implements DataValidBuilder<ExcelValidT
     }
 
     @Override
-    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet) {
-        annotationValid(accepter);
+    public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
+        annotationValid(columnInit);
         String var1 = excelValid.value() + "";
         String var2 = excelValid.optionalVal() == -1 ? null : excelValid.optionalVal() + "";
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
@@ -38,10 +38,10 @@ public class ExcelValidTextLengthBuilder implements DataValidBuilder<ExcelValidT
                 var2
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                processor.getTableTextRdx(),
-                processor.getTableTextRdx()+ processor.getTextRowNum(),
-                accepter.getColumnIndex(),
-                accepter.getColumnIndex()
+                tabulationInit.getTableTextRdx(),
+                tabulationInit.getTableTextRdx()+ tabulationInit.getTextRowNum(),
+                columnInit.getColumnIndex(),
+                columnInit.getColumnIndex()
         );
         DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
         MessageBoxUtil.setPrompBoxMessage(dataValidation, excelValid.prompMessage());
@@ -49,10 +49,10 @@ public class ExcelValidTextLengthBuilder implements DataValidBuilder<ExcelValidT
         sheet.addValidationData(dataValidation);
     }
 
-    private void annotationValid(ExcelcolumnDataAccepter accepter) {
+    private void annotationValid(ExcelColumnInitializer columnInit) {
         if (excelValid.compareType().isOptionalValueValidity()){
             if (excelValid.value() > excelValid.optionalVal()){
-                throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + accepter.getFieldName());
+                throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + columnInit.getFieldName());
             }
         }
     }

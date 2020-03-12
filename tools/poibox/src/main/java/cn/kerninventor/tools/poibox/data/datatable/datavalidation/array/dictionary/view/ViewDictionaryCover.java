@@ -1,6 +1,6 @@
-package cn.kerninventor.tools.poibox.data.datatable.dictionary.view;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view;
 
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionaryLibrary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.ExcelDictionaryLibrary;
 
 import java.util.List;
 

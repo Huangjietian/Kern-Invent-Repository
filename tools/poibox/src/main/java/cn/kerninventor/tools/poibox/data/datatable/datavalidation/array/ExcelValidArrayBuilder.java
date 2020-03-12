@@ -1,13 +1,11 @@
 package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array;
 
-import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
-import cn.kerninventor.tools.poibox.data.datatable.ExcelcolumnDataAccepter;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.ExcelDictionaryLibrary;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.MessageBoxUtil;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionaryLibrary;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewDictionary;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewBody;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view.ViewBody;
 import cn.kerninventor.tools.poibox.data.utils.NameManegeUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
@@ -36,7 +34,7 @@ public class ExcelValidArrayBuilder implements DataValidBuilder<ExcelValidArray>
     }
 
     @Override
-    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet) {
+    public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
         List<ViewBody> view = ExcelDictionaryLibrary.referDict(excelValid.dictionary());
         if (view == null){
             view = new ArrayList<>();
@@ -53,15 +51,15 @@ public class ExcelValidArrayBuilder implements DataValidBuilder<ExcelValidArray>
         if (viewDatas.toString().length() <= 255){
             dvConstraint = dvHelper.createExplicitListConstraint(viewDatas.toArray(new String[viewDatas.size()]));
         } else {
-            String nameName = NameManegeUtil.addNameManage(sheet, "hidden", accepter.getTitleName(), accepter.getFieldName(), viewDatas.toArray(new String[viewDatas.size()]));
+            String nameName = NameManegeUtil.addNameManage(sheet, "hidden", columnInit.getTitleName(), columnInit.getFieldName(), viewDatas.toArray(new String[viewDatas.size()]));
             dvConstraint = dvHelper.createFormulaListConstraint(nameName);
         }
 
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                processor.getTableTextRdx(),
-                (processor.getTableTextRdx() + processor.getTextRowNum()) * 50,
-                accepter.getColumnIndex(),
-                accepter.getColumnIndex()
+                tabulationInit.getTableTextRdx(),
+                (tabulationInit.getTableTextRdx() + tabulationInit.getTextRowNum()) * 50,
+                columnInit.getColumnIndex(),
+                columnInit.getColumnIndex()
         );
         DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
         MessageBoxUtil.setPrompBoxMessage(dataValidation, excelValid.prompMessage());

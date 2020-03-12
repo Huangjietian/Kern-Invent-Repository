@@ -1,13 +1,14 @@
-package cn.kerninventor.tools.poibox.data.datatable;
+package cn.kerninventor.tools.poibox.data.datatable.initializer;
 
-import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.BoxGadget;
+import cn.kerninventor.tools.poibox.POIBox;
+import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
+import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.ExcelValidArray;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.ExcelDictionaryLibrary;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewBody;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewBody;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.ExcelDictionaryLibrary;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.style.Styler;
@@ -17,9 +18,9 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @Title: DataTable
@@ -28,8 +29,9 @@ import java.util.stream.Collectors;
  * @Author Kern
  * @Date 2019/12/9 15:25
  * @Description: excel 数据表解析处理类
+ * TODO 对象层级，  Tabulator { DataProcessor：解析注解注释的表格类， 持有该表格初始化的所有对象 }
  */
-public class ExcelTabulationDataProcessor<T> {
+public class ExcelTabulationInitializer<T> {
 
     /**
      * data tabulation class
@@ -62,7 +64,7 @@ public class ExcelTabulationDataProcessor<T> {
     /**
      * NotNull
      */
-    private List<ExcelcolumnDataAccepter> columnsContainer;
+    private List<ExcelColumnInitializer> columnsContainer;
 
 
     public int getFirstColumnIndex() {
@@ -70,7 +72,7 @@ public class ExcelTabulationDataProcessor<T> {
     }
 
     public int getLastColumnIndex() {
-        return columnsContainer.get(columnsContainer.size()-1).getColumnIndex();
+        return columnsContainer.get(columnsContainer.size() -1 ).getColumnIndex();
     }
 
     public int getColumnSize() {
@@ -125,7 +127,7 @@ public class ExcelTabulationDataProcessor<T> {
         return tabulationStyle;
     }
 
-    public List<ExcelcolumnDataAccepter> getColumnsContainer() {
+    public List<ExcelColumnInitializer> getColumnsContainer() {
         return columnsContainer;
     }
 
@@ -133,7 +135,7 @@ public class ExcelTabulationDataProcessor<T> {
      * Annotation way
      * @param tableClass
      */
-    public ExcelTabulationDataProcessor(Class<T> tableClass) {
+    public ExcelTabulationInitializer(Class<T> tableClass) {
         dataTabulationSourceClassValidate(tableClass);
         ExcelTabulation excelTabulation = tableClass.getAnnotation(ExcelTabulation.class);
         tabulationClass = tableClass;
@@ -152,32 +154,31 @@ public class ExcelTabulationDataProcessor<T> {
         } catch (Exception e) {
             throw new IllegalSourceClassOfTabulationException("An explicit, parameterless constructor is required in Tabulation.style()");
         }
-        columnsContainer = resolveTable(tableClass);
+        resolveTable(tableClass);
     }
 
-    private List<ExcelcolumnDataAccepter> resolveTable(Class tableClass){
-        List<ExcelcolumnDataAccepter> excelcolumnDataAccepters = new ArrayList();
+    private void resolveTable(Class tableClass){
         Field[] fields = tableClass.getDeclaredFields();
+        columnsContainer = new ArrayList(fields.length);
         ExcelColumn excelColumn;
         if (autoColumnIndex){
             int index = 0 ;
             for (Field field : fields){
                 if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    excelcolumnDataAccepters.add(ExcelcolumnDataAccepter.getInstance(field, excelColumn, index++));
+                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, index++));
                 }
             }
         } else {
             for (Field field : fields){
                 if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    excelcolumnDataAccepters.add(ExcelcolumnDataAccepter.getInstance(field, excelColumn,excelColumn.columnIndex()));
+                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn,excelColumn.columnIndex()));
                 }
             }
         }
-        if (excelcolumnDataAccepters.size() == 0){
+        if (columnsContainer.size() == 0){
             throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's fields!");
         }
-        Collections.sort(excelcolumnDataAccepters);
-        return excelcolumnDataAccepters;
+        Collections.sort(columnsContainer);
     }
 
     public void tabulateTo(Sheet sheet, POIBox poiBox, boolean valid) {
@@ -199,16 +200,17 @@ public class ExcelTabulationDataProcessor<T> {
          */
         Row row = sheet.createRow(tableHeadRdx);
         CellStyle tableHeadStyle = Styler.cloneStyle(poiBox.workbook(), tabulationStyle.getTableHeadStyle());
+
         Font tableHeadFont = sheet.getWorkbook().getFontAt(tableHeadStyle.getFontIndexAsInt());
         CellStyle tableTextStyle = Styler.cloneStyle(poiBox.workbook(), tabulationStyle.getTextStyle());
         DataFormat dataFormat = workbook.createDataFormat();
-
         columnsContainer.forEach( e -> {
             Cell cell = row.createCell(e.getColumnIndex());
             //value
             cell.setCellValue(e.getTitleName());
             //style
             cell.setCellStyle(tableHeadStyle);
+
             //column width
             if (e.getColumnWidth() == -1 ){
                 int columnWidth = BoxGadget.getCellWidthByStringContent(e.getTitleName(), tableHeadFont.getFontHeightInPoints());
@@ -221,10 +223,6 @@ public class ExcelTabulationDataProcessor<T> {
                 DataValidBuilder.getInstance(e.getValidAnnotation())
                         .addValidation(this, e, sheet);
             }
-//            else {
-//                ExcelQualifiedTypeValidType.getQualifiedTypeValidHandler(e.getFieldType())
-//                        .addValidation(this,e,sheet);
-//            }
 
             //text style
             CellStyle columnStyle = workbook.createCellStyle();
@@ -262,40 +260,32 @@ public class ExcelTabulationDataProcessor<T> {
                 } catch (IllegalAccessException e) {
                     throw new IllegalArgumentException("没有按照标准的方法给出get方法");
                 }
-                //如果使用校验，将校验源数据的有效性。
-                if (c.getValidAnnotation() instanceof ExcelValidArray) {
+                //翻译
+                if (c.getValidAnnotation() instanceof ExcelValidArray &&
+                        MetaViewDictionary.class.isAssignableFrom(((ExcelValidArray) c.getValidAnnotation()).dictionary())) {
                     ExcelValidArray excelValidArray = (ExcelValidArray) c.getValidAnnotation();
                     List<MetaViewBody> metaViewBodies = ExcelDictionaryLibrary.referDict(excelValidArray.dictionary());
-                    MetaViewBody metaViewBody = null;
+                    Object register = null;
                     for (MetaViewBody body : metaViewBodies){
                         if (body.getMetadata().equals(value)){
-                            metaViewBody = new MetaViewBody() {
-                                @Override
-                                public Object getMetadata() {
-                                    return body.getMetadata();
-                                }
-                                @Override
-                                public Object getViewdata() {
-                                    return body.getViewdata();
-                                }
-                            };
+                            register = body.getViewdata();
                             break;
                         }
                     }
-                    if (metaViewBody == null) {
-                        cell.setCellStyle(errorStyle);
-                    } else {
-                        value = metaViewBody.getViewdata();
-                    }
+                    value = register;
                 }
                 CellValueUtil.setCellValue(cell, value);
             });
         }
     }
 
-    public List<T> readFrom(Sheet sheet, POIBox poiBox) {
+    /**
+     * TODO 数据校验
+     * @param sheet
+     * @return
+     */
+    public List<T> readFrom(Sheet sheet) {
         List<T> list = new ArrayList();
-
         for (int i = tableTextRdx; i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
             try {
@@ -303,21 +293,43 @@ public class ExcelTabulationDataProcessor<T> {
             } catch (Exception e) {
                 throw new IllegalArgumentException("The tabulation Class Missing parameterless constructor!");
             }
-
             Row row = BoxGadget.getRowForce(sheet, i);
-            for (ExcelcolumnDataAccepter accepter : columnsContainer){
+            int nullCount = 0;
+            for (ExcelColumnInitializer accepter : columnsContainer){
                 Cell cell = BoxGadget.getCellForce(row, accepter.getColumnIndex());
-                //TODO 如果需要翻译的话如何处理
-                Object value = CellValueUtil.getCellValue(cell, accepter.getFieldType());
-
-                //TODO null 计数
+                Object value = null;
+                //翻译
+                if (accepter.getValidAnnotation() instanceof ExcelValidArray &&
+                        MetaViewDictionary.class.isAssignableFrom(((ExcelValidArray) accepter.getValidAnnotation()).dictionary())) {
+                    ExcelValidArray excelValidArray = (ExcelValidArray) accepter.getValidAnnotation();
+                    List<MetaViewBody> metaViewBodies = ExcelDictionaryLibrary.referDict(excelValidArray.dictionary());
+                    if (metaViewBodies != null && !metaViewBodies.isEmpty()) {
+                        Class viewType = metaViewBodies.get(0).getVType();
+                        value = CellValueUtil.getCellValueBySpecifiedType(cell, viewType);
+                        for (MetaViewBody body : metaViewBodies){
+                            if (body.getViewdata().equals(value)){
+                                value = body.getMetadata();
+                                break;
+                            }
+                        }
+                    } else {
+                        value = null;
+                    }
+                } else {
+                    value = CellValueUtil.getCellValueBySpecifiedType(cell, accepter.getFieldType());
+                }
+                if (null == value) {
+                    nullCount++;
+                }
                 try {
                     ReflectUtil.setFieldValue(accepter.getField(), t, value);
                 } catch (IllegalAccessException e) {
                     throw new IllegalArgumentException("Set value to Field error! Field: " + accepter.getFieldName());
                 }
             }
-            list.add(t);
+            if (nullCount < columnsContainer.size()){
+                list.add(t);
+            }
         }
         return list;
     }

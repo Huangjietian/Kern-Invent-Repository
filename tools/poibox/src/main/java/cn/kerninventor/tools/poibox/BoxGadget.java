@@ -16,7 +16,6 @@ public class BoxGadget {
     private static POIBox rootBox = POIBox.open();
 
     public static POIBox root(){
-        rootBox.reset();
         return rootBox;
     }
 

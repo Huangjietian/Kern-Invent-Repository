@@ -29,57 +29,35 @@ public final class POIBoxOpened implements POIBox {
 
     private Workbook workbook;
 
-    private Styler styler;
-
-    private Fonter fonter;
-
-    private Layouter layouter;
-
-    private DataTabulator dataTabulator;
-
     protected POIBoxOpened() {
         workbook = new HSSFWorkbook();
-        init();
     }
 
-    protected POIBoxOpened(InputStream source) throws IOException, InvalidFormatException {
+    protected POIBoxOpened(InputStream source) throws IOException {
         workbook = WorkbookFactory.create(source);
-        init();
-    }
-
-    private void init(){
-        styler = new StyleHandler(this);
-        fonter = new FontHandler(this);
-        layouter = new LayoutHandler(this);
-        dataTabulator = new DataTabulationHandler(this);
     }
 
     @Override
     public DataTabulator dataTabulator() {
-        return dataTabulator;
+        return new DataTabulationHandler(this);
     }
 
     @Override
     public Styler styler() {
-        return styler;
+        return new StyleHandler(this);
     }
 
     @Override
     public Fonter fonter() {
-        return fonter;
+        return new FontHandler(this);
     }
 
     @Override
-    public Layouter layouter() { return layouter; }
+    public Layouter layouter() { return new LayoutHandler(this); }
 
     @Override
     public Workbook workbook() {
         return workbook;
-    }
-
-    @Override
-    public void reset() {
-        styler.reset();
     }
 
     @Override

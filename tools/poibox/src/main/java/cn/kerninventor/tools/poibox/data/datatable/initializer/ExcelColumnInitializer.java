@@ -1,8 +1,9 @@
-package cn.kerninventor.tools.poibox.data.datatable;
+package cn.kerninventor.tools.poibox.data.datatable.initializer;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
+import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
-import cn.kerninventor.tools.poibox.utils.SupportedType;
+import cn.kerninventor.tools.poibox.data.utils.SupportedType;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -14,7 +15,7 @@ import java.lang.reflect.Field;
  * @Author Kern
  * @Date 2019/12/9 15:52
  */
-public class ExcelcolumnDataAccepter implements Comparable<ExcelcolumnDataAccepter> {
+public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer> {
 
     private Field field;
 
@@ -34,11 +35,11 @@ public class ExcelcolumnDataAccepter implements Comparable<ExcelcolumnDataAccept
 
     private Annotation validAnnotation;
 
-    private ExcelcolumnDataAccepter() {
+    private ExcelColumnInitializer() {
     }
 
-    public static ExcelcolumnDataAccepter getInstance(Field field, ExcelColumn excelColumn, int columnIndex){
-        ExcelcolumnDataAccepter accepter = new ExcelcolumnDataAccepter();
+    public static ExcelColumnInitializer getInstance(Field field, ExcelColumn excelColumn, int columnIndex){
+        ExcelColumnInitializer accepter = new ExcelColumnInitializer();
         accepter.field = SupportedType.checkSupportability(field);
         accepter.fieldName = field.getName();
         accepter.titleName = excelColumn.value();
@@ -92,7 +93,7 @@ public class ExcelcolumnDataAccepter implements Comparable<ExcelcolumnDataAccept
     }
 
     @Override
-    public int compareTo(ExcelcolumnDataAccepter o) {
+    public int compareTo(ExcelColumnInitializer o) {
         if (columnIndex > o.columnIndex){
             return 1;
         } else if (columnIndex < o.columnIndex){

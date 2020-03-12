@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.datatable.datavalidation;
 
-import cn.kerninventor.tools.poibox.data.datatable.ExcelcolumnDataAccepter;
-import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.ExcelValidArrayBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.ExcelValidArray;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.date.ExcelValidDateBuilder;
@@ -31,11 +31,11 @@ public interface DataValidBuilder<T extends Annotation> {
 
     /**
      * handler main method.
-     * @param processor
-     * @param accepter
+     * @param tabulationInit
+     * @param columnInit
      * @param sheet
      */
-    void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet);
+    void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet);
 
     /**
      * handler factory.

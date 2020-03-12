@@ -26,7 +26,6 @@ public interface POIBox {
     Fonter fonter();
     Layouter layouter();
     Workbook workbook();
-    void reset();
     void wirteToHttp(HttpServletResponse response, String fileName) throws IOException;
     void wirteToLocal(String fileFullName) throws IOException;
 

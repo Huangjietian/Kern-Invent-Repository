@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.datatable.datavalidation.date;
 
-import cn.kerninventor.tools.poibox.data.datatable.ExcelcolumnDataAccepter;
-import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulationDataProcessor;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.MessageBoxUtil;
 import org.apache.poi.hssf.usermodel.DVConstraint;
@@ -36,12 +36,12 @@ public class ExcelValidDateBuilder implements DataValidBuilder<ExcelValidDate> {
         this.excelValid = excelValid;
     }
 
-    public void addValidation(ExcelTabulationDataProcessor processor, ExcelcolumnDataAccepter accepter, Sheet sheet) {
+    public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
         //TODO 解析格式验证时间字段的有效性
         try {
-            annotationValid(accepter);
+            annotationValid(columnInit);
         } catch (ParseException e) {
-            throw new IllegalArgumentException("ExcelVCalid_DATE parse date failed! parseFormat, please check your configuration of field : " + accepter.getFieldName());
+            throw new IllegalArgumentException("ExcelVCalid_DATE parse date failed! parseFormat, please check your configuration of field : " + columnInit.getFieldName());
         }
 
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
@@ -52,10 +52,10 @@ public class ExcelValidDateBuilder implements DataValidBuilder<ExcelValidDate> {
                 excelValid.parseFormat()
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                processor.getTableTextRdx(),
-                processor.getTableTextRdx()+ processor.getTextRowNum(),
-                accepter.getColumnIndex(),
-                accepter.getColumnIndex()
+                tabulationInit.getTableTextRdx(),
+                tabulationInit.getTableTextRdx()+ tabulationInit.getTextRowNum(),
+                columnInit.getColumnIndex(),
+                columnInit.getColumnIndex()
         );
         DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
         MessageBoxUtil.setPrompBoxMessage(dataValidation, excelValid.prompMessage());
@@ -64,7 +64,7 @@ public class ExcelValidDateBuilder implements DataValidBuilder<ExcelValidDate> {
     }
 
 
-    private void annotationValid(ExcelcolumnDataAccepter accepter) throws ParseException {
+    private void annotationValid(ExcelColumnInitializer columnInit) throws ParseException {
         sdf = new SimpleDateFormat(excelValid.parseFormat());
         Date current = new Date();
         if (ExcelValidDate.NOW.equals(excelValid.date())) {
@@ -80,9 +80,9 @@ public class ExcelValidDateBuilder implements DataValidBuilder<ExcelValidDate> {
             optionalDate = sdf.parse(optionalDateEx = excelValid.optionalDate().trim());
         }
         if (excelValid.compareType().isOptionalValueValidity()){
-            Objects.requireNonNull(optionalDate, "The optionalDate() is not be Empty when compareType is bettwen or notBettwen! Field: " + accepter.getFieldName());
+            Objects.requireNonNull(optionalDate, "The optionalDate() is not be Empty when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
             if (date.after(optionalDate)){
-                throw new IllegalArgumentException("The optionalDate() is must be less than date() when compareType is bettwen or notBettwen! Field: " + accepter.getFieldName());
+                throw new IllegalArgumentException("The optionalDate() is must be less than date() when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
             }
         }
     }

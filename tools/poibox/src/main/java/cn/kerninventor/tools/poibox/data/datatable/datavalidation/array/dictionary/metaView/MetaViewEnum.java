@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView;
 
 /**
  * @Title: MetaViewEnum
@@ -8,6 +8,6 @@ package cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView;
  * @Date 2019/12/11 14:34
  * @Description: TODO
  */
-public interface MetaViewEnum extends MetaViewDictionary, MetaViewBody {
+public interface MetaViewEnum<M, T> extends MetaViewDictionary, MetaViewBody<M, T> {
 
 }

@@ -1,11 +1,11 @@
-package cn.kerninventor.tools.poibox.data.datatable.dictionary;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary;
 
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewBody;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewDictionary;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewDictionaryCover;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewBody;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionaryCover;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewBody;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewDictionaryCover;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view.ViewBody;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view.ViewDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view.ViewDictionaryCover;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 
 import java.util.*;
@@ -23,6 +23,10 @@ public final class ExcelDictionaryLibrary {
 
     public static void attach(ViewDictionary dictionary){
         dictionaryMap.put(dictionary.getClass(), dictionary);
+    }
+
+    public static ViewDictionary obtainDictionary(Class<? extends ViewDictionary> clazz) {
+        return dictionaryMap.get(clazz);
     }
 
     public static <T extends ViewBody> List<T> referDict(Class<? extends ViewDictionary> dictionaryClass) {

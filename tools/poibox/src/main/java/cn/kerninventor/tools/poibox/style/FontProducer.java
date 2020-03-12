@@ -15,7 +15,7 @@ public final class FontProducer {
 
     private Font font;
 
-    public FontProducer(Font font) {
+    FontProducer(Font font) {
         this.font = font;
     }
 

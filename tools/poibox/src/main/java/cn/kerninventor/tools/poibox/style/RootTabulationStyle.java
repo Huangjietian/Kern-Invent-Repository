@@ -13,19 +13,4 @@ import org.apache.poi.ss.usermodel.CellStyle;
  */
 public final class RootTabulationStyle implements TabulationStyle {
 
-    @Override
-    public CellStyle getHeadLineStyle() {
-        return BoxGadget.root().styler().usualHeadLine(null);
-    }
-
-    @Override
-    public CellStyle getTableHeadStyle() {
-        return BoxGadget.root().styler().usualTableHeader(null);
-    }
-
-    @Override
-    public CellStyle getTextStyle() {
-        return BoxGadget.root().styler().usualTextPart(null);
-    }
-
 }

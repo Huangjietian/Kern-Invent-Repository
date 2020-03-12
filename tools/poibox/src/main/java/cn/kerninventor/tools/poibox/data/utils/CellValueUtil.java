@@ -40,7 +40,7 @@ public final class CellValueUtil extends BoxGadget {
         Class type = value.getClass();
         //Number
         if (DataTypeGroupUtil.isMemberOfIntType(type)){
-            cell.setCellValue(((Integer)value).toString());
+            cell.setCellValue(((Integer)value));
         } else if (DataTypeGroupUtil.isMemberOfDecimal(type)){
             cell.setCellValue(((Number)value).doubleValue());
         }
@@ -71,7 +71,7 @@ public final class CellValueUtil extends BoxGadget {
      * @param cell
      * @return Object
      */
-    public static Object getCellValue(Cell cell, Class targetClass) {
+    public static Object getCellValueBySpecifiedType(Cell cell, Class targetClass) {
         Object ret = null;
         //String
         if (cell.getCellType() == CellType.STRING && String.class == targetClass) {

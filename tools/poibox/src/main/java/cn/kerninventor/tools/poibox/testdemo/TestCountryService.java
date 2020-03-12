@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.metaView.MetaViewDictionaryCover;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewDictionaryCover;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,4 +28,5 @@ public class TestCountryService extends MetaViewDictionaryCover<TestCountryBO> {
         countries.add(new TestCountryBO(7L,"瑞士"));
         return countries;
     }
+
 }

@@ -33,7 +33,7 @@ public class Test {
     @ExcelColumn(value = "身份证", dataFormatEx = "@")
     private String iddentity;
 
-    @ExcelValidArray(dictionary = TestGender.class)
+    @ExcelValidArray(dictionary = TestGender.class, body = TestGender.class)
     @ExcelColumn("性别")
     private Integer sex;
 
@@ -48,7 +48,7 @@ public class Test {
     private LocalDateTime joinDate;
 
     @ExcelValidInt(value = 0, optionalVal = 300, compareType = CompareType.BET)
-    @ExcelColumn("身高")
+    @ExcelColumn(value = "身高", dataFormatEx = "##0")
     private Integer height;
 
     @ExcelValidInt(value = 0, compareType = CompareType.GT)
@@ -59,7 +59,7 @@ public class Test {
     @ExcelColumn(value = "臂长")
     private BigDecimal brachium;
 
-    @ExcelValidArray(dictionary = TestCountryService.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
+    @ExcelValidArray(dictionary = TestCountryService.class, body = TestCountryBO.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
     @ExcelColumn("国籍")
     private Long nationalityId;
 

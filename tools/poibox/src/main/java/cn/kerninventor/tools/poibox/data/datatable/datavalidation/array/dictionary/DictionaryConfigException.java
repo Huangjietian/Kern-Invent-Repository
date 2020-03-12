@@ -1,6 +1,6 @@
-package cn.kerninventor.tools.poibox.data.datatable.dictionary;
+package cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary;
 
-import cn.kerninventor.tools.poibox.data.datatable.dictionary.view.ViewDictionary;
+import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.view.ViewDictionary;
 
 /**
  * @Title: DictionaryConfigException
