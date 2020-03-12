@@ -1,5 +1,7 @@
 package cn.kerninventor.tools.poibox.data.utils;
 
+import cn.kerninventor.tools.poibox.data.exception.IllegalFieldTypeException;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -56,10 +58,10 @@ public enum SupportedType {
 
     public static Field checkSupportability(Field field) {
         if (field.getType().isPrimitive()) {
-            throw new IllegalArgumentException("Basic data type is unsupported, please used wrapper type! Field： " + field.getName());
+            throw new IllegalFieldTypeException("Basic data type is unsupported, please used wrapper type! Field： " + field.getName());
         }
         if (!isSupportedType(field.getType())) {
-            throw new IllegalArgumentException("Field type is unsupported! Field：" + field.getName() + System.lineSeparator() +
+            throw new IllegalFieldTypeException("Field type is unsupported! Field：" + field.getName() + System.lineSeparator() +
                     "List of supported data type please refer the enum: " + SupportedType.class);
         }
         return field;

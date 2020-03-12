@@ -10,7 +10,6 @@ import cn.kerninventor.tools.poibox.data.datatable.datavalidation.integer.ExcelV
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.textLength.ExcelValidTextlength;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -48,7 +47,7 @@ public class Test {
     private LocalDateTime joinDate;
 
     @ExcelValidInt(value = 0, optionalVal = 300, compareType = CompareType.BET)
-    @ExcelColumn(value = "身高", dataFormatEx = "##0")
+    @ExcelColumn(value = "身高", dataFormatEx = "#0")
     private Integer height;
 
     @ExcelValidInt(value = 0, compareType = CompareType.GT)

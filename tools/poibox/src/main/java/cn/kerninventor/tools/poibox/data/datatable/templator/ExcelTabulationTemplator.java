@@ -1,15 +1,15 @@
 package cn.kerninventor.tools.poibox.data.datatable.templator;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
-import cn.kerninventor.tools.poibox.style.Fonter;
+import cn.kerninventor.tools.poibox.data.utils.InstanceGetter;
+import cn.kerninventor.tools.poibox.layout.LayoutHandler;
 import cn.kerninventor.tools.poibox.style.Styler;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+
 import java.util.List;
 
 
@@ -21,22 +21,24 @@ import java.util.List;
  * @Date 2020/3/12 18:53
  * @Description TODO
  */
-public class ExcelTabulationTemplator {
+public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter<ExcelTabulationInitializer<T>> {
 
-    private ExcelTabulationInitializer initializer;
+    private ExcelTabulationInitializer<T> initializer;
 
     private Headline headline;
 
-    public ExcelTabulationTemplator(ExcelTabulationInitializer initializer) {
+    public ExcelTabulationTemplator(ExcelTabulationInitializer<T> initializer) {
         this.initializer = initializer;
     }
 
+    @Override
     public Headline getHeadline() {
         return headline;
     }
 
-    public ExcelTabulationTemplator tabulateTo(Sheet sheet, POIBox poiBox, boolean valid) {
-        drawHeadLine(sheet, poiBox);
+    @Override
+    public ExcelTabulationTemplator tabulateTo(Sheet sheet, boolean valid) {
+        drawHeadLine(sheet);
         drawTable(sheet, valid);
         return this;
     }
@@ -44,9 +46,8 @@ public class ExcelTabulationTemplator {
     /**
      * draw headline
      * @param sheet
-     * @param poiBox
      */
-    private void drawHeadLine(Sheet sheet, POIBox poiBox){
+    private void drawHeadLine(Sheet sheet){
         if (initializer.getStartRowIndex() == initializer.getHeadlineRdx()){
             CellRangeAddress range = new CellRangeAddress(
                     initializer.getHeadlineRdx(),
@@ -56,8 +57,7 @@ public class ExcelTabulationTemplator {
             );
             CellStyle style = Styler.cloneStyle(sheet.getWorkbook(), initializer.getTabulationStyle().getHeadLineStyle());
             String content = initializer.getHeadline();
-            poiBox.layouter()
-                    .mergedRegion(sheet, range)
+            new LayoutHandler(null).mergedRegion(sheet, range)
                     .setMergeRangeContent(content)
                     .setMergeRangeStyle(style);
             this.headline = new Headline(this, sheet,range, style, content);
@@ -75,41 +75,44 @@ public class ExcelTabulationTemplator {
         DataFormat dataFormat = sheet.getWorkbook().createDataFormat();
 
         List<ExcelColumnInitializer> columnsContainer = initializer.getColumnsContainer();
-        columnsContainer.forEach( e -> {
-            Cell cell = row.createCell(e.getColumnIndex());
+        columnsContainer.forEach( column -> {
+            Cell cell = row.createCell(column.getColumnIndex());
             //value
-            cell.setCellValue(e.getTitleName());
+            cell.setCellValue(column.getTitleName());
             //style
             cell.setCellStyle(tableHeadStyle);
 
             //column width
-            if (e.getColumnWidth() == -1 ){
-                int columnWidth = BoxGadget.getCellWidthByStringContent(e.getTitleName(), tableHeadFont.getFontHeightInPoints());
-                sheet.setColumnWidth(e.getColumnIndex(), columnWidth);
+            if (column.getColumnWidth() == -1 ){
+                int columnWidth = BoxGadget.getCellWidthByContent(column.getTitleName(), tableHeadFont.getFontHeightInPoints());
+                sheet.setColumnWidth(column.getColumnIndex(), columnWidth);
             } else {
-                sheet.setColumnWidth(e.getColumnIndex(), e.getColumnWidth());
+                sheet.setColumnWidth(column.getColumnIndex(), column.getColumnWidth());
             }
 
             //text style
             CellStyle columnStyle = sheet.getWorkbook().createCellStyle();
             columnStyle.cloneStyleFrom(tableTextStyle);
-            if (e.getDataFormatEx() != null){
-                columnStyle.setDataFormat(dataFormat.getFormat(e.getDataFormatEx()));
+            if (column.getDataFormatEx() != null){
+                columnStyle.setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
             }
             for (int i = 0 ; i < initializer.getTextRowNum(); i ++){
                 Row textRow = BoxGadget.getRowForce(sheet, i + initializer.getTableTextRdx());
-                Cell textCell = textRow.createCell(e.getColumnIndex());
+                Cell textCell = textRow.createCell(column.getColumnIndex());
                 textCell.setCellStyle(columnStyle);
             }
 
             //data validation
-            if (valid && e.getValidAnnotation() != null) {
-                DataValidBuilder.getInstance(e.getValidAnnotation())
-                        .addValidation(initializer, e, sheet);
+            if (valid && column.getValidAnnotation() != null) {
+                DataValidBuilder.getInstance(column.getValidAnnotation())
+                        .addValidation(initializer, column, sheet);
             }
 
         });
     }
 
-
+    @Override
+    public ExcelTabulationInitializer<T> getInstance() {
+        return initializer;
+    }
 }

@@ -1,22 +1,15 @@
 package cn.kerninventor.tools.poibox.data.utils;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.exception.IllegalTypeOfCellValueException;
 import cn.kerninventor.tools.poibox.utils.DataTypeGroupUtil;
-import cn.kerninventor.tools.poibox.utils.ReflectUtil;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.ss.formula.functions.Value;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.StringUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Title: CellValuer
@@ -150,25 +143,22 @@ public final class CellValueUtil extends BoxGadget {
      * @throws UnsupportedEncodingException
      */
     public static int getCellValueLenth(Cell cell) throws UnsupportedEncodingException {
+        final int DFHIP = 12;
+        int size = 0;
         CellType cellType = cell.getCellType();
         if (cellType == CellType.NUMERIC){
             double d = cell.getNumericCellValue();
-            return String.valueOf(d).length();
+            size =  String.valueOf(d).length();
         } else if (cellType == CellType.STRING){
-            return cell.getStringCellValue().getBytes(DEFAULT_CHARSET).length;
-        } else if (cellType == CellType.BLANK){
-            return 0;
+            size =  cell.getStringCellValue().getBytes(DEFAULT_CHARSET).length;
         } else if (cellType == CellType.FORMULA){
-            return cell.getCellFormula().getBytes(DEFAULT_CHARSET).length;
+            size = cell.getCellFormula().getBytes(DEFAULT_CHARSET).length;
         } else if (cellType == CellType.BOOLEAN){
-            return (cell.getBooleanCellValue()+"").getBytes(DEFAULT_CHARSET).length;
+            size = (cell.getBooleanCellValue()+"").getBytes(DEFAULT_CHARSET).length;
         } else if (isCellDateFormat(cell)){
-            return cell.getLocalDateTimeCellValue().toString().getBytes(DEFAULT_CHARSET).length;
-        } else if (cellType == CellType.ERROR){
-            return 0;
-        } else {
-            return 0;
+            size =  cell.getLocalDateTimeCellValue().toString().getBytes(DEFAULT_CHARSET).length;
         }
+        return size * (cell.getSheet().getWorkbook().getFontAt(cell.getCellStyle().getFontIndexAsInt()).getFontHeightInPoints() / DFHIP);
     }
 
     private static boolean isCellDateFormat(Cell cell) {

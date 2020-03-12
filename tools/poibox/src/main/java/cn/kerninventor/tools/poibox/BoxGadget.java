@@ -37,11 +37,11 @@ public class BoxGadget {
         return row.getCell(cellIdx) == null ? row.createCell(cellIdx) : row.getCell(cellIdx);
     }
 
-    public static int getCellWidthByStringContent(String str, int fontHeightInPoints) {
+    public static int getCellWidthByContent(Object obj, int fontHeightInPoints) {
         final int DFHIP = 12;
         int size = 0;
         try {
-            size = str.getBytes(DEFAULT_CHARSET).length;
+            size = obj.toString().getBytes(DEFAULT_CHARSET).length;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

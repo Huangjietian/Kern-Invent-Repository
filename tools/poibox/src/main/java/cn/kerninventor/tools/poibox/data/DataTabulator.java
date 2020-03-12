@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data;
 
-import cn.kerninventor.tools.poibox.data.datatable.templator.ExcelTabulationTemplator;
+import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
@@ -16,58 +16,61 @@ import java.util.List;
 public interface DataTabulator {
 
     /**
-     * Generate template to specified name sheet
+     * Create template on specified name with sheet
      * @param sheetName
      * @param sourceClass
+     * @param <T>
      * @return
      */
-    ExcelTabulationTemplator templateTo(String sheetName, Class sourceClass);
+    <T> Templator<T> templateTo(String sheetName, Class<T> sourceClass);
 
     /**
-     * Generate template to specified index sheet
+     * Create template on specified index with sheet
      * @param sheetIndex
      * @param sourceClass
+     * @param <T>
      * @return
      */
-    ExcelTabulationTemplator templateTo(int sheetIndex, Class sourceClass);
+    <T> Templator<T> templateTo(int sheetIndex, Class<T> sourceClass);
 
     /**
-     * Generate template to specified index sheet
+     * Create template on specified sheet
      * @param sheet
      * @param sourceClass
+     * @param <T>
      * @return
      */
-    ExcelTabulationTemplator templateTo(Sheet sheet, Class sourceClass);
+    <T> Templator<T> templateTo(Sheet sheet, Class<T> sourceClass);
 
     /**
-     * Write datas into specified name sheet
+     * Write datas into specified name with sheet
      * @param sheetName
-     * @param sourceClass
      * @param datas
+     * @param templator
      * @param <T>
      */
-    <T> void writeDataTo(String sheetName, Class<T> sourceClass, List<T> datas);
+    <T> void writeDataTo(String sheetName, List<T> datas, Templator<T> templator);
 
     /**
-     * Write datas into specified index sheet
+     * Write datas into specified index with sheet
      * @param sheetIndex
-     * @param sourceClass
      * @param datas
+     * @param templator
      * @param <T>
      */
-    <T> void writeDataTo(int sheetIndex, Class<T> sourceClass, List<T> datas);
+    <T> void writeDataTo(int sheetIndex, List<T> datas, Templator<T> templator);
 
     /**
      * Write datas into specified sheet
      * @param sheet
-     * @param sourceClass
      * @param datas
+     * @param templator
      * @param <T>
      */
-    <T> void writeDataTo(Sheet sheet, Class<T> sourceClass, List<T> datas);
+    <T> void writeDataTo(Sheet sheet, List<T> datas, Templator<T> templator);
 
     /**
-     * Extract datas from specified name sheet
+     * Extract datas from specified name with sheet
      * @param sheetName
      * @param clazz
      * @param <T>
@@ -77,7 +80,7 @@ public interface DataTabulator {
     <T> List<T> readDatasFrom(String sheetName, Class<T> clazz);
 
     /**
-     * Extract datas from specified index sheet
+     * Extract datas from specified index with sheet
      * @param sheetIndex
      * @param clazz
      * @param <T>
