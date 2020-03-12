@@ -20,6 +20,14 @@ public final class MergedRange {
 
     private CellRangeAddress range;
 
+    public Sheet getSheet() {
+        return sheet;
+    }
+
+    public CellRangeAddress getRange() {
+        return range;
+    }
+
     public MergedRange(Sheet sheet, CellRangeAddress range) {
         this.sheet = sheet;
         this.range = range;

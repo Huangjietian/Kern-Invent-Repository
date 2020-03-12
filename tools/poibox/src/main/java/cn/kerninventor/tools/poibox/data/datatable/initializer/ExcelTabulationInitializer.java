@@ -3,12 +3,7 @@ package cn.kerninventor.tools.poibox.data.datatable.initializer;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
-import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.style.TabulationStyle;
-import cn.kerninventor.tools.poibox.utils.ReflectUtil;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -176,55 +171,6 @@ public class ExcelTabulationInitializer<T> {
         }
         Collections.sort(columnsContainer);
     }
-
-    /**
-     * TODO 数据校验
-     * @param sheet
-     * @return
-     */
-    public List<T> readFrom(Sheet sheet) {
-        List<T> list = new ArrayList();
-        for (int i = this.getTableTextRdx(); i <= sheet.getLastRowNum() ; i ++) {
-            T t = null;
-            try {
-                t = (T) ReflectUtil.newInstance(this.getTabulationClass());
-            } catch (Exception e) {
-                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + this.getTabulationClass());
-            }
-            Row row = sheet.getRow(i);
-            if (row == null){
-                continue;
-            }
-            int nullCount = 0;
-            for (ExcelColumnInitializer column : this.getColumnsContainer()){
-                Cell cell = row.getCell(column.getColumnIndex());
-                if (cell == null){
-                    nullCount++;
-                    continue;
-                }
-                Object value = null;
-                //翻译
-                if (column.getInterpretor().isInterpretable()) {
-                    value = column.getInterpretor().getMetaDataFrom(cell);
-                } else {
-                    value = CellValueUtil.getCellValueBySpecifiedType(cell, column.getFieldType());
-                }
-                if (null == value) {
-                    nullCount++;
-                }
-                try {
-                    ReflectUtil.setFieldValue(column.getField(), t, value);
-                } catch (IllegalAccessException e) {
-                    throw new IllegalArgumentException("Set value to Field error! Field: " + column.getFieldName());
-                }
-            }
-            if (nullCount < this.getColumnsContainer().size()){
-                list.add(t);
-            }
-        }
-        return list;
-    }
-
 
     public static void dataTabulationSourceClassValidate(Class tabulationClass) throws IllegalSourceClassOfTabulationException {
         if (tabulationClass.getAnnotation(ExcelTabulation.class) == null){

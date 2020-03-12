@@ -4,6 +4,7 @@ import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.datatable.reader.ExcelTabulationReader;
 import cn.kerninventor.tools.poibox.data.datatable.templator.ExcelTabulationTemplator;
 import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
 import cn.kerninventor.tools.poibox.data.datatable.writer.ExcelTabulationWriter;
@@ -63,19 +64,13 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
     @Override
     public <T> List<T> readDatasFrom(String sheetName, Class<T> clazz) {
         Sheet sheet = getParent().workbook().getSheet(sheetName);
-        if (sheet == null) {
-            throw new NullPointerException("The worksheet data cannot be read because the worksheet with the name " + sheetName + " is empty");
-        }
-        return new ExcelTabulationInitializer(clazz).readFrom(sheet);
+        return readDatasFrom(sheet, clazz);
     }
 
     @Override
     public <T> List<T> readDatasFrom(int sheetIndex, Class<T> clazz) {
         Sheet sheet = getParent().workbook().getSheetAt(sheetIndex);
-        if (sheet == null) {
-            throw new NullPointerException("The worksheet data cannot be read because the worksheet with the index " + sheetIndex + " is empty");
-        }
-        return new ExcelTabulationInitializer(clazz).readFrom(sheet);
+        return readDatasFrom(sheet, clazz);
     }
 
     @Override
@@ -83,7 +78,8 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
         if (sheet == null) {
             throw new NullPointerException("The worksheet data cannot be read because the worksheet with the name " + sheet.getSheetName() + " is empty");
         }
-        return new ExcelTabulationInitializer(clazz).readFrom(sheet);
+        ExcelTabulationInitializer tabulationInitializer = new ExcelTabulationInitializer(clazz);
+        return new ExcelTabulationReader(tabulationInitializer).readFrom(sheet);
     }
 
 }

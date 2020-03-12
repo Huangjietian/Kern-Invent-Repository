@@ -1,9 +1,7 @@
 package cn.kerninventor.tools.poibox.data.datatable.templator;
 
+import cn.kerninventor.tools.poibox.layout.MergedRange;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellRangeAddressList;
 
 /**
  * @Title HeadLine
@@ -15,21 +13,15 @@ import org.apache.poi.ss.util.CellRangeAddressList;
  */
 public class Headline {
 
-    public Headline(ExcelTabulationTemplator templator, Sheet sheet, CellRangeAddress rangeAddress, CellStyle style, String content) {
+    public Headline(ExcelTabulationTemplator templator, MergedRange mergedRange, String content) {
         this.templator = templator;
-        this.sheet = sheet;
-        this.rangeAddress = rangeAddress;
-        this.style = style;
+        this.mergedRange = mergedRange;
         this.content = content;
     }
 
     private ExcelTabulationTemplator templator;
 
-    private Sheet sheet;
-
-    private CellRangeAddress rangeAddress;
-
-    private CellStyle style;
+    private MergedRange mergedRange;
 
     private String content;
 
@@ -37,27 +29,20 @@ public class Headline {
         return templator;
     }
 
-    public CellRangeAddress getRangeAddress() {
-        return rangeAddress;
-    }
-
-    public void setRangeAddress(CellRangeAddress rangeAddress) {
-        this.rangeAddress = rangeAddress;
-    }
-
-    public CellStyle getStyle() {
-        return style;
-    }
-
-    public void setStyle(CellStyle style) {
-        this.style = style;
+    public MergedRange getMergedRange() {
+        return mergedRange;
     }
 
     public String getContent() {
         return content;
     }
 
+    public void setStyle(CellStyle cellStyle) {
+        mergedRange.setMergeRangeStyle(cellStyle);
+    }
+
     public void setContent(String content) {
         this.content = content;
+        mergedRange.setMergeRangeContent(content);
     }
 }

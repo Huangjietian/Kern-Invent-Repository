@@ -32,6 +32,14 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
 
     private String dataFormatEx;
 
+    /**
+     * TODO 删减列
+     */
+    private boolean removable;
+
+    /**
+     * TODO 合并单元格
+     */
     private boolean mergeByContent;
 
     private Annotation validAnnotation;
@@ -56,6 +64,21 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
         return column;
     }
 
+    /**
+     * Set
+     */
+    public void setColumnIndex(int columnIndex){
+        this.columnIndex = columnIndex;
+    }
+
+    public void remove(){
+        this.removable = true;
+    }
+
+
+    /**
+     * Get
+     */
     public Field getField() {
         return field;
     }

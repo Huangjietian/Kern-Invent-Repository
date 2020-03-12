@@ -6,10 +6,12 @@ import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitia
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.utils.InstanceGetter;
 import cn.kerninventor.tools.poibox.layout.LayoutHandler;
+import cn.kerninventor.tools.poibox.layout.MergedRange;
 import cn.kerninventor.tools.poibox.style.Styler;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -19,7 +21,7 @@ import java.util.List;
  * @PackageName cn.kerninventor.tools.poibox.data.datatable
  * @Author Kern
  * @Date 2020/3/12 18:53
- * @Description TODO
+ * @Description TODO  模板应该支持改大标题，删减列等操作
  */
 public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter<ExcelTabulationInitializer<T>> {
 
@@ -37,10 +39,21 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter
     }
 
     @Override
-    public ExcelTabulationTemplator tabulateTo(Sheet sheet, boolean valid) {
+    public Templator tabulateTo(Sheet sheet, boolean valid) {
         drawHeadLine(sheet);
         drawTable(sheet, valid);
         return this;
+    }
+
+    @Override
+    public Templator ReTemplate(Sheet sheet) {
+        Collections.sort(initializer.getColumnsContainer());
+        /**
+         * TODO 重新构建模板
+         */
+        int sheetIdx = sheet.getWorkbook().getSheetIndex(sheet);
+        sheet.getWorkbook().removeSheetAt(sheetIdx);
+        return null;
     }
 
     /**
@@ -57,10 +70,10 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter
             );
             CellStyle style = Styler.cloneStyle(sheet.getWorkbook(), initializer.getTabulationStyle().getHeadLineStyle());
             String content = initializer.getHeadline();
-            new LayoutHandler(null).mergedRegion(sheet, range)
-                    .setMergeRangeContent(content)
-                    .setMergeRangeStyle(style);
-            this.headline = new Headline(this, sheet,range, style, content);
+            MergedRange mergedRange =  new LayoutHandler(null).mergedRegion(sheet, range)
+                                                                        .setMergeRangeContent(content)
+                                                                        .setMergeRangeStyle(style);
+            this.headline = new Headline(this, mergedRange, content);
         }
     }
 

@@ -14,5 +14,7 @@ public interface Templator<T> {
 
     Headline getHeadline();
 
-    ExcelTabulationTemplator tabulateTo(Sheet sheet, boolean valid);
+    Templator tabulateTo(Sheet sheet, boolean valid);
+
+    Templator ReTemplate(Sheet sheet);
 }
