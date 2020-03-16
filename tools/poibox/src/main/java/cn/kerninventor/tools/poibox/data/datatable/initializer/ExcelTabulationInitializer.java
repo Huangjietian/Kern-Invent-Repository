@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.data.datatable.initializer;
 
+import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 public class ExcelTabulationInitializer<T> {
 
+    private POIBox poiBox;
     /**
      * data tabulation class
      */
@@ -54,6 +56,9 @@ public class ExcelTabulationInitializer<T> {
      */
     private List<ExcelColumnInitializer> columnsContainer;
 
+    public POIBox getPoiBox() {
+        return poiBox;
+    }
 
     public int getFirstColumnIndex() {
         return columnsContainer.get(0).getColumnIndex();
@@ -127,7 +132,7 @@ public class ExcelTabulationInitializer<T> {
      * Annotation way
      * @param tableClass
      */
-    public ExcelTabulationInitializer(Class<T> tableClass) {
+    public ExcelTabulationInitializer(Class<T> tableClass, POIBox poiBox) {
         dataTabulationSourceClassValidate(tableClass);
         ExcelTabulation excelTabulation = tableClass.getAnnotation(ExcelTabulation.class);
         tabulationClass = tableClass;
@@ -147,6 +152,7 @@ public class ExcelTabulationInitializer<T> {
             throw new IllegalSourceClassOfTabulationException("An explicit, parameterless constructor is required in Tabulation.style()");
         }
         initialzeColumns(tableClass.getDeclaredFields());
+        this.poiBox = poiBox;
     }
 
     private void initialzeColumns(Field[] fields){

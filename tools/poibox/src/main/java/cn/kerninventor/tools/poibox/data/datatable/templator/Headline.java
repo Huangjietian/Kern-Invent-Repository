@@ -13,15 +13,15 @@ import org.apache.poi.ss.usermodel.CellStyle;
  */
 public class Headline {
 
-    public Headline(ExcelTabulationTemplator templator, MergedRange mergedRange, String content) {
+    public Headline(ExcelTabulationTemplator templator, CellStyle style, String content) {
         this.templator = templator;
-        this.mergedRange = mergedRange;
+        this.cellStyle = style;
         this.content = content;
     }
 
     private ExcelTabulationTemplator templator;
 
-    private MergedRange mergedRange;
+    private CellStyle cellStyle;
 
     private String content;
 
@@ -29,22 +29,26 @@ public class Headline {
         return templator;
     }
 
-    public MergedRange getMergedRange() {
-        return mergedRange;
+    public Headline setTemplator(ExcelTabulationTemplator templator) {
+        this.templator = templator;
+        return this;
+    }
+
+    public CellStyle getCellStyle() {
+        return cellStyle;
+    }
+
+    public Headline setCellStyle(CellStyle cellStyle) {
+        this.cellStyle = cellStyle;
+        return this;
     }
 
     public String getContent() {
         return content;
     }
 
-    public Headline setStyle(CellStyle cellStyle) {
-        mergedRange.setMergeRangeStyle(cellStyle);
-        return this;
-    }
-
     public Headline setContent(String content) {
         this.content = content;
-        mergedRange.setMergeRangeContent(content);
         return this;
     }
 }

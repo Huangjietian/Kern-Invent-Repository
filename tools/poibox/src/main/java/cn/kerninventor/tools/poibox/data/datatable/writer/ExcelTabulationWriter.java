@@ -1,9 +1,11 @@
 package cn.kerninventor.tools.poibox.data.datatable.writer;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
+import cn.kerninventor.tools.poibox.data.datatable.TemplatedWriter;
+import cn.kerninventor.tools.poibox.data.datatable.Writer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
-import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
+import cn.kerninventor.tools.poibox.data.datatable.Templator;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.data.utils.InstanceGetter;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
@@ -19,39 +21,42 @@ import java.util.List;
  * @Date 2020/3/12 19:13
  * @Description TODO
  */
-public class ExcelTabulationWriter<T> {
-    private boolean templated;
-    private ExcelTabulationInitializer initializer;
+public class ExcelTabulationWriter<T> implements Writer<T> {
+
+    @Override
+    public void writeTo(String sheetName, List<T> datas, Templator<T> templator) {
+        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
+        writeTo(initializer.getPoiBox().workbook().getSheet(sheetName), datas, templator);
+    }
+
+    @Override
+    public void writeTo(int sheetAt, List<T> datas, Templator<T> templator) {
+        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
+        writeTo(initializer.getPoiBox().workbook().getSheetAt(sheetAt), datas, templator);
+    }
 
     /**
      * TODO 考虑在ExcelTabulationInitializer 初始化ColumnStyle的可行性。
-     * TODO 先实现所有功能和结构调整，然后再简化代码
      * @param sheet
      * @param datas
-     * @param templator
      */
     public void writeTo(Sheet sheet, List<T> datas, Templator<T> templator){
-        int start = 0 ;
-        if (templator != null){
-            templated = true;
-            initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-            start = initializer.getTableTextRdx();
-            initializer.setTextRowNum(datas.size());
-            templator.tabulateTo(sheet, false);
+        if (templator == null) {
+            throw new IllegalArgumentException("Templator is can't be null!");
         }
         if (datas == null || datas.isEmpty()) {
             return;
         }
-        if (initializer == null) {
-            initializer = new ExcelTabulationInitializer(datas.get(0).getClass());
-        }
-
+        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
+        initializer.setTextRowNum(datas.size());
+        int start = initializer.getTableTextRdx();
         List<ExcelColumnInitializer> columnInitializers = initializer.getColumnsContainer();
         DataFormat dataFormat = sheet.getWorkbook().createDataFormat();
         //列
         for (ExcelColumnInitializer column : columnInitializers) {
+            //设置单元格格式
             CellStyle columnStyle = null;
-            if (!templated && column.getDataFormatEx() != null){
+            if (column.getDataFormatEx() != null){
                 columnStyle = sheet.getWorkbook().createCellStyle();
                 columnStyle.setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
             }
@@ -65,6 +70,8 @@ public class ExcelTabulationWriter<T> {
                 } catch (IllegalAccessException e) {
                     throw new IllegalArgumentException("Field value get error., field name: " + column.getFieldName());
                 }
+
+                //翻译
                 if (column.getInterpretor().isInterpretable()) {
                     value = column.getInterpretor().interpreteOf(value);
                 }

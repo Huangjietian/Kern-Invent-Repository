@@ -1,9 +1,14 @@
 package cn.kerninventor.tools.poibox.data.datatable.reader;
 
+import cn.kerninventor.tools.poibox.BoxGadget;
+import cn.kerninventor.tools.poibox.data.datatable.Reader;
+import cn.kerninventor.tools.poibox.data.datatable.TemplatedReader;
+import cn.kerninventor.tools.poibox.data.datatable.Templator;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
+import cn.kerninventor.tools.poibox.data.utils.InstanceGetter;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,22 +25,32 @@ import java.util.List;
  * @Date 2020/3/12 19:13
  * @Description TODO
  */
-public class ExcelTabulationReader<T> {
+public class ExcelTabulationReader<T> implements Reader<T> {
 
-    private ExcelTabulationInitializer<T> initializer;
+    @Override
+    public List<T> readFrom(String sheetName, Templator<T> templator) {
+        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
+        return readFrom(initializer.getPoiBox().workbook().getSheet(sheetName), templator);
+    }
 
-    public ExcelTabulationReader(ExcelTabulationInitializer<T> initializer) {
-        this.initializer = initializer;
+    @Override
+    public List<T> readFrom(int sheetAt, Templator<T> templator) {
+        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
+        return readFrom(initializer.getPoiBox().workbook().getSheetAt(sheetAt), templator);
     }
 
     /**
      * TODO 无法解决的问题， 当写入不使用模板时， 读取的起始坐标错误，导致数据读取不全。
-     * TODO 考虑必须使用模板， 或者指定起始下标读取。
      * @param sheet
      * @return
      */
-    public List<T> readFrom(Sheet sheet) {
+    public List<T> readFrom(Sheet sheet, Templator<T> templator) {
+        if (templator == null) {
+            throw new IllegalArgumentException("Templator is can't be null!");
+        }
         List<T> list = new ArrayList();
+        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
+        List<ExcelColumnInitializer> columnInitializers = initializer.getColumnsContainer();
         for (int i = initializer.getTableTextRdx(); i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
             try {
@@ -48,7 +63,7 @@ public class ExcelTabulationReader<T> {
                 continue;
             }
             int nullCount = 0;
-            for (ExcelColumnInitializer column : initializer.getColumnsContainer()){
+            for (ExcelColumnInitializer column : columnInitializers){
                 Cell cell = row.getCell(column.getColumnIndex());
                 if (cell == null){
                     nullCount++;

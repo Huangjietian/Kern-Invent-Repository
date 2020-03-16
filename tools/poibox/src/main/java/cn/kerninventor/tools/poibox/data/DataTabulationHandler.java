@@ -3,11 +3,14 @@ package cn.kerninventor.tools.poibox.data;
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.POIBox;
+import cn.kerninventor.tools.poibox.data.datatable.Reader;
+import cn.kerninventor.tools.poibox.data.datatable.Writer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.reader.ExcelTabulationReader;
 import cn.kerninventor.tools.poibox.data.datatable.templator.ExcelTabulationTemplator;
-import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
+import cn.kerninventor.tools.poibox.data.datatable.Templator;
 import cn.kerninventor.tools.poibox.data.datatable.writer.ExcelTabulationWriter;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
@@ -27,59 +30,19 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
     }
 
     @Override
-    public <T> Templator<T> templateTo(String sheetName, Class<T> sourceClass) {
-        Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetName);
-        return templateTo(sheet, sourceClass);
+    public <T> Templator<T> templator(Class<T> sourceClass) {
+        return new ExcelTabulationTemplator(new ExcelTabulationInitializer<>(sourceClass, getParent()));
     }
 
     @Override
-    public <T> Templator<T> templateTo(int sheetIndex, Class<T> sourceClass) {
-        Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetIndex);
-        return templateTo(sheet, sourceClass);
+    public Writer writer() {
+        return new ExcelTabulationWriter();
     }
 
     @Override
-    public <T> Templator<T> templateTo(Sheet sheet, Class<T> sourceClass) {
-        ExcelTabulationInitializer initializer = new ExcelTabulationInitializer(sourceClass);
-        return new ExcelTabulationTemplator(initializer).tabulateTo(sheet, true);
+    public Reader reader() {
+        return new ExcelTabulationReader();
     }
 
-    @Override
-    public <T> void writeDataTo(String sheetName, List<T> datas, Templator<T> templator) {
-        Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetName);
-        writeDataTo(sheet, datas, templator);
-    }
-
-    @Override
-    public <T> void writeDataTo(int sheetIndex, List<T> datas, Templator<T> templator) {
-        Sheet sheet = BoxGadget.getSheetForce(getParent().workbook(), sheetIndex);
-        writeDataTo(sheet, datas, templator);
-    }
-
-    @Override
-    public <T> void writeDataTo(Sheet sheet, List<T> datas, Templator<T> templator) {
-        new ExcelTabulationWriter<T>().writeTo(sheet, datas, templator);
-    }
-
-    @Override
-    public <T> List<T> readDatasFrom(String sheetName, Class<T> clazz) {
-        Sheet sheet = getParent().workbook().getSheet(sheetName);
-        return readDatasFrom(sheet, clazz);
-    }
-
-    @Override
-    public <T> List<T> readDatasFrom(int sheetIndex, Class<T> clazz) {
-        Sheet sheet = getParent().workbook().getSheetAt(sheetIndex);
-        return readDatasFrom(sheet, clazz);
-    }
-
-    @Override
-    public <T> List<T> readDatasFrom(Sheet sheet, Class<T> clazz) {
-        if (sheet == null) {
-            throw new NullPointerException("The worksheet data cannot be read because the worksheet with the name " + sheet.getSheetName() + " is empty");
-        }
-        ExcelTabulationInitializer tabulationInitializer = new ExcelTabulationInitializer(clazz);
-        return new ExcelTabulationReader(tabulationInitializer).readFrom(sheet);
-    }
 
 }
