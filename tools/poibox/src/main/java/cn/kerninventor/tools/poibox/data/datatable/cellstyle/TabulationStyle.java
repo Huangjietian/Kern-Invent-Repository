@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.style;
+package cn.kerninventor.tools.poibox.data.datatable.cellstyle;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
 import org.apache.poi.ss.usermodel.CellStyle;

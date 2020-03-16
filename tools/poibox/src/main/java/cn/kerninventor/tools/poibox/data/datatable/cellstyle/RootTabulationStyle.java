@@ -1,7 +1,4 @@
-package cn.kerninventor.tools.poibox.style;
-
-import cn.kerninventor.tools.poibox.BoxGadget;
-import org.apache.poi.ss.usermodel.CellStyle;
+package cn.kerninventor.tools.poibox.data.datatable.cellstyle;
 
 /**
  * @Title: RootTabulationStyle

@@ -1,16 +1,13 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
-import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.elements.StylerElements;
 import cn.kerninventor.tools.poibox.style.Styler;
-import cn.kerninventor.tools.poibox.style.TabulationStyle;
+import cn.kerninventor.tools.poibox.data.datatable.cellstyle.TabulationStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
-
-import javax.swing.text.Style;
 
 /**
  * @Title: TestStyle
@@ -27,7 +24,10 @@ public class TestStyle implements TabulationStyle {
         Styler styler = BoxGadget.root().styler();
         CellStyle cellStyle = styler.usualHeadLine(null);
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        styler.setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.DOUBLE);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
         cellStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_CORNFLOWER_BLUE.getIndex());
         return cellStyle;
     }

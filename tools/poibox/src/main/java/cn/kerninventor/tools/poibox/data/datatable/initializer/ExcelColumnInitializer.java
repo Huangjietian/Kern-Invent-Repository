@@ -4,7 +4,7 @@ import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.DictionaryValueInterpretor;
-import cn.kerninventor.tools.poibox.data.utils.SupportedType;
+import cn.kerninventor.tools.poibox.data.utils.SupportedDataType;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -28,8 +28,6 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
 
     private int columnWidth;
 
-    private String regEx;
-
     private String dataFormatEx;
 
     /**
@@ -51,12 +49,11 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
 
     static ExcelColumnInitializer getInstance(Field field, ExcelColumn excelColumn, int columnIndex){
         ExcelColumnInitializer column = new ExcelColumnInitializer();
-        column.field = SupportedType.checkSupportability(field);
+        column.field = SupportedDataType.checkSupportability(field);
         column.fieldName = field.getName();
         column.titleName = excelColumn.value();
         column.columnIndex = columnIndex;
         column.columnWidth = excelColumn.columnWidth() == -1 ? -1 : BoxGadget.getExcelCellWidth(excelColumn.columnWidth());
-        column.regEx = "".equals(excelColumn.regEx().trim()) ? null : excelColumn.regEx();
         column.dataFormatEx = "".equals(excelColumn.dataFormatEx().trim()) ? null : excelColumn.dataFormatEx();
         column.mergeByContent = excelColumn.mergeByContent();
         column.validAnnotation = DataValidBuilder.findAnnotationForm(field);
@@ -101,10 +98,6 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
 
     public int getColumnWidth() {
         return columnWidth;
-    }
-
-    public String getRegEx() {
-        return regEx;
     }
 
     public String getDataFormatEx() {

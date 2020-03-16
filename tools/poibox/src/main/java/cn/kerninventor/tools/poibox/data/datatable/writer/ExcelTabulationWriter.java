@@ -48,12 +48,14 @@ public class ExcelTabulationWriter<T> {
 
         List<ExcelColumnInitializer> columnInitializers = initializer.getColumnsContainer();
         DataFormat dataFormat = sheet.getWorkbook().createDataFormat();
+        //列
         for (ExcelColumnInitializer column : columnInitializers) {
             CellStyle columnStyle = null;
             if (!templated && column.getDataFormatEx() != null){
                 columnStyle = sheet.getWorkbook().createCellStyle();
                 columnStyle.setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
             }
+            //行
             for (int i = 0; i < datas.size() ; i ++ ){
                 Row row = BoxGadget.getRowForce(sheet , start++);
                 Cell cell = BoxGadget.getCellForce(row, column.getColumnIndex());
@@ -66,6 +68,8 @@ public class ExcelTabulationWriter<T> {
                 if (column.getInterpretor().isInterpretable()) {
                     value = column.getInterpretor().interpreteOf(value);
                 }
+                //根据内容合并
+
                 CellValueUtil.setCellValue(cell, value);
                 cell.setCellStyle(columnStyle);
             }

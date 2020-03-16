@@ -9,6 +9,8 @@ import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictiona
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @Title: DictionaryTransfer
@@ -19,7 +21,7 @@ import java.util.*;
  */
 public final class ExcelDictionaryLibrary {
 
-    private static Map<Class<? extends ViewDictionary>, ViewDictionary> dictionaryMap = new HashMap<>();
+    private static ConcurrentHashMap<Class<? extends ViewDictionary>, ViewDictionary> dictionaryMap = new ConcurrentHashMap<>();
 
     public static void attach(ViewDictionary dictionary){
         dictionaryMap.put(dictionary.getClass(), dictionary);

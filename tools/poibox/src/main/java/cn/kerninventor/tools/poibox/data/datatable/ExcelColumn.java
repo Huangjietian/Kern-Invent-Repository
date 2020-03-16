@@ -35,13 +35,6 @@ public @interface ExcelColumn {
     int columnWidth() default -1;
 
     /**
-     * TODO 去掉，在ExcelValid 增加一个 Excel_REGULAR
-     * Regular validation at data upload.
-     * @return
-     */
-    String regEx() default "";
-
-    /**
      * TODO 改为CellFormatEx
      * Excel data format expression.
      * @return

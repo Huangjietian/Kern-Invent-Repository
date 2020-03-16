@@ -45,17 +45,6 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter
         return this;
     }
 
-    @Override
-    public Templator ReTemplate(Sheet sheet) {
-        Collections.sort(initializer.getColumnsContainer());
-        /**
-         * TODO 重新构建模板
-         */
-        int sheetIdx = sheet.getWorkbook().getSheetIndex(sheet);
-        sheet.getWorkbook().removeSheetAt(sheetIdx);
-        return null;
-    }
-
     /**
      * draw headline
      * @param sheet

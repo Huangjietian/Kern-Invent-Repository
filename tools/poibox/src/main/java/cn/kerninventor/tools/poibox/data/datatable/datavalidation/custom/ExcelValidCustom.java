@@ -8,5 +8,6 @@ package cn.kerninventor.tools.poibox.data.datatable.datavalidation.custom;
  * @Date 2020/3/11 11:07
  * @Description TODO
  */
+@Deprecated
 public @interface ExcelValidCustom {
 }

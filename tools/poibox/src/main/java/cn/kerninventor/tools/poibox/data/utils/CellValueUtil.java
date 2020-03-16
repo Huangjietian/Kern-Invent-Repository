@@ -136,31 +136,6 @@ public final class CellValueUtil extends BoxGadget {
         return "";
     }
 
-    /**
-     * This method return cell value lenth to calibrate column width.
-     * @param cell
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    public static int getCellValueLenth(Cell cell) throws UnsupportedEncodingException {
-        final int DFHIP = 12;
-        int size = 0;
-        CellType cellType = cell.getCellType();
-        if (cellType == CellType.NUMERIC){
-            double d = cell.getNumericCellValue();
-            size =  String.valueOf(d).length();
-        } else if (cellType == CellType.STRING){
-            size =  cell.getStringCellValue().getBytes(DEFAULT_CHARSET).length;
-        } else if (cellType == CellType.FORMULA){
-            size = cell.getCellFormula().getBytes(DEFAULT_CHARSET).length;
-        } else if (cellType == CellType.BOOLEAN){
-            size = (cell.getBooleanCellValue()+"").getBytes(DEFAULT_CHARSET).length;
-        } else if (isCellDateFormat(cell)){
-            size =  cell.getLocalDateTimeCellValue().toString().getBytes(DEFAULT_CHARSET).length;
-        }
-        return size * (cell.getSheet().getWorkbook().getFontAt(cell.getCellStyle().getFontIndexAsInt()).getFontHeightInPoints() / DFHIP);
-    }
-
     private static boolean isCellDateFormat(Cell cell) {
         if (cell == null) {
             return false;

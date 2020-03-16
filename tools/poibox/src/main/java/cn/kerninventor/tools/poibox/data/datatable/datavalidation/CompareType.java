@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.DataValidationConstraint;
  * @Description: TODO
  */
 public enum CompareType {
+
     BET(" <> ", DataValidationConstraint.OperatorType.BETWEEN, true),
     NOBET(" >< ",DataValidationConstraint.OperatorType.NOT_BETWEEN, true),
     ET(" == ",DataValidationConstraint.OperatorType.EQUAL, false),

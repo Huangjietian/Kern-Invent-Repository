@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Font;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -18,26 +19,20 @@ import java.util.Objects;
  */
 public final class FontHandler extends BoxBracket implements Fonter {
 
-    HashMap<String, Font> fontBox = new HashMap<>();
+    ConcurrentHashMap<String, Font> fontGrid = new ConcurrentHashMap<>();
 
     public FontHandler(POIBox poiBox) {
         super(poiBox);
-        fontBox.put(DEFAULT_KEY, getParent().workbook().createFont());
     }
 
     @Override
     public FontProducer produce() {
-        Font font = getParent().workbook().createFont();
-        return new FontProducer(font);
+        return new FontProducer(getParent().workbook().createFont());
     }
 
-    @Override
-    public Font getDefault() {
-        return fontBox.get(DEFAULT_KEY);
-    }
 
     @Override
-    public Font newSimpleFont(String fontName, int fontSize) {
+    public Font simpleFont(String fontName, int fontSize) {
         Font font = getParent().workbook().createFont();
         font.setFontName(fontName);
         font.setFontHeightInPoints((short) fontSize);
@@ -45,7 +40,7 @@ public final class FontHandler extends BoxBracket implements Fonter {
     }
 
     @Override
-    public Font newSimpleFont(String fontName, int fontSize, FonterElements.FontColor fontColor) {
+    public Font simpleFont(String fontName, int fontSize, FonterElements.FontColor fontColor) {
         Font font = getParent().workbook().createFont();
         font.setFontName(fontName);
         font.setFontHeightInPoints((short)fontSize);
@@ -55,14 +50,14 @@ public final class FontHandler extends BoxBracket implements Fonter {
 
     @Override
     public Font putInFont(String primaryKey, Font font) {
-        fontBox.put(Objects.requireNonNull(primaryKey,"Font primary key cannot be null"),
+        fontGrid.put(Objects.requireNonNull(primaryKey,"Font primary key cannot be null"),
                 Objects.requireNonNull(font, " The font cannot be null"));
         return font;
     }
 
     @Override
     public Font putOutFont(String primaryKey) {
-        return Objects.requireNonNull(fontBox.get(primaryKey), "The font for the primary key does not exist");
+        return Objects.requireNonNull(fontGrid.get(primaryKey), "The font for the primary key does not exist");
     }
 
 

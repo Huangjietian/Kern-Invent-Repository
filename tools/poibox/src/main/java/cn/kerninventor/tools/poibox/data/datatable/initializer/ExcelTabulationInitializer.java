@@ -3,7 +3,7 @@ package cn.kerninventor.tools.poibox.data.datatable.initializer;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
-import cn.kerninventor.tools.poibox.style.TabulationStyle;
+import cn.kerninventor.tools.poibox.data.datatable.cellstyle.TabulationStyle;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

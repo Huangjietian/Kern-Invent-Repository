@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.datatable;
-import cn.kerninventor.tools.poibox.style.RootTabulationStyle;
-import cn.kerninventor.tools.poibox.style.TabulationStyle;
+import cn.kerninventor.tools.poibox.data.datatable.cellstyle.RootTabulationStyle;
+import cn.kerninventor.tools.poibox.data.datatable.cellstyle.TabulationStyle;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -16,5 +16,4 @@ public interface Templator<T> {
 
     Templator tabulateTo(Sheet sheet, boolean valid);
 
-    Templator ReTemplate(Sheet sheet);
 }

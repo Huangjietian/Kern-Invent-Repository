@@ -37,12 +37,14 @@ public class Headline {
         return content;
     }
 
-    public void setStyle(CellStyle cellStyle) {
+    public Headline setStyle(CellStyle cellStyle) {
         mergedRange.setMergeRangeStyle(cellStyle);
+        return this;
     }
 
-    public void setContent(String content) {
+    public Headline setContent(String content) {
         this.content = content;
         mergedRange.setMergeRangeContent(content);
+        return this;
     }
 }

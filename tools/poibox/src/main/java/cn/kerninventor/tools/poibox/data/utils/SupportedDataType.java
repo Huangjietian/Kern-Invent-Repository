@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @Date 2020/3/11 16:23
  * @Description TODO
  */
-public enum SupportedType {
+public enum SupportedDataType {
 
 
     ByteT(Byte.class),
@@ -42,13 +42,13 @@ public enum SupportedType {
 
     private Class clazz;
 
-    SupportedType(Class clazz) {
+    SupportedDataType(Class clazz) {
         this.clazz = clazz;
     }
 
     public static boolean isSupportedType(Class clazz) {
-        SupportedType[] types = SupportedType.values();
-        for (SupportedType type : types) {
+        SupportedDataType[] types = SupportedDataType.values();
+        for (SupportedDataType type : types) {
             if (type.clazz.isAssignableFrom(clazz)) {
                 return true;
             }
@@ -62,7 +62,7 @@ public enum SupportedType {
         }
         if (!isSupportedType(field.getType())) {
             throw new IllegalFieldTypeException("Field type is unsupported! Field：" + field.getName() + System.lineSeparator() +
-                    "List of supported data type please refer the enum: " + SupportedType.class);
+                    "List of supported data type please refer the enum: " + SupportedDataType.class);
         }
         return field;
     }

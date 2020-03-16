@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Sheet;
  */
 public interface Fonter {
 
-    String DEFAULT_KEY = "DEFAULT_FONT";
     String NAME_HEADER = "黑体";
     String NAME_TEXTPART = "宋体";
     int SIZE_HEADLINE = 24;
@@ -23,14 +22,13 @@ public interface Fonter {
 
     FontProducer produce();
 
-    Font getDefault();
-
-    Font newSimpleFont(String fontName, int fontSize);
-
-    Font newSimpleFont(String fontName, int fontSize, FonterElements.FontColor fontColor);
-
     Font putInFont(String primaryKey, Font font);
 
     Font putOutFont(String primaryKey);
+
+    Font simpleFont(String fontName, int fontSize);
+
+    Font simpleFont(String fontName, int fontSize, FonterElements.FontColor fontColor);
+
 
 }

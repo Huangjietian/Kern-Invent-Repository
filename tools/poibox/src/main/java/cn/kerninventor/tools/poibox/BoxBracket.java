@@ -1,8 +1,6 @@
 package cn.kerninventor.tools.poibox;
 
 
-import java.io.Serializable;
-
 /**
  * @Title: POICreator
  * @ProjectName tools
@@ -10,9 +8,7 @@ import java.io.Serializable;
  * @Author Kern
  * @Date 2019/10/29 19:55
  */
-public class BoxBracket implements Serializable {
-
-    protected static final long serialVersionUID = 1L;
+public class BoxBracket {
 
     private POIBox poiBox;
 
