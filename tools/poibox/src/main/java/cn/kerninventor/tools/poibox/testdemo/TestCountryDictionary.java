@@ -13,7 +13,7 @@ import java.util.List;
  * @Date 2019/12/18 10:39
  * @Description: TODO
  */
-public class TestCountryService extends MetaViewDictionaryCover<TestCountryBO> {
+public class TestCountryDictionary extends MetaViewDictionaryCover<TestCountryBO> {
 
     @Override
     public List<TestCountryBO> obtainData() {

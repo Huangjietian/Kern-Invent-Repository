@@ -22,7 +22,7 @@ import java.util.Date;
  * @Description: TODO
  */
 @ExcelTabulation(headline = "人员信息", style = TestStyle.class)
-public class Test {
+public class TestBO {
 
     @ExcelValidTextlength(value = 30, compareType = CompareType.LTE)
     @ExcelColumn(value = "姓名", dataFormatEx = "@")
@@ -32,12 +32,12 @@ public class Test {
     @ExcelColumn(value = "身份证", dataFormatEx = "@")
     private String iddentity;
 
-    @ExcelValidArray(dictionary = TestGender.class, body = TestGender.class)
+    @ExcelValidArray(dictionary = TestGenderEnum.class, body = TestGenderEnum.class)
     @ExcelColumn("性别")
     private Integer sex;
 
     @ExcelValidDate(compareType = CompareType.BET, parseFormat = "dd/MM/yyyy", date = "01/01/2020", optionalDate = "31/12/2020",
-    prompMessage = "请输入2020-01-01 至 2020-12-31 之间的日期",errorMessage = "输入错误，请检查格式是否正确")
+            prompMessage = "请输入2020-01-01 至 2020-12-31 之间的日期",errorMessage = "输入错误，请检查格式是否正确")
     @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-MM-dd")
     private Date birthDay;
 
@@ -47,7 +47,7 @@ public class Test {
     private LocalDateTime joinDate;
 
     @ExcelValidInt(value = 0, optionalVal = 300, compareType = CompareType.BET)
-    @ExcelColumn(value = "身高", dataFormatEx = "#0")
+    @ExcelColumn(value = "身高")
     private Integer height;
 
     @ExcelValidInt(value = 0, compareType = CompareType.GT)
@@ -58,14 +58,15 @@ public class Test {
     @ExcelColumn(value = "臂长")
     private BigDecimal brachium;
 
-    @ExcelValidArray(dictionary = TestCountryService.class, body = TestCountryBO.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
+    @ExcelValidArray(dictionary = TestCountryDictionary.class, body = TestCountryBO.class,
+            prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
     @ExcelColumn(value = "国籍", mergeByContent = true)
     private Long nationalityId;
 
     @ExcelColumn("有效性")
     private Boolean availability;
 
-    public Test(String name, String iddentity, Integer sex, Date birthDay, LocalDateTime joinDate, Integer height, Integer weight, BigDecimal brachium, Long nationalityId, Boolean availability) {
+    public TestBO(String name, String iddentity, Integer sex, Date birthDay, LocalDateTime joinDate, Integer height, Integer weight, BigDecimal brachium, Long nationalityId, Boolean availability) {
         this.name = name;
         this.iddentity = iddentity;
         this.sex = sex;
@@ -78,7 +79,7 @@ public class Test {
         this.availability = availability;
     }
 
-    public Test() {
+    public TestBO() {
     }
 }
 
