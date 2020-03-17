@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.datatable;
+package cn.kerninventor.tools.poibox.data.datatable.templator;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -13,6 +13,10 @@ import java.util.List;
  * @Description TODO
  */
 public interface TemplatedWriter<T> {
+
+    boolean getDefaultMergedMode();
+
+    TemplatedWriter setDefaultMergedMode(boolean isMergeColum);
 
     void writeTo(String sheetName, List<T> datas);
 

@@ -59,7 +59,7 @@ public class Test {
     private BigDecimal brachium;
 
     @ExcelValidArray(dictionary = TestCountryService.class, body = TestCountryBO.class, prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
-    @ExcelColumn("国籍")
+    @ExcelColumn(value = "国籍", mergeByContent = true)
     private Long nationalityId;
 
     @ExcelColumn("有效性")

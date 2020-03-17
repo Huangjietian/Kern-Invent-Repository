@@ -1,20 +1,15 @@
 package cn.kerninventor.tools.poibox.data.datatable.templator;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.datatable.TemplatedReader;
-import cn.kerninventor.tools.poibox.data.datatable.TemplatedWriter;
-import cn.kerninventor.tools.poibox.data.datatable.Templator;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.reader.ExcelTabulationReader;
+import cn.kerninventor.tools.poibox.data.datatable.reader.Reader;
 import cn.kerninventor.tools.poibox.data.datatable.writer.ExcelTabulationWriter;
+import cn.kerninventor.tools.poibox.data.datatable.writer.Writer;
 import cn.kerninventor.tools.poibox.data.utils.InstanceGetter;
-import cn.kerninventor.tools.poibox.layout.LayoutHandler;
-import cn.kerninventor.tools.poibox.layout.MergedRange;
-import cn.kerninventor.tools.poibox.style.Styler;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.List;
 
@@ -27,7 +22,7 @@ import java.util.List;
  * @Date 2020/3/12 18:53
  * @Description TODO  模板应该支持改大标题，删减列等操作
  */
-public class ExcelTabulationTemplator<T> implements Templator<T>, TemplatedWriter<T>, TemplatedReader<T>, InstanceGetter<ExcelTabulationInitializer<T>> {
+public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter<ExcelTabulationInitializer<T>> {
 
     private ExcelTabulationInitializer<T> initializer;
 
@@ -38,7 +33,11 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, TemplatedWrite
     public ExcelTabulationTemplator(ExcelTabulationInitializer<T> initializer) {
         this.initializer = initializer;
         if (initializer.getHeadline() != null) {
-            this.headline = new Headline(this, initializer.getTabulationStyle().getHeadLineStyle(), initializer.getHeadline());
+            this.headline = new Headline(initializer.getHeadlineRdx(),
+                    initializer.getFirstColumnIndex(),
+                    initializer.getLastColumnIndex(),
+                    initializer.getHeadlineStyle(),
+                    initializer.getHeadline());
         }
     }
 
@@ -49,85 +48,58 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, TemplatedWrite
 
     @Override
     public Templator tempalateTo(String sheetName) {
-        return tempalateTo(BoxGadget.getSheetForce(initializer.getPoiBox().workbook(), sheetName));
+        return tempalateTo(initializer.getParent().getSheet(sheetName));
     }
 
     @Override
     public Templator tempalateTo(int sheetAt) {
-        return tempalateTo(BoxGadget.getSheetForce(initializer.getPoiBox().workbook(), sheetAt));
+        return tempalateTo(initializer.getParent().getSheet(sheetAt));
     }
 
 
     @Override
     public Templator tempalateTo(Sheet sheet) {
-        drawHeadLine(sheet);
-        drawTable(sheet);
+        execute(sheet, true);
         return this;
     }
 
-    /**
-     * draw headline
-     * @param sheet
-     */
-    private void drawHeadLine(Sheet sheet){
-        if (initializer.getStartRowIndex() == initializer.getHeadlineRdx()){
-            CellRangeAddress range = new CellRangeAddress(
-                    initializer.getHeadlineRdx(),
-                    initializer.getHeadlineRdx(),
-                    initializer.getFirstColumnIndex(),
-                    initializer.getLastColumnIndex()
-            );
-            CellStyle style = Styler.cloneStyle(sheet.getWorkbook(), headline.getCellStyle());
-            initializer.getPoiBox().layouter().mergedRegion(sheet, range)
-                    .setMergeRangeContent(headline.getContent())
-                    .setMergeRangeStyle(style);
+    public void execute(Sheet sheet, boolean noWriter) {
+        if (headline != null){
+            headline.draw(sheet);
         }
-    }
-
-    /**
-     * draw table
-     */
-    private void drawTable(Sheet sheet){
         Row row = sheet.createRow(initializer.getTableHeadRdx());
-        CellStyle tableHeadStyle = Styler.cloneStyle(sheet.getWorkbook(), initializer.getTabulationStyle().getTableHeadStyle());
-        Font tableHeadFont = sheet.getWorkbook().getFontAt(tableHeadStyle.getFontIndexAsInt());
-        CellStyle tableTextStyle = Styler.cloneStyle(sheet.getWorkbook(), initializer.getTabulationStyle().getTextStyle());
+        Short tableHeadFHIP = sheet.getWorkbook().getFontAt(initializer.getTableHeadStyle().getFontIndexAsInt()).getFontHeightInPoints();
         DataFormat dataFormat = sheet.getWorkbook().createDataFormat();
-
         List<ExcelColumnInitializer> columnsContainer = initializer.getColumnsContainer();
-        columnsContainer.forEach( column -> {
+        columnsContainer.forEach(column -> {
             Cell cell = row.createCell(column.getColumnIndex());
             //value
             cell.setCellValue(column.getTitleName());
             //style
-            cell.setCellStyle(tableHeadStyle);
-
+            cell.setCellStyle(column.getColumnStyle());
             //column width
             if (column.getColumnWidth() == -1 ){
-                int columnWidth = BoxGadget.getCellWidthByContent(column.getTitleName(), tableHeadFont.getFontHeightInPoints());
+                int columnWidth = BoxGadget.getCellWidthByContent(column.getTitleName(), tableHeadFHIP);
                 sheet.setColumnWidth(column.getColumnIndex(), columnWidth);
             } else {
                 sheet.setColumnWidth(column.getColumnIndex(), column.getColumnWidth());
             }
-
             //text style
-            CellStyle columnStyle = sheet.getWorkbook().createCellStyle();
-            columnStyle.cloneStyleFrom(tableTextStyle);
-            if (column.getDataFormatEx() != null){
-                columnStyle.setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
+            if (noWriter){
+                if (column.getDataFormatEx() != null){
+                    column.getColumnStyle().setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
+                }
+                for (int i = 0 ; i < initializer.getTextRowNum(); i ++){
+                    Row textRow = BoxGadget.getRowForce(sheet, i + initializer.getTableTextRdx());
+                    Cell textCell = textRow.createCell(column.getColumnIndex());
+                    textCell.setCellStyle(column.getColumnStyle());
+                }
+                //data validation
+                if (cellDataValid && column.getValidAnnotation() != null) {
+                    DataValidBuilder.getInstance(column.getValidAnnotation())
+                            .addValidation(initializer, column, sheet);
+                }
             }
-            for (int i = 0 ; i < initializer.getTextRowNum(); i ++){
-                Row textRow = BoxGadget.getRowForce(sheet, i + initializer.getTableTextRdx());
-                Cell textCell = textRow.createCell(column.getColumnIndex());
-                textCell.setCellStyle(columnStyle);
-            }
-
-            //data validation
-            if (cellDataValid && column.getValidAnnotation() != null) {
-                DataValidBuilder.getInstance(column.getValidAnnotation())
-                        .addValidation(initializer, column, sheet);
-            }
-
         });
     }
 
@@ -138,50 +110,84 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, TemplatedWrite
     }
 
     @Override
-    public TemplatedWriter writer() {
-        return this;
-    }
-
-    @Override
-    public TemplatedReader reader() {
-        return this;
-    }
-
-    @Override
     public ExcelTabulationInitializer<T> getInstance() {
         return initializer;
     }
 
     @Override
-    public List<T> readFrom(String sheetName) {
-        return new ExcelTabulationReader<T>().readFrom(sheetName, this);
+    public TemplatedWriter writer() {
+        return new InnerWriter(this, new ExcelTabulationWriter());
+    }
+
+    private class InnerWriter <T> implements TemplatedWriter<T>{
+        private ExcelTabulationTemplator<T> templator;
+        private Writer<T> writer;
+
+        public InnerWriter(ExcelTabulationTemplator<T> templator, Writer<T> writer) {
+            this.templator = templator;
+            this.writer = writer;
+        }
+
+        @Override
+        public boolean getDefaultMergedMode() {
+            return writer.getDefaultMergedMode();
+        }
+
+        @Override
+        public TemplatedWriter setDefaultMergedMode(boolean isMergeColum) {
+            writer.setDefaultMergedMode(isMergeColum);
+            return this;
+        }
+
+        @Override
+        public void writeTo(String sheetName, List<T> datas) {
+            Sheet sheet = initializer.getParent().getSheet(sheetName);
+            writeTo(sheet, datas);
+        }
+
+        @Override
+        public void writeTo(int sheetAt, List<T> datas) {
+            Sheet sheet = initializer.getParent().getSheet(sheetAt);
+            writeTo(sheet, datas);
+        }
+
+        @Override
+        public void writeTo(Sheet sheet, List<T> datas) {
+            writer.writeTo(sheet, datas, templator);
+        }
     }
 
     @Override
-    public List<T> readFrom(int sheetAt) {
-        return new ExcelTabulationReader<T>().readFrom(sheetAt, this);
+    public TemplatedReader reader() {
+        return new InnerReader(this, new ExcelTabulationReader());
     }
 
-    @Override
-    public List<T> readFrom(Sheet sheet) {
-        return new ExcelTabulationReader<T>().readFrom(sheet, this);
+    private class InnerReader<T> implements TemplatedReader<T>{
+
+        public InnerReader(ExcelTabulationTemplator<T> templator, Reader<T> reader) {
+            this.templator = templator;
+            this.reader = reader;
+        }
+
+        private ExcelTabulationTemplator<T> templator;
+        private Reader<T> reader;
+
+        @Override
+        public List<T> readFrom(String sheetName) {
+            Sheet sheet = initializer.getParent().getSheet(sheetName);
+            return reader.readFrom(sheet, templator);
+        }
+
+        @Override
+        public List<T> readFrom(int sheetAt) {
+            Sheet sheet = initializer.getParent().getSheet(sheetAt);
+            return reader.readFrom(sheet, templator);
+        }
+
+        @Override
+        public List<T> readFrom(Sheet sheet) {
+            return reader.readFrom(sheet, templator);
+        }
     }
 
-    @Override
-    public void writeTo(String sheetName, List<T> datas) {
-        tempalateTo(sheetName);
-        new ExcelTabulationWriter<T>().writeTo(initializer.getPoiBox().workbook().getSheet(sheetName), datas, this);
-    }
-
-    @Override
-    public void writeTo(int sheetAt, List<T> datas) {
-        tempalateTo(sheetAt);
-        new ExcelTabulationWriter<T>().writeTo(initializer.getPoiBox().workbook().getSheetAt(sheetAt), datas, this);
-    }
-
-    @Override
-    public void writeTo(Sheet sheet, List<T> datas) {
-        tempalateTo(sheet);
-        new ExcelTabulationWriter<T>().writeTo(sheet, datas, this);
-    }
 }

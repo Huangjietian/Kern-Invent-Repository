@@ -5,6 +5,7 @@ import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.DataValidBuilder;
 import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.DictionaryValueInterpretor;
 import cn.kerninventor.tools.poibox.data.utils.SupportedDataType;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -31,11 +32,6 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
     private String dataFormatEx;
 
     /**
-     * TODO 删减列
-     */
-    private boolean removable;
-
-    /**
      * TODO 合并单元格
      */
     private boolean mergeByContent;
@@ -44,10 +40,17 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
 
     private DictionaryValueInterpretor interpretor;
 
+    private CellStyle columnStyle;
+
+    /**
+     * TODO 删减列
+     */
+    private boolean removable;
+
     private ExcelColumnInitializer() {
     }
 
-    static ExcelColumnInitializer getInstance(Field field, ExcelColumn excelColumn, int columnIndex){
+    static ExcelColumnInitializer getInstance(Field field, ExcelColumn excelColumn, int columnIndex, CellStyle columnStyle){
         ExcelColumnInitializer column = new ExcelColumnInitializer();
         column.field = SupportedDataType.checkSupportability(field);
         column.fieldName = field.getName();
@@ -58,6 +61,7 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
         column.mergeByContent = excelColumn.mergeByContent();
         column.validAnnotation = DataValidBuilder.findAnnotationForm(field);
         column.interpretor = DictionaryValueInterpretor.newInstance(column.validAnnotation);
+        column.columnStyle = columnStyle;
         return column;
     }
 
@@ -114,6 +118,10 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
 
     public DictionaryValueInterpretor getInterpretor() {
         return interpretor;
+    }
+
+    public CellStyle getColumnStyle() {
+        return columnStyle;
     }
 
     @Override

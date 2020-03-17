@@ -35,7 +35,6 @@ public @interface ExcelColumn {
     int columnWidth() default -1;
 
     /**
-     * TODO 改为CellFormatEx
      * Excel data format expression.
      * @return
      */

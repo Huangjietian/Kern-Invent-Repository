@@ -1,9 +1,6 @@
 package cn.kerninventor.tools.poibox.data.datatable.reader;
 
-import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.datatable.Reader;
-import cn.kerninventor.tools.poibox.data.datatable.TemplatedReader;
-import cn.kerninventor.tools.poibox.data.datatable.Templator;
+import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
@@ -30,13 +27,13 @@ public class ExcelTabulationReader<T> implements Reader<T> {
     @Override
     public List<T> readFrom(String sheetName, Templator<T> templator) {
         ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-        return readFrom(initializer.getPoiBox().workbook().getSheet(sheetName), templator);
+        return readFrom(initializer.getParent().workbook().getSheet(sheetName), templator);
     }
 
     @Override
     public List<T> readFrom(int sheetAt, Templator<T> templator) {
         ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-        return readFrom(initializer.getPoiBox().workbook().getSheetAt(sheetAt), templator);
+        return readFrom(initializer.getParent().workbook().getSheetAt(sheetAt), templator);
     }
 
     /**

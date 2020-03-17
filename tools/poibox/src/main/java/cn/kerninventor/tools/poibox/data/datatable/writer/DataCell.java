@@ -1,24 +1,31 @@
 package cn.kerninventor.tools.poibox.data.datatable.writer;
 
-import javafx.scene.control.Cell;
-
-import java.lang.reflect.Field;
+import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Sheet;
 
 /**
- * @Title: DataCell
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.writer
- * @Author Kern
- * @Date 2020/3/12 21:59
- * @Description: TODO
+ * @author Kern
+ * @date 2020/3/17 10:53
+ * @description TODO
  */
-public class DataCell <V> {
+@FunctionalInterface
+public interface DataCell {
 
-    private Field valueField;
+    static DataCell newInstance(boolean isMergeMode) {
+        if (isMergeMode) {
+            return new MergeableDataCell();
+        }
+        return new SingleDataCell();
+    }
 
-    private V fieldValue;
-
-    private Cell cell;
-
+    /**
+     *
+     * @param sheet
+     * @param value
+     * @param cell
+     * @param rowIndex
+     */
+    void setValue(Sheet sheet, Object value, Cell cell, int rowIndex);
 
 }

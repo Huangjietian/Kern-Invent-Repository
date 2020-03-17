@@ -1,11 +1,10 @@
 package cn.kerninventor.tools.poibox.data.datatable.writer;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.datatable.TemplatedWriter;
-import cn.kerninventor.tools.poibox.data.datatable.Writer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.datatable.initializer.ExcelTabulationInitializer;
-import cn.kerninventor.tools.poibox.data.datatable.Templator;
+import cn.kerninventor.tools.poibox.data.datatable.templator.ExcelTabulationTemplator;
+import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.data.utils.InstanceGetter;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
@@ -23,20 +22,32 @@ import java.util.List;
  */
 public class ExcelTabulationWriter<T> implements Writer<T> {
 
+    private boolean defaultMergedMode = true;
+
+    @Override
+    public boolean getDefaultMergedMode() {
+        return defaultMergedMode;
+    }
+
+    @Override
+    public Writer setDefaultMergedMode(boolean isMergeColum) {
+        defaultMergedMode = isMergeColum;
+        return this;
+    }
+
     @Override
     public void writeTo(String sheetName, List<T> datas, Templator<T> templator) {
         ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-        writeTo(initializer.getPoiBox().workbook().getSheet(sheetName), datas, templator);
+        writeTo(initializer.getParent().getSheet(sheetName), datas, templator);
     }
 
     @Override
     public void writeTo(int sheetAt, List<T> datas, Templator<T> templator) {
         ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-        writeTo(initializer.getPoiBox().workbook().getSheetAt(sheetAt), datas, templator);
+        writeTo(initializer.getParent().getSheet(sheetAt), datas, templator);
     }
 
     /**
-     * TODO 考虑在ExcelTabulationInitializer 初始化ColumnStyle的可行性。
      * @param sheet
      * @param datas
      */
@@ -47,6 +58,8 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
         if (datas == null || datas.isEmpty()) {
             return;
         }
+        ((ExcelTabulationTemplator)templator).execute(sheet, false);
+
         ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
         initializer.setTextRowNum(datas.size());
         int start = initializer.getTableTextRdx();
@@ -55,31 +68,31 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
         //列
         for (ExcelColumnInitializer column : columnInitializers) {
             //设置单元格格式
-            CellStyle columnStyle = null;
             if (column.getDataFormatEx() != null){
-                columnStyle = sheet.getWorkbook().createCellStyle();
-                columnStyle.setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
+                column.getColumnStyle().setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
             }
+            /**
+             * DataCell object, to implement merge by cell content;
+             */
+            DataCell dataCell = DataCell.newInstance(column.isMergeByContent() && defaultMergedMode);
             //行
             for (int i = 0; i < datas.size() ; i ++ ){
-                Row row = BoxGadget.getRowForce(sheet , start++);
+                Row row = BoxGadget.getRowForce(sheet , start);
                 Cell cell = BoxGadget.getCellForce(row, column.getColumnIndex());
+                cell.setCellStyle(column.getColumnStyle());
                 Object value = null;
                 try {
                     value = ReflectUtil.getFieldValue(column.getField(), datas.get(i));
                 } catch (IllegalAccessException e) {
                     throw new IllegalArgumentException("Field value get error., field name: " + column.getFieldName());
                 }
-
                 //翻译
                 if (column.getInterpretor().isInterpretable()) {
                     value = column.getInterpretor().interpreteOf(value);
                 }
-                //根据内容合并
-
-                CellValueUtil.setCellValue(cell, value);
-                cell.setCellStyle(columnStyle);
+                dataCell.setValue(sheet, value, cell, start++);
             }
+            dataCell.setValue(sheet, null, null, 0);
             start -= datas.size();
         }
     }

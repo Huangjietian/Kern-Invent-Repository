@@ -1,6 +1,7 @@
 package cn.kerninventor.tools.poibox.layout;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
+import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
@@ -60,6 +61,11 @@ public final class MergedRange {
 
     public MergedRange setMergeRangeContent(RichTextString richTextString) {
         BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(richTextString);
+        return this;
+    }
+
+    public MergedRange setMergeRangeContent(Object value) {
+        CellValueUtil.setCellValue(BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()), value);
         return this;
     }
 

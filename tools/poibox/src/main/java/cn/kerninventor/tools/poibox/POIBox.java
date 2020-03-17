@@ -7,6 +7,7 @@ import cn.kerninventor.tools.poibox.layout.Layouter;
 import cn.kerninventor.tools.poibox.style.Fonter;
 import cn.kerninventor.tools.poibox.style.Styler;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,6 +51,19 @@ public interface POIBox {
      * @return
      */
     Workbook workbook();
+
+    /**
+     *
+     * @return
+     */
+    Sheet getSheet(String sheetName);
+
+    /**
+     *
+     * @param sheetAt
+     * @return
+     */
+    Sheet getSheet(int sheetAt);
 
     /**
      * 把文件流写入 HttpServletResponse

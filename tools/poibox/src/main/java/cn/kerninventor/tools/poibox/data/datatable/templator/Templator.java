@@ -1,6 +1,5 @@
-package cn.kerninventor.tools.poibox.data.datatable;
+package cn.kerninventor.tools.poibox.data.datatable.templator;
 
-import cn.kerninventor.tools.poibox.data.datatable.templator.Headline;
 import org.apache.poi.ss.usermodel.Sheet;
 
 /**

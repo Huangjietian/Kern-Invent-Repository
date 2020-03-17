@@ -5,6 +5,9 @@ import cn.kerninventor.tools.poibox.data.datatable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.datatable.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.datatable.cellstyle.TabulationStyle;
+import cn.kerninventor.tools.poibox.style.Styler;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,42 +25,65 @@ import java.util.List;
  */
 public class ExcelTabulationInitializer<T> {
 
-    private POIBox poiBox;
+    /**
+     *
+     */
+    private POIBox parent;
+
+
     /**
      * data tabulation class
      */
     private Class<T> tabulationClass;
+
+
     /**
      * Default headline content, you can set value to this attribution in initialize.
      */
     private String headline;
+
+
     /**
      * Table start row index, default 0.
      */
     private int startRowIndex;
+
+
     /**
      * headline / table head/ table text row index.
      */
     private int headlineRdx, tableHeadRdx, tableTextRdx;
+
+
+    /**
+     * styles
+     */
+    private CellStyle headlineStyle, tableHeadStyle, tableTextStyle;
+
+
     /**
      * The number of lines in the body.
      */
     private int textRowNum;
+
+
     /**
      * Default value is true, poibox adopt auto index in default.
      */
     private boolean autoColumnIndex;
+
+
     /**
-     * NullAble, no styles are added to the cells when this attribution is null.
-     */
-    private TabulationStyle tabulationStyle;
-    /**
-     * NotNull
+     * NotNull columns definition
      */
     private List<ExcelColumnInitializer> columnsContainer;
 
-    public POIBox getPoiBox() {
-        return poiBox;
+
+
+
+
+    public POIBox getParent() {
+        return parent;
     }
 
     public int getFirstColumnIndex() {
@@ -120,8 +146,16 @@ public class ExcelTabulationInitializer<T> {
         return autoColumnIndex;
     }
 
-    public TabulationStyle getTabulationStyle() {
-        return tabulationStyle;
+    public CellStyle getHeadlineStyle() {
+        return headlineStyle;
+    }
+
+    public CellStyle getTableHeadStyle() {
+        return tableHeadStyle;
+    }
+
+    public CellStyle getTableTextStyle() {
+        return tableTextStyle;
     }
 
     public List<ExcelColumnInitializer> getColumnsContainer() {
@@ -133,26 +167,35 @@ public class ExcelTabulationInitializer<T> {
      * @param tableClass
      */
     public ExcelTabulationInitializer(Class<T> tableClass, POIBox poiBox) {
+        parent = poiBox;
+        /**
+         * resolve table class.
+         */
         dataTabulationSourceClassValidate(tableClass);
         ExcelTabulation excelTabulation = tableClass.getAnnotation(ExcelTabulation.class);
         tabulationClass = tableClass;
-
         //row index calc and headline set value.
         headline = "".equals(excelTabulation.headline().trim()) ? null : excelTabulation.headline();
         startRowIndex = excelTabulation.startRowIndex();
+        //rdx init
         headlineRdx = headline == null ? startRowIndex - 1 : startRowIndex;
         tableHeadRdx = headlineRdx + 1;
-        tableTextRdx = tableHeadRdx + 1;
+        tableTextRdx = headlineRdx + 2;
         textRowNum = excelTabulation.textRowNum();
-
         autoColumnIndex = excelTabulation.autoColumnIndex();
-        try {
-            tabulationStyle = excelTabulation.style().newInstance();
-        } catch (Exception e) {
-            throw new IllegalSourceClassOfTabulationException("An explicit, parameterless constructor is required in Tabulation.style()");
-        }
+        //style init
+        TabulationStyle tabulationStyle = TabulationStyle.newInstance(excelTabulation.style());
+        Workbook workbook = poiBox.workbook();
+        headlineStyle = Styler.cloneStyle(workbook, tabulationStyle.getHeadLineStyle());
+        tableHeadStyle = Styler.cloneStyle(workbook, tabulationStyle.getTableHeadStyle());
+        tableTextStyle = Styler.cloneStyle(workbook, tabulationStyle.getTextStyle());
+        /**
+         * resolve columns
+         */
         initialzeColumns(tableClass.getDeclaredFields());
-        this.poiBox = poiBox;
+        if (columnsContainer.size() == 0){
+            throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's fields!");
+        }
     }
 
     private void initialzeColumns(Field[] fields){
@@ -162,18 +205,15 @@ public class ExcelTabulationInitializer<T> {
             int index = 0 ;
             for (Field field : fields){
                 if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, index++));
+                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, index++, Styler.cloneStyle(parent.workbook(), tableTextStyle)));
                 }
             }
         } else {
             for (Field field : fields){
                 if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn,excelColumn.columnIndex()));
+                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, excelColumn.columnIndex(), Styler.cloneStyle(parent.workbook(), tableTextStyle)));
                 }
             }
-        }
-        if (columnsContainer.size() == 0){
-            throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's fields!");
         }
         Collections.sort(columnsContainer);
     }

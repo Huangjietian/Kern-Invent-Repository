@@ -11,6 +11,7 @@ import cn.kerninventor.tools.poibox.style.StyleHandler;
 import cn.kerninventor.tools.poibox.utils.ExcelDownloader;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -58,6 +59,16 @@ public final class POIBoxOpened implements POIBox {
     @Override
     public Workbook workbook() {
         return workbook;
+    }
+
+    @Override
+    public Sheet getSheet(String sheetName) {
+        return BoxGadget.getSheetForce(workbook, sheetName);
+    }
+
+    @Override
+    public Sheet getSheet(int sheetAt) {
+        return BoxGadget.getSheetForce(workbook, sheetAt);
     }
 
     @Override
