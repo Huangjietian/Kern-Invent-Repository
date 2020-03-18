@@ -33,7 +33,8 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter
     public ExcelTabulationTemplator(ExcelTabulationInitializer<T> initializer) {
         this.initializer = initializer;
         if (initializer.getHeadline() != null) {
-            this.headline = new Headline(initializer.getHeadlineRdx(),
+            this.headline = new Headline(
+                    initializer.getHeadlineRdx(),
                     initializer.getFirstColumnIndex(),
                     initializer.getLastColumnIndex(),
                     initializer.getHeadlineStyle(),
@@ -55,7 +56,6 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter
     public Templator tempalateTo(int sheetAt) {
         return tempalateTo(initializer.getParent().getSheet(sheetAt));
     }
-
 
     @Override
     public Templator tempalateTo(Sheet sheet) {
@@ -140,20 +140,23 @@ public class ExcelTabulationTemplator<T> implements Templator<T>, InstanceGetter
         }
 
         @Override
-        public void writeTo(String sheetName, List<T> datas) {
+        public TemplatedWriter<T> writeTo(String sheetName, List<T> datas) {
             Sheet sheet = initializer.getParent().getSheet(sheetName);
             writeTo(sheet, datas);
+            return this;
         }
 
         @Override
-        public void writeTo(int sheetAt, List<T> datas) {
+        public TemplatedWriter<T> writeTo(int sheetAt, List<T> datas) {
             Sheet sheet = initializer.getParent().getSheet(sheetAt);
             writeTo(sheet, datas);
+            return this;
         }
 
         @Override
-        public void writeTo(Sheet sheet, List<T> datas) {
+        public TemplatedWriter<T> writeTo(Sheet sheet, List<T> datas) {
             writer.writeTo(sheet, datas, templator);
+            return this;
         }
     }
 

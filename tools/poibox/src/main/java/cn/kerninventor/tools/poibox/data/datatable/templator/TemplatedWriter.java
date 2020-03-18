@@ -18,9 +18,9 @@ public interface TemplatedWriter<T> {
 
     TemplatedWriter setDefaultMergedMode(boolean isMergeColum);
 
-    void writeTo(String sheetName, List<T> datas);
+    TemplatedWriter<T> writeTo(String sheetName, List<T> datas);
 
-    void writeTo(int sheetAt, List<T> datas);
+    TemplatedWriter<T> writeTo(int sheetAt, List<T> datas);
 
-    void writeTo(Sheet sheet, List<T> datas);
+    TemplatedWriter<T> writeTo(Sheet sheet, List<T> datas);
 }

@@ -28,6 +28,7 @@ import java.util.*;
 public class TestMain {
 
     public static void main(String[] args) throws IOException {
+
         //开启box
         POIBox poiBox = POIBox.open();
         //数据处理器
@@ -83,6 +84,20 @@ public class TestMain {
         }
 
         System.out.println("succeed!");
+
+        POIBox box = POIBox.open();
+        box.dataTabulator().templator(TestBO.class).writer()
+                .writeTo("1", testBOS)
+                .writeTo("2", testBOS)
+                .writeTo("3", testBOS)
+                .writeTo("4", testBOS)
+                .writeTo("5", testBOS)
+                .writeTo("6", testBOS)
+                .writeTo("7", testBOS)
+                .writeTo("8", testBOS)
+                .writeTo("9", testBOS)
+                ;
+        box.writeToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板1.xls");
 
 
 
