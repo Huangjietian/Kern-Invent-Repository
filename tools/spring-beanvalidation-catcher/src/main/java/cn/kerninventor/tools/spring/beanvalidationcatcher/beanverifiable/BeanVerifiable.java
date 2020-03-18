@@ -1,8 +1,6 @@
-package cn.kerninventor.tools.spring.beanvalidationcatcher.interfaces;
+package cn.kerninventor.tools.spring.beanvalidationcatcher.beanverifiable;
 
 import javax.validation.ConstraintViolation;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.spring.beanvalidationcatcher.interfaces;
+package cn.kerninventor.tools.spring.beanvalidationcatcher.beanverifiable;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
