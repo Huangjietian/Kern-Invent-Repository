@@ -17,7 +17,7 @@ import java.util.List;
  * @Author Kern
  * @Date 2019/11/11 15:35
  */
-public class TestBody implements ToTreeDiagramAble<TestBody, Integer> {
+public class TestBody implements ToTreeDiagramAble<Integer> {
 
     public TestBody() {
     }

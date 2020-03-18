@@ -8,7 +8,7 @@ package cn.kerninventor.tools.data.diagramer;
  * @Author Kern
  * @Date 2019/11/11 11:15
  */
-public interface ToTreeDiagramAble <T extends ToTreeDiagramAble, K> extends DataDiagramAble {
+public interface ToTreeDiagramAble <K> extends DataDiagramAble {
 
     K getPrimaryKey();
 

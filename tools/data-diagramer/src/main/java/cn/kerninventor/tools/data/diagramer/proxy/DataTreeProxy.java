@@ -44,7 +44,7 @@ public class DataTreeProxy implements DataDiagramProxy<ToTreeDiagramAble> {
 
         String contextPackage = "package " + packageName + PATH_SEPARATOR + LINE_SEPARATOR;
         String contextImport = "import " + targetClass.getName() + PATH_SEPARATOR + LINE_SEPARATOR;
-        String contextClass = "public class " + className
+        String contextClass = "public final class " + className
                 + " extends " + targetClass.getName() + " {" + LINE_SEPARATOR;
         String contextField = "private java.util.Collection subList;" + LINE_SEPARATOR;
         String contextMethod = "public void setter(java.util.Collection subList) { this.subList = subList; } " + LINE_SEPARATOR
