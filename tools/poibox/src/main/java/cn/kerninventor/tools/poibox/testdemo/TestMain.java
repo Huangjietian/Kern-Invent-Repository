@@ -99,11 +99,23 @@ public class TestMain {
                 ;
         box.writeToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板1.xls");
 
-
-
+        List<Object> objects = new ArrayList<>();
+        objects.add(3);
+        objects.add(1);
+        objects.add(2);
+        System.out.println(test(objects));
     }
 
 
+
+    public static List<Comparable> test(List list) {
+        List<Comparable> list1 = new ArrayList<>();
+        list.forEach(e -> {
+            list1.add((Comparable) e);
+        });
+        Collections.sort(list1);
+        return list1;
+    }
 }
 
 
