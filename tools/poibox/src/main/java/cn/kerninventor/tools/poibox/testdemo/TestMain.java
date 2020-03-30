@@ -99,22 +99,18 @@ public class TestMain {
                 ;
         box.writeToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板1.xls");
 
-        List<Object> objects = new ArrayList<>();
-        objects.add(3);
-        objects.add(1);
-        objects.add(2);
-        System.out.println(test(objects));
+        List<Integer> integers = new ArrayList<>();
+        integers.add(3);
+        integers.add(1);
+        integers.add(2);
+        System.out.println(test(integers, Integer.class));
     }
 
 
 
-    public static List<Comparable> test(List list) {
-        List<Comparable> list1 = new ArrayList<>();
-        list.forEach(e -> {
-            list1.add((Comparable) e);
-        });
-        Collections.sort(list1);
-        return list1;
+    public static <T extends Comparable<T>>List<Comparable> test(List<T> list, Class<T> comparableClass) {
+        list.sort(null);
+        return (List<Comparable>) list;
     }
 }
 
