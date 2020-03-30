@@ -21,5 +21,11 @@ used  使用的字段
 3.4  max  最大值
 3.5  min  最小值
 
+CompareRule.class
+
 ## 4. 加入替代功能
 4.1 @SubColumn  @When
+
+## 5. 集成级联功能
+
+## 6. 加入获取文件流的功能

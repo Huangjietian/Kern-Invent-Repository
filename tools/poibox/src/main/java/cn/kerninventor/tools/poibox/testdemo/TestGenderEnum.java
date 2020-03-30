@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @Date 2019/12/13 18:42
  * @Description: TODO
  */
-public enum TestGenderEnum implements MetaViewEnum<Integer, String>, Serializable {
+public enum TestGenderEnum implements MetaViewEnum<Integer, String> {
     MAN(1,"男"),
     WOMEN(2,"女"),
     ;

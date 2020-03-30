@@ -10,15 +10,15 @@ import java.util.Objects;
  */
 public abstract class Memory {
 
-    private Map<Short, Memory> snippets = new HashMap<>();
+    private Map<Double, Memory> snippets = new HashMap<>();
 
     public final static boolean precise = false;
 
-    public Memory recall(Double someting) {
-        return Objects.requireNonNull(snippets.get(someting.shortValue()),"I ...");
+    public Memory recall(Short someting) {
+        return Objects.requireNonNull(snippets.get(someting),"I ...");
     }
 
-    public void remember(Short snippet, Memory memory) {
+    public void remember(Double snippet, Memory memory) {
         snippets.put(snippet, memory);
     }
 
