@@ -1,7 +1,7 @@
-package cn.kerninventor.tools.data.diagramer.test;
+package cn.kerninventor.tools.data.structure.test;
 
-import cn.kerninventor.tools.data.diagramer.DataDiagramer;
-import cn.kerninventor.tools.data.diagramer.ToTreeDiagramAble;
+import cn.kerninventor.tools.data.structure.DataStructureBuilder;
+import cn.kerninventor.tools.data.structure.TreeStructureAble;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -10,14 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Title: TestBody
- * @ProjectName tools
- * @Version 1.1.0.RELEASE
- * @Description: TODO
- * @Author Kern
- * @Date 2019/11/11 15:35
+ * @author Kern
+ * @date 2019/11/11 15:35
  */
-public class TestBody implements ToTreeDiagramAble<Integer> {
+public class TestBody implements TreeStructureAble<Integer> {
 
     public TestBody() {
     }
@@ -63,7 +59,7 @@ public class TestBody implements ToTreeDiagramAble<Integer> {
     }
 
     public static void main(String[] args) throws NoSuchMethodException, IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        List<ToTreeDiagramAble> list = new ArrayList<>();
+        List<TreeStructureAble> list = new ArrayList<>();
         list.addAll(Arrays.asList(
                 new TestBody(1,null),
                 new TestBody(2,1),
@@ -78,8 +74,8 @@ public class TestBody implements ToTreeDiagramAble<Integer> {
                 new TestBody(11,10),
                 new TestBody(12,9)
         ));
-        List list0 = DataDiagramer.tree(list).getResult(null);
-        List list1 = DataDiagramer.tree(list).getResult(new TestBody(2,1));
+        List list0 = DataStructureBuilder.tree(list).getResult(null);
+        List list1 = DataStructureBuilder.tree(list).getResult(new TestBody(2,1));
         System.out.println("   ===  ");
 
         /**

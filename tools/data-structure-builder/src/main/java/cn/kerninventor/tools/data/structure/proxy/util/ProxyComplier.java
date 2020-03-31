@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.data.diagramer.proxy.util;
+package cn.kerninventor.tools.data.structure.proxy.util;
 
 import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
@@ -8,14 +8,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
- * @Title: DDTComplier
- * @ProjectName tools
- * @Version 1.1.0.RELEASE
- * @Description: TODO
- * @Author Kern
- * @Date 2019/11/11 14:52
+ * @author Kern
+ * @date 2019/11/11 14:52
  */
-public class DDTComplier {
+public class ProxyComplier {
 
     public static void compile(File proxyFile) throws IOException {
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
