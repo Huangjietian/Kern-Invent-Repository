@@ -1,8 +1,9 @@
 package cn.kerninventor.tools.poibox.data.datatable;
 
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.ExcelValid;
-
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @Title: POIColumn
@@ -45,5 +46,6 @@ public @interface ExcelColumn {
      * @return
      */
     boolean mergeByContent() default false;
+
 
 }

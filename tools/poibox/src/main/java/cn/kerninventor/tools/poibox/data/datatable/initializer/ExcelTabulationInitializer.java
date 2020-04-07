@@ -201,17 +201,18 @@ public class ExcelTabulationInitializer<T> {
     private void initialzeColumns(Field[] fields){
         columnsContainer = new ArrayList(fields.length);
         ExcelColumn excelColumn;
+        CellStyle columnStyle = Styler.cloneStyle(parent.workbook(), tableTextStyle);
         if (autoColumnIndex){
             int index = 0 ;
             for (Field field : fields){
                 if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, index++, Styler.cloneStyle(parent.workbook(), tableTextStyle)));
+                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, index++, columnStyle));
                 }
             }
         } else {
             for (Field field : fields){
                 if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, excelColumn.columnIndex(), Styler.cloneStyle(parent.workbook(), tableTextStyle)));
+                    columnsContainer.add(ExcelColumnInitializer.getInstance(field, excelColumn, excelColumn.columnIndex(), columnStyle));
                 }
             }
         }

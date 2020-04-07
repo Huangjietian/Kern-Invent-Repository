@@ -4,8 +4,8 @@ import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
 import org.apache.poi.ss.usermodel.CellStyle;
 
-import javax.xml.bind.annotation.XmlType;
-import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Title: TabulationStyle
@@ -37,4 +37,12 @@ public interface TabulationStyle {
         return BoxGadget.root().styler().usualTextPart(null);
     }
 
+    default Map<String, CellStyle> specifiedColumnStyle(){
+        /**
+        Map<String, CellStyle> style = new HashMap<>();
+        style.put("specifiedColumnName", BoxGadget.root().styler().produce().setAlignment(HorizontalAlignment.CENTER).get());
+        return style;
+         */
+        return new HashMap<>();
+    }
 }

@@ -17,9 +17,11 @@ import java.lang.reflect.Field;
  * @Author Kern
  * @Date 2019/12/9 15:52
  */
-public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer> {
+public class ExcelColumnInitializer<T extends Object> implements Comparable<ExcelColumnInitializer> {
 
     private Field field;
+
+    private Class<T> fieldType;
 
     private String fieldName;
 
@@ -47,11 +49,12 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
      */
     private boolean removable;
 
-    private ExcelColumnInitializer() {
+    private ExcelColumnInitializer(Class<T> fieldType) {
+        this.fieldType = fieldType;
     }
 
     static ExcelColumnInitializer getInstance(Field field, ExcelColumn excelColumn, int columnIndex, CellStyle columnStyle){
-        ExcelColumnInitializer column = new ExcelColumnInitializer();
+        ExcelColumnInitializer column = new ExcelColumnInitializer(field.getType());
         column.field = SupportedDataType.checkSupportability(field);
         column.fieldName = field.getName();
         column.titleName = excelColumn.value();
@@ -85,7 +88,7 @@ public class ExcelColumnInitializer implements Comparable<ExcelColumnInitializer
     }
 
     public Class getFieldType() {
-        return field.getType();
+        return fieldType;
     }
 
     public String getFieldName() {
