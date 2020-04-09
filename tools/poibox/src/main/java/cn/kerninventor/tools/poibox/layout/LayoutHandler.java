@@ -1,7 +1,8 @@
 package cn.kerninventor.tools.poibox.layout;
 
-import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.BoxBracket;
+import cn.kerninventor.tools.poibox.BoxGadget;
+import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -54,31 +55,27 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
         Map<Object, CellRangeAddress> map = new HashMap<>();
         for (Row row : sheet){
             Cell cell = row.getCell(column);
-            if (cell != null){
-                int rowIndex = row.getRowNum();
-                Object value = CellValueUtil.getCellValue(cell);
-                CellRangeAddress address = map.get(value);
-                //diverse value , to merge already recorded and reset map.
-                if (address == null){
-                    map.values().forEach(e -> {
-                        int first = e.getFirstRow();
-                        int last = e.getLastRow();
-                        if (first != last){
-                            sheet.addMergedRegion(e);
-                        }
-                    });
-                    map.clear();
-                    map.put(value, new CellRangeAddress(rowIndex, rowIndex, column, column));
-                } else {
-                    address.setLastRow(rowIndex);
-                }
+            if (cell == null) {
+                continue;
+            }
+            Object value = CellValueUtil.getCellValue(cell);
+            //diverse value , to merge already recorded and reset map.
+            CellRangeAddress address = map.get(value);
+            if (address == null){
+                map.values().forEach(e -> {
+                    if (e.getFirstRow() != e.getLastRow()){
+                        sheet.addMergedRegion(e);
+                    }
+                });
+                map.clear();
+                map.put(value, new CellRangeAddress(row.getRowNum(), row.getRowNum(), column, column));
+            } else {
+                address.setLastRow(row.getRowNum());
             }
         }
         if (!map.isEmpty()){
             map.values().forEach(e -> {
-                int first = e.getFirstRow();
-                int last = e.getLastRow();
-                if (first != last){
+                if (e.getFirstRow() != e.getLastRow()){
                     sheet.addMergedRegion(e);
                 }
             });
@@ -92,32 +89,26 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
         if ((mergedRow = sheet.getRow(row)) == null || mergedRow.getLastCellNum() <= 0){
             return;
         }
-        int rowIndex = mergedRow.getRowNum();
         Map<Object, CellRangeAddress> map = new HashMap<>();
         for (Cell cell : mergedRow){
-            int cellIndex = cell.getColumnIndex();
             Object value = CellValueUtil.getCellValue(cell);
-            CellRangeAddress address = map.get(value);
             //diverse value , to merge already recorded and reset map.
+            CellRangeAddress address = map.get(value);
             if (address == null){
                 map.values().forEach(e -> {
-                    int first = e.getFirstColumn();
-                    int last = e.getLastColumn();
-                    if (first != last){
+                    if (e.getFirstColumn() != e.getLastColumn()){
                         sheet.addMergedRegion(e);
                     }
                 });
                 map.clear();
-                map.put(value, new CellRangeAddress(rowIndex, rowIndex, cellIndex, cellIndex));
+                map.put(value, new CellRangeAddress(mergedRow.getRowNum(), mergedRow.getRowNum(), cell.getColumnIndex(), cell.getColumnIndex()));
             } else {
-                address.setLastColumn(cellIndex);
+                address.setLastColumn(cell.getColumnIndex());
             }
         }
         if (!map.isEmpty()){
             map.values().forEach(e -> {
-                int first = e.getFirstColumn();
-                int last = e.getLastColumn();
-                if (first != last){
+                if (e.getFirstColumn() != e.getLastColumn()){
                     sheet.addMergedRegion(e);
                 }
             });
@@ -137,7 +128,7 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
         });
         if (width != null){
             for (int i = 0 ; i < columnIndex[0] ; i++ ){
-                sheet.setColumnWidth(i , (int)((width + 0.72) * 256));
+                sheet.setColumnWidth(i , BoxGadget.adjustCellWidth(width));
             }
         }
     }

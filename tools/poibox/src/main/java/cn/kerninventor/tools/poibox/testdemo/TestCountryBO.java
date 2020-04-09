@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewBody;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
 
 /**
  * @Title: TestCountry
@@ -10,7 +10,7 @@ import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictiona
  * @Date 2019/12/18 10:39
  * @Description: TODO
  */
-public class TestCountryBO implements MetaViewBody<Long, String> {
+public class TestCountryBO implements DictionaryReferEntry<Long, String> {
 
     private Long id;
 

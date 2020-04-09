@@ -1,8 +1,6 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewEnum;
-
-import java.io.Serializable;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
 
 /**
  * @Title: SexGender
@@ -12,7 +10,7 @@ import java.io.Serializable;
  * @Date 2019/12/13 18:42
  * @Description: TODO
  */
-public enum TestGenderEnum implements MetaViewEnum<Integer, String> {
+public enum TestGenderEnum implements DictionaryReferEntry<Integer, String> {
     MAN(1,"男"),
     WOMEN(2,"女"),
     ;
@@ -25,7 +23,6 @@ public enum TestGenderEnum implements MetaViewEnum<Integer, String> {
     private int code;
 
     private String msg;
-
 
     @Override
     public Integer getMetadata() {

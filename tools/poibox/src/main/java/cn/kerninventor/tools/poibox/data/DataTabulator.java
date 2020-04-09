@@ -1,13 +1,10 @@
 package cn.kerninventor.tools.poibox.data;
 
-import cn.kerninventor.tools.poibox.data.datatable.reader.Reader;
-import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
-import cn.kerninventor.tools.poibox.data.datatable.writer.Writer;
+import cn.kerninventor.tools.poibox.data.templatedtable.reader.Reader;
+import cn.kerninventor.tools.poibox.data.templatedtable.templator.Templator;
+import cn.kerninventor.tools.poibox.data.templatedtable.writer.Writer;
 
 /**
- * @Title: POIDataProcessor
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data
  * @Author Kern
  * @Date 2019/12/9 14:50
  * @Description: TODO

@@ -1,10 +1,11 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
 import cn.kerninventor.tools.poibox.POIBox;
+import cn.kerninventor.tools.poibox.POIBoxFactory;
 import cn.kerninventor.tools.poibox.data.DataTabulator;
-import cn.kerninventor.tools.poibox.data.datatable.templator.Templator;
-import cn.kerninventor.tools.poibox.elements.FonterElements;
-import cn.kerninventor.tools.poibox.elements.StylerElements;
+import cn.kerninventor.tools.poibox.data.templatedtable.templator.Templator;
+import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
+import cn.kerninventor.tools.poibox.style.enums.FontColor;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -15,7 +16,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Title: MainTest
@@ -30,7 +33,7 @@ public class TestMain {
     public static void main(String[] args) throws IOException {
 
         //开启box
-        POIBox poiBox = POIBox.open();
+        POIBox poiBox = POIBoxFactory.open();
         //数据处理器
         DataTabulator dataTabulator = poiBox.dataTabulator();
 
@@ -38,12 +41,12 @@ public class TestMain {
         Templator templator = dataTabulator.templator(TestBO.class).tempalateTo("人员信息导入模板1");
 
         //新的大标题风格
-        CellStyle newHeadlineStyle = poiBox.styler().produce()
-                .setBorder(StylerElements.CellDirection.SURROUND, BorderStyle.MEDIUM)
+        CellStyle newHeadlineStyle = poiBox.styler().producer()
+                .setBorder(BorderDirection.SURROUND, BorderStyle.MEDIUM)
                 .setFillPattern(FillPatternType.SOLID_FOREGROUND)
                 .setFillBackgroundColor(HSSFColor.HSSFColorPredefined.BROWN)
                 .setWrapText(true)
-                .setFont(poiBox.fonter().simpleFont("黑体", 22, FonterElements.FontColor.RED))
+                .setFont(poiBox.fonter().simpleFont("黑体", 22, FontColor.RED))
                 .setWholeCenter()
                 .get();
         //修改大标题的内容和风格
@@ -76,7 +79,7 @@ public class TestMain {
 
         //打开本地文件的数据读取形式
         try {
-            POIBox newBox = POIBox.open("C:\\Users\\82576\\Desktop\\人员信息导入模板.xls");
+            POIBox newBox = POIBoxFactory.open("C:\\Users\\82576\\Desktop\\人员信息导入模板.xls");
             List<TestBO> readList2 = newBox.dataTabulator().templator(TestBO.class).reader().readFrom("人员信息导入模板3");
             System.out.println("读取的数据总量： "+ readList2.size());
         } catch (InvalidFormatException e) {
@@ -85,7 +88,7 @@ public class TestMain {
 
         System.out.println("succeed!");
 
-        POIBox box = POIBox.open();
+        POIBox box = POIBoxFactory.open();
         box.dataTabulator().templator(TestBO.class).writer()
                 .writeTo("1", testBOS)
                 .writeTo("2", testBOS)
@@ -99,19 +102,8 @@ public class TestMain {
                 ;
         box.writeToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板1.xls");
 
-        List<Integer> integers = new ArrayList<>();
-        integers.add(3);
-        integers.add(1);
-        integers.add(2);
-        System.out.println(test(integers, Integer.class));
     }
 
-
-
-    public static <T extends Comparable<T>>List<Comparable> test(List<T> list, Class<T> comparableClass) {
-        list.sort(null);
-        return (List<Comparable>) list;
-    }
 }
 
 

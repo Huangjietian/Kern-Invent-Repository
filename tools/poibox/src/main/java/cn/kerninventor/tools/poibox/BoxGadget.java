@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class BoxGadget {
 
-    private static POIBox rootBox = POIBox.open();
+    private static POIBox rootBox = POIBoxFactory.open();
 
     public static POIBox root(){
         return rootBox;
@@ -45,22 +45,17 @@ public class BoxGadget {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return (int) (getExcelCellWidth(size + 2) * fontHeightInPoints / DFHIP);
+        return (int) (adjustCellWidth(size + 2) * fontHeightInPoints / DFHIP);
     }
 
-    public static int getExcelCellWidth(int characterSize) {
-        return (int) ((characterSize + 0.82) * 256);
+    public static int adjustCellWidth(int width) {
+        return (int) ((width + 0.82) * 256);
     }
 
     public static Font getFontFrom(CellStyle cellStyle, Workbook workbook) {
         return workbook.getFontAt(cellStyle.getFontIndexAsInt());
     }
 
-    /**
-     * This method transfer excel column index to english form.
-     * @param cellIndex
-     * @return
-     */
     public static String TransferExcelColumnIndex(int cellIndex){
         String cellStrIndex = "";
         int iHead = (cellIndex - 1) / 26;

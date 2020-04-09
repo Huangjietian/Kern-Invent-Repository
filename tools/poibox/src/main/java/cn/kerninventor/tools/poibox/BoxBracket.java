@@ -10,7 +10,7 @@ package cn.kerninventor.tools.poibox;
  */
 public class BoxBracket {
 
-    private POIBox poiBox;
+    protected POIBox poiBox;
 
     public BoxBracket(POIBox poiBox) {
         this.poiBox = poiBox;

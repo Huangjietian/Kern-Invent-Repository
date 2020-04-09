@@ -1,34 +1,30 @@
 package cn.kerninventor.tools.poibox.style;
 
-import cn.kerninventor.tools.poibox.elements.FonterElements;
+import cn.kerninventor.tools.poibox.style.enums.FontColor;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Sheet;
 
 /**
- * @Title: POIFonter
- * @ProjectName tools
- * @Version 1.1.0.RELEASE
- * @Description: TODO
  * @Author Kern
  * @Date 2019/10/29 19:52
  */
 public interface Fonter {
 
-    String NAME_HEADER = "黑体";
-    String NAME_TEXTPART = "宋体";
-    int SIZE_HEADLINE = 24;
-    int SIZE_TABLEHEADER = 16;
-    int SIZE_TEXTPART = 12;
+    String DEF_NAME_HEADER = "黑体";
 
-    FontProducer produce();
+    String DEF_NAME_TEXTPART = "宋体";
 
-    Font putInFont(String primaryKey, Font font);
+    int DEF_SIZE_HEADLINE = 24;
 
-    Font putOutFont(String primaryKey);
+    int DEF_SIZE_TABLEHEADER = 16;
+
+    int DEF_SIZE_TEXTPART = 12;
+
+    FontProducer producer();
 
     Font simpleFont(String fontName, int fontSize);
 
-    Font simpleFont(String fontName, int fontSize, FonterElements.FontColor fontColor);
+    Font simpleFont(String fontName, int fontSize, FontColor fontColor);
 
+    Font simpleFont(String fontName, int fontSize, boolean bold);
 
 }

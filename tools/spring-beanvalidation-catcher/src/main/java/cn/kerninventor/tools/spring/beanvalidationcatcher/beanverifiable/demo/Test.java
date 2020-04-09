@@ -1,6 +1,7 @@
 package cn.kerninventor.tools.spring.beanvalidationcatcher.beanverifiable.demo;
 
 import cn.kerninventor.tools.spring.beanvalidationcatcher.beanverifiable.BeanVerifiable;
+import cn.kerninventor.tools.spring.beanvalidationcatcher.paramtervalidate.BeanValidate;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
  * @date 2020/3/17 19:37
  * @description TODO
  */
+@BeanValidate
 public class Test implements BeanVerifiable {
 
     @NotNull(message = "age不能为空")

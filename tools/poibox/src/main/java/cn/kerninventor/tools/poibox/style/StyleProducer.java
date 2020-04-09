@@ -1,16 +1,12 @@
 package cn.kerninventor.tools.poibox.style;
 
-import cn.kerninventor.tools.poibox.elements.StylerElements;
+import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 
 /**
- * @Title StyleProducer
- * @ProjectName kerninventresp
- * @PackageName cn.kerninventor.tools.poibox.style
  * @Author Kern
  * @Date 2020/3/16 11:16
- * @Description TODO
  */
 public class StyleProducer {
 
@@ -29,7 +25,7 @@ public class StyleProducer {
         return this;
     }
 
-    public StyleProducer setBorder(StylerElements.CellDirection direction, BorderStyle borderStyle) {
+    public StyleProducer setBorder(BorderDirection direction, BorderStyle borderStyle) {
         switch (direction){
             case TOP :
                 cellStyle.setBorderTop(borderStyle);
@@ -54,7 +50,7 @@ public class StyleProducer {
         return this;
     }
 
-    public StyleProducer setBorderColor(StylerElements.CellDirection direction, HSSFColor.HSSFColorPredefined hssfColorPredefined) {
+    public StyleProducer setBorderColor(BorderDirection direction, HSSFColor.HSSFColorPredefined hssfColorPredefined) {
         switch (direction){
             case TOP :
                 cellStyle.setTopBorderColor(hssfColorPredefined.getIndex());
@@ -75,7 +71,6 @@ public class StyleProducer {
                 cellStyle.setRightBorderColor(hssfColorPredefined.getIndex());
                 break;
             default:
-
         }
         return this;
     }

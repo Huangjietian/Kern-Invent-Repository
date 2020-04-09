@@ -1,23 +1,19 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
-import cn.kerninventor.tools.poibox.data.datatable.datavalidation.array.dictionary.metaView.MetaViewDictionaryCover;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryProvider;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Title: TestService
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox
  * @Author Kern
  * @Date 2019/12/18 10:39
- * @Description: TODO
  */
-public class TestCountryDictionary extends MetaViewDictionaryCover<TestCountryBO> {
+public class TestCountryDictionary implements DictionaryProvider {
 
     @Override
-    public List<TestCountryBO> obtainData() {
-        //
+    public List<? extends DictionaryEntry> obtainData() {
         List<TestCountryBO> countries = new ArrayList<>();
         countries.add(new TestCountryBO(1L, "中国"));
         countries.add(new TestCountryBO(2L, "美国"));
@@ -28,5 +24,4 @@ public class TestCountryDictionary extends MetaViewDictionaryCover<TestCountryBO
         countries.add(new TestCountryBO(7L,"瑞士"));
         return countries;
     }
-
 }

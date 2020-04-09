@@ -9,9 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @Title: MergedRegion
- * @ProjectName tools
- * @Description: TODO
  * @Author Kern
  * @Date 2019/10/30 17:51
  */
@@ -35,6 +32,7 @@ public final class MergedRange {
     }
 
     public MergedRange setMergeRangeContent(double d) {
+//        sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()).setCellValue(d);
         BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(d);
         return this;
     }

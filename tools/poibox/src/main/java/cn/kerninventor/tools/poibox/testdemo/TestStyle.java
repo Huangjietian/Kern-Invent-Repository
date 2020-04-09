@@ -1,9 +1,8 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.elements.StylerElements;
 import cn.kerninventor.tools.poibox.style.Styler;
-import cn.kerninventor.tools.poibox.data.datatable.cellstyle.TabulationStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.TabulationStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
