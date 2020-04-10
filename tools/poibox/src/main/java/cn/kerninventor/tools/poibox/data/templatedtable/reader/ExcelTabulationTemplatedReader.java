@@ -18,7 +18,7 @@ import java.util.List;
  * @Author Kern
  * @Date 2020/3/12 19:13
  */
-public class ExcelTabulationReader<T> implements Reader<T> {
+public class ExcelTabulationTemplatedReader<T> implements Reader<T> {
 
     @Override
     public List<T> readFrom(String sheetName, Templator<T> templator) {

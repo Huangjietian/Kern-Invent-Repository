@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templatedtable.cellstyle;
+package cn.kerninventor.tools.poibox.data.templatedtable.element;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -35,6 +35,5 @@ public @interface CellStyle {
 
     boolean hidden() default false;
 
-    boolean effective() default true;
 
 }

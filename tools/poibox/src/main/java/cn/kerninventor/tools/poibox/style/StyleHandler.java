@@ -19,14 +19,14 @@ public final class StyleHandler extends BoxBracket implements Styler {
 
     @Override
     public StyleProducer producer() {
-        CellStyle cellStyle = poiBox.workbook().createCellStyle();
+        CellStyle cellStyle = getParent().workbook().createCellStyle();
         return new StyleProducer(cellStyle);
     }
 
     @Override
     public CellStyle usualHeadLine(Integer fontSize) {
         fontSize = fontSize == null ? Fonter.DEF_SIZE_HEADLINE : fontSize;
-        Font font = poiBox.fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize, true);
+        Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize, true);
         return producer()
                 .setWholeCenter()
                 .setBorder(BorderDirection.SURROUND, BorderStyle.DOUBLE)
@@ -37,7 +37,7 @@ public final class StyleHandler extends BoxBracket implements Styler {
     @Override
     public CellStyle usualTableHeader(Integer fontSize) {
         fontSize = fontSize == null ? Fonter.DEF_SIZE_TABLEHEADER : fontSize;
-        Font font = poiBox.fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize);
+        Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize);
         return producer()
                 .setWholeCenter()
                 .setBorder(BorderDirection.SURROUND, BorderStyle.THIN)
@@ -48,12 +48,29 @@ public final class StyleHandler extends BoxBracket implements Styler {
     @Override
     public CellStyle usualTextPart(Integer fontSize) {
         fontSize = fontSize == null ? Fonter.DEF_SIZE_TEXTPART : fontSize;
-        Font font = poiBox.fonter().simpleFont(Fonter.DEF_NAME_TEXTPART, fontSize);
+        Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_TEXTPART, fontSize);
         return producer()
                 .setWholeCenter()
                 .setWrapText(true)
                 .setBorder(BorderDirection.SURROUND, BorderStyle.THIN)
                 .setFont(font)
+                .get();
+    }
+
+    @Override
+    public CellStyle generate(cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle cellStyle) {
+        return producer()
+                .setBorder(cellStyle.border().direction(), cellStyle.border().borderStyle())
+                .setFont(getParent().fonter().generate(cellStyle.font()))
+                .setFillPattern(cellStyle.fillPatternType())
+                .setFillForegroundColor(cellStyle.foregroudColor())
+                .setFillBackgroundColor(cellStyle.backgroudColor())
+                .setVerticalAlignment(cellStyle.verticalAlignment())
+                .setAlignment(cellStyle.alignment())
+                .setWrapText(cellStyle.wrapText())
+                .setLocked(cellStyle.locked())
+                .setIndention((short) cellStyle.indention())
+                .setHidden(cellStyle.hidden())
                 .get();
     }
 }

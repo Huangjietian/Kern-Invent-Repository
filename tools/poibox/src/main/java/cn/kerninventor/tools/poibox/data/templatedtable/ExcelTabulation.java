@@ -1,8 +1,7 @@
 package cn.kerninventor.tools.poibox.data.templatedtable;
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.CellStyle;
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.Font;
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.RootTabulationStyle;
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.TabulationStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Banner;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Font;
 import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 import cn.kerninventor.tools.poibox.style.Fonter;
 
@@ -24,10 +23,10 @@ import java.lang.annotation.Target;
 public @interface ExcelTabulation {
 
     @ReadyToDevelop("大标题，允许有多个大标题，对结果不负责")
-    ExcelBanner[] banners() default {};
+    Banner[] banners() default {};
 
     @ReadyToDevelop("表头风格")
-    CellStyle tHeadStyle() default @CellStyle(
+    CellStyle theadStyle() default @CellStyle(
             font = @Font(fontName = Fonter.DEF_NAME_HEADER,
                     fontSize = Fonter.DEF_SIZE_TABLEHEADER,
                     bold = true
@@ -35,21 +34,12 @@ public @interface ExcelTabulation {
     );
 
     @ReadyToDevelop("表体风格")
-    CellStyle tBodyStyle() default @CellStyle;
+    CellStyle tbodyStyle() default @CellStyle;
 
     int startRowIndex() default 0;
 
-    int textRowNum() default 20;
+    int effectiveRows() default 20;
 
     boolean autoColumnIndex() default true;
-
-
-
-
-    @Deprecated
-    String headline() default "";
-    @Deprecated
-    Class<? extends TabulationStyle> style() default RootTabulationStyle.class;
-
 
 }

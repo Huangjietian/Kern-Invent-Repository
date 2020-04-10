@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templatedtable;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.CellStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
 import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 
 import java.lang.annotation.ElementType;
@@ -46,7 +46,9 @@ public @interface ExcelColumn {
      */
     boolean mergeByContent() default false;
 
-    @ReadyToDevelop
-    CellStyle columnStyle() default @CellStyle(effective = false);
+    @ReadyToDevelop("列特定风格")
+    CellStyle columnStyle() default @CellStyle;
+    @ReadyToDevelop("如果要使用上述风格，需要开启effictive")
+    boolean styleEffictive() default false;
 
 }

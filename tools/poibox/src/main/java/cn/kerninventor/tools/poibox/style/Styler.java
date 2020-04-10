@@ -17,6 +17,8 @@ public interface Styler {
 
     CellStyle usualTextPart(Integer fontSize);
 
+    CellStyle generate(cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle cellStyle);
+
     static CellStyle cloneStyle(Workbook workbook, CellStyle sourceStyle) {
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.cloneStyleFrom(sourceStyle);

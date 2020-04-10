@@ -1,6 +1,7 @@
-package cn.kerninventor.tools.poibox.data.templatedtable.cellstyle;
+package cn.kerninventor.tools.poibox.data.templatedtable.element;
 
 import cn.kerninventor.tools.poibox.style.Fonter;
+import cn.kerninventor.tools.poibox.style.enums.FontColor;
 import cn.kerninventor.tools.poibox.style.enums.FontUnderline;
 
 /**
@@ -13,6 +14,8 @@ public @interface Font {
     String fontName() default Fonter.DEF_NAME_TEXTPART;
 
     int fontSize() default Fonter.DEF_SIZE_TEXTPART;
+
+    FontColor color() default FontColor.BLACK;
 
     boolean bold() default false;
 

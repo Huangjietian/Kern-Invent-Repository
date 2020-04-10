@@ -2,13 +2,13 @@ package cn.kerninventor.tools.poibox.data;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.data.templatedtable.reader.Reader;
-import cn.kerninventor.tools.poibox.data.templatedtable.writer.Writer;
 import cn.kerninventor.tools.poibox.data.templatedtable.initializer.ExcelTabulationInitializer;
-import cn.kerninventor.tools.poibox.data.templatedtable.reader.ExcelTabulationReader;
+import cn.kerninventor.tools.poibox.data.templatedtable.reader.ExcelTabulationTemplatedReader;
+import cn.kerninventor.tools.poibox.data.templatedtable.reader.Reader;
 import cn.kerninventor.tools.poibox.data.templatedtable.templator.ExcelTabulationTemplator;
 import cn.kerninventor.tools.poibox.data.templatedtable.templator.Templator;
-import cn.kerninventor.tools.poibox.data.templatedtable.writer.ExcelTabulationWriter;
+import cn.kerninventor.tools.poibox.data.templatedtable.writer.ExcelTabulationTemplatedWriter;
+import cn.kerninventor.tools.poibox.data.templatedtable.writer.Writer;
 
 /**
  * @Title: POIDataBoxOpened
@@ -26,19 +26,18 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
 
     @Override
     public <T> Templator<T> templator(Class<T> sourceClass) {
-
         return new ExcelTabulationTemplator(new ExcelTabulationInitializer<>(sourceClass, poiBox));
     }
 
     @Override
-    public Writer writer() {
-        return new ExcelTabulationWriter();
+    public <T> Writer<T> writer(Class<T> sourceClass) {
+        return new ExcelTabulationTemplatedWriter<>(new ExcelTabulationInitializer(sourceClass, poiBox));
     }
 
     @Override
-    public Reader reader() {
-        return new ExcelTabulationReader();
+    public <T> Reader<T> reader(Class<T> sourceClass) {
+        //FIXME
+        return new ExcelTabulationTemplatedReader<>();
     }
-
 
 }

@@ -1,10 +1,13 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary;
 
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.ArrayDataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.Dictionary;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryProvider;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryEntry;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +60,23 @@ public final class DictionaryLibrary {
             }
         }
         return provider.obtainData();
+    }
+
+    public static DictionaryInterpretor getInterpretor(Annotation dataValid) {
+        DictionaryInterpretor interpretor = new DictionaryInterpretor();
+        if (dataValid instanceof ArrayDataValid) {
+            interpretor.setArrayDataValid((ArrayDataValid) dataValid);
+            Class dictionaryClass = interpretor.getArrayDataValid().dictionary();
+            List<? extends DictionaryEntry> entries = DictionaryLibrary.lookup(dictionaryClass);
+            if (entries != null && !entries.isEmpty()) {
+                interpretor.setEntries(entries);
+                if (DictionaryReferEntry.class.isAssignableFrom(entries.get(0).getClass())){
+                    interpretor.setInterpretable(true);
+                }
+            }
+            return interpretor;
+        }
+        return interpretor;
     }
 
 }

@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templatedtable.cellstyle;
+package cn.kerninventor.tools.poibox.data.templatedtable.element;
 
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.ss.usermodel.BorderStyle;

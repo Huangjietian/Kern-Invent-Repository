@@ -6,7 +6,6 @@ import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dic
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.Cell;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
@@ -46,24 +45,7 @@ public class DictionaryInterpretor {
         return this;
     }
 
-    public static DictionaryInterpretor newInstance(Annotation dataValid) {
-        DictionaryInterpretor interpretor = new DictionaryInterpretor();
-        if (dataValid instanceof ArrayDataValid) {
-            interpretor.setArrayDataValid((ArrayDataValid) dataValid);
-            Class dictionaryClass = interpretor.getArrayDataValid().dictionary();
-            List<? extends DictionaryEntry> entries = DictionaryLibrary.lookup(dictionaryClass);
-            if (entries != null && !entries.isEmpty()) {
-                interpretor.setEntries(entries);
-                if (DictionaryReferEntry.class.isAssignableFrom(entries.get(0).getClass())){
-                    interpretor.setInterpretable(true);
-                }
-            }
-            return interpretor;
-        }
-        return interpretor;
-    }
-
-    private DictionaryInterpretor() {
+    DictionaryInterpretor() {
     }
 
     public Object interpreteOf(Object metaData) {

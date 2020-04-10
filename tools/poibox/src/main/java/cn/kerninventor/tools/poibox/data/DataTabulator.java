@@ -12,21 +12,26 @@ import cn.kerninventor.tools.poibox.data.templatedtable.writer.Writer;
 public interface DataTabulator {
 
     /**
-     * 模板
-     * @param sourceClass
-     * @return
-     */
+    * @author Kern
+    * @date 2020/4/10
+    * @description
+    * @中文描述 模板生成器
+    */
     <T> Templator<T> templator(Class<T> sourceClass);
 
     /**
-     * 写入器
-     * @return
-     */
-    Writer writer();
+    * @author Kern
+    * @date 2020/4/10
+    * @description
+    * @中文描述 数据写入器
+    */
+    <T> Writer<T> writer(Class<T> sourceClass);
 
     /**
-     * 读取器
-     * @return
-     */
-    Reader reader();
+    * @author Kern
+    * @date 2020/4/10
+    * @description
+    * @中文描述 数据读取器
+    */
+    <T> Reader<T> reader(Class<T> sourceClass);
 }

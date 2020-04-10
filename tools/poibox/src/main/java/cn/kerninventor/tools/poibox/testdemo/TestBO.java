@@ -1,11 +1,11 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelColumn;
-import cn.kerninventor.tools.poibox.data.templatedtable.ExcelBanner;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Banner;
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelTabulation;
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.CellBorder;
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.CellStyle;
-import cn.kerninventor.tools.poibox.data.templatedtable.cellstyle.Font;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.CellBorder;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Font;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.CompareType;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.ArrayDataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.date.DateDataValid;
@@ -28,10 +28,8 @@ import java.util.Date;
  * @Description: TODO
  */
 @ExcelTabulation(
-        headline = "人员信息",
-        style = TestStyle.class,
         //大标题
-        banners = @ExcelBanner(
+        banners = @Banner(
                 value = "人员信息",
                 style = @CellStyle(
                         font = @Font(fontName = "微软雅黑", fontSize = 26, bold = true),
@@ -40,9 +38,11 @@ import java.util.Date;
                 )
         ),
         //表头风格
-        tHeadStyle = @CellStyle(font = @Font(fontName = "黑体", fontSize = 20, bold = true)),
+        theadStyle = @CellStyle(font = @Font(fontName = "黑体", fontSize = 20, bold = true)),
         //表体风格
-        tBodyStyle = @CellStyle(font = @Font(fontName = "宋体", fontSize = 16), wrapText = true)
+        tbodyStyle = @CellStyle(font = @Font(fontName = "宋体", fontSize = 16), wrapText = true),
+        //有效行数
+        effectiveRows = 100
 )
 public class TestBO {
 

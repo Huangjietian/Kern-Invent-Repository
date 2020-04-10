@@ -4,8 +4,8 @@ import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.DataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.DictionaryInterpretor;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.DictionaryLibrary;
 import cn.kerninventor.tools.poibox.data.utils.SupportedDataType;
-import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.CellStyle;
 
@@ -40,9 +40,6 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
 
     private CellStyle columnStyle;
 
-    @ReadyToDevelop("删减列")
-    private boolean removable;
-
     private ExcelColumnInitializer(Class<T> fieldType) {
         this.fieldType = fieldType;
     }
@@ -57,17 +54,13 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
         column.dataFormatEx = "".equals(excelColumn.dataFormatEx().trim()) ? null : excelColumn.dataFormatEx();
         column.mergeByContent = excelColumn.mergeByContent();
         column.validAnnotation = ReflectUtil.getFirstAnnotated(field, DataValid.class);
-        column.interpretor = DictionaryInterpretor.newInstance(column.validAnnotation);
+        column.interpretor = DictionaryLibrary.getInterpretor(column.validAnnotation);
         column.columnStyle = columnStyle;
         return column;
     }
 
     public void setColumnIndex(int columnIndex){
         this.columnIndex = columnIndex;
-    }
-
-    public void remove(){
-        this.removable = true;
     }
 
     public Field getField() {
@@ -113,6 +106,9 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
     public CellStyle getColumnStyle() {
         return columnStyle;
     }
+
+
+
 
     @Override
     public int compareTo(ExcelColumnInitializer o) {

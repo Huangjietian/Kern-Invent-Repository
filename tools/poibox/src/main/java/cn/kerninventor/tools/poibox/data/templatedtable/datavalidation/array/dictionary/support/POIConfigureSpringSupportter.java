@@ -13,7 +13,7 @@ import java.util.Map;
  * @date 2020/4/9 17:20
  * @description
  */
-public class SpringSupportConfiguration implements ApplicationContextAware {
+public class POIConfigureSpringSupportter implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

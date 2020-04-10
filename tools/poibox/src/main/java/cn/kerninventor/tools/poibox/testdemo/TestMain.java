@@ -37,6 +37,7 @@ public class TestMain {
         //数据处理器
         DataTabulator dataTabulator = poiBox.dataTabulator();
 
+
         //写入模板
         Templator templator = dataTabulator.templator(TestBO.class).tempalateTo("人员信息导入模板1");
 
@@ -67,7 +68,7 @@ public class TestMain {
         }
         System.out.println("数据总量: " + testBOS.size());
         //写入数据到新的页面（两种方式）
-        templator.writer().writeTo("人员信息导入模板2", testBOS);
+        templator.writeTo("人员信息导入模板2", testBOS);
         dataTabulator.writer().setDefaultMergedMode(false).writeTo("人员信息导入模板3", testBOS, templator);
 
         //写入到本地文件,采取覆盖文件的形式
@@ -80,7 +81,7 @@ public class TestMain {
         //打开本地文件的数据读取形式
         try {
             POIBox newBox = POIBoxFactory.open("C:\\Users\\82576\\Desktop\\人员信息导入模板.xls");
-            List<TestBO> readList2 = newBox.dataTabulator().templator(TestBO.class).reader().readFrom("人员信息导入模板3");
+            List<TestBO> readList2 = newBox.dataTabulator().templator(TestBO.class).readFrom("人员信息导入模板3");
             System.out.println("读取的数据总量： "+ readList2.size());
         } catch (InvalidFormatException e) {
             e.printStackTrace();
@@ -89,7 +90,7 @@ public class TestMain {
         System.out.println("succeed!");
 
         POIBox box = POIBoxFactory.open();
-        box.dataTabulator().templator(TestBO.class).writer()
+        box.dataTabulator().templator(TestBO.class)
                 .writeTo("1", testBOS)
                 .writeTo("2", testBOS)
                 .writeTo("3", testBOS)

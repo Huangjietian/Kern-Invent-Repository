@@ -14,25 +14,31 @@ import java.util.List;
  */
 public interface Templator<T> {
 
-    //TODO 修改在初始化时赋值。
-    Headline getHeadline();
+    Templator<T> setCellDataValid(boolean valid);
 
-    Templator tempalateTo(String sheetName);
+    Templator<T> tempalateTo(String sheetName);
 
-    Templator tempalateTo(int sheetAt);
+    Templator<T> tempalateTo(int sheetAt);
 
-    Templator tempalateTo(Sheet sheet);
+    Templator<T> tempalateTo(Sheet sheet);
 
-    Templator setCellDataValid(boolean valid);
+    /**
+     * FIXME 是否提供这种方式
+     * @param sheetName
+     * @param datas
+     * @return
+     */
 
-    void wirteTo(String sheetName, List<T> datas);
+    Templator<T> writeTo(String sheetName, List<T> datas);
 
-    void wirteTo(int sheetAt, List<T> datas);
+    Templator<T> writeTo(int sheetAt, List<T> datas);
 
-    void wirteTo(Sheet sheet, List<T> datas);
+    Templator<T> writeTo(Sheet sheet, List<T> datas);
 
-    TemplatedWriter writer();
+    List<T> readFrom(String sheetName);
 
-    TemplatedReader reader();
+    List<T> readFrom(int sheetAt);
+
+    List<T> readFrom(Sheet sheet);
 
 }

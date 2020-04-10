@@ -21,7 +21,7 @@ public class DictionaryInterfacesScanConfig {
         ConfigurationBuilder configuration = new ConfigurationBuilder();
         configuration.forPackages(basePackages)
                 .addScanners(new SubTypesScanner())
-//                .addScanners(new FieldAnnotationsScanner())
+//                .addScanners(new Fie·ldAnnotationsScanner())
         ;
         Reflections reflections = new Reflections(configuration);
 
