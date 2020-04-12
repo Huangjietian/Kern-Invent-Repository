@@ -23,7 +23,7 @@ public interface DataTabulator {
     * @author Kern
     * @date 2020/4/10
     * @description
-    * @中文描述 数据写入器
+    * @中文描述 数据写入器. 考虑新的工厂方法， 参数为Templator
     */
     <T> Writer<T> writer(Class<T> sourceClass);
 
@@ -31,7 +31,7 @@ public interface DataTabulator {
     * @author Kern
     * @date 2020/4/10
     * @description
-    * @中文描述 数据读取器
+    * @中文描述 数据读取器. 考虑新的工厂方法， 参数为Templator
     */
     <T> Reader<T> reader(Class<T> sourceClass);
 }

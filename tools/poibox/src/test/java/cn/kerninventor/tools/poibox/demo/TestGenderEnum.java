@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.testdemo;
+package cn.kerninventor.tools.poibox.demo;
 
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
 

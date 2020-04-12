@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.testdemo;
+package cn.kerninventor.tools.poibox.demo;
 
 import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.POIBoxFactory;
@@ -51,9 +51,9 @@ public class TestMain {
                 .setWholeCenter()
                 .get();
         //修改大标题的内容和风格
-        templator.getHeadline()
-                .setContent("修改的标题： 人员信息模板")
-                .setStyle(newHeadlineStyle);
+//        templator.getHeadline()
+//                .setContent("修改的标题： 人员信息模板")
+//                .setStyle(newHeadlineStyle);
 
         //模拟原始数据
         List<TestBO> testBOS = new ArrayList<>();
@@ -69,13 +69,13 @@ public class TestMain {
         System.out.println("数据总量: " + testBOS.size());
         //写入数据到新的页面（两种方式）
         templator.writeTo("人员信息导入模板2", testBOS);
-        dataTabulator.writer().setDefaultMergedMode(false).writeTo("人员信息导入模板3", testBOS, templator);
+        dataTabulator.writer(TestBO.class).setDefaultMergedMode(false).writeTo("人员信息导入模板3", testBOS, templator);
 
         //写入到本地文件,采取覆盖文件的形式
         poiBox.writeToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板.xls");
 
         //读取流中的数据
-        List<TestBO> readList = dataTabulator.reader().readFrom("人员信息导入模板3",templator);
+        List<TestBO> readList = dataTabulator.reader(TestBO.class).readFrom("人员信息导入模板3",templator);
         System.out.println("读取的数据总量： "+ readList.size());
 
         //打开本地文件的数据读取形式
