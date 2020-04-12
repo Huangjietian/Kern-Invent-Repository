@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.style;
 
+import cn.kerninventor.tools.poibox.config.SealingVersion;
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
@@ -8,6 +9,11 @@ import org.apache.poi.ss.usermodel.*;
  * @Author Kern
  * @Date 2020/3/16 11:16
  */
+@SealingVersion(
+        version = 1.00,
+        description = "" +
+                "基于POI CellStyle 封装成链式风格的风格生成器， 并提供更符合企业化文档更常使用到的文档风格设置方法"
+)
 public class StyleProducer {
 
     private CellStyle cellStyle;

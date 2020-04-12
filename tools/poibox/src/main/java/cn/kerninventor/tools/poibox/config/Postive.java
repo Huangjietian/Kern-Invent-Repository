@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templatedtable.config;
+package cn.kerninventor.tools.poibox.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

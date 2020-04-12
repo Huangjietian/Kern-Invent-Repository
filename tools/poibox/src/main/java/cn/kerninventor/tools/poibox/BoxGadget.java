@@ -1,23 +1,19 @@
 package cn.kerninventor.tools.poibox;
 
+import cn.kerninventor.tools.poibox.config.SealingVersion;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.UnsupportedEncodingException;
 
 /**
- * @Title: POIMultifunctionGadget
- * @ProjectName tools
- * @Description: TODO
- * @Author Kern
- * @Date 2019/10/30 17:58
+ * @uthor Kern
+ * @date 2019/10/30 17:58
  */
+@SealingVersion(
+        version = 0.00,
+        description = "POIBox 通用工具类"
+)
 public class BoxGadget {
-
-    private static POIBox rootBox = POIBoxFactory.open();
-
-    public static POIBox root(){
-        return rootBox;
-    }
 
     protected static final String DEFAULT_CHARSET = "GBK";
 
@@ -45,7 +41,7 @@ public class BoxGadget {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return (int) (adjustCellWidth(size + 2) * fontHeightInPoints / DFHIP);
+        return adjustCellWidth(size + 2) * fontHeightInPoints / DFHIP;
     }
 
     public static int adjustCellWidth(int width) {

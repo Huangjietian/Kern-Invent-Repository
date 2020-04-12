@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @Author Kern
- * @Date 2019/10/30 17:51
+ * @author Kern
+ * @date 2019/10/30 17:51
  */
 public final class MergedRange {
 

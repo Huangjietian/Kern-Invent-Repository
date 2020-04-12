@@ -2,6 +2,7 @@ package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.POIBox;
+import cn.kerninventor.tools.poibox.config.SealingVersion;
 import cn.kerninventor.tools.poibox.style.enums.FontColor;
 import org.apache.poi.ss.usermodel.Font;
 
@@ -10,6 +11,7 @@ import org.apache.poi.ss.usermodel.Font;
  * @Author Kern
  * @Date 2019/10/29 19:53
  */
+@SealingVersion(version = 1.00)
 public final class FontHandler extends BoxBracket implements Fonter {
 
     public FontHandler(POIBox poiBox) {

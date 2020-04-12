@@ -17,11 +17,9 @@ import java.lang.reflect.Field;
  * @date 2019/12/9 15:52
  */
 public class ExcelColumnInitializer<T extends Object> implements Comparable<ExcelColumnInitializer> {
-
+    //列字段
     private Field field;
-
-    private Class<T> fieldType;
-
+    //
     private String fieldName;
 
     private String titleName;
@@ -40,27 +38,21 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
 
     private CellStyle columnStyle;
 
-    private ExcelColumnInitializer(Class<T> fieldType) {
-        this.fieldType = fieldType;
+    private ExcelColumnInitializer(Field field, ExcelColumn excelColumn, int columnIndex, CellStyle columnStyle) {
+        this.field = SupportedDataType.checkSupportability(field);
+        this.fieldName = field.getName();
+        this.titleName = excelColumn.value();
+        this.columnIndex = columnIndex;
+        this.columnWidth = excelColumn.columnWidth() == -1 ? -1 : BoxGadget.adjustCellWidth(excelColumn.columnWidth());
+        this.dataFormatEx = "".equals(excelColumn.dataFormatEx().trim()) ? null : excelColumn.dataFormatEx();
+        this.mergeByContent = excelColumn.mergeByContent();
+        this.validAnnotation = ReflectUtil.getFirstAnnotated(field, DataValid.class);
+        this.interpretor = DictionaryLibrary.getInterpretor(this.validAnnotation);
+        this.columnStyle = columnStyle;
     }
 
     static ExcelColumnInitializer getInstance(Field field, ExcelColumn excelColumn, int columnIndex, CellStyle columnStyle){
-        ExcelColumnInitializer column = new ExcelColumnInitializer(field.getType());
-        column.field = SupportedDataType.checkSupportability(field);
-        column.fieldName = field.getName();
-        column.titleName = excelColumn.value();
-        column.columnIndex = columnIndex;
-        column.columnWidth = excelColumn.columnWidth() == -1 ? -1 : BoxGadget.adjustCellWidth(excelColumn.columnWidth());
-        column.dataFormatEx = "".equals(excelColumn.dataFormatEx().trim()) ? null : excelColumn.dataFormatEx();
-        column.mergeByContent = excelColumn.mergeByContent();
-        column.validAnnotation = ReflectUtil.getFirstAnnotated(field, DataValid.class);
-        column.interpretor = DictionaryLibrary.getInterpretor(column.validAnnotation);
-        column.columnStyle = columnStyle;
-        return column;
-    }
-
-    public void setColumnIndex(int columnIndex){
-        this.columnIndex = columnIndex;
+        return new ExcelColumnInitializer(field, excelColumn, columnIndex, columnStyle);
     }
 
     public Field getField() {
@@ -68,7 +60,7 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
     }
 
     public Class getFieldType() {
-        return fieldType;
+        return field.getType();
     }
 
     public String getFieldName() {
@@ -106,9 +98,6 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
     public CellStyle getColumnStyle() {
         return columnStyle;
     }
-
-
-
 
     @Override
     public int compareTo(ExcelColumnInitializer o) {

@@ -2,15 +2,17 @@ package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.POIBox;
+import cn.kerninventor.tools.poibox.config.SealingVersion;
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 
 /**
- * @Author Kern
- * @Date 2019/10/29 17:25
+ * @author Kern
+ * @date 2019/10/29 17:25
  */
+@SealingVersion(version = 1.00)
 public final class StyleHandler extends BoxBracket implements Styler {
 
     public StyleHandler(POIBox poiBox) {
@@ -24,7 +26,7 @@ public final class StyleHandler extends BoxBracket implements Styler {
     }
 
     @Override
-    public CellStyle usualHeadLine(Integer fontSize) {
+    public CellStyle defaultHeadline(Integer fontSize) {
         fontSize = fontSize == null ? Fonter.DEF_SIZE_HEADLINE : fontSize;
         Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize, true);
         return producer()
@@ -35,7 +37,7 @@ public final class StyleHandler extends BoxBracket implements Styler {
     }
 
     @Override
-    public CellStyle usualTableHeader(Integer fontSize) {
+    public CellStyle defaultThead(Integer fontSize) {
         fontSize = fontSize == null ? Fonter.DEF_SIZE_TABLEHEADER : fontSize;
         Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize);
         return producer()
@@ -46,7 +48,7 @@ public final class StyleHandler extends BoxBracket implements Styler {
     }
 
     @Override
-    public CellStyle usualTextPart(Integer fontSize) {
+    public CellStyle defaultTbody(Integer fontSize) {
         fontSize = fontSize == null ? Fonter.DEF_SIZE_TEXTPART : fontSize;
         Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_TEXTPART, fontSize);
         return producer()
@@ -72,5 +74,12 @@ public final class StyleHandler extends BoxBracket implements Styler {
                 .setIndention((short) cellStyle.indention())
                 .setHidden(cellStyle.hidden())
                 .get();
+    }
+
+    @Override
+    public CellStyle copyStyle(CellStyle targetStyle) {
+        CellStyle cellStyle = getParent().workbook().createCellStyle();
+        cellStyle.cloneStyleFrom(targetStyle);
+        return cellStyle;
     }
 }

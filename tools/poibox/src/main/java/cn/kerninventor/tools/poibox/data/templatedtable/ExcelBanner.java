@@ -1,5 +1,9 @@
-package cn.kerninventor.tools.poibox.data.templatedtable.element;
+package cn.kerninventor.tools.poibox.data.templatedtable;
 
+import cn.kerninventor.tools.poibox.data.templatedtable.element.CellBorder;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Font;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Range;
 import cn.kerninventor.tools.poibox.style.Fonter;
 import org.apache.poi.ss.usermodel.BorderStyle;
 
@@ -8,7 +12,7 @@ import org.apache.poi.ss.usermodel.BorderStyle;
  * @date 2020/4/9 11:54
  * @description
  */
-public @interface Banner {
+public @interface ExcelBanner {
 
     String value();
 

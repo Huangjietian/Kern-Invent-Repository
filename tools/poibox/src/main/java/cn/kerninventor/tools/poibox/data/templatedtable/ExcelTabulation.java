@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.poibox.data.templatedtable;
 import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
-import cn.kerninventor.tools.poibox.data.templatedtable.element.Banner;
 import cn.kerninventor.tools.poibox.data.templatedtable.element.Font;
 import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 import cn.kerninventor.tools.poibox.style.Fonter;
@@ -23,7 +22,7 @@ import java.lang.annotation.Target;
 public @interface ExcelTabulation {
 
     @ReadyToDevelop("大标题，允许有多个大标题，对结果不负责")
-    Banner[] banners() default {};
+    ExcelBanner[] banners() default {};
 
     @ReadyToDevelop("表头风格")
     CellStyle theadStyle() default @CellStyle(

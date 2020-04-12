@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @description:
- * @中文描述:
- * @Author Kern
- * @Date 2019/10/29 19:06
- */
+* @author Kern
+* @date 2019/10/29 19:06
+* @description
+* @中文描述
+*/
 public interface POIBox {
 
     /**

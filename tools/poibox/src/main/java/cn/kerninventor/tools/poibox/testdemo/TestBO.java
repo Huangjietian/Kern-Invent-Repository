@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.testdemo;
 
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelColumn;
-import cn.kerninventor.tools.poibox.data.templatedtable.element.Banner;
+import cn.kerninventor.tools.poibox.data.templatedtable.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.templatedtable.element.CellBorder;
 import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
@@ -29,7 +29,7 @@ import java.util.Date;
  */
 @ExcelTabulation(
         //大标题
-        banners = @Banner(
+        banners = @ExcelBanner(
                 value = "人员信息",
                 style = @CellStyle(
                         font = @Font(fontName = "微软雅黑", fontSize = 26, bold = true),

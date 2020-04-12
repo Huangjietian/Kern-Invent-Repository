@@ -13,11 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Title: POILayouterInner
- * @ProjectName tools
- * @Description: TODO
- * @Author Kern
- * @Date 2019/10/30 18:34
+ * @author Kern
+ * @date 2019/10/30 18:34
  */
 public final class LayoutHandler extends BoxBracket implements Layouter {
 
