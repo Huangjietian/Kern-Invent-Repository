@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.element;
 
-import cn.kerninventor.tools.poibox.config.Postive;
+import cn.kerninventor.tools.poibox.developer.Postive;
 
 /**
  * @author Kern

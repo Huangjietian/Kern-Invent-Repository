@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox;
 
 
-import cn.kerninventor.tools.poibox.config.SealingVersion;
+import cn.kerninventor.tools.poibox.developer.SealingVersion;
 
 /**
  * @uthor Kern

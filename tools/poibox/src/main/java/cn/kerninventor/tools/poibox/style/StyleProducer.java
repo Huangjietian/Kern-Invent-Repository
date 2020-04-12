@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.style;
 
-import cn.kerninventor.tools.poibox.config.SealingVersion;
+import cn.kerninventor.tools.poibox.developer.SealingVersion;
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;

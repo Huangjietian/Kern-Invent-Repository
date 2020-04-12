@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.config;
+package cn.kerninventor.tools.poibox.developer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
