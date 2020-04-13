@@ -48,8 +48,8 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
                 dataValid.parseFormat()
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                tabulationInit.getTableTextRdx(),
-                tabulationInit.getTableTextRdx()+ tabulationInit.getTextRowNum(),
+                tabulationInit.getTbodyFirstRowIndex(),
+                tabulationInit.getTbodyFirstRowIndex()+ tabulationInit.getEffectiveRows(),
                 columnInit.getColumnIndex(),
                 columnInit.getColumnIndex()
         );

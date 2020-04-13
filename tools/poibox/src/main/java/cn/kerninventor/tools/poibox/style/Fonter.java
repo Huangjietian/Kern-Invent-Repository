@@ -29,6 +29,8 @@ public interface Fonter {
 
     int DEF_SIZE_TEXTPART = 12;
 
+    int DEFAULT_FONT_HEIGHT_IN_POINTS = 12;
+
     FontProducer producer();
 
     Font simpleFont(String fontName, int fontSize);

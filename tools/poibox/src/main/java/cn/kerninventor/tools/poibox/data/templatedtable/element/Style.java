@@ -11,9 +11,9 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * @date 2020/4/9 11:58
  * @description
  */
-public @interface CellStyle {
+public @interface Style {
 
-    CellBorder border() default @CellBorder(borderStyle = BorderStyle.THIN);
+    Border border() default @Border(borderStyle = BorderStyle.THIN);
 
     Font font() default @Font;
 

@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templatedtable;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Style;
 import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 
 import java.lang.annotation.ElementType;
@@ -16,18 +16,20 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelColumn {
 
+    int DEFAULT_COLUMN_WIDTH = -1;
+
     String value();
 
     int columnIndex() default -1;
 
-    int columnWidth() default -1;
+    int columnWidth() default DEFAULT_COLUMN_WIDTH;
 
     String dataFormatEx() default "";
 
     boolean mergeByContent() default false;
 
     @ReadyToDevelop("列特定风格")
-    CellStyle columnStyle() default @CellStyle;
+    Style columnStyle() default @Style;
     @ReadyToDevelop("如果要使用上述风格，需要开启effictive")
     boolean styleEffictive() default false;
 

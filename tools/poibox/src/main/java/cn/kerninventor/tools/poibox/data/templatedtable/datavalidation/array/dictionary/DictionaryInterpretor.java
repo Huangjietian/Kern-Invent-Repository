@@ -30,17 +30,17 @@ public class DictionaryInterpretor {
         return entries;
     }
 
-    public DictionaryInterpretor setInterpretable(boolean interpretable) {
+    DictionaryInterpretor setInterpretable(boolean interpretable) {
         this.interpretable = interpretable;
         return this;
     }
 
-    public DictionaryInterpretor setArrayDataValid(ArrayDataValid arrayDataValid) {
+    DictionaryInterpretor setArrayDataValid(ArrayDataValid arrayDataValid) {
         this.arrayDataValid = arrayDataValid;
         return this;
     }
 
-    public DictionaryInterpretor setEntries(List<? extends DictionaryEntry> entries) {
+    DictionaryInterpretor setEntries(List<? extends DictionaryEntry> entries) {
         this.entries = entries;
         return this;
     }

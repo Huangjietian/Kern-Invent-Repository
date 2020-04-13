@@ -38,8 +38,8 @@ public class IntDataValidationBuilder implements DataValidationBuilder<IntDataVa
                 var2
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                tabulationInit.getTableTextRdx() ,
-                tabulationInit.getTableTextRdx() + tabulationInit.getTextRowNum(),
+                tabulationInit.getTbodyFirstRowIndex() ,
+                tabulationInit.getTbodyFirstRowIndex() + tabulationInit.getEffectiveRows(),
                 columnInit.getColumnIndex(),
                 columnInit.getColumnIndex()
         );

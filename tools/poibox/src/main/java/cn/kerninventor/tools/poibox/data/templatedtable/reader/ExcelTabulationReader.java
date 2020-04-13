@@ -1,11 +1,9 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.reader;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.templator.Templator;
+import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.templatedtable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.templatedtable.initializer.ExcelTabulationInitializer;
-import cn.kerninventor.tools.poibox.data.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
-import cn.kerninventor.tools.poibox.data.utils.InstanceGetter;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,44 +11,43 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author Kern
  * @Date 2020/3/12 19:13
  */
-public class ExcelTabulationTemplatedReader<T> implements Reader<T> {
+public class ExcelTabulationReader<T> implements Reader<T> {
 
-    @Override
-    public List<T> readFrom(String sheetName, Templator<T> templator) {
-        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-        return readFrom(initializer.getParent().workbook().getSheet(sheetName), templator);
+    private ExcelTabulationInitializer tabulationInitializer;
+
+    public ExcelTabulationReader(ExcelTabulationInitializer tabulationInitializer) {
+        this.tabulationInitializer = Objects.requireNonNull(tabulationInitializer);
     }
 
     @Override
-    public List<T> readFrom(int sheetAt, Templator<T> templator) {
-        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-        return readFrom(initializer.getParent().workbook().getSheetAt(sheetAt), templator);
+    public List<T> readFrom(String sheetName) {
+        Sheet sheet = tabulationInitializer.getParent().workbook().getSheet(sheetName);
+        return readFrom(sheet);
     }
 
-    /**
-     * TODO 无法解决的问题， 当写入不使用模板时， 读取的起始坐标错误，导致数据读取不全。
-     * @param sheet
-     * @return
-     */
-    public List<T> readFrom(Sheet sheet, Templator<T> templator) {
-        if (templator == null) {
-            throw new IllegalArgumentException("Templator is can't be null!");
-        }
+    @Override
+    public List<T> readFrom(int sheetAt) {
+        Sheet sheet = tabulationInitializer.getParent().workbook().getSheetAt(sheetAt);
+        return readFrom(sheet);
+    }
+
+    @Override
+    public List<T> readFrom(Sheet sheet) {
         List<T> list = new ArrayList();
-        ExcelTabulationInitializer initializer = ((InstanceGetter<ExcelTabulationInitializer>)templator).getInstance();
-        List<ExcelColumnInitializer> columnInitializers = initializer.getColumnsContainer();
-        for (int i = initializer.getTableTextRdx(); i <= sheet.getLastRowNum() ; i ++) {
+        List<ExcelColumnInitializer> columnInitializers = tabulationInitializer.getColumnsContainer();
+        for (int i = tabulationInitializer.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
             try {
-                Class<T> tClass = initializer.getTabulationClass();
+                Class<T> tClass = tabulationInitializer.getTabulationClass();
                 t = ReflectUtil.newInstance(tClass);
             } catch (Exception e) {
-                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + initializer.getTabulationClass());
+                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + tabulationInitializer.getTabulationClass());
             }
             Row row = sheet.getRow(i);
             if (row == null){
@@ -79,7 +76,7 @@ public class ExcelTabulationTemplatedReader<T> implements Reader<T> {
                     throw new IllegalArgumentException("Set value to Field error! Field: " + column.getFieldName());
                 }
             }
-            if (nullCount < initializer.getColumnsContainer().size()){
+            if (nullCount < tabulationInitializer.getColumnsContainer().size()){
                 list.add(t);
             }
         }

@@ -2,6 +2,7 @@ package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.POIBox;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Style;
 import cn.kerninventor.tools.poibox.developer.SealingVersion;
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -60,19 +61,19 @@ public final class StyleHandler extends BoxBracket implements Styler {
     }
 
     @Override
-    public CellStyle generate(cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle cellStyle) {
+    public CellStyle generate(Style style) {
         return producer()
-                .setBorder(cellStyle.border().direction(), cellStyle.border().borderStyle())
-                .setFont(getParent().fonter().generate(cellStyle.font()))
-                .setFillPattern(cellStyle.fillPatternType())
-                .setFillForegroundColor(cellStyle.foregroudColor())
-                .setFillBackgroundColor(cellStyle.backgroudColor())
-                .setVerticalAlignment(cellStyle.verticalAlignment())
-                .setAlignment(cellStyle.alignment())
-                .setWrapText(cellStyle.wrapText())
-                .setLocked(cellStyle.locked())
-                .setIndention((short) cellStyle.indention())
-                .setHidden(cellStyle.hidden())
+                .setBorder(style.border().direction(), style.border().borderStyle())
+                .setFont(getParent().fonter().generate(style.font()))
+                .setFillPattern(style.fillPatternType())
+                .setFillForegroundColor(style.foregroudColor())
+                .setFillBackgroundColor(style.backgroudColor())
+                .setVerticalAlignment(style.verticalAlignment())
+                .setAlignment(style.alignment())
+                .setWrapText(style.wrapText())
+                .setLocked(style.locked())
+                .setIndention((short) style.indention())
+                .setHidden(style.hidden())
                 .get();
     }
 

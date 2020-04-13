@@ -51,8 +51,8 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
         }
 
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                tabulationInit.getTableTextRdx(),
-                (tabulationInit.getTableTextRdx() + tabulationInit.getTextRowNum()) * 50,
+                tabulationInit.getTbodyFirstRowIndex(),
+                (tabulationInit.getTbodyFirstRowIndex() + tabulationInit.getEffectiveRows()),
                 columnInit.getColumnIndex(),
                 columnInit.getColumnIndex()
         );

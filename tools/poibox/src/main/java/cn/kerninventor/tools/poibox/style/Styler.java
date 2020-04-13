@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.style;
 
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Style;
 import cn.kerninventor.tools.poibox.developer.SealingVersion;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -26,7 +27,7 @@ public interface Styler {
 
     CellStyle defaultTbody(Integer fontSize);
 
-    CellStyle generate(cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle cellStyle);
+    CellStyle generate(Style style);
 
     CellStyle copyStyle(CellStyle targetStyle);
 

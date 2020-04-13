@@ -1,5 +1,5 @@
 package cn.kerninventor.tools.poibox.data.templatedtable;
-import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Style;
 import cn.kerninventor.tools.poibox.data.templatedtable.element.Font;
 import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 import cn.kerninventor.tools.poibox.style.Fonter;
@@ -25,7 +25,7 @@ public @interface ExcelTabulation {
     ExcelBanner[] banners() default {};
 
     @ReadyToDevelop("表头风格")
-    CellStyle theadStyle() default @CellStyle(
+    Style theadStyle() default @Style(
             font = @Font(fontName = Fonter.DEF_NAME_HEADER,
                     fontSize = Fonter.DEF_SIZE_TABLEHEADER,
                     bold = true
@@ -33,7 +33,7 @@ public @interface ExcelTabulation {
     );
 
     @ReadyToDevelop("表体风格")
-    CellStyle tbodyStyle() default @CellStyle;
+    Style tbodyStyle() default @Style;
 
     int startRowIndex() default 0;
 

@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templatedtable.writer;
+package cn.kerninventor.tools.poibox.data.templatedtable.writer.tbodywriter.datacolumn;
 
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.layout.LayoutHandler;
@@ -15,16 +15,28 @@ import org.apache.poi.ss.util.CellRangeAddress;
  * @Date 2020/3/17 10:28
  * @Description TODO
  */
-public class MergeableDataCell implements DataCell{
+public class DataColumnMergeable implements DataColumn {
 
-    private Integer columnIdx, firstRdx, lastRdx;
+    private Sheet sheet;
+
+    private Integer columnIdx;
+
+    private Integer firstRdx;
+
+    private Integer lastRdx;
 
     private Object temporary;
 
+    public DataColumnMergeable(Sheet sheet) {
+        this.sheet = sheet;
+    }
+
     @Override
-    public void setValue(Sheet sheet, Object value, Cell cell, int rowIndex) {
+    public void setCellValue(Cell cell, Object value, int rowIndex) {
         if (columnIdx == null) {
-            columnIdx = cell.getColumnIndex();
+            if (cell != null) {
+                columnIdx = cell.getColumnIndex();
+            }
             firstRdx = rowIndex;
             lastRdx = rowIndex;
             temporary = value;
@@ -33,19 +45,21 @@ public class MergeableDataCell implements DataCell{
                 lastRdx = rowIndex ;
             } else {
                 if (firstRdx != lastRdx) {
-                    Layouter layouter = new LayoutHandler(null);
-                    CellRangeAddress range = new CellRangeAddress(firstRdx, lastRdx, columnIdx, columnIdx);
-                    layouter.mergedRegion(sheet, range).setMergeRangeContent(temporary);
+                    flush();
                 } else {
                     CellValueUtil.setCellValue(sheet.getRow(lastRdx).getCell(columnIdx), temporary);
-                }
-                if (cell != null) {
-                    columnIdx = cell.getColumnIndex();
                 }
                 firstRdx = rowIndex;
                 lastRdx = rowIndex;
                 temporary = value;
             }
         }
+    }
+
+    @Override
+    public void flush() {
+        Layouter layouter = new LayoutHandler(null);
+        CellRangeAddress range = new CellRangeAddress(firstRdx, lastRdx, columnIdx, columnIdx);
+        layouter.mergedRegion(sheet, range).setMergeRangeContent(temporary);
     }
 }

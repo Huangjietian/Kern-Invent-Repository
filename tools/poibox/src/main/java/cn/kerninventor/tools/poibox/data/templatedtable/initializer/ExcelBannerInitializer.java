@@ -3,11 +3,7 @@ package cn.kerninventor.tools.poibox.data.templatedtable.initializer;
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.templatedtable.element.Range;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author Kern
@@ -17,31 +13,62 @@ import java.util.List;
 public class ExcelBannerInitializer {
 
     private CellStyle cellStyle;
-    private List<CellRangeAddress> rangeAddresses;
+
+    private CellRangeAddress rangeAddress;
+
     private String value;
 
-    private ExcelBannerInitializer(ExcelTabulationInitializer initializer, ExcelBanner banner) {
-        value = banner.value();
-        cellStyle = initializer.getParent().styler().generate(banner.style());
-        Range[] ranges = banner.range();
-        List<CellRangeAddress> rangeAddresses = new LinkedList();
-        for (Range range : ranges) {
-            CellRangeAddress rangeAddress = new CellRangeAddress(range.fistRow(), range.lastRow(), range.firstCell(), range.lastCell());
-            rangeAddresses.add(rangeAddress);
+    private ExcelBannerInitializer(ExcelTabulationInitializer tabulation, ExcelBanner banner) {
+        this.value = banner.value();
+        this.cellStyle = tabulation.getParent().styler().generate(banner.style());
+        this.rangeAddress = new CellRangeAddress(
+                banner.range().fistRow(),
+                banner.range().lastRow(),
+                banner.range().firstCell(),
+                banner.range().lastCell()
+        );
+    }
+
+    public int getLastRowIndex(){
+        return rangeAddress.getLastRow();
+    }
+
+    public CellStyle getCellStyle() {
+        return cellStyle;
+    }
+
+    public CellRangeAddress getRangeAddress() {
+        return rangeAddress;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    private boolean isDefaultRangeValue(int index) {
+        if (index != Range.defaultVal) {
+            return false;
         }
-        if (rangeAddresses.isEmpty()){
-            CellRangeAddress cellAddresses = new CellRangeAddress(initializer.getStartRowIndex(), initializer.getStartRowIndex(), initializer.getFirstColumnIndex(), initializer.getLastColumnIndex());
-            rangeAddresses.add(cellAddresses);
+        return true;
+    }
+
+    public void adjustCellRangeAddress(ExcelTabulationInitializer tabulation) {
+        if (isDefaultRangeValue(rangeAddress.getFirstRow())) {
+            rangeAddress.setFirstRow(tabulation.getStartRowIndex());
+        }
+        if (isDefaultRangeValue(rangeAddress.getLastRow())) {
+            rangeAddress.setLastRow(tabulation.getStartRowIndex());
+        }
+        if (isDefaultRangeValue(rangeAddress.getFirstColumn())) {
+            rangeAddress.setFirstColumn(tabulation.getFirstColumnIndex());
+        }
+        if (isDefaultRangeValue(rangeAddress.getLastColumn())) {
+            rangeAddress.setLastColumn(tabulation.getLastColumnIndex());
         }
     }
 
-    public static ExcelBannerInitializer newInstance(ExcelTabulationInitializer initializer, ExcelBanner banner) {
-        return new ExcelBannerInitializer(initializer, banner);
+    public static ExcelBannerInitializer newInstance(ExcelTabulationInitializer tabulation, ExcelBanner banner) {
+        return new ExcelBannerInitializer(tabulation, banner);
     }
 
-    public void setBanner(Sheet sheet, ExcelTabulationInitializer initializer) {
-        rangeAddresses.forEach(e -> {
-            initializer.getParent().layouter().mergedRegion(sheet, e).setMergeRangeStyle(cellStyle).setMergeRangeContent(value);
-        });
-    }
 }

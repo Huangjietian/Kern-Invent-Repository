@@ -38,8 +38,8 @@ public class TextLengthDataValidationBuilder implements DataValidationBuilder<Te
                 var2
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
-                tabulationInit.getTableTextRdx(),
-                tabulationInit.getTableTextRdx()+ tabulationInit.getTextRowNum(),
+                tabulationInit.getTbodyFirstRowIndex(),
+                tabulationInit.getTbodyFirstRowIndex()+ tabulationInit.getEffectiveRows(),
                 columnInit.getColumnIndex(),
                 columnInit.getColumnIndex()
         );

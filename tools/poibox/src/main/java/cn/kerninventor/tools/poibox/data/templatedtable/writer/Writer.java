@@ -1,28 +1,29 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.writer;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.templator.Templator;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
 
 /**
- * @Title Writer
- * @ProjectName kerninventresp
- * @PackageName cn.kerninventor.tools.poibox.data.datatable
+ * @Title: Template
+ * @ProjectName tools
+ * @PackageName cn.kerninventor.tools.poibox.data.datatable.templator
  * @Author Kern
- * @Date 2020/3/16 19:27
- * @Description TODO
+ * @Date 2020/3/12 23:04
+ * @Description: TODO
  */
 public interface Writer<T> {
 
-    boolean getDefaultMergedMode();
+    Writer<T> writeTo(String sheetName);
 
-    Writer setDefaultMergedMode(boolean isMergeColum);
+    Writer<T> writeTo(int sheetAt);
 
-    void writeTo(String sheetName, List<T> datas, Templator<T> templator);
+    Writer<T> writeTo(Sheet sheet);
 
-    void writeTo(int sheetAt, List<T> datas, Templator<T> templator);
+    Writer<T> writeTo(String sheetName, List<T> datas);
 
-    void writeTo(Sheet sheet, List<T> datas, Templator<T> templator);
+    Writer<T> writeTo(int sheetAt, List<T> datas);
+
+    Writer<T> writeTo(Sheet sheet, List<T> datas);
 
 }

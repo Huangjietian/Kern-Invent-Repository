@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.BorderStyle;
  * @date 2020/4/9 12:32
  * @description
  */
-public @interface CellBorder {
+public @interface Border {
 
     BorderStyle borderStyle() default BorderStyle.NONE;
 

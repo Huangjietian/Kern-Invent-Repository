@@ -1,19 +1,22 @@
 package cn.kerninventor.tools.poibox.demo;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelBanner;
+import cn.kerninventor.tools.poibox.data.templatedtable.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.templatedtable.ExcelTabulation;
-import cn.kerninventor.tools.poibox.data.templatedtable.element.CellBorder;
-import cn.kerninventor.tools.poibox.data.templatedtable.element.CellStyle;
-import cn.kerninventor.tools.poibox.data.templatedtable.element.Font;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.CompareType;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.ArrayDataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.date.DateDataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.decimal.DecimalDataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.integer.IntDataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.textLength.TextLengthDataValid;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Border;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Font;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Range;
+import cn.kerninventor.tools.poibox.data.templatedtable.element.Style;
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
+import cn.kerninventor.tools.poibox.style.enums.FontColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,20 +32,34 @@ import java.util.Date;
  */
 @ExcelTabulation(
         //大标题
-        banners = @ExcelBanner(
-                value = "人员信息",
-                style = @CellStyle(
-                        font = @Font(fontName = "微软雅黑", fontSize = 26, bold = true),
-                        wrapText = true,
-                        border = @CellBorder(borderStyle = BorderStyle.DOUBLE, direction = BorderDirection.SURROUND)
-                )
-        ),
+        banners = {
+                @ExcelBanner(
+                        value = "人员信息",
+                        style = @Style(font = @Font(fontName = "微软雅黑", fontSize = 24, bold = true), wrapText = true, border = @Border(borderStyle = BorderStyle.DOUBLE, direction = BorderDirection.SURROUND)),
+                        range = @Range(fistRow = 0, lastRow = 0)
+                ),
+                @ExcelBanner(
+                        value = "模板生成者： Kern",
+                        style = @Style(font = @Font(color = FontColor.RED), alignment = HorizontalAlignment.LEFT),
+                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 0, lastCell = 2)
+                ),
+                @ExcelBanner(
+                        value = "所属机构： 壹体体育",
+                        style = @Style(font = @Font(color = FontColor.RED), alignment = HorizontalAlignment.LEFT),
+                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 3, lastCell = 5)
+                ),
+                @ExcelBanner(
+                        value = "日期: 2020-04-13",
+                        style = @Style(font = @Font(color = FontColor.RED), alignment = HorizontalAlignment.LEFT),
+                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 6, lastCell = 9)
+                ),
+        },
         //表头风格
-        theadStyle = @CellStyle(font = @Font(fontName = "黑体", fontSize = 20, bold = true)),
+        theadStyle = @Style(font = @Font(fontName = "黑体", fontSize = 16, bold = true)),
         //表体风格
-        tbodyStyle = @CellStyle(font = @Font(fontName = "宋体", fontSize = 16), wrapText = true),
+        tbodyStyle = @Style(font = @Font(fontName = "宋体", fontSize = 12), wrapText = true),
         //有效行数
-        effectiveRows = 100
+        effectiveRows = 10
 )
 public class TestBO {
 
@@ -69,7 +86,7 @@ public class TestBO {
     private LocalDateTime joinDate;
 
     @IntDataValid(value = 0, optionalVal = 300, compareType = CompareType.BET)
-    @ExcelColumn(value = "身高")
+    @ExcelColumn(value = "身高", styleEffictive = true, columnStyle = @Style(font = @Font(color = FontColor.RED)))
     private Integer height;
 
     @IntDataValid(value = 0, compareType = CompareType.GT)

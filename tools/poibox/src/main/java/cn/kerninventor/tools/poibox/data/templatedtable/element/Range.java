@@ -9,13 +9,15 @@ import cn.kerninventor.tools.poibox.developer.Postive;
  */
 public @interface Range {
 
+    int defaultVal = -1;
+
     @Postive
-    int fistRow();
+    int fistRow() default defaultVal;
     @Postive
-    int firstCell();
+    int firstCell() default defaultVal;
     @Postive
-    int lastRow();
+    int lastRow() default defaultVal;
     @Postive
-    int lastCell();
+    int lastCell() default defaultVal;
 
 }

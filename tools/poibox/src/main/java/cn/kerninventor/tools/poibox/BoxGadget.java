@@ -1,6 +1,7 @@
 package cn.kerninventor.tools.poibox;
 
 import cn.kerninventor.tools.poibox.developer.SealingVersion;
+import cn.kerninventor.tools.poibox.style.Fonter;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.UnsupportedEncodingException;
@@ -34,14 +35,15 @@ public class BoxGadget {
     }
 
     public static int getCellWidthByContent(Object obj, int fontHeightInPoints) {
-        final int DFHIP = 12;
         int size = 0;
+        int cellWidthAdjustIncrement = 2;
         try {
             size = obj.toString().getBytes(DEFAULT_CHARSET).length;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return adjustCellWidth(size + 2) * fontHeightInPoints / DFHIP;
+        size += cellWidthAdjustIncrement;
+        return adjustCellWidth(size) * fontHeightInPoints / Fonter.DEFAULT_FONT_HEIGHT_IN_POINTS;
     }
 
     public static int adjustCellWidth(int width) {

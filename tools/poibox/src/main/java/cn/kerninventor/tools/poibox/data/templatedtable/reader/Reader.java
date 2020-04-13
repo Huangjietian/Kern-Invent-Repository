@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.reader;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.templator.Templator;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
@@ -15,10 +14,10 @@ import java.util.List;
  */
 public interface Reader<T> {
 
-    List<T> readFrom(String sheetName, Templator<T> templator);
+    List<T> readFrom(String sheetName);
 
-    List<T> readFrom(int sheetAt, Templator<T> templator);
+    List<T> readFrom(int sheetAt);
 
-    List<T> readFrom(Sheet sheet, Templator<T> templator);
+    List<T> readFrom(Sheet sheet);
 
 }
