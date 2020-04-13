@@ -17,10 +17,9 @@ public @interface ExcelBanner {
     String value();
 
     Style style() default @Style(
-            border = @Border(borderStyle = BorderStyle.DOUBLE),
+            border = @Border(borderStyle = BorderStyle.THIN),
             font = @Font(fontName = Fonter.DEF_NAME_HEADER,
-                    fontSize = Fonter.DEF_SIZE_HEADLINE,
-                    bold = true
+                    fontSize = Fonter.DEF_SIZE_HEADLINE
             ),
             wrapText = true
     );

@@ -23,11 +23,11 @@ public interface Fonter {
 
     String DEF_NAME_TEXTPART = "宋体";
 
-    int DEF_SIZE_HEADLINE = 24;
+    int DEF_SIZE_HEADLINE = 14;
 
-    int DEF_SIZE_TABLEHEADER = 16;
+    int DEF_SIZE_TABLEHEADER = 12;
 
-    int DEF_SIZE_TEXTPART = 12;
+    int DEF_SIZE_TEXTPART = 10;
 
     int DEFAULT_FONT_HEIGHT_IN_POINTS = 12;
 

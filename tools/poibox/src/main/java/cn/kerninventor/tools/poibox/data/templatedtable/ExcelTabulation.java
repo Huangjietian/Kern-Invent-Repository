@@ -26,9 +26,9 @@ public @interface ExcelTabulation {
 
     @ReadyToDevelop("表头风格")
     Style theadStyle() default @Style(
-            font = @Font(fontName = Fonter.DEF_NAME_HEADER,
-                    fontSize = Fonter.DEF_SIZE_TABLEHEADER,
-                    bold = true
+            font = @Font(
+                    fontName = Fonter.DEF_NAME_HEADER,
+                    fontSize = Fonter.DEF_SIZE_TABLEHEADER
             )
     );
 
