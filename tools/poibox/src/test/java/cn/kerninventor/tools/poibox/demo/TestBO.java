@@ -71,7 +71,7 @@ public class TestBO {
     @ExcelColumn(value = "身份证", dataFormatEx = "@")
     private String iddentity;
 
-    @ArrayDataValid(dictionary = TestGenderEnum.class, body = TestGenderEnum.class)
+    @ArrayDataValid(dictionary = TestGenderEnum.class)
     @ExcelColumn("性别")
     private Integer sex;
 
@@ -97,7 +97,7 @@ public class TestBO {
     @ExcelColumn(value = "臂长")
     private BigDecimal brachium;
 
-    @ArrayDataValid(dictionary = TestCountryDictionary.class, body = TestCountryBO.class,
+    @ArrayDataValid(dictionary = TestCountryDictionary.class,
             prompMessage = "请选择国籍", errorMessage = "请按照下拉框选择国籍")
     @ExcelColumn(value = "国籍", mergeByContent = true)
     private Long nationalityId;

@@ -22,12 +22,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Title: MainTest
- * @ProjectName tools
- * @Version 1.1.0.RELEASE
- * @Description: TODO
- * @Author Kern
- * @Date 2019/10/29 20:04
+ * @author Kern
+ * @date 2019/10/29 20:04
  */
 public class TestMain {
 
@@ -72,7 +68,7 @@ public class TestMain {
         for (int i= 0 ; i <= 4 ; i ++ ){
             testBOS.add(new TestBO("Jack", "350521199301144445", 2 , new Date(), LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()),190, 75, BigDecimal.valueOf(210.33),2L, true));
         }
-        for (int i= 0 ; i <= 7000 ; i ++ ){
+        for (int i= 0 ; i <= 6 ; i ++ ){
             testBOS.add(new TestBO("Tom", "350521199301144445", 2 , new Date(), LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()),178, 93, BigDecimal.valueOf(203.11),3L, true));
         }
         System.out.println("数据总量: " + testBOS.size());
@@ -111,6 +107,7 @@ public class TestMain {
                 .writeTo("9", testBOS)
                 ;
         box.writeToLocal("C:\\Users\\82576\\Desktop\\人员信息导入模板1.xls");
+
 
     }
 

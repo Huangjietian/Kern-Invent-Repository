@@ -1,10 +1,9 @@
 package cn.kerninventor.tools.poibox.data.utils;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import org.apache.poi.ss.usermodel.Name;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+
+import java.util.List;
 
 /**
  * @Title: NameNameManegeUtil
@@ -16,34 +15,42 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class NameManegeUtil {
 
-    public static String addNameManage(Sheet sheet, String hiddenSheetName, String nameName, String nameNameUKEY, String[] datas) {
-        String UKEY = nameNameUKEY == null ? "" : nameNameUKEY;
-        //创建放置名称管理器数据的页签
-        Workbook wb = sheet.getWorkbook();
-        Sheet hiddenSheet = wb.getSheet(hiddenSheetName) == null ? wb.createSheet(hiddenSheetName) : wb.getSheet(hiddenSheetName);
-        if (datas == null || datas.length == 0){
-            datas[0] = "NO DATA";
+    private final static String HIDDEN_SHEET_NAME = "Pandora's box";
+
+    public static String addNameManage(Sheet sheet, String nameName, List<String> datas) {
+        if (datas == null || datas.isEmpty()) {
+            return nameName;
         }
-        int dataRowNum = hiddenSheet.getLastRowNum()+1;
-        Row dataRow = hiddenSheet.createRow(dataRowNum);
-        for (int i = 0 ; i < datas.length; i++){
-            dataRow.createCell(i).setCellValue(datas[i]);
+        Workbook workbook = sheet.getWorkbook();
+        Sheet hiddenSheet = BoxGadget.getSheetForce(workbook, HIDDEN_SHEET_NAME);
+        int dataRowIndex = hiddenSheet.getLastRowNum() + 1;
+        Row dataRow = hiddenSheet.createRow(dataRowIndex);
+
+        //赋值到隐藏的字典sheet页
+        for (int i = 0 ; i < datas.size(); i++){
+            Cell cell = dataRow.createCell(i);
+            String value = datas.get(i);
+            cell.setCellValue(value);
         }
+
         //创建名称管理器
-        Name nameManager = wb.createName();
-        nameManager.setNameName(UKEY + nameName);
+        Name nameManager = workbook.createName();
+        nameManager.setNameName(nameName);
+
         //创建引用
-        String endCellEnIndex = BoxGadget.TransferExcelColumnIndex(dataRow.getLastCellNum());
+        int dataRowSerial = dataRowIndex + 1;
+        String endCellEnIndex = BoxGadget.transferExcelColumnIndex(dataRow.getLastCellNum());
         StringBuilder formulaExBulder = new StringBuilder();
         formulaExBulder
-                .append(hiddenSheetName)
+                .append(HIDDEN_SHEET_NAME)
                 .append("!$A$")
-                .append((dataRowNum + 1))
+                .append(dataRowSerial)
                 .append(":$")
                 .append(endCellEnIndex)
                 .append("$")
-                .append((dataRowNum + 1));
+                .append(dataRowSerial);
         nameManager.setRefersToFormula(formulaExBulder.toString());
         return nameName;
     }
+
 }

@@ -54,12 +54,12 @@ public class BoxGadget {
         return workbook.getFontAt(cellStyle.getFontIndexAsInt());
     }
 
-    public static String TransferExcelColumnIndex(int cellIndex){
+    public static String transferExcelColumnIndex(int cellIndex){
         String cellStrIndex = "";
         int iHead = (cellIndex - 1) / 26;
         int iLeftOver = (cellIndex - 1) % 26;
         if (iHead >= 26) {
-            cellStrIndex = TransferExcelColumnIndex(iHead);
+            cellStrIndex = transferExcelColumnIndex(iHead);
         } else if (iHead > 0) {
             cellStrIndex += (char)(64 + iHead);
         }

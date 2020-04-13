@@ -1,7 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array;
 
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.DataValid;
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryEntry;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.Dictionary;
 import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 
@@ -19,20 +18,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ArrayDataValid {
 
-    @ReadyToDevelop("覆盖必要性???")
-    boolean coverness = true;
-
     /**
      * The field value can be translated based on metadata and viewdata by configuring the property
      * @return
      */
     Class<? extends Dictionary> dictionary();
 
-    /**
-     *
-     * @return
-     */
-    Class<? extends DictionaryEntry> body();
 
     /**
      * Prompt message when a cell is selected
@@ -51,6 +42,11 @@ public @interface ArrayDataValid {
      * @return
      */
     @ReadyToDevelop
-    String casecadeFrom() default "";
+    String cascadeFlow() default "";
 
+    /**
+     * Default data when no dictionary data was provided!
+     * @return
+     */
+    String[] defValuesWhenEmpty() default "NO DATA!";
 }
