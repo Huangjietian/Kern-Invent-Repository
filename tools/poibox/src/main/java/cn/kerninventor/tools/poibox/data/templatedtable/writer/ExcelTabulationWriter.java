@@ -68,16 +68,13 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
     }
 
     public void execute(Sheet sheet, TbodyWriter tbodyWriter, List datas) {
-        //画横幅
-        tempalateBanners(tabulationInitializer, sheet);
         //画表头表体
-        Row headRow = sheet.createRow(sheet.getLastRowNum() + 1);
+        Row headRow = sheet.createRow(tabulationInitializer.getTheadRowIndex());
         //获取当前字体的大小设置，以便自动调整列宽的设置实现
         Font font = BoxGadget.getFontFrom(tabulationInitializer.getTheadStyle(), tabulationInitializer.getParent().workbook());
         Short theadFontHeightInPoints = font.getFontHeightInPoints();
         //设置表头行风格
         CellStyle theadStyle = tabulationInitializer.getTheadStyle();
-
         List<ExcelColumnInitializer> columnsContainer = tabulationInitializer.getColumnsContainer();
         columnsContainer.forEach(column -> {
             //画表头单元格
@@ -95,6 +92,8 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
             //正文, 执行写入的时候不设置正文每一行的风格和数据有效性，由writer代替。考虑适用装饰者模式
             tbodyWriter.templateTbody(tabulationInitializer, column, sheet, datas);
         });
+        //画横幅
+        tempalateBanners(tabulationInitializer, sheet);
     }
 
     protected void tempalateBanners(ExcelTabulationInitializer tabulationInitializer, Sheet sheet) {

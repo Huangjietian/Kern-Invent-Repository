@@ -59,6 +59,10 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         return effectiveRows;
     }
 
+    public int getTheadRowIndex() {
+        return theadRowIndex;
+    }
+
     public int getTbodyFirstRowIndex(){
         return tbodyFirstRowIndex;
     }
@@ -103,7 +107,7 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         this.startRowIndex = excelTabulation.startRowIndex();
         this.effectiveRows = excelTabulation.effectiveRows();
         this.theadRowIndex = getRowIndexIncrementsByBanners(this.bannerContainer) + startRowIndex;
-        this.tbodyFirstRowIndex = ++theadRowIndex;
+        this.tbodyFirstRowIndex = theadRowIndex + 1;
     }
 
     private List<ExcelBannerInitializer> initialzeBanners(ExcelBanner... banners) {

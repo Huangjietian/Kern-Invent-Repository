@@ -2,8 +2,8 @@ package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.developer.SealingVersion;
 import cn.kerninventor.tools.poibox.style.enums.FontCharset;
-import cn.kerninventor.tools.poibox.style.enums.FontColor;
 import cn.kerninventor.tools.poibox.style.enums.FontUnderline;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Font;
 
 /**
@@ -33,7 +33,7 @@ public final class FontProducer {
         return this;
     }
 
-    public FontProducer setFontColor(FontColor fontColor) {
+    public FontProducer setFontColor(HSSFColor.HSSFColorPredefined fontColor) {
         font.setColor(fontColor.getIndex());
         return this;
     }

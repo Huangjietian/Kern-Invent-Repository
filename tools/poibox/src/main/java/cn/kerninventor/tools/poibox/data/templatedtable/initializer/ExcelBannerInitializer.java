@@ -45,24 +45,17 @@ public class ExcelBannerInitializer {
         return value;
     }
 
-    private boolean isDefaultRangeValue(int index) {
-        if (index != Range.defaultVal) {
-            return false;
-        }
-        return true;
-    }
-
     public void adjustCellRangeAddress(ExcelTabulationInitializer tabulation) {
-        if (isDefaultRangeValue(rangeAddress.getFirstRow())) {
+        if (rangeAddress.getFirstRow() == Range.defaultVal) {
             rangeAddress.setFirstRow(tabulation.getStartRowIndex());
         }
-        if (isDefaultRangeValue(rangeAddress.getLastRow())) {
+        if (rangeAddress.getLastRow() == Range.defaultVal) {
             rangeAddress.setLastRow(tabulation.getStartRowIndex());
         }
-        if (isDefaultRangeValue(rangeAddress.getFirstColumn())) {
+        if (rangeAddress.getFirstColumn() == Range.defaultVal) {
             rangeAddress.setFirstColumn(tabulation.getFirstColumnIndex());
         }
-        if (isDefaultRangeValue(rangeAddress.getLastColumn())) {
+        if (rangeAddress.getLastColumn() == Range.defaultVal) {
             rangeAddress.setLastColumn(tabulation.getLastColumnIndex());
         }
     }
