@@ -146,8 +146,7 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
         }
     }
 
-    @Override
-    public void addTextBox(HSSFSheet sheet, AnchorIndex anchorIndex, String text) {
+    private void addTextBox(HSSFSheet sheet, AnchorIndex anchorIndex, String text) {
         HSSFPatriarch drawing = sheet.createDrawingPatriarch();
         HSSFClientAnchor clientAnchor = drawing.createAnchor(
                 anchorIndex.getLeft(),
@@ -163,8 +162,7 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
         textBox.setString(new HSSFRichTextString(text));
     }
 
-    @Override
-    public void addTextBox(XSSFSheet sheet, AnchorIndex anchorIndex, String text) {
+    private void addTextBox(XSSFSheet sheet, AnchorIndex anchorIndex, String text) {
         XSSFDrawing drawing = sheet.createDrawingPatriarch();
         XSSFClientAnchor clientAnchor = drawing.createAnchor(
                 anchorIndex.getLeft(),

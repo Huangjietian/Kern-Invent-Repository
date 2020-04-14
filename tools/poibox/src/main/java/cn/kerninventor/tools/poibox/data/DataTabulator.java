@@ -22,7 +22,7 @@ public interface DataTabulator {
     * @author Kern
     * @date 2020/4/10
     * @description
-    * @中文描述 数据读取器. 考虑新的工厂方法， 参数为Templator
+    * @中文描述
     */
     <T> Reader<T> reader(Class<T> sourceClass);
 }

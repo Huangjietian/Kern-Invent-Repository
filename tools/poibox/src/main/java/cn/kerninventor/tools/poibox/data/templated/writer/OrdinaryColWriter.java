@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templated.writer.tbody;
+package cn.kerninventor.tools.poibox.data.templated.writer;
 
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.Cell;
@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Cell;
  * @date 2020/3/17 11:00
  * @description TODO
  */
-public class TbodyDataColumnWriterOrdinary implements TbodyDataColumnWriter {
+public class OrdinaryColWriter implements ColWriter {
 
     @Override
     public void setCellValue(Cell cell, Object value, int rowIndex) {

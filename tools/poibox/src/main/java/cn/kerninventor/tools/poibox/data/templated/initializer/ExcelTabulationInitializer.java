@@ -2,17 +2,20 @@ package cn.kerninventor.tools.poibox.data.templated.initializer;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.templated.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.templated.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.templated.ExcelTabulation;
+import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
+import cn.kerninventor.tools.poibox.exception.IllegalTabulationConfigureException;
 import cn.kerninventor.tools.poibox.style.Styler;
+import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author Kern
@@ -20,23 +23,17 @@ import java.util.List;
  * @Description: excel 数据表解析处理类
  */
 public class ExcelTabulationInitializer<T> extends BoxBracket {
-    //表格定义类class
+
     private Class<T> tabulationClass;
-    //表头风格
     private CellStyle theadStyle;
-    //表体风格
     private CellStyle tbodyStyle;
-    //起始行
+    private float theadRowHeight;
+    private float tbodyRowHeight;
     private int startRowIndex;
-    //表头行坐标
     private int theadRowIndex;
-    //表体行起始最表
     private int tbodyFirstRowIndex;
-    //适用行数
     private int effectiveRows;
-    //横幅集
     private List<ExcelBannerInitializer> bannerContainer;
-    //列定义集
     private List<ExcelColumnInitializer> columnsContainer;
 
     public Class<T> getTabulationClass() {
@@ -49,6 +46,14 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
 
     public CellStyle getTbodyStyle() {
         return tbodyStyle;
+    }
+
+    public float getTheadRowHeight() {
+        return theadRowHeight;
+    }
+
+    public float getTbodyRowHeight() {
+        return tbodyRowHeight;
     }
 
     public int getStartRowIndex() {
@@ -75,13 +80,8 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         return columnsContainer;
     }
 
-    public ExcelColumnInitializer getColumnInitializerByTitleName(String fieldName) {
-        for (ExcelColumnInitializer columnInitializer : columnsContainer) {
-            if (columnInitializer.getFieldName().equals(fieldName)) {
-                return columnInitializer;
-            }
-        }
-        return null;
+    public ExcelColumnInitializer getColumnInitializerByTitleName(final String fieldName) {
+        return columnsContainer.stream().filter(e -> e.getFieldName().equals(fieldName)).findFirst().get();
     }
 
     public int getFirstColumnIndex() {
@@ -94,41 +94,47 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
 
     public ExcelTabulationInitializer(Class<T> tableClass, POIBox poiBox) {
         super(poiBox);
-        this.tabulationClass = tableClass;
         ExcelTabulation excelTabulation = dataTabulationSourceClassValidate(tableClass);
-        //初始化表格风格
+        this.tabulationClass = tableClass;
         this.theadStyle = getParent().styler().generate(excelTabulation.theadStyle());
         this.tbodyStyle = getParent().styler().generate(excelTabulation.tbodyStyle());
-        //初始化大标题
+        this.theadRowHeight = excelTabulation.theadRowHeight();
+        this.tbodyRowHeight = excelTabulation.tbodyRowHeight();
+        this.startRowIndex = startRowIndexNotMinus(excelTabulation.startRowIndex());
+        this.effectiveRows = effectiveRowsNotLessThan1(excelTabulation.effectiveRows());
         this.bannerContainer = initialzeBanners(excelTabulation.banners());
-        //初始化列
         this.columnsContainer = initialzeColumns(tableClass.getDeclaredFields(), excelTabulation.autoColumnIndex(), getTbodyStyle());
-        //设置行列坐标信息
-        this.startRowIndex = excelTabulation.startRowIndex();
-        this.effectiveRows = excelTabulation.effectiveRows();
         this.theadRowIndex = getRowIndexIncrementsByBanners(this.bannerContainer) + startRowIndex;
         this.tbodyFirstRowIndex = theadRowIndex + 1;
     }
 
-    private List<ExcelBannerInitializer> initialzeBanners(ExcelBanner... banners) {
-        List<ExcelBannerInitializer> bannerContainer = new ArrayList<>(banners.length);
-        for (ExcelBanner banner : banners) {
-            ExcelBannerInitializer bannerInitializer = ExcelBannerInitializer.newInstance(this, banner);
-            bannerContainer.add(bannerInitializer);
+    private int startRowIndexNotMinus(int startRowIndex) {
+        if (startRowIndex < 0)
+            throw new IllegalTabulationConfigureException("startRowIndex must be positive integer!");
+        return startRowIndex;
+    }
 
-        }
-        return bannerContainer;
+    private int effectiveRowsNotLessThan1(int effectiveRows) {
+        if (effectiveRows < 1)
+            throw new IllegalTabulationConfigureException("effectiveRows must be great than 1!");
+        return effectiveRows;
+    }
+
+    private List<ExcelBannerInitializer> initialzeBanners(ExcelBanner... banners) {
+        return Arrays.stream(banners).map(e -> ExcelBannerInitializer.newInstance(this, e)).collect(Collectors.toList());
     }
 
     private int getRowIndexIncrementsByBanners(List<ExcelBannerInitializer> bannerContainer) {
-        int inherentIncrement = 1;
-        int max = 0;
+        if (BeanUtil.isEmpty(bannerContainer)) {
+            return 0;
+        }
+        int incremental = 1;
         for (ExcelBannerInitializer bannerInitializer : bannerContainer) {
-            if (bannerInitializer.getLastRowIndex() > max) {
-                max = bannerInitializer.getLastRowIndex();
+            if (bannerInitializer.getLastRowIndex() >= incremental) {
+                incremental = bannerInitializer.getLastRowIndex() + 1;
             }
         }
-        return max + inherentIncrement;
+        return incremental;
     }
 
     private List<ExcelColumnInitializer> initialzeColumns(Field[] fields, boolean autoColumnIndex, CellStyle tbodyStyle){
@@ -154,7 +160,16 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         if (columnsContainer.size() == 0){
             throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's fields!");
         }
-        Collections.sort(columnsContainer);
+
+        columnsContainer.stream().sorted((o1, o2) -> {
+            if (o1.getColumnIndex() > o2.getColumnIndex()) {
+                return 1;
+            } else if (o1.getColumnIndex() == o2.getColumnIndex()) {
+                return 0;
+            } else {
+                return -1;
+            }
+        });
         return columnsContainer;
     }
 

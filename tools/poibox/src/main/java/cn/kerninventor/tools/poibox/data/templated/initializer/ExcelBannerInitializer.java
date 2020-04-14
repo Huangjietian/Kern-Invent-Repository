@@ -45,7 +45,7 @@ public class ExcelBannerInitializer {
         return value;
     }
 
-    public void adjustCellRangeAddress(ExcelTabulationInitializer tabulation) {
+    public CellRangeAddress adjustCellRangeAddress(ExcelTabulationInitializer tabulation) {
         if (rangeAddress.getFirstRow() == Range.defaultVal) {
             rangeAddress.setFirstRow(tabulation.getStartRowIndex());
         }
@@ -58,6 +58,7 @@ public class ExcelBannerInitializer {
         if (rangeAddress.getLastColumn() == Range.defaultVal) {
             rangeAddress.setLastColumn(tabulation.getLastColumnIndex());
         }
+        return rangeAddress;
     }
 
     public static ExcelBannerInitializer newInstance(ExcelTabulationInitializer tabulation, ExcelBanner banner) {

@@ -27,8 +27,6 @@ public @interface ArrayDataValid {
 
     String errorMessage() default "";
 
-    @ReadyToDevelop
-    String cascadeFlow() default "";
-
     String[] defValuesWhenEmpty() default "NO DATA!";
+
 }

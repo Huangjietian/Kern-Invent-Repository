@@ -9,8 +9,6 @@ import cn.kerninventor.tools.poibox.developer.Postive;
  */
 public @interface Range {
 
-    int sheetEndVal = -2;
-    
     int defaultVal = -1;
 
     @Postive

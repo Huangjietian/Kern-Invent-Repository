@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templated.writer.tbody;
+package cn.kerninventor.tools.poibox.data.templated.writer;
 
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
@@ -11,6 +11,7 @@ import java.util.List;
  * @date 2020/4/10 14:10
  * @description
  */
+@FunctionalInterface
 public interface TbodyWriter {
 
     void templateTbody(ExcelTabulationInitializer tabulation, ExcelColumnInitializer column, Sheet sheet, List data);

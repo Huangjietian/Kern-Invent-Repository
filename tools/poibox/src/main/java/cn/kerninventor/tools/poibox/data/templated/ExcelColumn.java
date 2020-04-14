@@ -20,18 +20,18 @@ public @interface ExcelColumn {
 
     String value();
 
-    /**
-     * 公式
-     * @return
-     */
-    @ReadyToDevelop
-    String formula() default "";
-
     int columnIndex() default -1;
 
     int columnWidth() default DEFAULT_COLUMN_WIDTH;
 
     String dataFormatEx() default "";
+
+    /**
+     * 公式
+     * @return
+     */
+    @ReadyToDevelop("已实现，未验证")
+    String formula() default "";
 
     boolean mergeByContent() default false;
 

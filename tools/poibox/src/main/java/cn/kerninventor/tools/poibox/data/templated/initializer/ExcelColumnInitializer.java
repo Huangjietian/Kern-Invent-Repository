@@ -1,10 +1,10 @@
 package cn.kerninventor.tools.poibox.data.templated.initializer;
 
 import cn.kerninventor.tools.poibox.data.templated.ExcelColumn;
+import cn.kerninventor.tools.poibox.data.templated.enums.SupportedDataType;
 import cn.kerninventor.tools.poibox.data.templated.validation.DataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.DictionaryInterpretor;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.DictionaryLibrary;
-import cn.kerninventor.tools.poibox.data.templated.enums.SupportedDataType;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.CellStyle;
 
@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * @author Kern
  * @date 2019/12/9 15:52
  */
-public class ExcelColumnInitializer<T extends Object> implements Comparable<ExcelColumnInitializer> {
+public class ExcelColumnInitializer<T extends Object> {
 
     private Field field;
     private String fieldName;
@@ -23,6 +23,7 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
     private int columnIndex;
     private int columnWidth;
     private String dataFormatEx;
+    private String formula;
     private boolean mergeByContent;
     private CellStyle columnStyle;
     private Annotation validAnnotation;
@@ -32,10 +33,11 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
         this.field = SupportedDataType.checkSupportability(field);
         this.fieldName = field.getName();
         this.titleName = excelColumn.value();
-        this.columnIndex = columnIndex;
         this.columnWidth = excelColumn.columnWidth();
-        this.dataFormatEx = "".equals(excelColumn.dataFormatEx().trim()) ? null : excelColumn.dataFormatEx().trim();
+        this.dataFormatEx = excelColumn.dataFormatEx();
+        this.formula = excelColumn.formula();
         this.mergeByContent = excelColumn.mergeByContent();
+        this.columnIndex = columnIndex;
         this.columnStyle = columnStyle;
         this.validAnnotation = ReflectUtil.getFirstAnnotated(field, DataValid.class);
         this.interpretor = DictionaryLibrary.getInterpretor(this.validAnnotation);
@@ -73,6 +75,10 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
         return dataFormatEx;
     }
 
+    public String getFormula() {
+        return formula;
+    }
+
     public boolean isMergeByContent() {
         return mergeByContent;
     }
@@ -87,17 +93,6 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
 
     public CellStyle getColumnStyle() {
         return columnStyle;
-    }
-
-    @Override
-    public int compareTo(ExcelColumnInitializer o) {
-        if (columnIndex > o.columnIndex){
-            return 1;
-        } else if (columnIndex < o.columnIndex){
-            return -1;
-        } else {
-            throw new IllegalArgumentException("Column definition duplicate index! Field: " + o.getFieldName());
-        }
     }
 
     @Override

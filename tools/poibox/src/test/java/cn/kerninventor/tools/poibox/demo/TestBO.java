@@ -3,21 +3,19 @@ package cn.kerninventor.tools.poibox.demo;
 import cn.kerninventor.tools.poibox.data.templated.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.templated.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.templated.ExcelTabulation;
+import cn.kerninventor.tools.poibox.data.templated.element.Border;
+import cn.kerninventor.tools.poibox.data.templated.element.Font;
+import cn.kerninventor.tools.poibox.data.templated.element.Style;
 import cn.kerninventor.tools.poibox.data.templated.validation.CompareType;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.ArrayDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.date.DateDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.decimal.DecimalDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.integer.IntDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.textLength.TextLengthDataValid;
-import cn.kerninventor.tools.poibox.data.templated.element.Border;
-import cn.kerninventor.tools.poibox.data.templated.element.Font;
-import cn.kerninventor.tools.poibox.data.templated.element.Range;
-import cn.kerninventor.tools.poibox.data.templated.element.Style;
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,24 +40,24 @@ import java.util.Date;
                                 border = @Border(borderStyle = BorderStyle.DOUBLE, direction = BorderDirection.SURROUND),
                                 fillPatternType = FillPatternType.SOLID_FOREGROUND,
                                 foregroudColor = HSSFColor.HSSFColorPredefined.DARK_BLUE
-                        ),
-                        range = @Range(fistRow = 0, lastRow = 0)
-                ),
-                @ExcelBanner(
-                        value = "模板生成者： Kern",
-                        style = @Style(alignment = HorizontalAlignment.LEFT),
-                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 0, lastCell = 2)
-                ),
-                @ExcelBanner(
-                        value = "所属机构： 壹体体育",
-                        style = @Style(alignment = HorizontalAlignment.LEFT),
-                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 3, lastCell = 5)
-                ),
-                @ExcelBanner(
-                        value = "日期: 2020-04-13",
-                        style = @Style(alignment = HorizontalAlignment.LEFT),
-                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 6, lastCell = 9)
-                ),
+                        )
+//                        range = @Range(fistRow = 0, lastRow = 0)
+                )
+//                @ExcelBanner(
+//                        value = "模板生成者： Kern\n 你好",
+//                        style = @Style(alignment = HorizontalAlignment.LEFT),
+//                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 0, lastCell = 2)
+//                ),
+//                @ExcelBanner(
+//                        value = "所属机构： 壹体体育",
+//                        style = @Style(alignment = HorizontalAlignment.LEFT),
+//                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 3, lastCell = 5)
+//                ),
+//                @ExcelBanner(
+//                        value = "日期: 2020-04-13",
+//                        style = @Style(alignment = HorizontalAlignment.LEFT),
+//                        range = @Range(fistRow = 1, lastRow = 1, firstCell = 6, lastCell = 9)
+//                ),
         },
         //表头风格
         theadStyle = @Style(
@@ -72,6 +70,8 @@ import java.util.Date;
                 font = @Font(fontName = "宋体", fontSize = 10),
                 wrapText = true
         ),
+        theadRowHeight = 20,
+        tbodyRowHeight = 14,
         //有效行数
         effectiveRows = 10
 )

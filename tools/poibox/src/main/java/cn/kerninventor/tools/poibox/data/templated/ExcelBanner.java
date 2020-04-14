@@ -4,6 +4,7 @@ import cn.kerninventor.tools.poibox.data.templated.element.Border;
 import cn.kerninventor.tools.poibox.data.templated.element.Style;
 import cn.kerninventor.tools.poibox.data.templated.element.Font;
 import cn.kerninventor.tools.poibox.data.templated.element.Range;
+import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 import cn.kerninventor.tools.poibox.style.Fonter;
 import org.apache.poi.ss.usermodel.BorderStyle;
 
@@ -23,6 +24,9 @@ public @interface ExcelBanner {
             ),
             wrapText = true
     );
+
+    @ReadyToDevelop("banner 设置行高")
+    float height() default ExcelTabulation.DEF_ROW_HEIGHT;
 
     Range range() default @Range;
 

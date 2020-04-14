@@ -33,7 +33,6 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
 
     @Override
     public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
-
         List<DictionaryEntry> entries = (List<DictionaryEntry>) columnInit.getInterpretor().getEntries();
         if (entries == null){
             entries = new ArrayList<>();
@@ -75,8 +74,8 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
     }
 
     public void addCascadeDataValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
-        //级联
-        if (!"".equals(excelValid.cascadeFlow().trim())) {
+        //级联 !"".equals(excelValid.cascadeFlow().trim())
+        if (true) {
             DictionaryInterpretor interpretor = columnInit.getInterpretor();
             if (interpretor.getEntries() != null && interpretor.getEntries().isEmpty()) {
 
@@ -84,9 +83,9 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
 
 
 
-            ExcelColumnInitializer parentColumn = tabulationInit.getColumnInitializerByTitleName(excelValid.cascadeFlow());
+            ExcelColumnInitializer parentColumn = tabulationInit.getColumnInitializerByTitleName("excelValid.cascadeFlow()");
             if (parentColumn == null) {
-                throw new IllegalColumnConfigureException("The field name as " + excelValid.cascadeFlow() + "'s field does not found, please check your configuration on @ArrayDataValid");
+                throw new IllegalColumnConfigureException("The field name as " + "excelValid.cascadeFlow()" + "'s field does not found, please check your configuration on @ArrayDataValid");
             }
             //查询上级和下级字典。组装成上下级。
             List<DictionaryEntry> pEntries = (List<DictionaryEntry>) parentColumn.getInterpretor().getEntries();

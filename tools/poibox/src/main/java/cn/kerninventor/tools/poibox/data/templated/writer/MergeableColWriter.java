@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templated.writer.tbody;
+package cn.kerninventor.tools.poibox.data.templated.writer;
 
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.layout.LayoutHandler;
@@ -15,7 +15,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
  * @Date 2020/3/17 10:28
  * @Description TODO
  */
-public class TbodyDataColumnWriterMergeable implements TbodyDataColumnWriter {
+public class MergeableColWriter implements ColWriter {
 
     private Sheet sheet;
 
@@ -27,7 +27,7 @@ public class TbodyDataColumnWriterMergeable implements TbodyDataColumnWriter {
 
     private Object temporary;
 
-    public TbodyDataColumnWriterMergeable(Sheet sheet) {
+    public MergeableColWriter(Sheet sheet) {
         this.sheet = sheet;
     }
 
