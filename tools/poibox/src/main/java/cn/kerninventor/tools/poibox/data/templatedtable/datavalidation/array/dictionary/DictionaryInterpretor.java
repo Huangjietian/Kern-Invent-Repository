@@ -2,10 +2,11 @@ package cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.di
 
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.ArrayDataValid;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryEntry;
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.ReferDictionaryEntry;
 import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.Cell;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
@@ -52,9 +53,9 @@ public class DictionaryInterpretor {
         if (metaData == null || !isInterpretable()) {
             return metaData;
         }
-        List<DictionaryReferEntry> referEntries = (List<DictionaryReferEntry>) getEntries();
+        List<ReferDictionaryEntry> referEntries = (List<ReferDictionaryEntry>) getEntries();
         Object register = null;
-        for (DictionaryReferEntry body : referEntries){
+        for (ReferDictionaryEntry body : referEntries){
             if (body.getMetadata() != null && body.getMetadata().equals(metaData)){
                 register = body.getViewdata();
                 break;
@@ -67,10 +68,12 @@ public class DictionaryInterpretor {
         if (!isInterpretable()){
             return null;
         }
-        List<DictionaryReferEntry> referEntries = (List<DictionaryReferEntry>) getEntries();
-        Class viewType = referEntries.get(0).getVType();
+        List<ReferDictionaryEntry> referEntries = (List<ReferDictionaryEntry>) getEntries();
+        ReferDictionaryEntry referEntry = referEntries.get(0);
+        ParameterizedType entryType = DictionaryLibrary.getEntryType(referEntry);
+        Class viewType = (Class) entryType.getActualTypeArguments()[0];
         Object value = CellValueUtil.getCellValueBySpecifiedType(cell, viewType);
-        for (DictionaryReferEntry body : referEntries){
+        for (ReferDictionaryEntry body : referEntries){
             if (body.getViewdata().equals(value)){
                 return body.getMetadata();
             }

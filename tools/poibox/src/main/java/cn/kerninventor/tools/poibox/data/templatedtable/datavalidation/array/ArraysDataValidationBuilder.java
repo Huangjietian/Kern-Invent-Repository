@@ -4,6 +4,7 @@ import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.exception.ColumnConfigureException;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.MessageBoxSetter;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.DictionaryInterpretor;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryEntry;
 import cn.kerninventor.tools.poibox.data.templatedtable.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.templatedtable.initializer.ExcelTabulationInitializer;
@@ -76,6 +77,13 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
     public void addCascadeDataValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
         //级联
         if (!"".equals(excelValid.cascadeFlow().trim())) {
+            DictionaryInterpretor interpretor = columnInit.getInterpretor();
+            if (interpretor.getEntries() != null && interpretor.getEntries().isEmpty()) {
+
+            }
+
+
+
             ExcelColumnInitializer parentColumn = tabulationInit.getColumnInitializerByTitleName(excelValid.cascadeFlow());
             if (parentColumn == null) {
                 throw new ColumnConfigureException("The field name as " + excelValid.cascadeFlow() + "'s field does not found, please check your configuration on @ArrayDataValid");

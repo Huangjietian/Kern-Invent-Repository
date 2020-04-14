@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array;
 
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.DataValid;
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.Dictionary;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.Dictionary;
 import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 
 import java.lang.annotation.ElementType;

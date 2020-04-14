@@ -4,6 +4,7 @@ import cn.kerninventor.tools.poibox.BoxGadget;
 import org.apache.poi.ss.usermodel.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Title: NameNameManegeUtil
@@ -51,6 +52,10 @@ public class NameManegeUtil {
                 .append(dataRowSerial);
         nameManager.setRefersToFormula(formulaExBulder.toString());
         return nameName;
+    }
+
+    public static void setCascadeFlowData(Sheet sheet, Map<String, List<String>> dataMap) {
+
     }
 
 }

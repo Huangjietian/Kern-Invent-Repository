@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.demo;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.ReferDictionaryEntry;
 
 /**
  * @Title: TestCountry
@@ -10,7 +10,7 @@ import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dic
  * @Date 2019/12/18 10:39
  * @Description: TODO
  */
-public class TestCountryBO implements DictionaryReferEntry<Long, String> {
+public class TestCountryBO implements ReferDictionaryEntry<String, Long> {
 
     private Long id;
 

@@ -1,7 +1,5 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.Dictionary;
-
 /**
  * @author Kern
  * @date 2019/12/11 14:57

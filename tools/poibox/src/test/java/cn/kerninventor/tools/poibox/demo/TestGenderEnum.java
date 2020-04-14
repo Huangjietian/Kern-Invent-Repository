@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.demo;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.ReferDictionaryEntry;
 
 /**
  * @Title: SexGender
@@ -10,7 +10,7 @@ import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dic
  * @Date 2019/12/13 18:42
  * @Description: TODO
  */
-public enum TestGenderEnum implements DictionaryReferEntry<Integer, String> {
+public enum TestGenderEnum implements ReferDictionaryEntry<String, Integer> {
     MAN(1,"男"),
     WOMEN(2,"女"),
     ;

@@ -1,13 +1,14 @@
 package cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary;
 
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.ArrayDataValid;
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.Dictionary;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryProvider;
 import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryEntry;
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryReferEntry;
+import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.ReferDictionaryEntry;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +50,7 @@ public final class DictionaryLibrary {
         }
         DictionaryProvider provider = (DictionaryProvider) dictionaryMap.get(providerClass);
         /**
-         * if dictionary is null ， POIBOX will try to get a new instance， then put in map!
+         * if dictionary is null ， POIBOX will try to get a new instance，then put in map!
          */
         if (provider == null){
             try {
@@ -70,13 +71,28 @@ public final class DictionaryLibrary {
             List<? extends DictionaryEntry> entries = DictionaryLibrary.lookup(dictionaryClass);
             if (entries != null && !entries.isEmpty()) {
                 interpretor.setEntries(entries);
-                if (DictionaryReferEntry.class.isAssignableFrom(entries.get(0).getClass())){
+                if (ReferDictionaryEntry.class.isAssignableFrom(entries.get(0).getClass())){
                     interpretor.setInterpretable(true);
                 }
             }
             return interpretor;
         }
         return interpretor;
+    }
+
+    public static ParameterizedType getEntryType(DictionaryEntry entry) {
+        Type[] types = entry.getClass().getGenericInterfaces();
+        Type bodyType = null;
+        for (Type type : types) {
+            if (type instanceof ParameterizedType) {
+                bodyType = type;
+                break;
+            }
+        }
+        if (bodyType == null ){
+            throw new IllegalArgumentException("Dictionary entry must specified the generic!");
+        }
+        return (ParameterizedType)bodyType;
     }
 
 }
