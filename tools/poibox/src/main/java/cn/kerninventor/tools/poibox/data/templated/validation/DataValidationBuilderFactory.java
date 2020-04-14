@@ -30,7 +30,6 @@ public class DataValidationBuilderFactory {
         if (!annotation.annotationType().isAnnotationPresent(DataValid.class)){
             throw new AnnotationFormatError("error format annotation!");
         }
-        //date validation
         if (annotation instanceof DateDataValid){
             return new DateDataValidationBuilder((DateDataValid) annotation);
         }

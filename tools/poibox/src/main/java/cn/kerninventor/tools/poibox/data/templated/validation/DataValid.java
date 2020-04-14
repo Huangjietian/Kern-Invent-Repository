@@ -15,7 +15,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataValid {
 
-    boolean coverness = false;
-
 
 }

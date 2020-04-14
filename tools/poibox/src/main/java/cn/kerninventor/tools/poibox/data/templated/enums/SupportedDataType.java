@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.enums;
+package cn.kerninventor.tools.poibox.data.templated.enums;
 
 
 import cn.kerninventor.tools.poibox.exception.IllegalColumnConfigureException;

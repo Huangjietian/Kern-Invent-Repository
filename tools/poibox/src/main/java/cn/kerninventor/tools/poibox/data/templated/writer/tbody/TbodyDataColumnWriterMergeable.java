@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templated.writer.tbodywriter.datacolumn;
+package cn.kerninventor.tools.poibox.data.templated.writer.tbody;
 
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.layout.LayoutHandler;
@@ -15,7 +15,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
  * @Date 2020/3/17 10:28
  * @Description TODO
  */
-public class DataColumnMergeable implements DataColumn {
+public class TbodyDataColumnWriterMergeable implements TbodyDataColumnWriter {
 
     private Sheet sheet;
 
@@ -27,7 +27,7 @@ public class DataColumnMergeable implements DataColumn {
 
     private Object temporary;
 
-    public DataColumnMergeable(Sheet sheet) {
+    public TbodyDataColumnWriterMergeable(Sheet sheet) {
         this.sheet = sheet;
     }
 

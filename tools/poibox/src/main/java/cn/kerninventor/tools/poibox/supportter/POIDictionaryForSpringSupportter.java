@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.support;
+package cn.kerninventor.tools.poibox.supportter;
 
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.DictionaryLibrary;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.Dictionary;
@@ -11,9 +11,10 @@ import java.util.Map;
 /**
  * @author Kern
  * @date 2020/4/9 17:20
- * @description
+ * @description If you want to use @ArraysDataValid in the Spring project, inherit the class and add it to the Bean container.
+ * @中文描述 如果要在Spring项目中使用 @ArraysDataValidation   请继承该类并加入到Bean容器中
  */
-public class POIConfigureSpringSupportter implements ApplicationContextAware {
+public class POIDictionaryForSpringSupportter implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

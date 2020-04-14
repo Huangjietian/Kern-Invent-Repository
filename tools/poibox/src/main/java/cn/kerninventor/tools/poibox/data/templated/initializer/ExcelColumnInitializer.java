@@ -4,7 +4,7 @@ import cn.kerninventor.tools.poibox.data.templated.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.templated.validation.DataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.DictionaryInterpretor;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.DictionaryLibrary;
-import cn.kerninventor.tools.poibox.data.enums.SupportedDataType;
+import cn.kerninventor.tools.poibox.data.templated.enums.SupportedDataType;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.CellStyle;
 

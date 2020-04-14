@@ -5,9 +5,9 @@ import cn.kerninventor.tools.poibox.data.templated.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelBannerInitializer;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
-import cn.kerninventor.tools.poibox.data.templated.writer.tbodywriter.TbodyDataWriter;
-import cn.kerninventor.tools.poibox.data.templated.writer.tbodywriter.TbodyEmptyWriter;
-import cn.kerninventor.tools.poibox.data.templated.writer.tbodywriter.TbodyWriter;
+import cn.kerninventor.tools.poibox.data.templated.writer.tbody.TbodyDataWriter;
+import cn.kerninventor.tools.poibox.data.templated.writer.tbody.TbodyEmptyWriter;
+import cn.kerninventor.tools.poibox.data.templated.writer.tbody.TbodyWriter;
 import cn.kerninventor.tools.poibox.layout.MergedRange;
 import org.apache.poi.ss.usermodel.*;
 

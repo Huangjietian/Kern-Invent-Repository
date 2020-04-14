@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.templated.writer.tbodywriter;
+package cn.kerninventor.tools.poibox.data.templated.writer.tbody;
 
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
