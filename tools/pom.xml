@@ -29,7 +29,6 @@
         <module>kern-romance</module>
     </modules>
 
-
     <build>
         <plugins>
             <plugin>

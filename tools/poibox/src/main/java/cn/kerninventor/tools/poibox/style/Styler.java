@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.style;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.element.Style;
+import cn.kerninventor.tools.poibox.data.templated.element.Style;
 import cn.kerninventor.tools.poibox.developer.SealingVersion;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;

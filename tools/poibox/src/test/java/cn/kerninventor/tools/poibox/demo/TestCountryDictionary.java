@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.demo;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryProvider;
-import cn.kerninventor.tools.poibox.data.templatedtable.datavalidation.array.dictionary.api.DictionaryEntry;
+import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.api.DictionaryProvider;
+import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.api.DictionaryEntry;
 
 import java.util.ArrayList;
 import java.util.List;

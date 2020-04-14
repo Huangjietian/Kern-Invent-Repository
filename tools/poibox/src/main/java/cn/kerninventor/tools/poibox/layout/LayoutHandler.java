@@ -3,11 +3,16 @@ package cn.kerninventor.tools.poibox.layout;
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
+import cn.kerninventor.tools.poibox.utils.CellValueUtil;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFTextBox;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -128,6 +133,51 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
                 sheet.setColumnWidth(i , BoxGadget.adjustCellWidth(width));
             }
         }
+    }
+
+    @Override
+    public void addTextBox(Sheet sheet, AnchorIndex anchorIndex, String text) {
+        if (HSSFSheet.class.isAssignableFrom(sheet.getClass())) {
+            addTextBox((HSSFSheet) sheet, anchorIndex, text);
+        } else if (XSSFSheet.class.isAssignableFrom(sheet.getClass())){
+            addTextBox((XSSFSheet) sheet, anchorIndex, text);
+        } else {
+            throw new IllegalArgumentException("Unsupported sheet type");
+        }
+    }
+
+    @Override
+    public void addTextBox(HSSFSheet sheet, AnchorIndex anchorIndex, String text) {
+        HSSFPatriarch drawing = sheet.createDrawingPatriarch();
+        HSSFClientAnchor clientAnchor = drawing.createAnchor(
+                anchorIndex.getLeft(),
+                anchorIndex.getTop(),
+                anchorIndex.getRight(),
+                anchorIndex.getBottom(),
+                anchorIndex.getCol1(),
+                anchorIndex.getRow1(),
+                anchorIndex.getCol2(),
+                anchorIndex.getRow2()
+                );
+        HSSFTextbox textBox = drawing.createTextbox(clientAnchor);
+        textBox.setString(new HSSFRichTextString(text));
+    }
+
+    @Override
+    public void addTextBox(XSSFSheet sheet, AnchorIndex anchorIndex, String text) {
+        XSSFDrawing drawing = sheet.createDrawingPatriarch();
+        XSSFClientAnchor clientAnchor = drawing.createAnchor(
+                anchorIndex.getLeft(),
+                anchorIndex.getTop(),
+                anchorIndex.getRight(),
+                anchorIndex.getBottom(),
+                anchorIndex.getCol1(),
+                anchorIndex.getRow1(),
+                anchorIndex.getCol2(),
+                anchorIndex.getRow2()
+        );
+        XSSFTextBox textBox = drawing.createTextbox(clientAnchor);
+        textBox.setText(text);
     }
 
 

@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.layout;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.utils.CellValueUtil;
+import cn.kerninventor.tools.poibox.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 

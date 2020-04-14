@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data;
 
-import cn.kerninventor.tools.poibox.data.templatedtable.reader.Reader;
-import cn.kerninventor.tools.poibox.data.templatedtable.writer.Writer;
+import cn.kerninventor.tools.poibox.data.templated.reader.Reader;
+import cn.kerninventor.tools.poibox.data.templated.writer.Writer;
 
 /**
  * @Author Kern

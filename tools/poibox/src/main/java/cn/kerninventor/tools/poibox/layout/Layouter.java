@@ -1,7 +1,9 @@
 package cn.kerninventor.tools.poibox.layout;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 /**
  * @author Kern
@@ -22,4 +24,10 @@ public interface Layouter {
     void mergedByRowContent(Sheet sheet, int row);
 
     void setCellsSize(Sheet sheet, Float height, Integer width);
+
+    void addTextBox(Sheet sheet, AnchorIndex anchorIndex, String text);
+
+    void addTextBox(HSSFSheet sheet, AnchorIndex anchorIndex, String text);
+
+    void addTextBox(XSSFSheet sheet, AnchorIndex anchorIndex, String text);
 }
