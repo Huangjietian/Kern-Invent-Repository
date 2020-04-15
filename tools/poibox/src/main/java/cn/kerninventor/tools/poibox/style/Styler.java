@@ -36,4 +36,6 @@ public interface Styler {
         cellStyle.cloneStyleFrom(sourceStyle);
         return cellStyle;
     }
+
+    CellStyle copyStyle(CellStyle targetStyle, Workbook workbook);
 }

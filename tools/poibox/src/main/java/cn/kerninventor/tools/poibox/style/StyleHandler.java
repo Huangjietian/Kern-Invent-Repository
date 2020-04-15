@@ -8,6 +8,7 @@ import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * @author Kern
@@ -81,6 +82,34 @@ public final class StyleHandler extends BoxBracket implements Styler {
     public CellStyle copyStyle(CellStyle targetStyle) {
         CellStyle cellStyle = getParent().workbook().createCellStyle();
         cellStyle.cloneStyleFrom(targetStyle);
+        return cellStyle;
+    }
+
+    @Override
+    public CellStyle copyStyle(CellStyle targetStyle, Workbook workbook) {
+        CellStyle cellStyle = getParent().workbook().createCellStyle();
+        cellStyle.setDataFormat(targetStyle.getDataFormat());
+        cellStyle.setFont(workbook.getFontAt(targetStyle.getFontIndexAsInt()));
+        cellStyle.setFillForegroundColor(targetStyle.getFillForegroundColor());
+        cellStyle.setFillBackgroundColor(targetStyle.getFillBackgroundColor());
+        cellStyle.setFillPattern(targetStyle.getFillPattern());
+        cellStyle.setTopBorderColor(targetStyle.getTopBorderColor());
+        cellStyle.setLeftBorderColor(targetStyle.getLeftBorderColor());
+        cellStyle.setRightBorderColor(targetStyle.getRightBorderColor());
+        cellStyle.setBottomBorderColor(targetStyle.getBottomBorderColor());
+        cellStyle.setBorderTop(targetStyle.getBorderTop());
+        cellStyle.setBorderBottom(targetStyle.getBorderBottom());
+        cellStyle.setBorderLeft(targetStyle.getBorderLeft());
+        cellStyle.setBorderRight(targetStyle.getBorderRight());
+        cellStyle.setAlignment(targetStyle.getAlignment());
+        cellStyle.setVerticalAlignment(targetStyle.getVerticalAlignment());
+        cellStyle.setIndention(targetStyle.getIndention());
+        cellStyle.setLocked(targetStyle.getLocked());
+        cellStyle.setRotation(targetStyle.getRotation());
+        cellStyle.setWrapText(targetStyle.getWrapText());
+        cellStyle.setHidden(targetStyle.getHidden());
+        cellStyle.setQuotePrefixed(targetStyle.getQuotePrefixed());
+        cellStyle.setShrinkToFit(targetStyle.getShrinkToFit());
         return cellStyle;
     }
 }
