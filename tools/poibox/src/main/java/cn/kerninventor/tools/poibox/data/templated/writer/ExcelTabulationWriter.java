@@ -195,25 +195,20 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
             Cell headRowCell = headRow.createCell(column.getColumnIndex());
             headRowCell.setCellValue(column.getTitleName());
             headRowCell.setCellStyle(theadStyle);
-            if (column.getColumnWidth() == ExcelColumn.DEFAULT_COLUMN_WIDTH){
-                sheet.setColumnWidth(
-                        column.getColumnIndex(),
-                        BoxGadget.getCellWidthByContent(
-                                column.getTitleName(),
-                                theadFontHeightInPoints
-                        )
-                );
-            } else {
-                sheet.setColumnWidth(
-                        column.getColumnIndex(),
-                        BoxGadget.adjustCellWidth(
-                                column.getColumnWidth()
-                        )
-                );
-            }
+            setColumnWidth(tabulationInitializer, column, sheet, 0, theadFontHeightInPoints);
             tbodyWriter.templateTbody(tabulationInitializer, column, sheet, datas);
         }
         tempalateBanners(tabulationInitializer, columnsContainer, sheet);
+    }
+
+    private void setColumnWidth(ExcelTabulationInitializer tabulation, ExcelColumnInitializer column, Sheet sheet, int width, int var) {
+        if (column.getColumnWidth() == ExcelColumn.DEFAULT_COLUMN_WIDTH){
+            width = BoxGadget.getCellWidthByContent(column.getTitleName(), var);
+        } else {
+            width = BoxGadget.adjustCellWidth(column.getColumnWidth());
+        }
+        width = width < tabulation.getMinimumColumnsWidth() ? tabulation.getMinimumColumnsWidth() : width;
+        sheet.setColumnWidth(column.getColumnIndex(), width);
     }
 
     private Row setRowHeight(Row row, float height) {

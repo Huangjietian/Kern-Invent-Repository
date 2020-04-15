@@ -31,6 +31,7 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
     private int theadRowIndex;
     private int tbodyFirstRowIndex;
     private int effectiveRows;
+    private int minimumColumnsWidth;
 //    private boolean autoColumnIndex;
     private List<ExcelBannerInitializer> bannerContainer;
     private List<ExcelColumnInitializer> columnsContainer;
@@ -61,6 +62,10 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
 
     public int getEffectiveRows() {
         return effectiveRows;
+    }
+
+    public int getMinimumColumnsWidth() {
+        return minimumColumnsWidth;
     }
 
     public int getTheadRowIndex() {
@@ -101,6 +106,7 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         this.tbodyRowHeight = excelTabulation.tbodyRowHeight();
         this.startRowIndex = startRowIndexNotMinus(excelTabulation.startRowIndex());
         this.effectiveRows = effectiveRowsNotLessThan1(excelTabulation.effectiveRows());
+        this.minimumColumnsWidth = excelTabulation.minimumColumnsWidth();
         this.bannerContainer = initialzeBanners(excelTabulation.banners());
         this.columnsContainer = columnsTitleNameCannotRepeat(initialzeColumns(tableClass.getDeclaredFields(), getTbodyStyle()));
         this.theadRowIndex = getRowIndexIncrementsByBanners(bannerContainer) + startRowIndex;

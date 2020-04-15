@@ -1,7 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templated;
 import cn.kerninventor.tools.poibox.data.templated.element.Font;
 import cn.kerninventor.tools.poibox.data.templated.element.Style;
-import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 import cn.kerninventor.tools.poibox.style.Fonter;
 
 import java.lang.annotation.ElementType;
@@ -30,15 +29,15 @@ public @interface ExcelTabulation {
 
     Style tbodyStyle() default @Style;
 
-    @ReadyToDevelop("表头高度, 已实现，未验证")
     float theadRowHeight() default DEF_ROW_HEIGHT;
 
-    @ReadyToDevelop("表体， 已实现，未验证")
     float tbodyRowHeight() default DEF_ROW_HEIGHT;
 
     int startRowIndex() default 0;
 
     int effectiveRows() default 20;
+
+    int minimumColumnsWidth() default 0;
 
     @Deprecated
     boolean autoColumnIndex() default true;
