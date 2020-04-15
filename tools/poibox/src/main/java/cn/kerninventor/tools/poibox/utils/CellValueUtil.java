@@ -63,7 +63,6 @@ public final class CellValueUtil extends BoxGadget {
             ret = "".equals(str) ? null : str;
         }
         //Date
-
         else if (isCellDateFormat(cell)) {
             if (LocalDate.class == targetClass){
                 ret = cell.getLocalDateTimeCellValue().toLocalDate();
@@ -83,14 +82,15 @@ public final class CellValueUtil extends BoxGadget {
                 ret = doub.floatValue();
             } else if (Double.class == targetClass) {
                 ret = doub;
-            }
-            //int
-            else if (Long.class == targetClass) {
+             //int
+            } else if (Long.class == targetClass) {
                 ret = doub.longValue();
-            }
-            else {
+            } else if (Integer.class == targetClass){
                 //自动装拆包
                 ret = doub.intValue();
+            //String
+            } else if (String.class == targetClass){
+                ret = doub.intValue() + "";
             }
         }
         //Boolean
