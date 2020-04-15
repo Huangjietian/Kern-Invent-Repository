@@ -204,10 +204,10 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
     private void setColumnWidth(ExcelTabulationInitializer tabulation, ExcelColumnInitializer column, Sheet sheet, int width, int var) {
         if (column.getColumnWidth() == ExcelColumn.DEFAULT_COLUMN_WIDTH){
             width = BoxGadget.getCellWidthByContent(column.getTitleName(), var);
+            width = width < tabulation.getMinimumColumnsWidth() ? tabulation.getMinimumColumnsWidth() : width;
         } else {
             width = BoxGadget.adjustCellWidth(column.getColumnWidth());
         }
-        width = width < tabulation.getMinimumColumnsWidth() ? tabulation.getMinimumColumnsWidth() : width;
         sheet.setColumnWidth(column.getColumnIndex(), width);
     }
 

@@ -22,7 +22,7 @@ import java.util.Date;
 @ExcelTabulation(
         theadStyle = @Style(
                 font = @Font(
-                        fontSize = 14,
+                        fontSize = 12,
                         color = HSSFColor.HSSFColorPredefined.WHITE,
                         bold = true
                 ),
@@ -31,21 +31,22 @@ import java.util.Date;
         ),
         tbodyStyle = @Style(
                 font = @Font(
-                        fontSize = 12,
+                        fontSize = 10,
                         fontName = "仿宋"
                 ),
                 fillPatternType = FillPatternType.SOLID_FOREGROUND,
                 foregroudColor = HSSFColor.HSSFColorPredefined.LIGHT_YELLOW
         ),
         theadRowHeight = 25.0f,
-        tbodyRowHeight = 18.0f
+        tbodyRowHeight = 18.0f,
+        minimumColumnsWidth = 15
 )
 public class AthleteRosterEO {
 
     @ExcelColumn("再加一个")
     private Integer sss;
 
-    @ExcelColumn(value = "序号")
+    @ExcelColumn(value = "序号", columnWidth = 10)
     private Integer serial;
 
     @ExcelColumn(value = "共建单位")
@@ -55,7 +56,7 @@ public class AthleteRosterEO {
     @ExcelColumn("1管理模式")
     private String managementMode;
 
-    @ExcelColumn(value = "身份证号", dataFormatEx = "@")
+    @ExcelColumn(value = "身份证号", dataFormatEx = "@", columnWidth = 20)
     private String idCard;
 
     @ExcelColumn("姓名")

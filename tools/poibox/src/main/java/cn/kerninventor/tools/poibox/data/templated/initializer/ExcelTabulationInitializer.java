@@ -1,6 +1,7 @@
 package cn.kerninventor.tools.poibox.data.templated.initializer;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
+import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.POIBox;
 import cn.kerninventor.tools.poibox.data.templated.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.templated.ExcelColumn;
@@ -106,7 +107,7 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         this.tbodyRowHeight = excelTabulation.tbodyRowHeight();
         this.startRowIndex = startRowIndexNotMinus(excelTabulation.startRowIndex());
         this.effectiveRows = effectiveRowsNotLessThan1(excelTabulation.effectiveRows());
-        this.minimumColumnsWidth = excelTabulation.minimumColumnsWidth();
+        this.minimumColumnsWidth = BoxGadget.adjustCellWidth(excelTabulation.minimumColumnsWidth());
         this.bannerContainer = initialzeBanners(excelTabulation.banners());
         this.columnsContainer = columnsTitleNameCannotRepeat(initialzeColumns(tableClass.getDeclaredFields(), getTbodyStyle()));
         this.theadRowIndex = getRowIndexIncrementsByBanners(bannerContainer) + startRowIndex;

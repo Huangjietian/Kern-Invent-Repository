@@ -36,7 +36,7 @@ import java.util.Date;
                 @ExcelBanner(
                         value = "人员信息",
                         style = @Style(
-                                font = @Font(fontName = "微软雅黑", fontSize = 16, bold = true, color = HSSFColor.HSSFColorPredefined.WHITE),
+                                font = @Font(fontName = "微软雅黑", fontSize = 12, bold = true, color = HSSFColor.HSSFColorPredefined.WHITE),
                                 wrapText = true,
                                 border = @Border(borderStyle = BorderStyle.DOUBLE, direction = BorderDirection.SURROUND),
                                 fillPatternType = FillPatternType.SOLID_FOREGROUND,
@@ -62,7 +62,7 @@ import java.util.Date;
         },
         //表头风格
         theadStyle = @Style(
-                font = @Font(fontName = "黑体", fontSize = 12, bold = true),
+                font = @Font(fontName = "黑体", fontSize = 10, bold = true),
                 fillPatternType = FillPatternType.SOLID_FOREGROUND,
                 foregroudColor = HSSFColor.HSSFColorPredefined.GREY_40_PERCENT
         ),

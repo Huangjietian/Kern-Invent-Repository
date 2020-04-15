@@ -47,6 +47,9 @@ public class BoxGadget {
     }
 
     public static int adjustCellWidth(int width) {
+        if (0 == width) {
+            return 0;
+        }
         return (int) ((width + 0.82) * 256);
     }
 
