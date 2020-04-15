@@ -150,7 +150,7 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         ExcelColumn excelColumn;
         for (Field field : fields){
             if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                CellStyle columnStyle = excelColumn.styleEffictive() ? styler.generate(excelColumn.columnStyle()) : styler.copyStyle(tbodyStyle) ;
+                CellStyle columnStyle = excelColumn.styleEffictive() ? styler.generate(excelColumn.columnStyle()) : tbodyStyle;
                 columnsContainer.add(ExcelColumnInitializer.newInstance(field, excelColumn, columnStyle));
             }
         }

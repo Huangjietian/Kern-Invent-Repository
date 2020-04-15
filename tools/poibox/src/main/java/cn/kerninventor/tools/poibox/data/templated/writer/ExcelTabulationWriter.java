@@ -74,8 +74,12 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
             execute(sheet, null, ignore,
 
                 (t, c, s, d) -> {
+                    CellStyle cellStyle = c.getColumnStyle();
                     if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
-                        c.getColumnStyle().setDataFormat(
+                        if (cellStyle.equals(t.getTbodyStyle())) {
+                            cellStyle = t.getParent().styler().copyStyle(cellStyle);
+                        }
+                        cellStyle.setDataFormat(
                                 t.getParent().workbook().createDataFormat().getFormat(
                                         c.getDataFormatEx()
                                 )
@@ -87,7 +91,7 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
                                 t.getTbodyRowHeight()
                         );
                         Cell textCell = textRow.createCell(c.getColumnIndex());
-                        textCell.setCellStyle(c.getColumnStyle());
+                        textCell.setCellStyle(cellStyle);
                         if (BeanUtil.isNotEmpty(c.getFormula())) {
                             textCell.setCellFormula(c.getFormula());
                         }
@@ -102,8 +106,12 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
             execute(sheet, datas, ignore,
 
                 (t, c, s, d) -> {
+                    CellStyle cellStyle = c.getColumnStyle();
                     if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
-                        c.getColumnStyle().setDataFormat(
+                        if (cellStyle.equals(t.getTbodyStyle())) {
+                            cellStyle = t.getParent().styler().copyStyle(cellStyle);
+                        }
+                        cellStyle.setDataFormat(
                                 t.getParent().workbook().createDataFormat().getFormat(
                                         c.getDataFormatEx()
                                 )
@@ -117,7 +125,7 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
                         );
                         Cell cell = BoxGadget.getCellForce(row, c.getColumnIndex()
                         );
-                        cell.setCellStyle(c.getColumnStyle());
+                        cell.setCellStyle(cellStyle);
                         Object value = null;
                         try {
                             value = ReflectUtil.getFieldValue(c.getField(), d.get(datasIndex));
@@ -168,8 +176,8 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
                 return result;
 
             }).reInit(columnsContainer);
+            tabulationInitializer.reIndex(columnsContainer);
         }
-        tabulationInitializer.reIndex(columnsContainer);
         Row headRow = setRowHeight(
                 sheet.createRow(
                         tabulationInitializer.getTheadRowIndex()
@@ -180,10 +188,10 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
                 tabulationInitializer.getTheadStyle(),
                 tabulationInitializer.getParent().workbook()
         ).getFontHeightInPoints();
+
         CellStyle theadStyle = tabulationInitializer.getTheadStyle();
-
-
-        for (ExcelColumnInitializer column : columnsContainer) {
+        for (Iterator<ExcelColumnInitializer> iterator = columnsContainer.iterator() ; iterator.hasNext() ; ) {
+            ExcelColumnInitializer column = iterator.next();
             Cell headRowCell = headRow.createCell(column.getColumnIndex());
             headRowCell.setCellValue(column.getTitleName());
             headRowCell.setCellStyle(theadStyle);
