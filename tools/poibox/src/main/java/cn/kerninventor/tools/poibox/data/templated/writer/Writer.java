@@ -3,6 +3,7 @@ package cn.kerninventor.tools.poibox.data.templated.writer;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Title: Template
@@ -20,10 +21,12 @@ public interface Writer<T> {
 
     Writer<T> writeTo(Sheet sheet);
 
-    Writer<T> writeTo(String sheetName, List<T> datas);
+    Writer<T> writeTo(String sheetName, List<T> datas, String... ignore);
 
-    Writer<T> writeTo(int sheetAt, List<T> datas);
+    Writer<T> writeTo(int sheetAt, List<T> datas, String... ignore);
 
-    Writer<T> writeTo(Sheet sheet, List<T> datas);
+    Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore);
+
+    Writer<T> addNameName(Map<String, List<String>> nameNameMap);
 
 }

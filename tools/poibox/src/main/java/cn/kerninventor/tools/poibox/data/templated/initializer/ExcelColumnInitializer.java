@@ -15,12 +15,13 @@ import java.lang.reflect.Field;
  * @author Kern
  * @date 2019/12/9 15:52
  */
-public class ExcelColumnInitializer<T extends Object> {
+public class ExcelColumnInitializer<T extends Object> implements Comparable<ExcelColumnInitializer>{
 
     private Field field;
     private String fieldName;
     private String titleName;
     private int columnIndex;
+    private int columnSort;
     private int columnWidth;
     private String dataFormatEx;
     private String formula;
@@ -29,7 +30,7 @@ public class ExcelColumnInitializer<T extends Object> {
     private Annotation validAnnotation;
     private DictionaryInterpretor interpretor;
 
-    private ExcelColumnInitializer(Field field, ExcelColumn excelColumn, int columnIndex, CellStyle columnStyle) {
+    private ExcelColumnInitializer(Field field, ExcelColumn excelColumn, CellStyle columnStyle) {
         this.field = SupportedDataType.checkSupportability(field);
         this.fieldName = field.getName();
         this.titleName = excelColumn.value();
@@ -37,14 +38,18 @@ public class ExcelColumnInitializer<T extends Object> {
         this.dataFormatEx = excelColumn.dataFormatEx();
         this.formula = excelColumn.formula();
         this.mergeByContent = excelColumn.mergeByContent();
-        this.columnIndex = columnIndex;
+        this.columnSort = excelColumn.columnSort();
         this.columnStyle = columnStyle;
         this.validAnnotation = ReflectUtil.getFirstAnnotated(field, DataValid.class);
         this.interpretor = DictionaryLibrary.getInterpretor(this.validAnnotation);
     }
 
-    static ExcelColumnInitializer newInstance(Field field, ExcelColumn excelColumn, int columnIndex, CellStyle columnStyle){
-        return new ExcelColumnInitializer(field, excelColumn, columnIndex, columnStyle);
+    static ExcelColumnInitializer newInstance(Field field, ExcelColumn excelColumn, CellStyle columnStyle){
+        return new ExcelColumnInitializer(field, excelColumn, columnStyle);
+    }
+
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
     }
 
     public Field getField() {
@@ -98,5 +103,16 @@ public class ExcelColumnInitializer<T extends Object> {
     @Override
     public String toString() {
         return titleName;
+    }
+
+    @Override
+    public int compareTo(ExcelColumnInitializer o) {
+        if (this.columnSort > o.columnSort) {
+            return 1;
+        } else if (this.columnSort == o.columnSort) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }

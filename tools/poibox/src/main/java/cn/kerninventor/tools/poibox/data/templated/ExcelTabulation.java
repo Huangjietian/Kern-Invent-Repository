@@ -40,6 +40,7 @@ public @interface ExcelTabulation {
 
     int effectiveRows() default 20;
 
+    @Deprecated
     boolean autoColumnIndex() default true;
 
 }

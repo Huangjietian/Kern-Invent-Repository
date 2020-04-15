@@ -5,16 +5,14 @@ import cn.kerninventor.tools.poibox.POIBoxFactory;
 import cn.kerninventor.tools.poibox.data.DataTabulator;
 import cn.kerninventor.tools.poibox.data.templated.writer.Writer;
 import cn.kerninventor.tools.poibox.layout.AnchorIndex;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Kern
@@ -29,7 +27,12 @@ public class TestMain {
         //数据处理器
         DataTabulator dataTabulator = poiBox.dataTabulator();
         //写入模板
-        Writer writer = dataTabulator.writer(TestBO.class).writeTo("人员信息导入模板1");
+
+
+        Map<String, List<String>> nameNameMap = new HashMap<>();
+        String[] hobbys = {"打球","打游戏","大小朋友"};
+        nameNameMap.put("爱好", Arrays.stream(hobbys).collect(Collectors.toList()));
+        Writer writer = dataTabulator.writer(TestBO.class).addNameName(nameNameMap).writeTo("人员信息导入模板1");
 
         Sheet sheet = poiBox.getSheet("人员信息导入模板1");
         AnchorIndex anchorIndex = new AnchorIndex(4,4,4,4,1,23,8,28);
@@ -50,25 +53,26 @@ public class TestMain {
 
         System.out.println("数据总量: " + testBOS.size());
         //写入数据到新的页面（两种方式）
-        writer.writeTo("人员信息导入模板2", testBOS);
+        writer.writeTo("人员信息导入模板2", testBOS, "身份证 ","出生日期")
+        .writeTo("人员信息导入模板3", testBOS);
 
 
 
         //写入到本地文件,采取覆盖文件的形式
         poiBox.writeToLocal("C:\\Users\\kern\\Desktop\\人员信息导入模板.xls");
 
-        //读取流中的数据
-        List<TestBO> readList = dataTabulator.reader(TestBO.class).readFrom("人员信息导入模板2");
-        System.out.println("读取的数据总量： "+ readList.size());
-
-        //打开本地文件的数据读取形式
-        try {
-            POIBox newBox = POIBoxFactory.open("C:\\Users\\kern\\Desktop\\人员信息导入模板.xls");
-            List<TestBO> readList2 = newBox.dataTabulator().reader(TestBO.class).readFrom("人员信息导入模板2");
-            System.out.println("读取的数据总量： "+ readList2.size());
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        }
+//        //读取流中的数据
+//        List<TestBO> readList = dataTabulator.reader(TestBO.class).readFrom("人员信息导入模板2");
+//        System.out.println("读取的数据总量： "+ readList.size());
+//
+//        //打开本地文件的数据读取形式
+//        try {
+//            POIBox newBox = POIBoxFactory.open("C:\\Users\\kern\\Desktop\\人员信息导入模板.xls");
+//            List<TestBO> readList2 = newBox.dataTabulator().reader(TestBO.class).readFrom("人员信息导入模板2");
+//            System.out.println("读取的数据总量： "+ readList2.size());
+//        } catch (InvalidFormatException e) {
+//            e.printStackTrace();
+//        }
 
         System.out.println("succeed!");
 

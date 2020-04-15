@@ -8,6 +8,7 @@ import cn.kerninventor.tools.poibox.data.templated.element.Font;
 import cn.kerninventor.tools.poibox.data.templated.element.Style;
 import cn.kerninventor.tools.poibox.data.templated.validation.CompareType;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.ArrayDataValid;
+import cn.kerninventor.tools.poibox.data.templated.validation.array.NameNameDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.date.DateDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.decimal.DecimalDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.integer.IntDataValid;
@@ -78,11 +79,11 @@ import java.util.Date;
 public class TestBO {
 
     @TextLengthDataValid(value = 30, compareType = CompareType.LTE)
-    @ExcelColumn(value = "姓名", dataFormatEx = "@", mergeByContent = true)
+    @ExcelColumn(value = "姓名", dataFormatEx = "@", mergeByContent = true, columnWidth = 20)
     private String name;
 
     @TextLengthDataValid(compareType = CompareType.ET, value = 18)
-    @ExcelColumn(value = "身份证", dataFormatEx = "@")
+    @ExcelColumn(value = "身份证", dataFormatEx = "@", columnWidth = 26)
     private String iddentity;
 
     @ArrayDataValid(dictionary = TestGenderEnum.class)
@@ -118,6 +119,10 @@ public class TestBO {
 
     @ExcelColumn("有效性")
     private Boolean availability;
+
+    @NameNameDataValid("爱好")
+    @ExcelColumn("爱好")
+    private String hobby;
 
     public TestBO(String name, String iddentity, Integer sex, Date birthDay, LocalDateTime joinDate, Integer height, Integer weight, BigDecimal brachium, Long nationalityId, Boolean availability) {
         this.name = name;

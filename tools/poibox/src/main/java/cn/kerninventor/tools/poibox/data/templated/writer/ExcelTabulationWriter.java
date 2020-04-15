@@ -6,14 +6,19 @@ import cn.kerninventor.tools.poibox.data.templated.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelBannerInitializer;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ReInitializer;
 import cn.kerninventor.tools.poibox.data.templated.validation.DataValidationBuilderFactory;
+import cn.kerninventor.tools.poibox.data.templated.validation.array.NameNameDataValid;
 import cn.kerninventor.tools.poibox.layout.MergedRange;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
+import cn.kerninventor.tools.poibox.utils.NameManegeUtil;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -24,6 +29,9 @@ import java.util.Objects;
 public class ExcelTabulationWriter<T> implements Writer<T> {
 
     protected ExcelTabulationInitializer<T> tabulationInitializer;
+
+    protected Map<String, List<String>> nameNameMap = new HashMap<>();
+
 
     public ExcelTabulationWriter(ExcelTabulationInitializer<T> tabulationInitializer) {
         this.tabulationInitializer = Objects.requireNonNull(tabulationInitializer);
@@ -49,21 +57,21 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
     }
 
     @Override
-    public Writer<T> writeTo(String sheetName, List<T> datas) {
+    public Writer<T> writeTo(String sheetName, List<T> datas, String... ignore) {
         Sheet sheet = tabulationInitializer.getParent().getSheet(sheetName);
-        return writeTo(sheet, datas);
+        return writeTo(sheet, datas, ignore);
     }
 
     @Override
-    public Writer<T> writeTo(int sheetAt, List<T> datas) {
+    public Writer<T> writeTo(int sheetAt, List<T> datas, String... ignore) {
         Sheet sheet = tabulationInitializer.getParent().getSheet(sheetAt);
-        return writeTo(sheet, datas);
+        return writeTo(sheet, datas, ignore);
     }
 
     @Override
-    public Writer<T> writeTo(Sheet sheet, List<T> datas) {
+    public Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore) {
         if (BeanUtil.isEmpty(datas)) {
-            execute(sheet, null,
+            execute(sheet, null, ignore,
 
                 (t, c, s, d) -> {
                     if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
@@ -91,7 +99,7 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
 
             );
         } else {
-            execute(sheet, datas,
+            execute(sheet, datas, ignore,
 
                 (t, c, s, d) -> {
                     if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
@@ -130,22 +138,52 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
         return this;
     }
 
-    public void execute(Sheet sheet, List datas, final TbodyWriter tbodyWriter) {
+    @Override
+    public Writer<T> addNameName(Map<String, List<String>> nameNameMap) {
+        this.nameNameMap.putAll(nameNameMap);
+        return this;
+    }
+
+    public void execute(Sheet sheet, List datas, final String[] igonre, final TbodyWriter tbodyWriter) {
+        if (sheet.getSheetName().equals(NameManegeUtil.HIDDEN_SHEET_NAME)){
+            throw new IllegalArgumentException("Sheet name can't be application's constant:" + sheet.getSheetName());
+        }
+        if (!nameNameMap.isEmpty()){
+            nameNameMap.keySet().forEach(e -> {
+                NameManegeUtil.addNameManage(sheet, NameNameDataValid.NAME_PRIFIIX + e, nameNameMap.get(e));
+            });
+            nameNameMap.clear();
+        }
+
         ExcelTabulationInitializer tabulationInitializer = getTabulationInitializer();
+        List<ExcelColumnInitializer> columnsContainer = tabulationInitializer.getColumnsContainer();
+        if (BeanUtil.hasElement(igonre)) {
+            columnsContainer = ((ReInitializer<List<ExcelColumnInitializer>>) colums -> {
+                List<ExcelColumnInitializer> result = new ArrayList<>();
+                colums.forEach(column -> {
+                    if (Arrays.stream(igonre).noneMatch(e -> column.getTitleName().equals(e.trim()))) {
+                        result.add(column);
+                    }
+                });
+                return result;
+
+            }).reInit(columnsContainer);
+        }
+        tabulationInitializer.reIndex(columnsContainer);
         Row headRow = setRowHeight(
                 sheet.createRow(
                         tabulationInitializer.getTheadRowIndex()
                 ),
                 tabulationInitializer.getTheadRowHeight()
         );
-        Font font = BoxGadget.getFontFrom(
+        Short theadFontHeightInPoints = BoxGadget.getFontFrom(
                 tabulationInitializer.getTheadStyle(),
                 tabulationInitializer.getParent().workbook()
-        );
-        Short theadFontHeightInPoints = font.getFontHeightInPoints();
+        ).getFontHeightInPoints();
         CellStyle theadStyle = tabulationInitializer.getTheadStyle();
-        List<ExcelColumnInitializer> columnsContainer = tabulationInitializer.getColumnsContainer();
-        columnsContainer.forEach(column -> {
+
+
+        for (ExcelColumnInitializer column : columnsContainer) {
             Cell headRowCell = headRow.createCell(column.getColumnIndex());
             headRowCell.setCellValue(column.getTitleName());
             headRowCell.setCellStyle(theadStyle);
@@ -166,8 +204,8 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
                 );
             }
             tbodyWriter.templateTbody(tabulationInitializer, column, sheet, datas);
-        });
-        tempalateBanners(tabulationInitializer, sheet);
+        }
+        tempalateBanners(tabulationInitializer, columnsContainer, sheet);
     }
 
     private Row setRowHeight(Row row, float height) {
@@ -177,12 +215,12 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
         return row;
     }
 
-    private void tempalateBanners(ExcelTabulationInitializer tabulationInitializer, Sheet sheet) {
-        List<ExcelBannerInitializer> bannerContainer = tabulationInitializer.getBannerContainer();
+    private void tempalateBanners(ExcelTabulationInitializer tabulation, List<ExcelColumnInitializer> columns, Sheet sheet) {
+        List<ExcelBannerInitializer> bannerContainer = tabulation.getBannerContainer();
         bannerContainer.forEach(e -> {
-            MergedRange mergedRange = tabulationInitializer.getParent().layouter().mergedRegion(
+            MergedRange mergedRange = tabulation.getParent().layouter().mergedRegion(
                     sheet,
-                    e.adjustCellRangeAddress(tabulationInitializer)
+                    e.adjustCellRangeAddress(tabulation, columns)
             );
             //TODO 某些情况下生成多行的数据时，如何进行换行和如何调整行高。
             mergedRange.setMergeRangeContent(e.getValue()).setMergeRangeStyle(e.getCellStyle());

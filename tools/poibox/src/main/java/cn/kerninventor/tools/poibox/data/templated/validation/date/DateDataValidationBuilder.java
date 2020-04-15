@@ -37,7 +37,6 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
     }
 
     public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
-        //TODO 解析格式验证时间字段的有效性
         annotationValid(columnInit);
 
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
@@ -49,7 +48,7 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
                 tabulationInit.getTbodyFirstRowIndex(),
-                tabulationInit.getTbodyFirstRowIndex()+ tabulationInit.getEffectiveRows(),
+                tabulationInit.getTbodyFirstRowIndex()+ tabulationInit.getEffectiveRows() - 1,
                 columnInit.getColumnIndex(),
                 columnInit.getColumnIndex()
         );

@@ -1,7 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templated.validation.array;
 
 import cn.kerninventor.tools.poibox.data.templated.validation.DataValid;
-import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.Dictionary;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,19 +9,19 @@ import java.lang.annotation.Target;
 
 /**
  * @author Kern
- * @date 2019/12/13 15:28
+ * @date 2020/4/15 12:23
  */
 @DataValid
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ArrayDataValid {
+public @interface NameNameDataValid {
 
-    Class<? extends Dictionary> dictionary();
+    String NAME_PRIFIIX = "NAME_";
+
+    String value();
 
     String prompMessage() default "";
 
     String errorMessage() default "";
-
-    String[] defValuesWhenEmpty() default "NO DATA!";
 
 }

@@ -39,7 +39,7 @@ public class DecimalDataValidationBuilder implements DataValidationBuilder<Decim
         );
         CellRangeAddressList dvRange = new CellRangeAddressList(
                 tabulationInit.getTbodyFirstRowIndex() ,
-                tabulationInit.getTbodyFirstRowIndex() + tabulationInit.getEffectiveRows(),
+                tabulationInit.getTbodyFirstRowIndex() + tabulationInit.getEffectiveRows() - 1,
                 columnInit.getColumnIndex(),
                 columnInit.getColumnIndex()
         );

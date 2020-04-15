@@ -6,7 +6,7 @@
 
     <groupId>cn.kerninventor</groupId>
     <artifactId>poibox</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.1-RELEASE</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -15,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <V1.0.1-RELEASE>2020-04-15</V1.0.1-RELEASE>
     </properties>
 
     <build>

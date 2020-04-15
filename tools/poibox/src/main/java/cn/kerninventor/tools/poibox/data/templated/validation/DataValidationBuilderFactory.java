@@ -2,6 +2,8 @@ package cn.kerninventor.tools.poibox.data.templated.validation;
 
 import cn.kerninventor.tools.poibox.data.templated.validation.array.ArrayDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.ArraysDataValidationBuilder;
+import cn.kerninventor.tools.poibox.data.templated.validation.array.NameNameDataValid;
+import cn.kerninventor.tools.poibox.data.templated.validation.array.NameNameDataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.templated.validation.date.DateDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.date.DateDataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.templated.validation.decimal.DecimalDataValid;
@@ -44,6 +46,9 @@ public class DataValidationBuilderFactory {
         }
         else if (annotation instanceof ArrayDataValid){
             return new ArraysDataValidationBuilder((ArrayDataValid) annotation);
+        }
+        else if (annotation instanceof NameNameDataValid) {
+            return new NameNameDataValidationBuilder((NameNameDataValid) annotation);
         }
         else {
             throw new AnnotationFormatError("not found ExcelValidHandler by this annotation: " + annotation.getClass());

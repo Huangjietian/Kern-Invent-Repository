@@ -1,7 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templated;
 
 import cn.kerninventor.tools.poibox.data.templated.element.Style;
-import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -20,17 +19,12 @@ public @interface ExcelColumn {
 
     String value();
 
-    int columnIndex() default -1;
+    int columnSort() default -1;
 
     int columnWidth() default DEFAULT_COLUMN_WIDTH;
 
     String dataFormatEx() default "";
 
-    /**
-     * 公式
-     * @return
-     */
-    @ReadyToDevelop("已实现，未验证")
     String formula() default "";
 
     boolean mergeByContent() default false;

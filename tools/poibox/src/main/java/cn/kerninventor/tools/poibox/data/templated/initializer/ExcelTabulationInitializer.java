@@ -12,9 +12,7 @@ import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +31,7 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
     private int theadRowIndex;
     private int tbodyFirstRowIndex;
     private int effectiveRows;
+//    private boolean autoColumnIndex;
     private List<ExcelBannerInitializer> bannerContainer;
     private List<ExcelColumnInitializer> columnsContainer;
 
@@ -103,20 +102,28 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         this.startRowIndex = startRowIndexNotMinus(excelTabulation.startRowIndex());
         this.effectiveRows = effectiveRowsNotLessThan1(excelTabulation.effectiveRows());
         this.bannerContainer = initialzeBanners(excelTabulation.banners());
-        this.columnsContainer = initialzeColumns(tableClass.getDeclaredFields(), excelTabulation.autoColumnIndex(), getTbodyStyle());
-        this.theadRowIndex = getRowIndexIncrementsByBanners(this.bannerContainer) + startRowIndex;
+        this.columnsContainer = columnsTitleNameCannotRepeat(initialzeColumns(tableClass.getDeclaredFields(), getTbodyStyle()));
+        this.theadRowIndex = getRowIndexIncrementsByBanners(bannerContainer) + startRowIndex;
         this.tbodyFirstRowIndex = theadRowIndex + 1;
+    }
+
+    private List<ExcelColumnInitializer> columnsTitleNameCannotRepeat(List<ExcelColumnInitializer> columnsContainer) {
+        int size = columnsContainer.stream().map(e -> e.getTitleName().trim()).collect(Collectors.toSet()).size();
+        if (size != columnsContainer.size()) {
+            throw new IllegalTabulationConfigureException("Column title name must be unique!");
+        }
+        return columnsContainer;
     }
 
     private int startRowIndexNotMinus(int startRowIndex) {
         if (startRowIndex < 0)
-            throw new IllegalTabulationConfigureException("startRowIndex must be positive integer!");
+            throw new IllegalTabulationConfigureException("StartRowIndex must be positive integer!");
         return startRowIndex;
     }
 
     private int effectiveRowsNotLessThan1(int effectiveRows) {
         if (effectiveRows < 1)
-            throw new IllegalTabulationConfigureException("effectiveRows must be great than 1!");
+            throw new IllegalTabulationConfigureException("EffectiveRows must be great than 1!");
         return effectiveRows;
     }
 
@@ -137,39 +144,27 @@ public class ExcelTabulationInitializer<T> extends BoxBracket {
         return incremental;
     }
 
-    private List<ExcelColumnInitializer> initialzeColumns(Field[] fields, boolean autoColumnIndex, CellStyle tbodyStyle){
+    private List<ExcelColumnInitializer> initialzeColumns(Field[] fields, CellStyle tbodyStyle){
         Styler styler = getParent().styler();
         List<ExcelColumnInitializer> columnsContainer = new ArrayList(fields.length);
         ExcelColumn excelColumn;
-        if (autoColumnIndex){
-            int index = 0 ;
-            for (Field field : fields){
-                if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    CellStyle columnStyle = excelColumn.styleEffictive() ? styler.generate(excelColumn.columnStyle()) : styler.copyStyle(tbodyStyle) ;
-                    columnsContainer.add(ExcelColumnInitializer.newInstance(field, excelColumn, index++, columnStyle));
-                }
-            }
-        } else {
-            for (Field field : fields){
-                if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                    CellStyle columnStyle = excelColumn.styleEffictive() ? styler.generate(excelColumn.columnStyle()) : styler.copyStyle(tbodyStyle) ;
-                    columnsContainer.add(ExcelColumnInitializer.newInstance(field, excelColumn, excelColumn.columnIndex(), columnStyle));
-                }
+        for (Field field : fields){
+            if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
+                CellStyle columnStyle = excelColumn.styleEffictive() ? styler.generate(excelColumn.columnStyle()) : styler.copyStyle(tbodyStyle) ;
+                columnsContainer.add(ExcelColumnInitializer.newInstance(field, excelColumn, columnStyle));
             }
         }
         if (columnsContainer.size() == 0){
             throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's fields!");
         }
+        Collections.sort(columnsContainer);
+        return reIndex(columnsContainer);
+    }
 
-        columnsContainer.stream().sorted((o1, o2) -> {
-            if (o1.getColumnIndex() > o2.getColumnIndex()) {
-                return 1;
-            } else if (o1.getColumnIndex() == o2.getColumnIndex()) {
-                return 0;
-            } else {
-                return -1;
-            }
-        });
+    public List<ExcelColumnInitializer> reIndex(List<ExcelColumnInitializer> columnsContainer) {
+        for (int i = 0 ; i < columnsContainer.size() ; i ++) {
+            columnsContainer.get(i).setColumnIndex(i);
+        }
         return columnsContainer;
     }
 

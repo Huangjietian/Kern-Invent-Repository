@@ -6,16 +6,12 @@ import org.apache.poi.ss.usermodel.*;
 import java.util.List;
 
 /**
- * @Title: NameNameManegeUtil
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.nameName
- * @Author Kern
- * @Date 2019/12/13 17:08
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/13 17:08
  */
 public class NameManegeUtil {
 
-    private final static String HIDDEN_SHEET_NAME = "Pandora's box";
+    public final static String HIDDEN_SHEET_NAME = "Pandora";
 
     public static String addNameManage(Sheet sheet, String nameName, List<String> datas) {
         if (datas == null || datas.isEmpty()) {
@@ -23,6 +19,9 @@ public class NameManegeUtil {
         }
         Workbook workbook = sheet.getWorkbook();
         Sheet hiddenSheet = BoxGadget.getSheetForce(workbook, HIDDEN_SHEET_NAME);
+        if (sheet.equals(hiddenSheet)) {
+            throw new IllegalArgumentException("NameName Sheet can't to operate!");
+        }
         int dataRowIndex = hiddenSheet.getLastRowNum() + 1;
         Row dataRow = hiddenSheet.createRow(dataRowIndex);
 
@@ -50,6 +49,10 @@ public class NameManegeUtil {
                 .append("$")
                 .append(dataRowSerial);
         nameManager.setRefersToFormula(formulaExBulder.toString());
+
+        if (!workbook.isSheetHidden(workbook.getSheetIndex(hiddenSheet))) {
+            workbook.setSheetHidden(workbook.getSheetIndex(hiddenSheet), true);
+        }
         return nameName;
     }
 

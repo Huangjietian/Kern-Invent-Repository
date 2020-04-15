@@ -5,6 +5,8 @@ import cn.kerninventor.tools.poibox.data.templated.element.Range;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.util.List;
+
 /**
  * @author Kern
  * @date 2020/4/10 10:35
@@ -45,20 +47,21 @@ public class ExcelBannerInitializer {
         return value;
     }
 
-    public CellRangeAddress adjustCellRangeAddress(ExcelTabulationInitializer tabulation) {
+    public CellRangeAddress adjustCellRangeAddress(ExcelTabulationInitializer tabulation, List<ExcelColumnInitializer> columns) {
+        CellRangeAddress address = rangeAddress.copy();
         if (rangeAddress.getFirstRow() == Range.defaultVal) {
-            rangeAddress.setFirstRow(tabulation.getStartRowIndex());
+            address.setFirstRow(tabulation.getStartRowIndex());
         }
         if (rangeAddress.getLastRow() == Range.defaultVal) {
-            rangeAddress.setLastRow(tabulation.getStartRowIndex());
+            address.setLastRow(tabulation.getStartRowIndex());
         }
         if (rangeAddress.getFirstColumn() == Range.defaultVal) {
-            rangeAddress.setFirstColumn(tabulation.getFirstColumnIndex());
+            address.setFirstColumn(columns.get(0).getColumnIndex());
         }
         if (rangeAddress.getLastColumn() == Range.defaultVal) {
-            rangeAddress.setLastColumn(tabulation.getLastColumnIndex());
+            address.setLastColumn(columns.get(columns.size() - 1).getColumnIndex());
         }
-        return rangeAddress;
+        return address;
     }
 
     public static ExcelBannerInitializer newInstance(ExcelTabulationInitializer tabulation, ExcelBanner banner) {
