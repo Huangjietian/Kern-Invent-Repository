@@ -27,6 +27,7 @@
 <!--        <module>spring-async-transaction-manager</module>-->
         <module>spring-beanvalidation-catcher</module>
         <module>kern-romance</module>
+        <module>beanConvertEngine</module>
     </modules>
 
     <build>

@@ -70,11 +70,24 @@ public final class POIBoxOpened implements POIBox {
     @Override
     public void writeToHttp(HttpServletResponse response, String fileName) throws IOException {
         ExcelDownloader.writeToHttp(workbook, response, fileName);
+        flush();
     }
 
     @Override
     public void writeToLocal(String fileFullName) throws IOException {
         ExcelDownloader.wirteToLocal(workbook, fileFullName);
+        flush();
+    }
+
+    @Override
+    public void flush(){
+        if (workbook != null) {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

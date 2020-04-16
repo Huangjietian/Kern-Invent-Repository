@@ -90,5 +90,11 @@ public interface POIBox {
     */
     void writeToLocal(String fileFullName) throws IOException;
 
-
+    /**
+    * @author Kern
+    * @date 2020/4/16
+    * @description
+    * @中文描述 关闭流
+    */
+    void flush();
 }

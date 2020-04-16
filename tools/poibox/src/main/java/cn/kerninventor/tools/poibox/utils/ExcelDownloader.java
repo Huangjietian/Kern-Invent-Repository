@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.poibox.utils;
 
-import cn.kerninventor.tools.fileformat.enums.FileFormatEnum;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 

@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
  */
 public class MainTest {
 
-    private static final String filePath = "C:\\Users\\kern\\Desktop\\BeanFactory  接口 Bean工厂.png";
+    private static final String filePath = "C:\\Users\\kern\\Desktop\\中央成绩任务跟踪20200213.xlsx";
 
     public static void main(String[] args) throws FileNotFoundException {
 
