@@ -1,17 +1,18 @@
 package cn.kerninventor.tools.poibox.data.templated.reader;
 
-import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
 import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
+import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import java.util.*;
 
 /**
  * @Author Kern
@@ -20,6 +21,7 @@ import java.util.Objects;
 public class ExcelTabulationReader<T> implements Reader<T> {
 
     private ExcelTabulationInitializer tabulationInitializer;
+    private Validator beanValidator;
 
     public ExcelTabulationReader(ExcelTabulationInitializer tabulationInitializer) {
         this.tabulationInitializer = Objects.requireNonNull(tabulationInitializer);
@@ -40,11 +42,13 @@ public class ExcelTabulationReader<T> implements Reader<T> {
     @Override
     public List<T> readFrom(Sheet sheet) {
         List<T> list = new ArrayList();
+        Map<Integer, Set<ConstraintViolation<T>>> constraintMap = new HashMap<>();
         List<ExcelColumnInitializer> columnInitializers = tabulationInitializer.getColumnsContainer();
         for (int i = tabulationInitializer.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
+            Class<T> tClass;
             try {
-                Class<T> tClass = tabulationInitializer.getTabulationClass();
+                 tClass = tabulationInitializer.getTabulationClass();
                 t = ReflectUtil.newInstance(tClass);
             } catch (Exception e) {
                 throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + tabulationInitializer.getTabulationClass());
@@ -77,9 +81,23 @@ public class ExcelTabulationReader<T> implements Reader<T> {
                 }
             }
             if (nullCount < tabulationInitializer.getColumnsContainer().size()){
+                if (beanValidator != null) {
+                    Set<ConstraintViolation<T>> constraintViolations = beanValidator.validate(t, tClass);
+                    if (BeanUtil.isNotEmpty(columnInitializers)) {
+                        constraintMap.put(i + 1, constraintViolations);
+                    }
+                }
                 list.add(t);
             }
         }
+        if (!constraintMap.isEmpty()){
+//            throw new BeanValidationException("Bean validate un pass!" , constraintMap);
+        }
         return list;
+    }
+
+    @Override
+    public void addBeanValidator(Validator validator) {
+        this.beanValidator = validator;
     }
 }

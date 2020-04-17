@@ -1,6 +1,6 @@
-package cn.kerninventor.tools.fileformat;
+package cn.kerninventor.tools.file.fileformat;
 
-import cn.kerninventor.tools.fileformat.enums.FileFormatEnum;
+import cn.kerninventor.tools.file.fileformat.enums.FileFormatEnum;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

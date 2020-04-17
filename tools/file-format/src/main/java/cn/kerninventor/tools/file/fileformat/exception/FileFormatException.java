@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.fileformat.exception;
+package cn.kerninventor.tools.file.fileformat.exception;
 
 import java.util.IllegalFormatException;
 

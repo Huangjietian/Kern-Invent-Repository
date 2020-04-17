@@ -2,6 +2,7 @@ package cn.kerninventor.tools.poibox.data.templated.reader;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
+import javax.validation.Validator;
 import java.util.List;
 
 /**
@@ -19,5 +20,7 @@ public interface Reader<T> {
     List<T> readFrom(int sheetAt);
 
     List<T> readFrom(Sheet sheet);
+
+    void addBeanValidator(Validator validator);
 
 }

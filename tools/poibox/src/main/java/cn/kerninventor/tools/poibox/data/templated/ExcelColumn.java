@@ -15,13 +15,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelColumn {
 
-    int DEFAULT_COLUMN_WIDTH = -1;
+    int DefaultColumnWidth = -1;
 
     String value();
 
     int columnSort() default -1;
 
-    int columnWidth() default DEFAULT_COLUMN_WIDTH;
+    int columnWidth() default DefaultColumnWidth;
 
     String dataFormatEx() default "";
 

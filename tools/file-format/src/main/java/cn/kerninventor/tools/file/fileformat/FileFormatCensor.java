@@ -1,8 +1,8 @@
-package cn.kerninventor.tools.fileformat;
+package cn.kerninventor.tools.file.fileformat;
 
-import cn.kerninventor.tools.fileformat.enums.FileFormatEnum;
-import cn.kerninventor.tools.fileformat.enums.FileFormatErrorEnum;
-import cn.kerninventor.tools.fileformat.exception.FileFormatException;
+import cn.kerninventor.tools.file.fileformat.enums.FileFormatEnum;
+import cn.kerninventor.tools.file.fileformat.enums.FileFormatErrorEnum;
+import cn.kerninventor.tools.file.fileformat.exception.FileFormatException;
 
 import java.io.IOException;
 import java.io.InputStream;

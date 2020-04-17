@@ -26,7 +26,7 @@ public @interface ExcelBanner {
     );
 
     @ReadyToDevelop("banner 设置行高")
-    float height() default ExcelTabulation.DEF_ROW_HEIGHT;
+    float height() default ExcelTabulation.DefaultRowHeight;
 
     Range range() default @Range;
 

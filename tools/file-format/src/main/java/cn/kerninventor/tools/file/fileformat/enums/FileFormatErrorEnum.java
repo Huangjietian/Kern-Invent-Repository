@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.fileformat.enums;
+package cn.kerninventor.tools.file.fileformat.enums;
 
 /**
  * @Title: FileFormatErrorEnum
