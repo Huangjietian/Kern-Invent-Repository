@@ -43,102 +43,108 @@ public class ExcelTabulationWriter<T> implements Writer<T> {
 
     @Override
     public Writer<T> writeTo(String sheetName) {
-        return writeTo(sheetName, null);
+        Sheet sheet = tabulationInitializer.getParent().getSheet(sheetName);
+        return writeTo(sheet, null, true);
     }
 
     @Override
     public Writer<T> writeTo(int sheetAt) {
-        return writeTo(sheetAt, null);
+        Sheet sheet = tabulationInitializer.getParent().getSheet(sheetAt);
+        return writeTo(sheet, null, true);
     }
 
     @Override
     public Writer<T> writeTo(Sheet sheet) {
-        return writeTo(sheet, null);
+        return writeTo(sheet, null, true);
     }
 
     @Override
     public Writer<T> writeTo(String sheetName, List<T> datas, String... ignore) {
         Sheet sheet = tabulationInitializer.getParent().getSheet(sheetName);
-        return writeTo(sheet, datas, ignore);
+        return writeTo(sheet, datas, false, ignore);
     }
 
     @Override
     public Writer<T> writeTo(int sheetAt, List<T> datas, String... ignore) {
         Sheet sheet = tabulationInitializer.getParent().getSheet(sheetAt);
-        return writeTo(sheet, datas, ignore);
+        return writeTo(sheet, datas, false, ignore);
     }
 
     @Override
     public Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore) {
-        if (BeanUtil.isEmpty(datas)) {
+        return writeTo(sheet, datas, false, ignore);
+    }
+
+    private Writer<T> writeTo(Sheet sheet, List<T> datas, boolean isTemplateOney, String... ignore) {
+        if (BeanUtil.isEmpty(datas) && isTemplateOney) {
             execute(sheet, null, ignore,
 
-                (t, c, s, d) -> {
-                    CellStyle cellStyle = c.getColumnStyle();
-                    if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
-                        if (cellStyle.equals(t.getTbodyStyle())) {
-                            cellStyle = t.getParent().styler().copyStyle(cellStyle);
+                    (t, c, s, d) -> {
+                        CellStyle cellStyle = c.getColumnStyle();
+                        if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
+                            if (cellStyle.equals(t.getTbodyStyle())) {
+                                cellStyle = t.getParent().styler().copyStyle(cellStyle);
+                            }
+                            cellStyle.setDataFormat(
+                                    t.getParent().workbook().createDataFormat().getFormat(
+                                            c.getDataFormatEx()
+                                    )
+                            );
                         }
-                        cellStyle.setDataFormat(
-                                t.getParent().workbook().createDataFormat().getFormat(
-                                        c.getDataFormatEx()
-                                )
-                        );
-                    }
-                    for (int i = 0 ; i < t.getEffectiveRows(); i ++){
-                        Row textRow = setRowHeight(
-                                BoxGadget.getRowForce(s, i + t.getTbodyFirstRowIndex()),
-                                t.getTbodyRowHeight()
-                        );
-                        Cell textCell = textRow.createCell(c.getColumnIndex());
-                        textCell.setCellStyle(cellStyle);
-                        if (BeanUtil.isNotEmpty(c.getFormula())) {
-                            textCell.setCellFormula(c.getFormula());
+                        for (int i = 0 ; i < t.getEffectiveRows(); i ++){
+                            Row textRow = setRowHeight(
+                                    BoxGadget.getRowForce(s, i + t.getTbodyFirstRowIndex()),
+                                    t.getTbodyRowHeight()
+                            );
+                            Cell textCell = textRow.createCell(c.getColumnIndex());
+                            textCell.setCellStyle(cellStyle);
+                            if (BeanUtil.isNotEmpty(c.getFormula())) {
+                                textCell.setCellFormula(c.getFormula());
+                            }
+                        }
+                        if (c.getValidAnnotation() != null) {
+                            DataValidationBuilderFactory.getInstance(c.getValidAnnotation()).addValidation(t, c, s);
                         }
                     }
-                    if (c.getValidAnnotation() != null) {
-                        DataValidationBuilderFactory.getInstance(c.getValidAnnotation()).addValidation(t, c, s);
-                    }
-                }
 
             );
         } else {
             execute(sheet, datas, ignore,
 
-                (t, c, s, d) -> {
-                    CellStyle cellStyle = c.getColumnStyle();
-                    if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
-                        if (cellStyle.equals(t.getTbodyStyle())) {
-                            cellStyle = t.getParent().styler().copyStyle(cellStyle);
+                    (t, c, s, d) -> {
+                        CellStyle cellStyle = c.getColumnStyle();
+                        if (BeanUtil.isNotEmpty(c.getDataFormatEx())){
+                            if (cellStyle.equals(t.getTbodyStyle())) {
+                                cellStyle = t.getParent().styler().copyStyle(cellStyle);
+                            }
+                            cellStyle.setDataFormat(
+                                    t.getParent().workbook().createDataFormat().getFormat(
+                                            c.getDataFormatEx()
+                                    )
+                            );
                         }
-                        cellStyle.setDataFormat(
-                                t.getParent().workbook().createDataFormat().getFormat(
-                                        c.getDataFormatEx()
-                                )
-                        );
+                        ColWriter colWriter = ColWriter.newInstance(c.isMergeByContent(), s);
+                        for (int datasIndex = 0, rowIndex = t.getTbodyFirstRowIndex(); datasIndex < d.size() ; datasIndex ++ , rowIndex++){
+                            Row row = setRowHeight(
+                                    BoxGadget.getRowForce(s , rowIndex),
+                                    t.getTbodyRowHeight()
+                            );
+                            Cell cell = BoxGadget.getCellForce(row, c.getColumnIndex()
+                            );
+                            cell.setCellStyle(cellStyle);
+                            Object value = null;
+                            try {
+                                value = ReflectUtil.getFieldValue(c.getField(), d.get(datasIndex));
+                            } catch (IllegalAccessException e) {
+                                throw new IllegalArgumentException("Field value get error., field name: " + c.getFieldName());
+                            }
+                            if (c.getInterpretor().isInterpretable()) {
+                                value = c.getInterpretor().interpreteOf(value);
+                            }
+                            colWriter.setCellValue(cell, value, rowIndex);
+                        }
+                        colWriter.flush();
                     }
-                    ColWriter colWriter = ColWriter.newInstance(c.isMergeByContent(), s);
-                    for (int datasIndex = 0, rowIndex = t.getTbodyFirstRowIndex(); datasIndex < d.size() ; datasIndex ++ , rowIndex++){
-                        Row row = setRowHeight(
-                                BoxGadget.getRowForce(s , rowIndex),
-                                t.getTbodyRowHeight()
-                        );
-                        Cell cell = BoxGadget.getCellForce(row, c.getColumnIndex()
-                        );
-                        cell.setCellStyle(cellStyle);
-                        Object value = null;
-                        try {
-                            value = ReflectUtil.getFieldValue(c.getField(), d.get(datasIndex));
-                        } catch (IllegalAccessException e) {
-                            throw new IllegalArgumentException("Field value get error., field name: " + c.getFieldName());
-                        }
-                        if (c.getInterpretor().isInterpretable()) {
-                            value = c.getInterpretor().interpreteOf(value);
-                        }
-                        colWriter.setCellValue(cell, value, rowIndex);
-                    }
-                    colWriter.flush();
-                }
 
             );
         }
