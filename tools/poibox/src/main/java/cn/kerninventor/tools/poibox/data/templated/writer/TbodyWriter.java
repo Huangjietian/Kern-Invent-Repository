@@ -1,7 +1,8 @@
 package cn.kerninventor.tools.poibox.data.templated.writer;
 
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.templated.initializer.EColumnInitiator;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ETabulationInitiator;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
@@ -14,6 +15,6 @@ import java.util.List;
 @FunctionalInterface
 public interface TbodyWriter {
 
-    void templateTbody(ExcelTabulationInitializer tabulation, ExcelColumnInitializer column, Sheet sheet, List data);
+    void templateTbody(ETabulationInitiator tabulation, EColumnInitiator column, CellStyle style, Sheet sheet, List data);
 
 }

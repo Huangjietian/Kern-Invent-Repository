@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
  * @author Kern
  * @date 2019/12/13 15:28
  */
+@Deprecated
 @DataValid
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

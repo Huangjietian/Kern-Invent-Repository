@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.data.templated.writer;
 
+import cn.kerninventor.tools.poibox.data.templated.initializer.configuration.TabConfiguration;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
@@ -28,5 +29,8 @@ public interface Writer<T> {
     Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore);
 
     Writer<T> addNameName(Map<String, List<String>> nameNameMap);
+
+    TabConfiguration getConfiguration();
+
 
 }

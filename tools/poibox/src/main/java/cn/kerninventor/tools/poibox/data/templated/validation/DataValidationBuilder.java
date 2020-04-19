@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.templated.validation;
 
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.templated.initializer.EColumnInitiator;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ETabulationInitiator;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.lang.annotation.Annotation;
@@ -20,6 +20,6 @@ public interface DataValidationBuilder<T extends Annotation> {
     /**
      * handler main method.
      */
-    void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet);
+    void addValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet);
 
 }

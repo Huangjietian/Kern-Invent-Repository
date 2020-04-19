@@ -1,7 +1,5 @@
 package cn.kerninventor.tools.poibox.data.templated;
 
-import cn.kerninventor.tools.poibox.data.templated.element.Style;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -29,8 +27,8 @@ public @interface ExcelColumn {
 
     boolean mergeByContent() default false;
 
-    Style columnStyle() default @Style;
+    int theadStyleIndex() default 0;
 
-    boolean styleEffictive() default false;
+    int tbodyStyleIndex() default 0;
 
 }

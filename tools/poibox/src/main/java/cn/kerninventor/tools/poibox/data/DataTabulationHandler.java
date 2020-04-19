@@ -2,10 +2,10 @@ package cn.kerninventor.tools.poibox.data;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.POIBox;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
-import cn.kerninventor.tools.poibox.data.templated.reader.ExcelTabulationReader;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ETabulationInitiator;
+import cn.kerninventor.tools.poibox.data.templated.reader.ETabulationReader;
 import cn.kerninventor.tools.poibox.data.templated.reader.Reader;
-import cn.kerninventor.tools.poibox.data.templated.writer.ExcelTabulationWriter;
+import cn.kerninventor.tools.poibox.data.templated.writer.ETabulationWriter;
 import cn.kerninventor.tools.poibox.data.templated.writer.Writer;
 
 /**
@@ -24,14 +24,14 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
 
     @Override
     public <T> Writer<T> writer(Class<T> sourceClass) {
-        ExcelTabulationInitializer tabulationInitializer = new ExcelTabulationInitializer(sourceClass, getParent());
-        return new ExcelTabulationWriter(tabulationInitializer);
+        ETabulationInitiator tabulationInitializer = new ETabulationInitiator(sourceClass, getParent());
+        return new ETabulationWriter(tabulationInitializer);
     }
 
     @Override
     public <T> Reader<T> reader(Class<T> sourceClass) {
-        ExcelTabulationInitializer tabulationInitializer = new ExcelTabulationInitializer(sourceClass, getParent());
-        return new ExcelTabulationReader(tabulationInitializer);
+        ETabulationInitiator tabulationInitializer = new ETabulationInitiator(sourceClass, getParent());
+        return new ETabulationReader(tabulationInitializer);
     }
 
 }

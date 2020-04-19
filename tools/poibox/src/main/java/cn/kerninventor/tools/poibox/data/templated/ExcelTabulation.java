@@ -1,8 +1,5 @@
 package cn.kerninventor.tools.poibox.data.templated;
-import cn.kerninventor.tools.poibox.data.templated.element.Font;
 import cn.kerninventor.tools.poibox.data.templated.element.Style;
-import cn.kerninventor.tools.poibox.developer.ReadyToDevelop;
-import cn.kerninventor.tools.poibox.style.Fonter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -23,22 +20,9 @@ public @interface ExcelTabulation {
 
     ExcelBanner[] banners() default {};
 
-    @Deprecated
-    Style theadStyle() default @Style(
-            font = @Font(
-                    fontName = Fonter.DEF_NAME_HEADER,
-                    fontSize = Fonter.DEF_SIZE_TABLEHEADER
-            )
-    );
+    Style[] theadStyles() default {@Style(index = 0)};
 
-    @Deprecated
-    Style tbodyStyle() default @Style;
-
-    @ReadyToDevelop
-    Style[] theadStyles() default {};
-
-    @ReadyToDevelop
-    Style[] tbodyStyles() default {};
+    Style[] tbodyStyles() default {@Style(index = 0)};
 
     float theadRowHeight() default DefaultRowHeight;
 
@@ -50,16 +34,7 @@ public @interface ExcelTabulation {
 
     int minimumColumnsWidth() default 0;
 
-    /**
-    * @author Kern
-    * @date 2020/4/17
-    * @description 
-    * @中文描述 
-    */
-    @ReadyToDevelop
     int maximumColumnsWidth() default MaximumColumnWidthAllowed;
 
-    @Deprecated
-    boolean autoColumnIndex() default true;
 
 }

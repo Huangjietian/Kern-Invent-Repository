@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.templated.validation.integer;
 
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.templated.initializer.EColumnInitiator;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ETabulationInitiator;
 import cn.kerninventor.tools.poibox.data.templated.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.templated.validation.MessageBoxSetter;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -27,7 +27,7 @@ public class IntDataValidationBuilder implements DataValidationBuilder<IntDataVa
     }
 
     @Override
-    public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
+    public void addValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet) {
         annotationValid(columnInit);
         String var1 = dataValid.value() + "";
         String var2 = dataValid.optionalVal() == -1 ? null : dataValid.optionalVal() + "";
@@ -49,7 +49,7 @@ public class IntDataValidationBuilder implements DataValidationBuilder<IntDataVa
         sheet.addValidationData(dataValidation);
     }
 
-    private void annotationValid(ExcelColumnInitializer columnInit) {
+    private void annotationValid(EColumnInitiator columnInit) {
         if (dataValid.compareType().isOptionalValueValidity()){
             if (dataValid.value() > dataValid.optionalVal()){
                 throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + columnInit.getFieldName());

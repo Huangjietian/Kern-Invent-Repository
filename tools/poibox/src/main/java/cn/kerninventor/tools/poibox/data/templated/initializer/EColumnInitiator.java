@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * @author Kern
  * @date 2019/12/9 15:52
  */
-public class ExcelColumnInitializer<T extends Object> implements Comparable<ExcelColumnInitializer>{
+public class EColumnInitiator<T extends Object> implements Comparable<EColumnInitiator>{
 
     private Field field;
     private String fieldName;
@@ -26,11 +26,12 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
     private String dataFormatEx;
     private String formula;
     private boolean mergeByContent;
-    private CellStyle columnStyle;
+    private CellStyle theadStyle;
+    private CellStyle tbodyStyle;
     private Annotation validAnnotation;
     private DictionaryInterpretor interpretor;
 
-    private ExcelColumnInitializer(Field field, ExcelColumn excelColumn, CellStyle columnStyle) {
+    public EColumnInitiator(Field field, ExcelColumn excelColumn, CellStyle theadStyle, CellStyle tbodyStyle) {
         this.field = SupportedDataType.checkSupportability(field);
         this.fieldName = field.getName();
         this.titleName = excelColumn.value();
@@ -39,14 +40,12 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
         this.formula = excelColumn.formula();
         this.mergeByContent = excelColumn.mergeByContent();
         this.columnSort = excelColumn.columnSort();
-        this.columnStyle = columnStyle;
+        this.theadStyle = theadStyle;
+        this.tbodyStyle = tbodyStyle;
         this.validAnnotation = ReflectUtil.getFirstAnnotated(field, DataValid.class);
         this.interpretor = DictionaryLibrary.getInterpretor(this.validAnnotation);
     }
 
-    static ExcelColumnInitializer newInstance(Field field, ExcelColumn excelColumn, CellStyle columnStyle){
-        return new ExcelColumnInitializer(field, excelColumn, columnStyle);
-    }
 
     public void setColumnIndex(int columnIndex) {
         this.columnIndex = columnIndex;
@@ -96,8 +95,12 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
         return interpretor;
     }
 
-    public CellStyle getColumnStyle() {
-        return columnStyle;
+    public CellStyle getTheadStyle() {
+        return theadStyle;
+    }
+
+    public CellStyle getTbodyStyle() {
+        return tbodyStyle;
     }
 
     @Override
@@ -106,7 +109,7 @@ public class ExcelColumnInitializer<T extends Object> implements Comparable<Exce
     }
 
     @Override
-    public int compareTo(ExcelColumnInitializer o) {
+    public int compareTo(EColumnInitiator o) {
         if (this.columnSort > o.columnSort) {
             return 1;
         } else if (this.columnSort == o.columnSort) {

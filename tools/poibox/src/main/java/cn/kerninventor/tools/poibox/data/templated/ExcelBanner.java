@@ -18,6 +18,7 @@ public @interface ExcelBanner {
     String value();
 
     Style style() default @Style(
+            index = -1,
             border = @Border(borderStyle = BorderStyle.THIN),
             font = @Font(fontName = Fonter.DEF_NAME_HEADER,
                     fontSize = Fonter.DEF_SIZE_HEADLINE
@@ -25,6 +26,7 @@ public @interface ExcelBanner {
             wrapText = true
     );
 
+    @Deprecated
     @ReadyToDevelop("banner 设置行高")
     float height() default ExcelTabulation.DefaultRowHeight;
 

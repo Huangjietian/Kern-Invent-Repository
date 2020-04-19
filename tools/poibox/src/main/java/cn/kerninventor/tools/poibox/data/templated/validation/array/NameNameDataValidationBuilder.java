@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.templated.validation.array;
 
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.templated.initializer.EColumnInitiator;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ETabulationInitiator;
 import cn.kerninventor.tools.poibox.data.templated.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.templated.validation.MessageBoxSetter;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
@@ -24,7 +24,7 @@ public class NameNameDataValidationBuilder implements DataValidationBuilder<Name
     }
 
     @Override
-    public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
+    public void addValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet) {
         if (BeanUtil.isEmpty(excelValid.value())) {
             //TODO 此处应打印日志 warn
             return;

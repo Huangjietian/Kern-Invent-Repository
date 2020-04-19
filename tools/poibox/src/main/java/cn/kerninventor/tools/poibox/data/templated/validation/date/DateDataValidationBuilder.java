@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.templated.validation.date;
 
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.templated.initializer.EColumnInitiator;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ETabulationInitiator;
 import cn.kerninventor.tools.poibox.data.templated.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.templated.validation.MessageBoxSetter;
 import org.apache.poi.hssf.usermodel.DVConstraint;
@@ -36,7 +36,7 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
         this.dataValid = dataValid;
     }
 
-    public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
+    public void addValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet) {
         annotationValid(columnInit);
 
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
@@ -59,7 +59,7 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
     }
 
 
-    private void annotationValid(ExcelColumnInitializer columnInit) {
+    private void annotationValid(EColumnInitiator columnInit) {
         try {
             sdf = new SimpleDateFormat(dataValid.parseFormat());
             Date current = new Date();

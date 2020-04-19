@@ -5,14 +5,17 @@ import cn.kerninventor.tools.poibox.data.templated.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.templated.element.Font;
 import cn.kerninventor.tools.poibox.data.templated.element.Style;
 import cn.kerninventor.tools.poibox.data.templated.validation.CompareType;
-//import cn.kerninventor.tools.poibox.data.templated.validation.array.NameNameDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.date.DateDataValid;
+import cn.kerninventor.tools.poibox.data.templated.validation.decimal.DecimalDataValid;
 import cn.kerninventor.tools.poibox.data.templated.validation.integer.IntDataValid;
+import cn.kerninventor.tools.poibox.data.templated.validation.textLength.TextLengthDataValid;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.FillPatternType;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
+//import cn.kerninventor.tools.poibox.data.templated.validation.array.NameNameDataValid;
 
 /**
  * @author Kern
@@ -20,142 +23,166 @@ import java.util.Date;
  * @description
  */
 @ExcelTabulation(
-        theadStyle = @Style(
-                font = @Font(
-                        fontSize = 12,
-                        color = HSSFColor.HSSFColorPredefined.WHITE,
-                        bold = true
+        theadStyles = {
+                @Style(
+                        index = 0,
+                        font = @Font(color = HSSFColor.HSSFColorPredefined.WHITE),
+                        fillPatternType = FillPatternType.SOLID_FOREGROUND,
+                        foregroudColor = HSSFColor.HSSFColorPredefined.ROYAL_BLUE,
+                        wrapText = true
                 ),
-                fillPatternType = FillPatternType.SOLID_FOREGROUND,
-                foregroudColor = HSSFColor.HSSFColorPredefined.ROYAL_BLUE
-        ),
-        tbodyStyle = @Style(
-                font = @Font(
-                        fontSize = 10,
-                        fontName = "仿宋"
-                ),
-                fillPatternType = FillPatternType.SOLID_FOREGROUND,
-                foregroudColor = HSSFColor.HSSFColorPredefined.LIGHT_YELLOW
-        ),
-        theadRowHeight = 25.0f,
+                @Style(
+                        index = 1,
+                        font = @Font(color = HSSFColor.HSSFColorPredefined.WHITE),
+                        fillPatternType = FillPatternType.SOLID_FOREGROUND,
+                        foregroudColor = HSSFColor.HSSFColorPredefined.RED,
+                        wrapText = true
+                )
+        },
+        tbodyStyles =
+                @Style(
+                        index = 0,
+                        font = @Font(fontName = "仿宋"),
+                        fillPatternType = FillPatternType.SOLID_FOREGROUND,
+                        foregroudColor = HSSFColor.HSSFColorPredefined.LIGHT_YELLOW
+                        ),
+        theadRowHeight = 30.0f,
         tbodyRowHeight = 18.0f,
-        minimumColumnsWidth = 15
+        minimumColumnsWidth = 10
 )
 public class AthleteRosterEO {
 
-    @ExcelColumn("再加一个")
-    private Integer sss;
-
-    @ExcelColumn(value = "序号", columnWidth = 10)
+    @IntDataValid
+    @ExcelColumn(value = "序号", columnWidth = 5)
     private Integer serial;
 
-    @ExcelColumn(value = "共建单位")
+    @ExcelColumn("共建单位")
+    @TextLengthDataValid(value = 50)
     private String cooperativeUnit;
-
+//
 //    @NameNameDataValid("MANAGEMENT_MODE")
-    @ExcelColumn("1管理模式")
-    private String managementMode;
+    @ExcelColumn(value = "1管理模式", columnWidth = 16, theadStyleIndex = 1)
+    private String managementModeName;
 
-    @ExcelColumn(value = "身份证号", dataFormatEx = "@", columnWidth = 20)
-    private String idCard;
+    @TextLengthDataValid(value = 18, compareType = CompareType.ET)
+    @ExcelColumn(value = "身份证号", dataFormatEx = "@", columnWidth = 20, theadStyleIndex = 1)
+    private String identityCard;
 
-    @ExcelColumn("姓名")
+    @TextLengthDataValid(value = 50)
+    @ExcelColumn(value = "姓名", theadStyleIndex = 1)
     private String name;
 
 //    @NameNameDataValid("SEX")
-    @ExcelColumn("性别")
-    private String gender;
+    @ExcelColumn(value = "性别", theadStyleIndex = 1)
+    private String genderName;
 
     @DateDataValid(date = DateDataValid.NOW, compareType = CompareType.LT)
-    @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-MM-dd")
+    @ExcelColumn(value = "出生日期", dataFormatEx = "yyyy-MM-dd", theadStyleIndex = 1)
     private Date birthDate;
 
     @IntDataValid
-    @ExcelColumn(value = "身高（CM）", dataFormatEx = "0")
+    @ExcelColumn(value = "身高（CM）", dataFormatEx = "0", theadStyleIndex = 1)
     private Integer height;
-
+//
     @IntDataValid
-    @ExcelColumn(value = "体重（KG）", dataFormatEx = "0")
+    @ExcelColumn(value = "体重（KG）", dataFormatEx = "0", theadStyleIndex = 1)
     private Integer weight;
-
-    @ExcelColumn("籍贯")
+//
+    @TextLengthDataValid(value = 100)
+    @ExcelColumn(value = "籍贯", theadStyleIndex = 1)
     private String nativePlace;
 
 //    @NameNameDataValid("EDUCATIONAL_LEVEL")
-    @ExcelColumn("学历")
+    @ExcelColumn(value = "学历", theadStyleIndex = 1)
     private String educationalLevelName;
 
 //    @NameNameDataValid("DEGREE")
-    @ExcelColumn("2学位")
+    @ExcelColumn(value = "2学位", theadStyleIndex = 1)
     private String degreeName;
 
 //    @NameNameDataValid("POLITICS_STATUS")
-    @ExcelColumn("政治面貌")
+    @ExcelColumn(value = "政治面貌", theadStyleIndex = 1)
     private String politicsStatusName;
 
 //    @NameNameDataValid("SPORT_LEVEL")
-    @ExcelColumn("运动员技术等级")
+    @ExcelColumn(value = "运动员技术等级", theadStyleIndex = 1)
     private String sportLevelName;
 
     @DateDataValid(compareType = CompareType.LTE, date = DateDataValid.NOW)
-    @ExcelColumn(value = "入队时间", dataFormatEx = "yyyy-MM-dd")
+    @ExcelColumn(value = "入队时间", dataFormatEx = "yyyy-MM-dd", theadStyleIndex = 1)
     private Date selectedDate;
 
-    @ExcelColumn("队伍（组）")
+    @TextLengthDataValid(value = 20)
+    @ExcelColumn(value = "队伍（组）", theadStyleIndex = 1)
     private String teamName;
 
 //    @NameNameDataValid("DISCIPLINE_TYPE")
-    @ExcelColumn("大项")
-    private String discipline;
+    @ExcelColumn(value = "大项", theadStyleIndex = 1)
+    private String sportName;
 
 //    @NameNameDataValid("PROJECT")
-    @ExcelColumn("分项")
-    private String sport;
+    @ExcelColumn(value = "分项", columnWidth = 25, theadStyleIndex = 1)
+    private String subentryName;
 
-    @ExcelColumn("主项")
+    @TextLengthDataValid(value = 20)
+    @ExcelColumn(value = "主项", theadStyleIndex = 1)
     private String majorSport;
 
 //    @NameNameDataValid("TRAINING_LEVEL")
-    @ExcelColumn("3训练层次")
+    @ExcelColumn(value = "3训练层次", theadStyleIndex = 1)
     private String trainingLevelName;
 
 //    @NameNameDataValid("REGISTERED_UNIT_AREA")
-    @ExcelColumn("注册单位所在省市区(含解放军)")
+    @ExcelColumn(value = "注册单位所在省市区(含解放军)", theadStyleIndex = 1)
     private String registeredUnitAreaName;
 
-    @ExcelColumn("注册单位")
+    @TextLengthDataValid(value = 50)
+    @ExcelColumn(value = "注册单位", theadStyleIndex = 1)
     private String registeredUnit;
 
+    @TextLengthDataValid(value = 50)
     @ExcelColumn("解放军运动员输送单位")
     private String plaAthleteSourceUnit;
 
+    @TextLengthDataValid(value = 50)
     @ExcelColumn("双重注册单位")
     private String doalSourceUnit;
 
-    @ExcelColumn("是否属冬季项目跨界跨项跨季运动员")
-    private Boolean cbsAthleteTag;
+//    @NameNameDataValid("BOOLEAN")
+    @ExcelColumn(value = "是否属冬季项目跨界跨项跨季运动员",columnWidth = 17, theadStyleIndex = 1)
+    private String isCbsAthlete;
 
+    @TextLengthDataValid(value = 50)
     @ExcelColumn("国家队津贴标准")
     private String subsidyStandard;
 
-    @ExcelColumn("上月训练天数")
+    @DecimalDataValid(value = 0, optionalVal = 31, compareType = CompareType.BET)
+    @ExcelColumn(value = "上月训练天数", dataFormatEx = "0.0")
     private BigDecimal lastMonthTraniningDays;
 
-    @ExcelColumn("上月实发国家队津贴")
+    @DecimalDataValid(value = -10000.0D, compareType = CompareType.GTE)
+    @ExcelColumn(value = "上月实发国家队津贴", dataFormatEx = "0.00")
     private BigDecimal lastMonthSubsidy;
 
+    @TextLengthDataValid(value = 500)
     @ExcelColumn(value = "本年度入选时间", dataFormatEx = "@")
     private String selectedDateInterval;
 
-    @ExcelColumn("主管教练员")
+    @TextLengthDataValid(value = 20)
+    @ExcelColumn(value = "主管教练员", theadStyleIndex = 1)
     private String chiefCoach;
 
 //    @NameNameDataValid("CURRENT_SITUATION")
-    @ExcelColumn("4现状")
+    @ExcelColumn(value = "4现状", theadStyleIndex = 1)
     private String currentSituationName;
 
+    @TextLengthDataValid(value = 50)
     @ExcelColumn("在训队员训练地")
     private String trainingPlace;
+
+    @TextLengthDataValid(value = 20)
+    @ExcelColumn("运动年限")
+    private String trainingPeriod;
 
     @ExcelColumn("其他1")
     private String other1;
@@ -172,20 +199,27 @@ public class AthleteRosterEO {
     @ExcelColumn("突出经历或成绩")
     private String experience;
 
-    @ExcelColumn("填报人")
+    @TextLengthDataValid(value = 20)
+    @ExcelColumn(value = "填报人", theadStyleIndex = 1)
     private String informant;
 
-    @ExcelColumn(value = "填报人手机号", dataFormatEx = "@")
+    @TextLengthDataValid(value = 11, compareType = CompareType.ET)
+    @ExcelColumn(value = "填报人手机号", dataFormatEx = "@", theadStyleIndex = 1)
     private String informantPhone;
 
-    @ExcelColumn("备注")
+    @ExcelColumn(value = "备注", columnWidth = 40)
     private String remark;
 
+    @TextLengthDataValid(value = 50)
     @ExcelColumn("最新驻地")
     private String latestLocation;
 
+    @TextLengthDataValid(value = 50)
     @ExcelColumn("最新状态")
     private String latestStatus;
+
+    private String iconUri;
+
 
 }
 

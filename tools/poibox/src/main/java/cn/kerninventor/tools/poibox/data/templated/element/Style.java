@@ -13,6 +13,8 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  */
 public @interface Style {
 
+    int index();
+
     Border border() default @Border(borderStyle = BorderStyle.THIN);
 
     Font font() default @Font;

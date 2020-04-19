@@ -6,8 +6,8 @@ import cn.kerninventor.tools.poibox.data.templated.validation.DataValidationBuil
 import cn.kerninventor.tools.poibox.data.templated.validation.MessageBoxSetter;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.DictionaryInterpretor;
 import cn.kerninventor.tools.poibox.data.templated.validation.array.dictionary.api.DictionaryEntry;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelColumnInitializer;
-import cn.kerninventor.tools.poibox.data.templated.initializer.ExcelTabulationInitializer;
+import cn.kerninventor.tools.poibox.data.templated.initializer.EColumnInitiator;
+import cn.kerninventor.tools.poibox.data.templated.initializer.ETabulationInitiator;
 import cn.kerninventor.tools.poibox.utils.NameManegeUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
@@ -32,7 +32,7 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
     }
 
     @Override
-    public void addValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
+    public void addValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet) {
         List<DictionaryEntry> entries = (List<DictionaryEntry>) columnInit.getInterpretor().getEntries();
         if (entries == null){
             entries = new ArrayList<>();
@@ -73,7 +73,7 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
         sheet.addValidationData(dataValidation);
     }
 
-    public void addCascadeDataValidation(ExcelTabulationInitializer tabulationInit, ExcelColumnInitializer columnInit, Sheet sheet) {
+    public void addCascadeDataValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet) {
         //级联 !"".equals(excelValid.cascadeFlow().trim())
         if (true) {
             DictionaryInterpretor interpretor = columnInit.getInterpretor();
@@ -83,7 +83,7 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
 
 
 
-            ExcelColumnInitializer parentColumn = tabulationInit.getColumnInitializerByTitleName("excelValid.cascadeFlow()");
+            EColumnInitiator parentColumn = tabulationInit.getColumnInitializerByTitleName("excelValid.cascadeFlow()");
             if (parentColumn == null) {
                 throw new IllegalColumnConfigureException("The field name as " + "excelValid.cascadeFlow()" + "'s field does not found, please check your configuration on @ArrayDataValid");
             }
