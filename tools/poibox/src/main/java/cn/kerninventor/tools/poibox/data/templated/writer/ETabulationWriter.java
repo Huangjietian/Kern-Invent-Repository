@@ -16,6 +16,7 @@ import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.utils.NameManegeUtil;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.*;
 
@@ -227,5 +228,17 @@ public class ETabulationWriter<T> implements Writer<T> {
     @Override
     public TabConfiguration getConfiguration() {
         return tabInitiator;
+    }
+
+    @Override
+    public Writer addBannerDefinition(String value, CellStyle style, CellRangeAddress range) {
+        this.tabInitiator.addBanner(value, style, range);
+        return this;
+    }
+
+    @Override
+    public Writer addBannerDefinition(String value, CellStyle style, int row1, int row2, int col1, int col2) {
+        this.tabInitiator.addBanner(value, style, row1, row2, col1, col2);
+        return this;
     }
 }

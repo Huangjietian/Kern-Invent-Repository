@@ -201,7 +201,6 @@ public class ETabulationInitiator<T> extends BoxBracket implements TabConfigurat
         return excelTabulation;
     }
 
-
     @Override
     public TabConfiguration addBanner(String value, CellStyle cellStyle, CellRangeAddress cellRangeAddress) {
         EBannerInitiator bannerInitiator = new EBannerInitiator(cellStyle, cellRangeAddress, value);

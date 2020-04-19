@@ -1,7 +1,9 @@
 package cn.kerninventor.tools.poibox.data.templated.writer;
 
 import cn.kerninventor.tools.poibox.data.templated.initializer.configuration.TabConfiguration;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.List;
 import java.util.Map;
@@ -32,5 +34,8 @@ public interface Writer<T> {
 
     TabConfiguration getConfiguration();
 
+    Writer addBannerDefinition(String value, CellStyle style, CellRangeAddress range);
+
+    Writer addBannerDefinition(String value, CellStyle style, int row1, int row2, int col1, int col2);
 
 }
