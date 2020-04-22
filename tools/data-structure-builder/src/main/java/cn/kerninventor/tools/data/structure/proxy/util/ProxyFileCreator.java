@@ -12,12 +12,23 @@ public class ProxyFileCreator {
         String targetSource = targetClass.getProtectionDomain().getCodeSource().getLocation().getFile()
                 + targetClass.getPackage().getName().replace(".", "/")
                 + "/" + className + ".java";
-        File file = new File(targetSource);
-        file.createNewFile();
-        FileWriter writer = new FileWriter(file);
-        writer.write(context);
-        writer.flush();
-        writer.close();
-        return file;
+        File file = null;
+        FileWriter writer = null;
+        try {
+            file = new File(targetSource);
+            file.createNewFile();
+            writer = new FileWriter(file);
+            writer.write(context);
+            writer.flush();
+            return file;
+        } catch (IOException e) {
+            //TODO 异常处理
+            throw e;
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+
+        }
     }
 }

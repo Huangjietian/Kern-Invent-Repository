@@ -27,7 +27,7 @@ public interface DataStructureProxy<T extends DataStructure> {
 
     T newInstance(T targetObj) throws IllegalAccessException, InstantiationException;
 
-    List<T> newInstance(List<T> targetObjs);
+    List<? extends T> newInstance(List<T> targetObjs);
 
     Object invoke(Object sign,T t, Object... parameters) throws InvocationTargetException, IllegalAccessException;
 

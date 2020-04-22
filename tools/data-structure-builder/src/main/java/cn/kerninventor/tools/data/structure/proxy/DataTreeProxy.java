@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.data.structure.proxy;
 
-import cn.kerninventor.tools.data.structure.TreeStructureAble;
+import cn.kerninventor.tools.data.structure.Tree;
 import cn.kerninventor.tools.data.structure.proxy.util.ProxyComplier;
 import cn.kerninventor.tools.data.structure.proxy.util.ProxyFileCreator;
 import com.alibaba.fastjson.JSON;
@@ -15,22 +15,22 @@ import java.util.List;
  * @author Kern
  * @date 2019/11/11 15:30
  */
-public class DataTreeProxy implements DataStructureProxy<TreeStructureAble> {
+public class DataTreeProxy implements DataStructureProxy<Tree> {
 
     public final static String GET_SIGN = "getter";
     public final static String SET_SIGN = "setter";
 
-    private Class<TreeStructureAble> proxyClass;
+    private Class<Tree> proxyClass;
     private Method getMethod;
     private Method setMethod;
 
-    private DataTreeProxy(Class<TreeStructureAble> proxyClass) throws NoSuchMethodException {
+    private DataTreeProxy(Class<Tree> proxyClass) throws NoSuchMethodException {
         this.proxyClass = proxyClass;
         this.getMethod = proxyClass.getMethod("getter");
         this.setMethod = proxyClass.getMethod("setter", java.util.Collection.class);
     }
 
-    public static DataTreeProxy proxyGenerate(Class<TreeStructureAble> targetClass) throws ClassNotFoundException, NoSuchMethodException, IOException {
+    public static DataTreeProxy proxyGenerate(Class<Tree> targetClass) throws ClassNotFoundException, NoSuchMethodException, IOException {
         String className = targetClass.getSimpleName() + NAME_PROXY_SUFFIX;
         String packageName = targetClass.getPackage().getName();
         String contextPackage = "package " + packageName + PATH_SEPARATOR + LINE_SEPARATOR;
@@ -55,27 +55,27 @@ public class DataTreeProxy implements DataStructureProxy<TreeStructureAble> {
             file.deleteOnExit();
         }
         String classFullName = targetClass.getName() + NAME_PROXY_SUFFIX;
-        return new DataTreeProxy((Class<TreeStructureAble>) Class.forName(classFullName));
+        return new DataTreeProxy((Class<Tree>) Class.forName(classFullName));
     }
 
 
 
     @Override
-    public TreeStructureAble newInstance(TreeStructureAble targetObj) {
+    public Tree newInstance(Tree targetObj) {
         return JSON.parseObject(JSON.toJSONString(targetObj), proxyClass);
     }
 
     @Override
-    public List<TreeStructureAble> newInstance(List<TreeStructureAble> targetObjs) {
+    public List<Tree> newInstance(List<Tree> targetObjs) {
         return JSON.parseArray(JSON.toJSONString(targetObjs), proxyClass);
     }
 
     @Override
-    public Object invoke(Object sign, TreeStructureAble treeStructureAble, Object... parameters) throws InvocationTargetException, IllegalAccessException {
+    public Object invoke(Object sign, Tree tree, Object... parameters) throws InvocationTargetException, IllegalAccessException {
         if (GET_SIGN.equals(sign)){
-            return getMethod.invoke(treeStructureAble);
+            return getMethod.invoke(tree);
         } else if (SET_SIGN.equals(sign)){
-            return setMethod.invoke(treeStructureAble, parameters);
+            return setMethod.invoke(tree, parameters);
         } else {
             throw new IllegalAccessException("error coding in " + DataTreeProxy.class + " : invoke sign error!");
         }

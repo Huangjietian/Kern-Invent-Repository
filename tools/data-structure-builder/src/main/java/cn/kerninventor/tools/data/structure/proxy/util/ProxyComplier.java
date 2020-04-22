@@ -14,12 +14,22 @@ import java.nio.charset.Charset;
 public class ProxyComplier {
 
     public static void compile(File proxyFile) throws IOException {
-        JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-        StandardJavaFileManager standardJavaFileManager = javaCompiler.getStandardFileManager(null, null, Charset.forName("UTF-8"));
-        Iterable javaFile = standardJavaFileManager.getJavaFileObjects(proxyFile);
-        JavaCompiler.CompilationTask task = javaCompiler.getTask(null, standardJavaFileManager, null, null, null, javaFile);
-        task.call();
-        standardJavaFileManager.flush();
-        standardJavaFileManager.close();
+        StandardJavaFileManager standardJavaFileManager = null;
+        try {
+            JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
+            standardJavaFileManager = javaCompiler.getStandardFileManager(null, null, Charset.forName("UTF-8"));
+            Iterable javaFile = standardJavaFileManager.getJavaFileObjects(proxyFile);
+            JavaCompiler.CompilationTask task = javaCompiler.getTask(null, standardJavaFileManager, null, null, null, javaFile);
+            task.call();
+            standardJavaFileManager.flush();
+        } catch (Exception e) {
+            //TODO 异常处理
+            throw e;
+        } finally {
+            if (standardJavaFileManager != null) {
+                standardJavaFileManager.close();
+            }
+        }
+
     }
 }

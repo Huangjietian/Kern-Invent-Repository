@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.data.structure;
 
-import cn.kerninventor.tools.data.structure.handler.DataTreeStructureHandler;
-import cn.kerninventor.tools.data.structure.handler.DataTreeStructureCarrier;
+import cn.kerninventor.tools.data.structure.handler.DataTreeBuilder;
+import cn.kerninventor.tools.data.structure.handler.DataTree;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class DataStructureBuilder {
 
-    public static <T extends TreeStructureAble> DataTreeStructureCarrier tree(List<T> datas) throws NoSuchMethodException, IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return new DataTreeStructureHandler(datas);
+    public static <T extends Tree> DataTree toTree(List<T> datas) throws NoSuchMethodException, IOException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        return new DataTreeBuilder(datas);
     }
 }
