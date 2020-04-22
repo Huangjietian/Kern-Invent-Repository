@@ -20,6 +20,6 @@ public interface Reader<T> {
 
     List<T> readFrom(Sheet sheet);
 
-    void addBeanValidator(BeanValidator<T, ?>... beanValidators);
+    Reader addBeanValidator(BeanValidator<T, ?>... beanValidators);
 
 }

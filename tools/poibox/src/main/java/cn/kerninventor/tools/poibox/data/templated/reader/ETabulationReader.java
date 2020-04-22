@@ -46,7 +46,6 @@ public class ETabulationReader<T> implements Reader<T> {
     public List<T> readFrom(Sheet sheet) {
         tabInitiator.init();
         List<T> list = new ArrayList();
-//        Map<Integer, Set<ConstraintViolation<T>>> constraintMap = new HashMap<>();
         List<EColumnInitiator> columnInitializers = tabInitiator.getColumnsContainer();
         for (int i = tabInitiator.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
@@ -97,11 +96,12 @@ public class ETabulationReader<T> implements Reader<T> {
     }
 
     @Override
-    public void addBeanValidator(BeanValidator<T, ?>... beanValidators) {
+    public Reader addBeanValidator(BeanValidator<T, ?>... beanValidators) {
         if (this.beanValidators == null) {
             this.beanValidators = new ArrayList();
         }
         this.beanValidators.addAll(Arrays.stream(beanValidators).collect(Collectors.toList()));
+        return this;
     }
 
 

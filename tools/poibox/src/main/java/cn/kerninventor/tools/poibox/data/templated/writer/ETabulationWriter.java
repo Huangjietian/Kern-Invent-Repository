@@ -24,13 +24,13 @@ import java.util.*;
 /**
  * @Author Kern
  * @Date 2020/3/12 18:53
- * @Description TODO  模板应该支持改大标题，删减列等操作
+ * @Description
  */
-public class ETabulationWriter<T> implements Writer<T> {
+public final class ETabulationWriter<T> implements Writer<T> {
 
-    protected ETabulationInitiator<T> tabInitiator;
+    private ETabulationInitiator<T> tabInitiator;
 
-    protected Map<String, List<String>> nameNameMap = new HashMap<>();
+    private Map<String, List<String>> nameNameMap = new HashMap<>();
 
     public ETabulationWriter(ETabulationInitiator<T> tabInitiator) {
         this.tabInitiator = Objects.requireNonNull(tabInitiator);
@@ -43,99 +43,46 @@ public class ETabulationWriter<T> implements Writer<T> {
     @Override
     public Writer<T> writeTo(String sheetName) {
         Sheet sheet = tabInitiator.getParent().getSheet(sheetName);
-        return writeTo(sheet, null, true);
+        return writeTo(sheet);
     }
 
     @Override
     public Writer<T> writeTo(int sheetAt) {
         Sheet sheet = tabInitiator.getParent().getSheet(sheetAt);
-        return writeTo(sheet, null, true);
+        return writeTo(sheet);
     }
 
     @Override
     public Writer<T> writeTo(Sheet sheet) {
-        return writeTo(sheet, null, true);
+        TbodyWriter tbodyWriter = getTemplateTbodyWriter();
+        execute(sheet, null, null, tbodyWriter);
+        return this;
     }
 
     @Override
     public Writer<T> writeTo(String sheetName, List<T> datas, String... ignore) {
         Sheet sheet = tabInitiator.getParent().getSheet(sheetName);
-        return writeTo(sheet, datas, false, ignore);
+        return writeTo(sheet, datas, ignore);
     }
 
     @Override
     public Writer<T> writeTo(int sheetAt, List<T> datas, String... ignore) {
         Sheet sheet = tabInitiator.getParent().getSheet(sheetAt);
-        return writeTo(sheet, datas, false, ignore);
+        return writeTo(sheet, datas, ignore);
     }
 
     @Override
     public Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore) {
-        return writeTo(sheet, datas, false, ignore);
-    }
-
-    private Writer<T> writeTo(Sheet sheet, List<T> datas, boolean isTemplateOney, String... ignore) {
-        if (BeanUtil.isEmpty(datas) && isTemplateOney) {
-            execute(sheet,
-                    null,
-                    ignore,
-                    (table, col, tbSt, sh, data) -> {
-                        for (int rowIndex = table.getTbodyFirstRowIndex() ; rowIndex < table.getEffectiveRows() + table.getTbodyFirstRowIndex(); rowIndex ++){
-                            Row bodyRow = BoxGadget.getRowForce(sh, rowIndex);
-                            setRowHeight(bodyRow, table.getTbodyRowHeight());
-                            Cell bodyCell = bodyRow.createCell(col.getColumnIndex());
-                            //设置风格
-                            if (tbSt != null) {
-                                bodyCell.setCellStyle(tbSt);
-                            }
-                            //设置函数
-                            if (BeanUtil.isNotEmpty(col.getFormula())) {
-                                bodyCell.setCellFormula(col.getFormula());
-                            }
-                        }
-                        //设置数据有效性校验
-                        if (col.getValidAnnotation() != null) {
-                            DataValidationBuilderFactory.getInstance(col.getValidAnnotation()).addValidation(table, col, sh);
-                        }
-                    }
-            );
-        } else {
-            execute(sheet,
-                    datas,
-                    ignore,
-                    (table, col, tbSt, sh, data) -> {
-                        ColWriter colWriter = ColWriter.newInstance(col.isMergeByContent(), sh);
-                        for (int datasIndex = 0, rowIndex = table.getTbodyFirstRowIndex(); datasIndex < data.size() ; datasIndex ++ , rowIndex++){
-                            Row bodyRow = BoxGadget.getRowForce(sh, rowIndex);
-                            setRowHeight(bodyRow, table.getTbodyRowHeight());
-                            Cell bodyCell = bodyRow.createCell(col.getColumnIndex());
-                            //设置风格
-                            if (tbSt != null) {
-                                bodyCell.setCellStyle(tbSt);
-                            }
-                            Object value = null;
-                            try {
-                                value = ReflectUtil.getFieldValue(col.getField(), data.get(datasIndex));
-                            } catch (IllegalAccessException e) {
-                                throw new IllegalArgumentException("Field value get error., field name: " + col.getFieldName());
-                            }
-                            //翻译 FIXME 去掉翻译功能
-                            if (col.getInterpretor().isInterpretable()) {
-                                value = col.getInterpretor().interpreteOf(value);
-                            }
-                            colWriter.setCellValue(bodyCell, value, rowIndex);
-                        }
-                        colWriter.flush();
-                    }
-            );
-        }
-
+        TbodyWriter tbodyWriter = getDataTbodyWriter();
+        execute(sheet, datas, ignore, tbodyWriter);
         return this;
     }
 
-    public void execute(Sheet sheet, List datas, final String[] igonre, final TbodyWriter tbodyWriter) {
+    private void execute(Sheet sheet, List datas, final String[] igonre, final TbodyWriter tbodyWriter) {
         getTabulationInitializer().init();
+        //1. 设置名称管理器
         setNameManager(sheet);
+        //2. 过滤ignore 列
         ETabulationInitiator tabulation = getTabulationInitializer();
         List<EColumnInitiator> columnsContainer = tabulation.getColumnsContainer();
         if (BeanUtil.hasElement(igonre)) {
@@ -147,10 +94,10 @@ public class ETabulationWriter<T> implements Writer<T> {
                     }
                 });
                 return result;
-
             }).reInit(columnsContainer);
             tabulation.setColumnsIndex(columnsContainer);
         }
+        //3. 绘制表头
         Row headRow = sheet.createRow(tabulation.getTheadRowIndex());
         setRowHeight(headRow, tabulation.getTheadRowHeight());
         Workbook workbook = tabulation.getParent().workbook();
@@ -170,11 +117,60 @@ public class ETabulationWriter<T> implements Writer<T> {
                 tbodyStyle = styler.copyStyle(tbodyStyle);
                 tbodyStyle.setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
             }
-            //绘制表体
+            //4. 绘制表体
             tbodyWriter.templateTbody(tabulation, column, tbodyStyle, sheet, datas);
         }
-        //写横幅
+        //5. 写横幅
         tempalateBanners(tabulation, columnsContainer, sheet);
+    }
+
+    private TbodyWriter getTemplateTbodyWriter(){
+        return (table, col, tbSt, sh, data) -> {
+            for (int rowIndex = table.getTbodyFirstRowIndex() ; rowIndex < table.getEffectiveRows() + table.getTbodyFirstRowIndex(); rowIndex ++){
+                Row bodyRow = BoxGadget.getRowForce(sh, rowIndex);
+                setRowHeight(bodyRow, table.getTbodyRowHeight());
+                Cell bodyCell = bodyRow.createCell(col.getColumnIndex());
+                //设置风格
+                if (tbSt != null) {
+                    bodyCell.setCellStyle(tbSt);
+                }
+                //设置函数
+                if (BeanUtil.isNotEmpty(col.getFormula())) {
+                    bodyCell.setCellFormula(col.getFormula());
+                }
+            }
+            //设置数据有效性校验
+            if (col.getValidAnnotation() != null) {
+                DataValidationBuilderFactory.getInstance(col.getValidAnnotation()).addValidation(table, col, sh);
+            }
+        };
+    }
+
+    private TbodyWriter getDataTbodyWriter(){
+        return (table, col, tbSt, sh, data) -> {
+            ColWriter colWriter = ColWriter.newInstance(col.isMergeByContent(), sh);
+            for (int datasIndex = 0, rowIndex = table.getTbodyFirstRowIndex(); datasIndex < data.size() ; datasIndex ++ , rowIndex++){
+                Row bodyRow = BoxGadget.getRowForce(sh, rowIndex);
+                setRowHeight(bodyRow, table.getTbodyRowHeight());
+                Cell bodyCell = bodyRow.createCell(col.getColumnIndex());
+                //设置风格
+                if (tbSt != null) {
+                    bodyCell.setCellStyle(tbSt);
+                }
+                Object value = null;
+                try {
+                    value = ReflectUtil.getFieldValue(col.getField(), data.get(datasIndex));
+                } catch (IllegalAccessException e) {
+                    throw new IllegalArgumentException("Field value get error., field name: " + col.getFieldName());
+                }
+                //翻译 FIXME 去掉翻译功能
+                if (col.getInterpretor().isInterpretable()) {
+                    value = col.getInterpretor().interpreteOf(value);
+                }
+                colWriter.setCellValue(bodyCell, value, rowIndex);
+            }
+            colWriter.flush();
+        };
     }
 
     private void setNameManager(Sheet sheet) {
@@ -231,13 +227,19 @@ public class ETabulationWriter<T> implements Writer<T> {
     }
 
     @Override
-    public Writer addBannerDefinition(String value, CellStyle style, CellRangeAddress range) {
+    public Writer addBanner(String value, CellStyle style, CellRangeAddress range) {
         this.tabInitiator.addBanner(value, style, range);
         return this;
     }
 
     @Override
-    public Writer addBannerDefinition(String value, CellStyle style, int row1, int row2, int col1, int col2) {
+    public Writer addBanner(String value, CellStyle style, int row1, int row2) {
+        this.tabInitiator.addBanner(value, style, row1, row2);
+        return null;
+    }
+
+    @Override
+    public Writer addBanner(String value, CellStyle style, int row1, int row2, int col1, int col2) {
         this.tabInitiator.addBanner(value, style, row1, row2, col1, col2);
         return this;
     }

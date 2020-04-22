@@ -12,10 +12,14 @@ import java.util.List;
  */
 public interface TabConfiguration {
 
-    TabConfiguration addBanner(String value, CellStyle cellStyle, CellRangeAddress cellRangeAddress);
+    TabConfiguration addBanner(String value, CellStyle cellStyle, int row1, int row2);
 
     TabConfiguration addBanner(String value, CellStyle cellStyle, int row1, int row2, int col1, int col2);
 
+    TabConfiguration addBanner(String value, CellStyle cellStyle, CellRangeAddress cellRangeAddress);
+
     List<? extends BannerDefinition> getBanners();
+
+    BannerDefinition getBannerAt(int index);
 
 }

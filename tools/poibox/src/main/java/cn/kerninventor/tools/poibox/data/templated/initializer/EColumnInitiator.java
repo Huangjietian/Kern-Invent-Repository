@@ -46,7 +46,6 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
         this.interpretor = DictionaryLibrary.getInterpretor(this.validAnnotation);
     }
 
-
     public void setColumnIndex(int columnIndex) {
         this.columnIndex = columnIndex;
     }

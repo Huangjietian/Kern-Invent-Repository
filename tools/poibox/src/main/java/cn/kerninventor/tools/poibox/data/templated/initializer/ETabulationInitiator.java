@@ -202,15 +202,19 @@ public class ETabulationInitiator<T> extends BoxBracket implements TabConfigurat
     }
 
     @Override
-    public TabConfiguration addBanner(String value, CellStyle cellStyle, CellRangeAddress cellRangeAddress) {
-        EBannerInitiator bannerInitiator = new EBannerInitiator(cellStyle, cellRangeAddress, value);
-        bannerContainer.add(bannerInitiator);
-        return this;
+    public TabConfiguration addBanner(String value, CellStyle cellStyle, int row1, int row2) {
+        return addBanner(value, cellStyle, row1, row2, -1, -1);
     }
 
     @Override
     public TabConfiguration addBanner(String value, CellStyle cellStyle, int row1, int row2, int col1, int col2) {
         CellRangeAddress cellRangeAddress = new CellRangeAddress(row1,row2,col1,col2);
+        return addBanner(value, cellStyle, cellRangeAddress);
+    }
+
+    @Override
+    public TabConfiguration addBanner(String value, CellStyle cellStyle, CellRangeAddress cellRangeAddress) {
+        value = value == null ? "" : value;
         EBannerInitiator bannerInitiator = new EBannerInitiator(cellStyle, cellRangeAddress, value);
         bannerContainer.add(bannerInitiator);
         return this;
@@ -219,5 +223,10 @@ public class ETabulationInitiator<T> extends BoxBracket implements TabConfigurat
     @Override
     public List<? extends BannerDefinition> getBanners() {
         return this.bannerContainer;
+    }
+
+    @Override
+    public BannerDefinition getBannerAt(int index) {
+        return this.bannerContainer.get(index);
     }
 }

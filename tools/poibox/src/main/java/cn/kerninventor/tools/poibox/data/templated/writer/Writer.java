@@ -34,8 +34,12 @@ public interface Writer<T> {
 
     TabConfiguration getConfiguration();
 
-    Writer addBannerDefinition(String value, CellStyle style, CellRangeAddress range);
+    Writer addBanner(String value, CellStyle style, CellRangeAddress range);
 
-    Writer addBannerDefinition(String value, CellStyle style, int row1, int row2, int col1, int col2);
+    Writer addBanner(String value, CellStyle style, int row1, int row2);
+
+    Writer addBanner(String value, CellStyle style, int row1, int row2, int col1, int col2);
+
+
 
 }
