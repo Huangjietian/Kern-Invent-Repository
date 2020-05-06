@@ -12,6 +12,8 @@ import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTextBox;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -183,6 +185,13 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
     }
 
     private List<Picture> pictures = new ArrayList<>(16);
+
+    @Override
+    public Picture addPicture(Sheet sheet, InputStream source, AnchorIndex anchorIndex) throws IOException {
+        byte[] bytes = new byte[source.available()];
+        source.read(bytes, 0, bytes.length);
+        return addPicture(sheet, bytes, anchorIndex);
+    }
 
     @Override
     public Picture addPicture(Sheet sheet, byte[] bytes, AnchorIndex anchorIndex) {

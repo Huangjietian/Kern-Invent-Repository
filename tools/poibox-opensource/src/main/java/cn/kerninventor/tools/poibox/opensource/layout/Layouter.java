@@ -8,6 +8,9 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTextBox;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * @author Kern
  * @date 2019/10/30 17:38
@@ -33,6 +36,8 @@ public interface Layouter {
     HSSFTextbox addTextBox(HSSFSheet sheet, AnchorIndex anchorIndex, String text);
 
     XSSFTextBox addTextBox(XSSFSheet sheet, AnchorIndex anchorIndex, String text);
+
+    Picture addPicture(Sheet sheet, InputStream source, AnchorIndex anchorIndex) throws IOException;
 
     Picture addPicture(Sheet sheet, byte[] bytes, AnchorIndex anchorIndex);
 }
