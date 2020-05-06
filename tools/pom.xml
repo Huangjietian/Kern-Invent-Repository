@@ -20,7 +20,7 @@
 
     <modules>
         <module>file-format</module>
-        <module>poibox</module>
+        <module>poibox-opensource</module>
         <module>data-structure-builder</module>
         <module>web-image-uploader</module>
         <module>web-develop-utils</module>
