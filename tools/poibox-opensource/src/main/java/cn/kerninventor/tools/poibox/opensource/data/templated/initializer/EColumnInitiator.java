@@ -34,7 +34,7 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
     private ColWriter colWriter;
 
     public EColumnInitiator(Field field, ExcelColumn excelColumn, CellStyle theadStyle, CellStyle tbodyStyle) {
-        this.field = SupportedDataType.checkSupportability(field);
+        this.field = field;
         this.fieldName = field.getName();
         this.titleName = excelColumn.value();
         this.columnWidth = excelColumn.columnWidth();
@@ -43,13 +43,16 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
         this.columnSort = excelColumn.columnSort();
         this.theadStyle = theadStyle;
         this.tbodyStyle = tbodyStyle;
-        this.validAnnotation = ReflectUtil.getFirstAnnotated(field, DataValid.class);
+        this.validAnnotation = ReflectUtil.getFirstMarkedAnnotation(field, DataValid.class);
+        //FIXME 重新实现翻译功能， 建议以外部添加的形式指定字段的翻译器。
         this.interpretor = DictionaryLibrary.getInterpretor(this.validAnnotation);
         try {
             this.colWriter = excelColumn.colWriter().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new IllegalColumnConfigureException("ColWriter lack of parameterless constructors! field : " + fieldName);
         }
+        //默认提供的GeneralColWriter 和 MergeAbleColWriter 仅支持部分数据类型，其他数据类型需指定实现了ColWriter接口的自定义实现。
+        SupportedDataType.checkSupportability(field, colWriter);
     }
 
     public void setColumnIndex(int columnIndex) {

@@ -7,9 +7,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTextBox;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author Kern
@@ -31,13 +32,14 @@ public interface Layouter {
 
     void setCellsSize(Sheet sheet, Float height, Integer width);
 
-    void addTextBox(Sheet sheet, String text, AnchorIndex anchorIndex);
+    SimpleTextBox addTextBox(Sheet sheet, String text, AnchorIndex anchorIndex);
 
     HSSFTextbox addTextBox(HSSFSheet sheet, AnchorIndex anchorIndex, String text);
 
     XSSFTextBox addTextBox(XSSFSheet sheet, AnchorIndex anchorIndex, String text);
 
-    Picture addPicture(Sheet sheet, InputStream source, AnchorIndex anchorIndex) throws IOException;
+    Picture addPicture(Sheet sheet, File file, AnchorIndex anchorIndex) throws IOException;
 
-    Picture addPicture(Sheet sheet, byte[] bytes, AnchorIndex anchorIndex);
+    Picture addPicture(Sheet sheet, MultipartFile file, AnchorIndex anchorIndex) throws IOException;
+
 }

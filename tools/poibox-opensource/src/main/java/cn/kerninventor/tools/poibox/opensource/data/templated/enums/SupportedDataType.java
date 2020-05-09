@@ -1,7 +1,11 @@
 package cn.kerninventor.tools.poibox.opensource.data.templated.enums;
 
 
+import cn.kerninventor.tools.poibox.opensource.data.templated.writer.col.ColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.templated.writer.col.GeneralColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.templated.writer.col.MergeAbleColWriter;
 import cn.kerninventor.tools.poibox.opensource.exception.IllegalColumnConfigureException;
+import cn.kerninventor.tools.poibox.opensource.exception.UnSupportedDataTypeException;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -42,24 +46,35 @@ public enum SupportedDataType {
         this.clazz = clazz;
     }
 
-    public static boolean isSupportedType(Class clazz) {
+    public static boolean isSupportedType(Field field) {
+        if (field.getType().isPrimitive()) {
+            throw new IllegalColumnConfigureException("Basic data type is unsupported, please used wrapper type! Field： " + field.getName());
+        }
         SupportedDataType[] types = SupportedDataType.values();
         for (SupportedDataType type : types) {
-            if (type.clazz.isAssignableFrom(clazz)) {
+            if (type.clazz.isAssignableFrom(field.getType())) {
                 return true;
             }
         }
         return false;
     }
 
-    public static Field checkSupportability(Field field) {
-        if (field.getType().isPrimitive()) {
-            throw new IllegalColumnConfigureException("Basic data type is unsupported, please used wrapper type! Field： " + field.getName());
+    /**
+     * The GeneralColWriter and MergeAbleColWriter provided by default support only some data types;
+     * other data types specify custom implementations that implement the ColWriter interface.
+     * If you need to query for the supported data type, check SupportedDataType.class.
+     *
+     * @param field
+     * @param colWriter
+     */
+    public static void checkSupportability(Field field, ColWriter colWriter) {
+        boolean isSupportedType = SupportedDataType.isSupportedType(field);
+        if (!isSupportedType && (colWriter instanceof GeneralColWriter || colWriter instanceof MergeAbleColWriter)) {
+            throw new UnSupportedDataTypeException("" +
+                    "The Field data type is not supported when using the GeneralColWriter or MergeAbleColWriter!" +
+                    System.lineSeparator() +
+                    "Please check the enumeration values in SupportedDataType class!");
         }
-        if (!isSupportedType(field.getType())) {
-            throw new IllegalColumnConfigureException("Field type is unsupported! Field：" + field.getName() + System.lineSeparator() +
-                    "List of supported data type please refer the enum: " + SupportedDataType.class);
-        }
-        return field;
     }
+
 }

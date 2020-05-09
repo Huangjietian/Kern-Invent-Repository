@@ -4,8 +4,8 @@ import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.EColum
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.ETabulationInitiator;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.MessageBoxSetter;
-import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -38,9 +38,8 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
 
     public void addValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet) {
         annotationValid(columnInit);
-
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
-        DVConstraint dvConstraint = DVConstraint.createDateConstraint(
+        DataValidationConstraint dvConstraint = dvHelper.createDateConstraint(
                 dataValid.compareType().getCode(),
                 dateEx,
                 optionalDateEx,

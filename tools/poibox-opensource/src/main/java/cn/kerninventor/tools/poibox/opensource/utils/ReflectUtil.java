@@ -68,10 +68,10 @@ public class ReflectUtil {
         }
     }
 
-    public static <T extends Annotation> Annotation getFirstAnnotated(Field field, Class<T> annotationClass) {
+    public static <T extends Annotation> Annotation getFirstMarkedAnnotation(Field field, Class<T> marker) {
         Annotation[] annotations = field.getDeclaredAnnotations();
         for (Annotation annotation : annotations){
-            if (annotation.annotationType().isAnnotationPresent(annotationClass)){
+            if (annotation.annotationType().isAnnotationPresent(marker)){
                 return annotation;
             }
         }

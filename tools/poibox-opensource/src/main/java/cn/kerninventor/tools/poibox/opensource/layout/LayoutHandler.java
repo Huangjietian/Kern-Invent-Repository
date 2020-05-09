@@ -11,12 +11,13 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTextBox;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -138,14 +139,16 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
     }
 
     @Override
-    public void addTextBox(Sheet sheet, String text, AnchorIndex anchorIndex) {
+    public SimpleTextBox addTextBox(Sheet sheet, String text, AnchorIndex anchorIndex) {
+        Shape shape;
         if (sheet instanceof HSSFSheet) {
-            addTextBox((HSSFSheet) sheet, anchorIndex, text);
+            shape = addTextBox((HSSFSheet) sheet, anchorIndex, text);
         } else if (sheet instanceof XSSFSheet){
-            addTextBox((XSSFSheet) sheet, anchorIndex, text);
+            shape = addTextBox((XSSFSheet) sheet, anchorIndex, text);
         } else {
             throw new IllegalArgumentException("Unsupported sheet type");
         }
+        return new SimpleTextBox(shape);
     }
 
     @Override
@@ -180,22 +183,43 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
                 anchorIndex.getRow2()
         );
         XSSFTextBox textBox = drawing.createTextbox(clientAnchor);
+        textBox.setFillColor(255,255,255);
+        textBox.setLineStyle(0);
+        textBox.setLineStyleColor(0,0,0);
         textBox.setText(text);
         return textBox;
     }
 
-    private List<Picture> pictures = new ArrayList<>(16);
-
     @Override
-    public Picture addPicture(Sheet sheet, InputStream source, AnchorIndex anchorIndex) throws IOException {
-        byte[] bytes = new byte[source.available()];
-        source.read(bytes, 0, bytes.length);
-        return addPicture(sheet, bytes, anchorIndex);
+    public Picture addPicture(Sheet sheet, File file, AnchorIndex anchorIndex) throws IOException {
+        FileInputStream in = new FileInputStream(file);
+        PictureFormat format = PictureFormat.getByFileName(file.getName());
+        return addPicture(sheet, in, format, anchorIndex);
     }
 
     @Override
-    public Picture addPicture(Sheet sheet, byte[] bytes, AnchorIndex anchorIndex) {
-        getParent().workbook().addPicture(bytes, pictures.size());
+    public Picture addPicture(Sheet sheet, MultipartFile file, AnchorIndex anchorIndex) throws IOException {
+        PictureFormat format = PictureFormat.getByFileName(file.getName());
+        InputStream source = file.getInputStream();
+        return addPicture(sheet, source, format, anchorIndex);
+    }
+
+    public Picture addPicture(Sheet sheet, InputStream source, PictureFormat format, AnchorIndex anchorIndex) throws IOException {
+        try {
+            byte[] bytes = new byte[source.available()];
+            source.read(bytes, 0, bytes.length);
+            return addPicture(sheet, bytes, format, anchorIndex);
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            if (source != null) {
+                source.close();
+            }
+        }
+    }
+
+    public Picture addPicture(Sheet sheet, byte[] bytes, PictureFormat format, AnchorIndex anchorIndex) {
+        int index = getParent().workbook().addPicture(bytes, format.getIndex());
         Drawing drawing = sheet.createDrawingPatriarch();
         ClientAnchor clientAnchor = drawing.createAnchor(
                 anchorIndex.getLeft(),
@@ -207,12 +231,8 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
                 anchorIndex.getCol2(),
                 anchorIndex.getRow2()
         );
-        Picture picture = drawing.createPicture(clientAnchor, pictures.size());
-        pictures.add(picture);
+        Picture picture = drawing.createPicture(clientAnchor, index);
         return picture;
     }
-
-
-
 
 }
