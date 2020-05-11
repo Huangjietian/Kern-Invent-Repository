@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.spring.beanvalidationcatcher;
+package cn.kerninventor.tools.spring.bean.validator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * @Date 2020/2/5 10:22
  * @Description: TODO
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableAspectJAutoProxy
 public class App {
 
