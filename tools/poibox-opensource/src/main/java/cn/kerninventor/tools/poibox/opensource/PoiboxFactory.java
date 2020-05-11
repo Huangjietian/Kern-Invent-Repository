@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.poibox.opensource;
 
-import cn.kerninventor.tools.poibox.opensource.developer.SealingVersion;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -14,10 +13,6 @@ import java.io.InputStream;
  * @date 2020/4/9 9:17
  * @description factory
  */
-@SealingVersion(
-        version = 1.00,
-        zh_description = "工厂类"
-)
 public final class PoiboxFactory {
 
     public static Poibox open(Workbook workbook) {

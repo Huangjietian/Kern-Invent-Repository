@@ -7,7 +7,6 @@ import javax.script.ScriptException;
 /**
  * @author Kern
  * @date 2020/5/7 10:40
- * @description
  */
 public final class JsMathUtil {
 
@@ -31,13 +30,19 @@ public final class JsMathUtil {
                     .append(" && ");
         }
         equation.append("true");
-        boolean b  = false;
         try {
-            b = (boolean) jsEngine.eval(equation.toString());
+            return (boolean) jsEngine.eval(equation.toString());
         } catch (ScriptException e) {
             throw new IllegalArgumentException("Js parse error" + e.getMessage() , e);
         }
-        return b;
+    }
+
+    public static <T extends Number> boolean compare(T t1, JsSimpleComparison comparison, T t2) {
+        try {
+            return (boolean) jsEngine.eval(t1 + comparison.getExpression() + t2);
+        } catch (ScriptException e) {
+            throw new IllegalArgumentException("Js parse error" + e.getMessage() , e);
+        }
     }
 
     public enum JsSimpleComparison {

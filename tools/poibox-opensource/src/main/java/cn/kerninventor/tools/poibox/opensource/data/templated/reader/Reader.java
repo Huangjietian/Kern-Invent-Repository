@@ -5,12 +5,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import java.util.List;
 
 /**
- * @Title Reader
- * @ProjectName kerninventresp
- * @PackageName cn.kerninventor.tools.poibox.data.datatable
- * @Author Kern
- * @Date 2020/3/16 19:27
- * @Description TODO
+ * @author Kern
+ * @date 2020/3/16 19:27
  */
 public interface Reader<T> {
 

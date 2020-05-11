@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.poibox.opensource.style;
 
-import cn.kerninventor.tools.poibox.opensource.developer.SealingVersion;
 import cn.kerninventor.tools.poibox.opensource.style.enums.FontCharset;
 import cn.kerninventor.tools.poibox.opensource.style.enums.FontUnderline;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -10,11 +9,6 @@ import org.apache.poi.ss.usermodel.Font;
  * @author Kern
  * @date 2019/12/17 15:51
  */
-@SealingVersion(
-        version = 1.00,
-        description = "" +
-                "基于POI Font 封装成链式风格的字体生成器。"
-)
 public final class FontProducer {
 
     private Font font;

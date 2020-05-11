@@ -9,12 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Title: Template
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.templator
- * @Author Kern
- * @Date 2020/3/12 23:04
- * @Description: TODO
+ * @author Kern
+ * @date 2020/3/12 23:04
  */
 public interface Writer<T> {
 
@@ -30,7 +26,7 @@ public interface Writer<T> {
 
     Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore);
 
-    Writer<T> addNameName(Map<String, List<String>> nameNameMap);
+    Writer<T> addFormulaList(Map<String, List<String>> nameNameMap);
 
     TabConfiguration getConfiguration();
 

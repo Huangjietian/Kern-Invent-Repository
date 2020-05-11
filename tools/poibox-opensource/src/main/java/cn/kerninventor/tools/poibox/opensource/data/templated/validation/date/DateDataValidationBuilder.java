@@ -16,12 +16,8 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * @Title: ExcelDateValid
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation
- * @Author Kern
- * @Date 2019/12/13 11:30
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/13 11:30
  */
 public class DateDataValidationBuilder implements DataValidationBuilder<DateDataValid> {
 
@@ -34,6 +30,38 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
 
     public DateDataValidationBuilder(DateDataValid dataValid) {
         this.dataValid = dataValid;
+    }
+
+    public static DateDataValidationBuilder getInstance(DateDataValid dateDataValid) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateDataValid.parseFormat());
+        Date current = new Date();
+//        if (DateDataValid.NOW.equals(dataValid.date())) {
+//            date = current;
+//            dateEx = sdf.format(date);
+//        } else {
+//            date = sdf.parse(dateEx = dataValid.date().trim());
+//        }
+//        if (DateDataValid.NOW.equals(dataValid.optionalDate().trim())) {
+//            optionalDate = current;
+//            optionalDateEx = sdf.format(optionalDate);
+//        } else if (!"".equals(dataValid.optionalDate().trim())){
+//            optionalDate = sdf.parse(optionalDateEx = dataValid.optionalDate().trim());
+//        }
+//        if (dataValid.compareType().isOptionalValueValidity()){
+//            Objects.requireNonNull(optionalDate, "The optionalDate() is not be Empty when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
+//            if (date.after(optionalDate)){
+//                throw new IllegalArgumentException("The optionalDate() is must be less than date() when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
+//            }
+//        }
+        return null;
+    }
+
+    public DateDataValidationBuilder(SimpleDateFormat sdf, String dateEx, String optionalDateEx, Date date, Date optionalDate) {
+        this.sdf = sdf;
+        this.dateEx = dateEx;
+        this.optionalDateEx = optionalDateEx;
+        this.date = date;
+        this.optionalDate = optionalDate;
     }
 
     public void addValidation(ETabulationInitiator tabulationInit, EColumnInitiator columnInit, Sheet sheet) {

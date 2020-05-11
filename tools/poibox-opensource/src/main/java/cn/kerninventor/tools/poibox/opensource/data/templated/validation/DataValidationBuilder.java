@@ -7,12 +7,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import java.lang.annotation.Annotation;
 
 /**
- * @Title: DataValidHandler
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation
- * @Author Kern
- * @Date 2019/12/13 11:31
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/13 11:31
  */
 @FunctionalInterface
 public interface DataValidationBuilder<T extends Annotation> {

@@ -9,12 +9,8 @@ import cn.kerninventor.tools.poibox.opensource.data.templated.writer.ETabulation
 import cn.kerninventor.tools.poibox.opensource.data.templated.writer.Writer;
 
 /**
- * @Title: POIDataBoxOpened
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data
- * @Author Kern
- * @Date 2019/12/11 17:05
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/11 17:05
  */
 public final class DataTabulationHandler extends BoxBracket implements DataTabulator {
 

@@ -3,7 +3,6 @@ package cn.kerninventor.tools.poibox.opensource.style;
 import cn.kerninventor.tools.poibox.opensource.BoxBracket;
 import cn.kerninventor.tools.poibox.opensource.Poibox;
 import cn.kerninventor.tools.poibox.opensource.data.templated.element.Style;
-import cn.kerninventor.tools.poibox.opensource.developer.SealingVersion;
 import cn.kerninventor.tools.poibox.opensource.style.enums.BorderDirection;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -14,7 +13,6 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author Kern
  * @date 2019/10/29 17:25
  */
-@SealingVersion(version = 1.00)
 public final class StyleHandler extends BoxBracket implements Styler {
 
     public StyleHandler(Poibox poiBox) {

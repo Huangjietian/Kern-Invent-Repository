@@ -9,12 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Title: ExcelValid_DECIMAL
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation.decimal
- * @Author Kern
- * @Date 2019/12/13 15:18
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/13 15:18
  */
 @DataValid
 @Target(ElementType.FIELD)

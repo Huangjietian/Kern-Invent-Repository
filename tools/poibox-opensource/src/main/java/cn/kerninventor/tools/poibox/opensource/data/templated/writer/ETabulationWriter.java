@@ -8,13 +8,12 @@ import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.EColum
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.ETabulationInitiator;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.ReInitializer;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.configuration.TabConfiguration;
-import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValidationBuilderFactory;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.FormulaListDataValid;
 import cn.kerninventor.tools.poibox.opensource.data.templated.writer.tbody.TbodyWriter;
 import cn.kerninventor.tools.poibox.opensource.layout.MergedRange;
 import cn.kerninventor.tools.poibox.opensource.style.Styler;
 import cn.kerninventor.tools.poibox.opensource.utils.BeanUtil;
-import cn.kerninventor.tools.poibox.opensource.utils.NameManegeUtil;
+import cn.kerninventor.tools.poibox.opensource.utils.FormulaListUtil;
 import cn.kerninventor.tools.poibox.opensource.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -23,15 +22,14 @@ import java.util.*;
 
 
 /**
- * @Author Kern
- * @Date 2020/3/12 18:53
- * @Description
+ * @author Kern
+ * @date 2020/3/12 18:53
  */
 public final class ETabulationWriter<T> implements Writer<T> {
 
     private ETabulationInitiator<T> tabInitiator;
 
-    private Map<String, List<String>> nameNameMap = new HashMap<>();
+    private Map<String, List<String>> formulaListMap = new HashMap<>();
 
     public ETabulationWriter(ETabulationInitiator<T> tabInitiator) {
         this.tabInitiator = Objects.requireNonNull(tabInitiator);
@@ -82,7 +80,7 @@ public final class ETabulationWriter<T> implements Writer<T> {
     private void execute(Sheet sheet, List datas, final String[] igonre, final TbodyWriter tbodyWriter) {
         getTabulationInitializer().init();
         //1. 设置名称管理器
-        setNameManager(sheet);
+        formulaLists2Sheet(sheet);
         //2. 过滤ignore 列
         ETabulationInitiator tabulation = getTabulationInitializer();
         List<EColumnInitiator> columnsContainer = tabulation.getColumnsContainer();
@@ -141,8 +139,8 @@ public final class ETabulationWriter<T> implements Writer<T> {
                 }
             }
             //设置数据有效性校验
-            if (col.getValidAnnotation() != null) {
-                DataValidationBuilderFactory.getInstance(col.getValidAnnotation()).addValidation(table, col, sh);
+            if (col.getDataValidationBuilder() != null) {
+                col.getDataValidationBuilder().addValidation(table, col, sh);
             }
         };
     }
@@ -173,16 +171,16 @@ public final class ETabulationWriter<T> implements Writer<T> {
         };
     }
 
-    private void setNameManager(Sheet sheet) {
-        if (sheet.getSheetName().equals(NameManegeUtil.HIDDEN_SHEET_NAME)){
+    private void formulaLists2Sheet(Sheet sheet) {
+        if (sheet.getSheetName().equals(FormulaListUtil.HIDDEN_SHEET_NAME)){
             throw new IllegalArgumentException("Sheet name can't be application's constant:" + sheet.getSheetName());
         }
         //设值名称管理器
-        if (!nameNameMap.isEmpty()){
-            nameNameMap.keySet().forEach(e -> {
-                NameManegeUtil.addNameManage(sheet, FormulaListDataValid.NAME_PRIFIIX + e, nameNameMap.get(e));
+        if (!formulaListMap.isEmpty()){
+            formulaListMap.keySet().forEach(e -> {
+                FormulaListUtil.addFormulaList(sheet, FormulaListDataValid.NAME_PRIFIIX + e, formulaListMap.get(e));
             });
-            nameNameMap.clear();
+            formulaListMap.clear();
         }
     }
 
@@ -216,8 +214,8 @@ public final class ETabulationWriter<T> implements Writer<T> {
     }
 
     @Override
-    public Writer<T> addNameName(Map<String, List<String>> nameNameMap) {
-        this.nameNameMap.putAll(nameNameMap);
+    public Writer<T> addFormulaList(Map<String, List<String>> nameNameMap) {
+        this.formulaListMap.putAll(nameNameMap);
         return this;
     }
 

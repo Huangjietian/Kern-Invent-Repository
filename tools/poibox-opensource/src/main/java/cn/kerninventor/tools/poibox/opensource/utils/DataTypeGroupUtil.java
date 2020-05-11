@@ -4,12 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @Title: DataTypeGroupUtil
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.utils
- * @Author Kern
- * @Date 2019/12/18 10:14
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/18 10:14
  */
 public class DataTypeGroupUtil {
 

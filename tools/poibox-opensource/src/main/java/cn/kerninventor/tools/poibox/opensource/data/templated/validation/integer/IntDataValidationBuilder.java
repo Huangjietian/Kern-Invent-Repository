@@ -11,12 +11,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddressList;
 
 /**
- * @Title: ExcelIntValidHandler
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation.integer
- * @Author Kern
- * @Date 2019/12/13 14:31
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/13 14:31
  */
 public class IntDataValidationBuilder implements DataValidationBuilder<IntDataValid> {
 

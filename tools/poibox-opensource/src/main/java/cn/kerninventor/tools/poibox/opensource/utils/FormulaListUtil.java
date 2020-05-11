@@ -9,11 +9,11 @@ import java.util.List;
  * @author Kern
  * @date 2019/12/13 17:08
  */
-public class NameManegeUtil {
+public class FormulaListUtil {
 
     public final static String HIDDEN_SHEET_NAME = "Pandora";
 
-    public static String addNameManage(Sheet sheet, String nameName, List<String> datas) {
+    public static String addFormulaList(Sheet sheet, String nameName, List<String> datas) {
         if (datas == null || datas.isEmpty()) {
             return nameName;
         }

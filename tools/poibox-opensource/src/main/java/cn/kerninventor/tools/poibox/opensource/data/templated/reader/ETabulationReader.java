@@ -17,8 +17,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @Author Kern
- * @Date 2020/3/12 19:13
+ * @author Kern
+ * @date 2020/3/12 19:13
  */
 public class ETabulationReader<T> implements Reader<T> {
 

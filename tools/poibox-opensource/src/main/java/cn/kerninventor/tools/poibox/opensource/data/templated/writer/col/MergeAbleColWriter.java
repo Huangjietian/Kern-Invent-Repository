@@ -8,23 +8,15 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
- * @Title DataColumn
- * @ProjectName kerninventresp
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.writer
- * @Author Kern
- * @Date 2020/3/17 10:28
- * @Description TODO
+ * @author Kern
+ * @date 2020/3/17 10:28
  */
 public class MergeAbleColWriter implements ColWriter {
 
     private Sheet sheet;
-
     private Integer columnIdx;
-
     private Integer firstRdx;
-
     private Integer lastRdx;
-
     private Object temporary;
 
     @Override
@@ -34,9 +26,7 @@ public class MergeAbleColWriter implements ColWriter {
         }
         int rowIndex = cell.getRow().getRowNum() - 1;
         if (columnIdx == null) {
-            if (cell != null) {
-                columnIdx = cell.getColumnIndex();
-            }
+            columnIdx = cell.getColumnIndex();
             firstRdx = rowIndex;
             lastRdx = rowIndex;
             temporary = value;

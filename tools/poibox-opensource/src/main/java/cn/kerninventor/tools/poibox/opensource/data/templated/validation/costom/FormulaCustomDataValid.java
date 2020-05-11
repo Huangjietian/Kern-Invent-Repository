@@ -8,12 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Title ExcelValid_REGULAR
- * @ProjectName kerninventresp
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.datavalidation.regular
- * @Author Kern
- * @Date 2020/3/11 11:07
- * @Description TODO
+ * @author Kern
+ * @date 2020/3/11 11:07
  */
 @DataValid
 @Target(ElementType.FIELD)

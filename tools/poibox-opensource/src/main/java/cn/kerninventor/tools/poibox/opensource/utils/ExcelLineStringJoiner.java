@@ -3,7 +3,6 @@ package cn.kerninventor.tools.poibox.opensource.utils;
 /**
  * @author Kern
  * @date 2020/5/6 16:34
- * @description
  */
 public class ExcelLineStringJoiner {
 

@@ -8,7 +8,7 @@ import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.d
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.dictionary.api.DictionaryEntry;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.EColumnInitiator;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.ETabulationInitiator;
-import cn.kerninventor.tools.poibox.opensource.utils.NameManegeUtil;
+import cn.kerninventor.tools.poibox.opensource.utils.FormulaListUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Author Kern
- * @Date 2019/12/13 15:39
+ * @author Kern
+ * @date 2019/12/13 15:39
  */
 public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayDataValid> {
 
@@ -53,7 +53,7 @@ public class ArraysDataValidationBuilder implements DataValidationBuilder<ArrayD
             dvConstraint = dvHelper.createExplicitListConstraint(array);
         } else {
             String nameName = columnInit.getFieldName() + columnInit.getTitleName();
-            NameManegeUtil.addNameManage(sheet, nameName, viewData);
+            FormulaListUtil.addFormulaList(sheet, nameName, viewData);
             dvConstraint = dvHelper.createFormulaListConstraint(nameName);
         }
 //        List<String> viewData = entries.stream().map(e -> e.getViewdata().toString()).collect(Collectors.toList());

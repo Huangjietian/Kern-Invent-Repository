@@ -10,12 +10,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * @Title: ExcelDownloader
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.io
- * @Author Kern
- * @Date 2019/12/6 10:21
- * @Description: TODO
+ * @duthor Kern
+ * @date 2019/12/6 10:21
  */
 public class ExcelDownloader {
 

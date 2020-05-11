@@ -13,12 +13,8 @@ import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * @Title: CellValuer
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data
- * @Author Kern
- * @Date 2019/12/6 10:07
- * @Description: TODO
+ * @uthor Kern
+ * @date 2019/12/6 10:07
  */
 public final class CellValueUtil extends BoxGadget {
 

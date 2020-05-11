@@ -21,9 +21,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Author Kern
- * @Date 2019/12/9 15:25
- * @Description: excel 数据表解析处理类
+ * @author Kern
+ * @date 2019/12/9 15:25
  */
 public class ETabulationInitiator<T> extends BoxBracket implements TabConfiguration {
 

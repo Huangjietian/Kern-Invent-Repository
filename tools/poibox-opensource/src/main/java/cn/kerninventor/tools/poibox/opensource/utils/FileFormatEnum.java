@@ -1,12 +1,8 @@
 package cn.kerninventor.tools.poibox.opensource.utils;
 
 /**
- * @Title: FileFormatEnum
- * @ProjectName fileformat
- * @Version 1.0.SNAPSHOT
- * @Description: TODO
- * @Author Kern
- * @Date 2019/10/22 16:34
+ * @author Kern
+ * @date 2019/10/22 16:34
  */
 public enum FileFormatEnum {
 

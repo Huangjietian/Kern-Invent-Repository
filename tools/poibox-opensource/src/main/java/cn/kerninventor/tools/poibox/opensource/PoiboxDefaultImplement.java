@@ -2,7 +2,6 @@ package cn.kerninventor.tools.poibox.opensource;
 
 import cn.kerninventor.tools.poibox.opensource.data.DataTabulationHandler;
 import cn.kerninventor.tools.poibox.opensource.data.DataTabulator;
-import cn.kerninventor.tools.poibox.opensource.developer.SealingVersion;
 import cn.kerninventor.tools.poibox.opensource.layout.LayoutHandler;
 import cn.kerninventor.tools.poibox.opensource.layout.Layouter;
 import cn.kerninventor.tools.poibox.opensource.style.FontHandler;
@@ -21,10 +20,6 @@ import java.io.IOException;
  * @author Kern
  * @date 2019/10/29 14:16
  */
-@SealingVersion(
-        version = 1.00,
-        zh_description = "poibox 默认实现"
-)
 public final class PoiboxDefaultImplement implements Poibox {
 
     private Workbook workbook;

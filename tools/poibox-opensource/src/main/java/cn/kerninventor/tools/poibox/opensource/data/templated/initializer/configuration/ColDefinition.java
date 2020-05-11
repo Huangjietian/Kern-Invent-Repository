@@ -11,11 +11,13 @@ public interface ColDefinition {
 
     ColDefinition setTitleName(String titleName);
 
-    ColDefinition setColumnStyle(CellStyle columnStyle);
+    ColDefinition setTheadStyle(CellStyle cellStyle);
+
+    ColDefinition setTbodyStyle(CellStyle cellStyle);
 
     ColDefinition setColumnWidth(int columnWidth);
 
     ColDefinition setDataFormatExpreesion(String dataFormatExpreesion);
 
-    ColDefinition setMergeByContent(boolean isMergeByContent);
+    ColDefinition setFormula(String formula);
 }

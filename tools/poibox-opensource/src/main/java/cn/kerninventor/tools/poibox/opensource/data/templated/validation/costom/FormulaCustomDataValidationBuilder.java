@@ -14,7 +14,6 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 /**
  * @author Kern
  * @date 2020/5/6 10:18
- * @description
  */
 public class FormulaCustomDataValidationBuilder implements DataValidationBuilder<FormulaCustomDataValid> {
 

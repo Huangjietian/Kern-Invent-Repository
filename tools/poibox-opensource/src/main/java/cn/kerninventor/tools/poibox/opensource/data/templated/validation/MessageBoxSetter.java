@@ -3,12 +3,8 @@ package cn.kerninventor.tools.poibox.opensource.data.templated.validation;
 import org.apache.poi.ss.usermodel.DataValidation;
 
 /**
- * @Title: ExcelDataValidHandlerCommonComponent
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.validation
- * @Author Kern
- * @Date 2019/12/13 12:52
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/13 12:52
  */
 public class MessageBoxSetter {
 

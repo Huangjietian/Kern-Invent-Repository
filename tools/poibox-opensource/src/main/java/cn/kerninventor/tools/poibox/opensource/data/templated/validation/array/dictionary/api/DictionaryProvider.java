@@ -5,12 +5,8 @@ import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.d
 import java.util.List;
 
 /**
- * @Title: ViewDictionaryCover
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.data.datatable.dict
- * @Author Kern
- * @Date 2019/12/13 16:01
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/13 16:01
  */
 public interface DictionaryProvider extends Dictionary {
 

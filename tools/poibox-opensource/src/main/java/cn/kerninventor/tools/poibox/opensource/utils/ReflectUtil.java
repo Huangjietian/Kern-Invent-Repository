@@ -7,12 +7,8 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * @Title: ReflectUtil
- * @ProjectName tools
- * @PackageName cn.kerninventor.tools.poibox.utils
- * @Author Kern
- * @Date 2019/12/16 16:39
- * @Description: TODO
+ * @author Kern
+ * @date 2019/12/16 16:39
  */
 public class ReflectUtil {
 

@@ -1,6 +1,5 @@
 package cn.kerninventor.tools.poibox.opensource;
 
-import cn.kerninventor.tools.poibox.opensource.developer.SealingVersion;
 import cn.kerninventor.tools.poibox.opensource.style.Fonter;
 import org.apache.poi.ss.usermodel.*;
 
@@ -10,16 +9,6 @@ import java.io.UnsupportedEncodingException;
  * @uthor Kern
  * @date 2019/10/30 17:58
  */
-@SealingVersion(
-        version = 1.00,
-        description = "Poi common util!",
-        zh_description = "POIBox 通用工具类, " +
-                "1. 提供获取表格各对象的功能；" +
-                "2. 提供获取调整后列宽的功能；" +
-                "3. 提供调整列宽的功能；" +
-                "4. 提供转换列数字下标为英文下标的功能",
-        possible = "New general functionality will be added based on the continuous extension."
-)
 public class BoxGadget {
 
     protected static final String DEFAULT_CHARSET = "GBK";

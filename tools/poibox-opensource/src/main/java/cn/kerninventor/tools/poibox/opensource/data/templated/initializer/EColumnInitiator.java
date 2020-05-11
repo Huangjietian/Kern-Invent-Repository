@@ -2,7 +2,10 @@ package cn.kerninventor.tools.poibox.opensource.data.templated.initializer;
 
 import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelColumn;
 import cn.kerninventor.tools.poibox.opensource.data.templated.enums.SupportedDataType;
+import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.configuration.ColDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValid;
+import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValidationBuilder;
+import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValidationBuilderFactory;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.dictionary.DictionaryInterpretor;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.dictionary.DictionaryLibrary;
 import cn.kerninventor.tools.poibox.opensource.data.templated.writer.col.ColWriter;
@@ -17,19 +20,21 @@ import java.lang.reflect.Field;
  * @author Kern
  * @date 2019/12/9 15:52
  */
-public class EColumnInitiator<T extends Object> implements Comparable<EColumnInitiator>{
+public class EColumnInitiator<T extends Object> implements Comparable<EColumnInitiator>, ColDefinition {
 
     private Field field;
     private String fieldName;
     private String titleName;
-    private int columnIndex;
+    private volatile int columnIndex;
     private int columnSort;
     private int columnWidth;
     private String dataFormatEx;
     private String formula;
     private CellStyle theadStyle;
     private CellStyle tbodyStyle;
-    private Annotation validAnnotation;
+    private DataValidationBuilder dataValidationBuilder;
+
+
     private DictionaryInterpretor interpretor;
     private ColWriter colWriter;
 
@@ -43,15 +48,17 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
         this.columnSort = excelColumn.columnSort();
         this.theadStyle = theadStyle;
         this.tbodyStyle = tbodyStyle;
-        this.validAnnotation = ReflectUtil.getFirstMarkedAnnotation(field, DataValid.class);
+        Annotation annotation = ReflectUtil.getFirstMarkedAnnotation(field, DataValid.class);
+        if (annotation != null) {
+            this.dataValidationBuilder = DataValidationBuilderFactory.getInstance(annotation);
+        }
         //FIXME 重新实现翻译功能， 建议以外部添加的形式指定字段的翻译器。
-        this.interpretor = DictionaryLibrary.getInterpretor(this.validAnnotation);
+        this.interpretor = DictionaryLibrary.getInterpretor(annotation);
         try {
             this.colWriter = excelColumn.colWriter().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new IllegalColumnConfigureException("ColWriter lack of parameterless constructors! field : " + fieldName);
         }
-        //默认提供的GeneralColWriter 和 MergeAbleColWriter 仅支持部分数据类型，其他数据类型需指定实现了ColWriter接口的自定义实现。
         SupportedDataType.checkSupportability(field, colWriter);
     }
 
@@ -91,8 +98,8 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
         return formula;
     }
 
-    public Annotation getValidAnnotation() {
-        return validAnnotation;
+    public DataValidationBuilder getDataValidationBuilder() {
+        return dataValidationBuilder;
     }
 
     public DictionaryInterpretor getInterpretor() {
@@ -126,4 +133,42 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
             return -1;
         }
     }
+
+    @Override
+    public ColDefinition setTitleName(String titleName) {
+        this.titleName = titleName;
+        return this;
+    }
+
+    @Override
+    public ColDefinition setTheadStyle(CellStyle cellStyle) {
+        this.theadStyle = cellStyle;
+        return this;
+    }
+
+    @Override
+    public ColDefinition setTbodyStyle(CellStyle cellStyle) {
+        this.tbodyStyle = cellStyle;
+        return this;
+    }
+
+    @Override
+    public ColDefinition setColumnWidth(int columnWidth) {
+        this.columnWidth = columnWidth;
+        return this;
+    }
+
+    @Override
+    public ColDefinition setDataFormatExpreesion(String dataFormatExpreesion) {
+        this.dataFormatEx = dataFormatExpreesion;
+        return this;
+    }
+
+    @Override
+    public ColDefinition setFormula(String formula) {
+        this.formula = formula;
+        return this;
+    }
+
+
 }
