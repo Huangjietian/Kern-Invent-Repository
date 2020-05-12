@@ -1,8 +1,5 @@
 package cn.kerninventor.tools.spring.bean.validator.demo;
 
-import cn.kerninventor.tools.spring.bean.validator.ThrowingCallback;
-import cn.kerninventor.tools.spring.bean.validator.VerifiedBean;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -12,7 +9,7 @@ import javax.validation.constraints.NotBlank;
  * @date 2020/5/11 19:53
  * @description
  */
-@VerifiedBean(callback = ThrowingCallback.class)
+//@VerifiedBean(callback = ThrowingCallback.class)
 public class Humen {
 
     @NotBlank(message = "人员姓名不能为空")

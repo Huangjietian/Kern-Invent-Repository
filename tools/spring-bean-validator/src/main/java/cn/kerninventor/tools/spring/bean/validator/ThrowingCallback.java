@@ -14,11 +14,9 @@ public class ThrowingCallback implements ValidateCallback {
     public <T> void invoke(Set<ConstraintViolation<T>> constraintViolations) {
         StringBuilder builder = new StringBuilder();
         String line = System.lineSeparator();
-
         constraintViolations.forEach(e -> {
             builder.append(e.getMessage()).append(line);
         });
-
         throw new IllegalArgumentException(builder.toString());
     }
 }

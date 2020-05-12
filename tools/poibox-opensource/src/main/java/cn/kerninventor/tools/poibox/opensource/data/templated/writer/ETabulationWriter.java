@@ -208,7 +208,6 @@ public final class ETabulationWriter<T> implements Writer<T> {
                     sheet,
                     e.adjustCellRangeAddress(tabulation, columns)
             );
-            //TODO 某些情况下生成多行的数据时，如何进行换行和如何调整行高。
             mergedRange.setRowHeight(e.getRowHeight()).setMergeRangeContent(e.getValue()).setMergeRangeStyle(e.getCellStyle());
         });
     }

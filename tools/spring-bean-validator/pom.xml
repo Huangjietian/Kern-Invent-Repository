@@ -7,11 +7,11 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.12.RELEASE</version>
+        <version>2.2.7.RELEASE</version>
     </parent>
     
     <groupId>cn.kerninventor</groupId>
-    <artifactId>spring-beanvalidation-catcher</artifactId>
+    <artifactId>spring-bean-validator</artifactId>
     <version>1.0-RELEASE</version>
 
     <dependencies>
