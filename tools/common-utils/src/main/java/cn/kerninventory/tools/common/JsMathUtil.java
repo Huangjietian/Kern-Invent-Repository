@@ -1,4 +1,4 @@
-package cn.kerninventory.tools.common.script;
+package cn.kerninventory.tools.common;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -21,14 +21,16 @@ public final class JsMathUtil {
      * @param <T>
      * @return
      */
-    public static  <T extends Number> boolean up2Standard(T standard, JsCompareType compare, T... ts) {
+    public static  <T extends Number> boolean up2Standard(T standard, String compare, T... ts) {
         if (ts.length == 0 || standard == null) {
             return false;
         }
         StringBuilder equation = new StringBuilder();
         for (T t : ts) {
             equation.append(t)
-                    .append(compare.getExpression())
+                    .append(" ")
+                    .append(compare)
+                    .append(" ")
                     .append(standard)
                     .append(" && ");
         }
@@ -48,9 +50,9 @@ public final class JsMathUtil {
      * @param <T>
      * @return
      */
-    public static <T extends Number> boolean compare(T t1, JsCompareType compare, T t2) {
+    public static <T extends Number> boolean compare(T t1, String compare, T t2) {
         try {
-            return (boolean) jsEngine.eval(t1 + compare.getExpression() + t2);
+            return (boolean) jsEngine.eval(t1 + " " + compare + " " + t2);
         } catch (ScriptException e) {
             throw new IllegalArgumentException("Js parse error" + e.getMessage() , e);
         }
