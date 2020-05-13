@@ -4,16 +4,15 @@ import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
  * @author Kern
  * @date 2019/11/11 14:52
  */
-public class ProxyComplier {
+public class ProxyFileComplier {
 
-    public static void compile(File proxyFile) throws IOException {
+    public static void compile(File proxyFile) throws Exception {
         StandardJavaFileManager standardJavaFileManager = null;
         try {
             JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
@@ -23,7 +22,6 @@ public class ProxyComplier {
             task.call();
             standardJavaFileManager.flush();
         } catch (Exception e) {
-            //TODO 异常处理
             throw e;
         } finally {
             if (standardJavaFileManager != null) {

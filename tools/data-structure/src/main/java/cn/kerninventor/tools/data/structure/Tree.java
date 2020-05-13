@@ -1,16 +1,17 @@
 package cn.kerninventor.tools.data.structure;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Kern
  * @date 2019/11/11 11:15
  */
-public interface Tree<K, T extends Tree> extends DataStructure {
+public interface Tree<K, T extends Tree> extends Serializable {
 
-    K getChildKey();
+    K subNode();
 
-    K getParentKey();
+    K masterNode();
 
     /**
      * 在织入代理之后，通过该方法可以获得树状结构的下层
@@ -18,8 +19,6 @@ public interface Tree<K, T extends Tree> extends DataStructure {
      *
      * @author Kern
      * @date 2020/4/22
-     * @description
-     * @中文描述
     */
     default List<T> branches() {
         //NOTHING TO DO !
@@ -32,11 +31,9 @@ public interface Tree<K, T extends Tree> extends DataStructure {
      *
      * @author Kern
      * @date 2020/4/22
-     * @description
-     * @中文描述
     */
     default T trunk() {
-        return null;
+        return (T) this;
     }
 
     /**
@@ -44,8 +41,6 @@ public interface Tree<K, T extends Tree> extends DataStructure {
      *
      * @author Kern
      * @date 2020/4/22
-     * @description
-     * @中文描述
     */
     default void setBranches(List<T> list) {
         //NOTHING TO DO !

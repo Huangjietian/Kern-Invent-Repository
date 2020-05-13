@@ -2,7 +2,6 @@ package cn.kerninventor.tools.data.structure.handler;
 
 import cn.kerninventor.tools.data.structure.Tree;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -11,5 +10,5 @@ import java.util.List;
  */
 public interface DataTree {
 
-    List<Tree> getResult(Tree top) throws InvocationTargetException, IllegalAccessException, InstantiationException;
+    <T extends Tree> List<T> getResult(Tree top);
 }
