@@ -12,6 +12,9 @@ public class ThrowingCallback implements ValidateCallback {
 
     @Override
     public <T> void invoke(Set<ConstraintViolation<T>> constraintViolations) {
+        if (constraintViolations == null || constraintViolations.isEmpty()) {
+            return;
+        }
         StringBuilder builder = new StringBuilder();
         String line = System.lineSeparator();
         constraintViolations.forEach(e -> {
