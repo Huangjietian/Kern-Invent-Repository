@@ -34,7 +34,7 @@ public class ExcelDownloader {
                 response.addHeader("Content-Disposition", "attachment;filename=" + fileName + fileSuffix);
             }
             response.addHeader("charset", "UTF-8");
-            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.addHeader("Access-Control-Allow-Origin", "*");
             out = response.getOutputStream();
             wb.write(out);
             out.flush();
