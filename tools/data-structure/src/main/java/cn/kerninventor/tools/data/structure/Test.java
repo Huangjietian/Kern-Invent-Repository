@@ -22,6 +22,24 @@ public class Test implements Tree<String, Test> {
         this.pid = pid;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public Test setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public Test setPid(String pid) {
+        this.pid = pid;
+        return this;
+    }
+
     @Override
     public String subNode() {
         return id;
@@ -53,5 +71,9 @@ public class Test implements Tree<String, Test> {
         List<Tree> newTests = new ArrayList<>();
         newTests = DataStructureBuilder.toTree(tests).getResult(new Test("AA",null));
         System.out.println(newTests);
+
+        List branches = newTests.get(0).branches();
+
+        System.out.println(branches);
     }
 }

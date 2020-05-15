@@ -1,9 +1,7 @@
 package cn.kerninventor.tools.poibox.opensource.utils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.Objects;
 
 /**
@@ -69,6 +67,16 @@ public class ReflectUtil {
         for (Annotation annotation : annotations){
             if (annotation.annotationType().isAnnotationPresent(marker)){
                 return annotation;
+            }
+        }
+        return null;
+    }
+
+    public static Type[] getGenericTypes(Class clazz) {
+        Type[] types = clazz.getGenericInterfaces();
+        for (Type type : types) {
+            if (type instanceof ParameterizedType) {
+                return ((ParameterizedType) type).getActualTypeArguments();
             }
         }
         return null;

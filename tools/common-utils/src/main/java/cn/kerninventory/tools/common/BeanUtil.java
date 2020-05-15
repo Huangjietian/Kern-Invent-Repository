@@ -1,6 +1,10 @@
 package cn.kerninventory.tools.common;
 
+import com.alibaba.fastjson.JSON;
+import org.springframework.beans.BeanUtils;
+
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,18 +85,14 @@ public class BeanUtil {
         return t;
     }
 
-    public static <T extends Object> T notEmpty(T t, Condition condittion) {
-        return notEmpty(t, condittion, t.getClass() + " cannot be empty!");
+    public static void inadequate(Condition condittion, String errorMsg) {
+        inadequate(condittion, new IllegalArgumentException(errorMsg));
     }
 
-    public static <T extends Object> T notEmpty(T t, Condition condittion, String errorMsg) {
-        return notEmpty(t, condittion, new IllegalArgumentException(errorMsg));
-    }
-
-    public static <T extends Object> T notEmpty(T t, Condition condittion, RuntimeException exc) {
+    public static void inadequate(Condition condittion, RuntimeException exc) {
         judgment(condittion, exc);
-        return t;
     }
+
 
     /**
      * 字符串判空=========================================================================
@@ -213,4 +213,15 @@ public class BeanUtil {
         return failureAction.action();
     }
 
+    public static <T> List<T> copyProperties(Collection source, Class<T> tClass) {
+        return JSON.parseArray(JSON.toJSONString(source), tClass);
+    }
+
+    public static <T> T copyProperties(Object source, Class<T> tClass) {
+        return JSON.parseObject(JSON.toJSONString(source), tClass);
+    }
+
+    public static void copyProperties(Object source, Object target, String... ignoreProperties) {
+        BeanUtils.copyProperties(source, target, ignoreProperties);
+    }
 }

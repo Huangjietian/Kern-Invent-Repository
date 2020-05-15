@@ -7,11 +7,6 @@ package cn.kerninventory.tools.common;
  */
 public class StringUtil {
 
-//    public static void main(String[] args) {
-//        String str = "3245313..5346";
-//        System.out.println(StringUtil.subFrontByLastIndexOf(str, "."));
-//    }
-
     /**
      * 字符串截取=========================================================================
      */

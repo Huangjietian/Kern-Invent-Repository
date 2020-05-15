@@ -20,7 +20,7 @@ public class FormulaListUtil {
         Workbook workbook = sheet.getWorkbook();
         Sheet hiddenSheet = BoxGadget.getSheetForce(workbook, HIDDEN_SHEET_NAME);
         if (sheet.equals(hiddenSheet)) {
-            throw new IllegalArgumentException("NameName Sheet can't to operate!");
+            throw new IllegalArgumentException("Hidden Sheet can't to operate!");
         }
         int dataRowIndex = hiddenSheet.getLastRowNum() + 1;
         Row dataRow = hiddenSheet.createRow(dataRowIndex);
