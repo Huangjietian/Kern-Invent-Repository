@@ -20,8 +20,7 @@ public class TreeProxyInstanceGenerator<T extends Tree> implements ProxyInstance
         this.proxyClass = proxyClass;
     }
 
-    private static String getClassContent(Class targetClass) {
-        String proxyClassName = targetClass.getSimpleName() + NAME_PROXY_SUFFIX;
+    private static String getClassContent(String proxyClassName, Class targetClass) {
         String packageName = targetClass.getPackage().getName();
         return new StringBuilder()
                 .append("package ").append(packageName).append(LINE_END)
@@ -37,9 +36,10 @@ public class TreeProxyInstanceGenerator<T extends Tree> implements ProxyInstance
     }
 
     public static TreeProxyInstanceGenerator proxyGenerate(Class<? extends Tree> targetClass) throws Exception {
-        String classContent = getClassContent(targetClass);
-        String proxyClassSimpleName = targetClass.getSimpleName() + NAME_PROXY_SUFFIX;
-        File file = ProxyFileCreator.create(proxyClassSimpleName, targetClass, classContent);
+        Long treeNumber = ProxyInstanceGeneratorFactory.getTagNumbers(ProxyInstanceGeneratorFactory.TAG_TREE);
+        String proxyClassName = targetClass.getSimpleName() + NAME_PROXY_SUFFIX + (treeNumber + 1);
+        String classContent = getClassContent(proxyClassName, targetClass);
+        File file = ProxyFileCreator.create(proxyClassName, targetClass, classContent);
         ProxyFileComplier.compile(file);
         String proxyClassFullName = targetClass.getName() + NAME_PROXY_SUFFIX;
         Class clazz = Class.forName(proxyClassFullName);

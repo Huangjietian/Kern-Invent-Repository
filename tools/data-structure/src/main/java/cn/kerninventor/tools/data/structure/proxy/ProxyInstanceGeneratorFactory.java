@@ -2,8 +2,8 @@ package cn.kerninventor.tools.data.structure.proxy;
 
 import cn.kerninventor.tools.data.structure.Tree;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Kern
@@ -11,9 +11,13 @@ import java.util.Map;
  */
 public class ProxyInstanceGeneratorFactory {
 
-    private static final String TAG_TREE = "&TREE_";
+    static final String TAG_TREE = "&TREE_";
 
-    private static Map<String, ProxyInstanceGenerator> proxyClassContainer = new HashMap<>();
+    private static Map<String, ProxyInstanceGenerator> proxyClassContainer = new ConcurrentHashMap<>();
+
+    public static long getTagNumbers(final String tag) {
+        return proxyClassContainer.keySet().stream().filter(e -> e.contains(tag)).count();
+    }
 
     private static <T extends ProxyInstanceGenerator> T putProxy(String tag, Class key, T value) {
         proxyClassContainer.put(tag + key.getName(), value);
