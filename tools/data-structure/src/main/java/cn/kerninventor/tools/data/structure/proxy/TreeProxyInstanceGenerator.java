@@ -41,7 +41,7 @@ public class TreeProxyInstanceGenerator<T extends Tree> implements ProxyInstance
         String classContent = getClassContent(proxyClassName, targetClass);
         File file = ProxyFileCreator.create(proxyClassName, targetClass, classContent);
         ProxyFileComplier.compile(file);
-        String proxyClassFullName = targetClass.getName() + NAME_PROXY_SUFFIX;
+        String proxyClassFullName = targetClass.getName() + NAME_PROXY_SUFFIX + (treeNumber + 1);
         Class clazz = Class.forName(proxyClassFullName);
         return new TreeProxyInstanceGenerator(clazz);
     }
