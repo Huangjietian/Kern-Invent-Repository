@@ -7,7 +7,7 @@ import java.lang.annotation.*;
  * @date 2020/5/11 19:12
  * @description
  */
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface BeanValidate {
