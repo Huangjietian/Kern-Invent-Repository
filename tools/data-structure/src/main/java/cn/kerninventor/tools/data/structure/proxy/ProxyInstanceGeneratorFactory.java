@@ -25,7 +25,7 @@ public class ProxyInstanceGeneratorFactory {
     }
 
     public static TreeProxyInstanceGenerator getTreeProxy(Class<? extends Tree> clazz)  {
-        ProxyInstanceGenerator proxy = proxyClassContainer.get(clazz);
+        ProxyInstanceGenerator proxy = proxyClassContainer.get(TAG_TREE+ clazz.getName());
         if (proxy == null){
             TreeProxyInstanceGenerator dataTreeProxy = null;
             try {
