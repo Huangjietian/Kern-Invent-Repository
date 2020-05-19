@@ -33,10 +33,12 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
     private CellStyle theadStyle;
     private CellStyle tbodyStyle;
     private DataValidationBuilder dataValidationBuilder;
+    private ColWriter colWriter;
+
 
 
     private DictionaryInterpretor interpretor;
-    private ColWriter colWriter;
+
 
     public EColumnInitiator(Field field, ExcelColumn excelColumn, CellStyle theadStyle, CellStyle tbodyStyle) {
         this.field = field;

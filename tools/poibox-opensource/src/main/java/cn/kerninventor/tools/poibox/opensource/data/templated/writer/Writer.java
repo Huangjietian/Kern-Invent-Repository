@@ -26,7 +26,7 @@ public interface Writer<T> {
 
     Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore);
 
-    Writer<T> addFormulaList(Map<String, List<String>> nameNameMap);
+    Writer<T> addFormulaList(Map<String, List<String>> formulaListMap);
 
     TabConfiguration getConfiguration();
 

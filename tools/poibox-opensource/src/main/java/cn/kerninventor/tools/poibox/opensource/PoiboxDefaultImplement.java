@@ -23,6 +23,10 @@ import java.io.IOException;
 public final class PoiboxDefaultImplement implements Poibox {
 
     private Workbook workbook;
+    private DataTabulationHandler dataTabulationHandler;
+    private Styler styler;
+    private Fonter fonter;
+    private Layouter layouter;
 
     protected PoiboxDefaultImplement() {
         workbook = new HSSFWorkbook();
@@ -34,21 +38,35 @@ public final class PoiboxDefaultImplement implements Poibox {
 
     @Override
     public DataTabulator dataTabulator() {
-        return new DataTabulationHandler(this);
+        if (dataTabulationHandler == null) {
+            dataTabulationHandler = new DataTabulationHandler(this);
+        }
+        return dataTabulationHandler;
     }
 
     @Override
     public Styler styler() {
-        return new StyleHandler(this);
+        if (styler == null) {
+            styler = new StyleHandler(this);
+        }
+        return styler;
     }
 
     @Override
     public Fonter fonter() {
-        return new FontHandler(this);
+        if (fonter == null) {
+            fonter = new FontHandler(this);
+        }
+        return fonter;
     }
 
     @Override
-    public Layouter layouter() { return new LayoutHandler(this); }
+    public Layouter layouter() {
+        if (layouter == null) {
+            layouter = new LayoutHandler(this);
+        }
+        return layouter;
+    }
 
     @Override
     public Workbook workbook() {

@@ -29,7 +29,7 @@ public final class ETabulationWriter<T> implements Writer<T> {
 
     private ETabulationInitiator<T> tabInitiator;
 
-    private Map<String, List<String>> formulaListMap = new HashMap<>();
+    private Map<String, List<String>> formulaListMap;
 
     public ETabulationWriter(ETabulationInitiator<T> tabInitiator) {
         this.tabInitiator = Objects.requireNonNull(tabInitiator);
@@ -172,11 +172,8 @@ public final class ETabulationWriter<T> implements Writer<T> {
     }
 
     private void formulaLists2Sheet(Sheet sheet) {
-        if (sheet.getSheetName().equals(FormulaListUtil.HIDDEN_SHEET_NAME)){
-            throw new IllegalArgumentException("Sheet name can't be application's constant:" + sheet.getSheetName());
-        }
         //设值名称管理器
-        if (!formulaListMap.isEmpty()){
+        if (formulaListMap != null && !formulaListMap.isEmpty()){
             formulaListMap.keySet().forEach(e -> {
                 FormulaListUtil.addFormulaList(sheet, FormulaListDataValid.NAME_PRIFIIX + e, formulaListMap.get(e));
             });
@@ -213,8 +210,11 @@ public final class ETabulationWriter<T> implements Writer<T> {
     }
 
     @Override
-    public Writer<T> addFormulaList(Map<String, List<String>> nameNameMap) {
-        this.formulaListMap.putAll(nameNameMap);
+    public Writer<T> addFormulaList(Map<String, List<String>> formulaListMap) {
+        if (this.formulaListMap == null) {
+            this.formulaListMap = new HashMap<>();
+        }
+        this.formulaListMap.putAll(formulaListMap);
         return this;
     }
 
