@@ -11,5 +11,15 @@ public interface ColWriter {
 
     void setCellValue(Cell cell, Object value);
 
-    void flush();
+    default void flush() {
+        //NOTHING TO DO
+    }
+
+    default void pre() {
+        //NOTHING TO DO
+    }
+
+    default void interrupt() {
+        //NOTHING TO DO
+    }
 }

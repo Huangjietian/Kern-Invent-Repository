@@ -15,8 +15,4 @@ public class GeneralColWriter implements ColWriter {
         CellValueUtil.setCellObjectValue(cell, value);
     }
 
-    @Override
-    public void flush() {
-        //NOTHING TO DO !!!
-    }
 }

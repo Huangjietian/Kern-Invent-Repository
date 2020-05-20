@@ -147,6 +147,7 @@ public final class ETabulationWriter<T> implements Writer<T> {
 
     private TbodyWriter getDataTbodyWriter(){
         return (table, col, tbSt, sh, data) -> {
+            col.getColWriter().pre();
             for (int datasIndex = 0, rowIndex = table.getTbodyFirstRowIndex(); datasIndex < data.size() ; datasIndex ++ , rowIndex++){
                 Row bodyRow = BoxGadget.getRowForce(sh, rowIndex);
                 setRowHeight(bodyRow, table.getTbodyRowHeight());
@@ -166,6 +167,7 @@ public final class ETabulationWriter<T> implements Writer<T> {
                     value = col.getInterpretor().interpreteOf(value);
                 }
                 col.getColWriter().setCellValue(bodyCell, value);
+                col.getColWriter().interrupt();
             }
             col.getColWriter().flush();
         };

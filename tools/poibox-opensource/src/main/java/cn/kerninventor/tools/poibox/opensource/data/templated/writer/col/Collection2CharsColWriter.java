@@ -35,8 +35,4 @@ public class Collection2CharsColWriter implements ColWriter {
         }
     }
 
-    @Override
-    public void flush() {
-        //NOTHING TO DO !!!
-    }
 }
