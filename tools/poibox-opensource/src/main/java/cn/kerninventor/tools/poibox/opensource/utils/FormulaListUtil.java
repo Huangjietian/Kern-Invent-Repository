@@ -3,7 +3,8 @@ package cn.kerninventor.tools.poibox.opensource.utils;
 import cn.kerninventor.tools.poibox.opensource.BoxGadget;
 import org.apache.poi.ss.usermodel.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * @author Kern
@@ -13,7 +14,7 @@ public class FormulaListUtil {
 
     public final static String HIDDEN_SHEET_NAME = "Pandora";
 
-    public static String addFormulaList(Sheet sheet, String nameName, List<String> datas) {
+    public static String addFormulaList(Sheet sheet, String nameName, Collection<String> datas) {
         if (datas == null || datas.isEmpty()) {
             return nameName;
         }
@@ -26,9 +27,10 @@ public class FormulaListUtil {
         Row dataRow = hiddenSheet.createRow(dataRowIndex);
 
         //赋值到隐藏的字典sheet页
-        for (int i = 0 ; i < datas.size(); i++){
+        int i = 0 ;
+        for (Iterator<String> iterator = datas.iterator(); iterator.hasNext() ; i ++) {
             Cell cell = dataRow.createCell(i);
-            String value = datas.get(i);
+            String value = iterator.next();
             cell.setCellValue(value);
         }
 

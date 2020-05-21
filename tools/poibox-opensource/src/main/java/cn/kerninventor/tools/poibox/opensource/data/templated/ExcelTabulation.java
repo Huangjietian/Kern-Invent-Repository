@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.opensource.data.templated;
 import cn.kerninventor.tools.poibox.opensource.data.templated.element.Style;
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Textbox;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -36,5 +37,5 @@ public @interface ExcelTabulation {
 
     int maximumColumnsWidth() default MaximumColumnWidthAllowed;
 
-
+    Textbox[] textboxes() default {};
 }

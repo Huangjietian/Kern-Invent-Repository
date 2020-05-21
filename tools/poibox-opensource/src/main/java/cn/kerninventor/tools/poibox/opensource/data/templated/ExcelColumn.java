@@ -33,4 +33,5 @@ public @interface ExcelColumn {
     int tbodyStyleIndex() default 0;
 
     Class<? extends ColWriter> colWriter() default GeneralColWriter.class;
+
 }

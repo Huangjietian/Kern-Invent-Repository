@@ -1,5 +1,6 @@
 package cn.kerninventor.tools.poibox.opensource.layout;
 
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Textbox;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFTextbox;
 import org.apache.poi.ss.usermodel.Picture;
@@ -33,6 +34,8 @@ public interface Layouter {
     void setCellsSize(Sheet sheet, Float height, Integer width);
 
     SimpleTextBox addTextBox(Sheet sheet, String text, AnchorIndex anchorIndex);
+
+    void addTextBox(Sheet sheet, Textbox textbox);
 
     HSSFTextbox addTextBox(HSSFSheet sheet, AnchorIndex anchorIndex, String text);
 

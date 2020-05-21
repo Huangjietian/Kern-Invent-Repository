@@ -3,6 +3,10 @@ package cn.kerninventor.tools.poibox.opensource.layout;
 import cn.kerninventor.tools.poibox.opensource.BoxBracket;
 import cn.kerninventor.tools.poibox.opensource.BoxGadget;
 import cn.kerninventor.tools.poibox.opensource.Poibox;
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Anchor;
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Margins;
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Palette;
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Textbox;
 import cn.kerninventor.tools.poibox.opensource.utils.CellValueUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
@@ -149,6 +153,24 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
             throw new IllegalArgumentException("Unsupported sheet type");
         }
         return new SimpleTextBox(shape);
+    }
+
+    @Override
+    public void addTextBox(Sheet sheet, Textbox textbox) {
+        Anchor anchor = textbox.anchorIndex();
+        AnchorIndex anchorIndex = new AnchorIndex(
+                anchor.left(), anchor.top(), anchor.right(), anchor.bottom(),
+                anchor.col1(), anchor.row1(), anchor.col2(), anchor.row2()
+        );
+        String value = textbox.value();
+        SimpleTextBox simpleTextBox = addTextBox(sheet, value, anchorIndex);
+        Palette fillColor = textbox.fillColor();
+        simpleTextBox.setFillColor(fillColor.red(), fillColor.green(), fillColor.bule());
+        Palette lineColor = textbox.lineColor();
+        simpleTextBox.setLineColor(lineColor.red(), lineColor.green(), lineColor.bule());
+        Margins margins = textbox.margins();
+        simpleTextBox.setMargins(margins.left(), margins.top(), margins.right(), margins.bottom());
+        simpleTextBox.setVerticalAlignment(textbox.verticalAlignment());
     }
 
     @Override

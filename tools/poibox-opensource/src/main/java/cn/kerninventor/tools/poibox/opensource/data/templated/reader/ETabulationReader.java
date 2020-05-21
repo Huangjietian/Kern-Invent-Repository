@@ -68,12 +68,7 @@ public class ETabulationReader<T> implements Reader<T> {
                     continue;
                 }
                 Object value = null;
-                //翻译
-                if (column.getInterpretor().isInterpretable()) {
-                    value = column.getInterpretor().getMetaDataFrom(cell);
-                } else {
-                    value = CellValueUtil.getCellValueBySpecifiedType(cell, column.getFieldType());
-                }
+                value = CellValueUtil.getCellValueBySpecifiedType(cell, column.getFieldType());
                 if (null == value) {
                     nullCount++;
                 }

@@ -3,6 +3,7 @@ package cn.kerninventor.tools.poibox.opensource.data.templated.writer;
 import cn.kerninventor.tools.poibox.opensource.BoxGadget;
 import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelColumn;
 import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelTabulation;
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Textbox;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.EBannerInitiator;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.EColumnInitiator;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.ETabulationInitiator;
@@ -29,7 +30,7 @@ public final class ETabulationWriter<T> implements Writer<T> {
 
     private ETabulationInitiator<T> tabInitiator;
 
-    private Map<String, List<String>> formulaListMap;
+    private Map<String, Set<String>> formulaListMap;
 
     public ETabulationWriter(ETabulationInitiator<T> tabInitiator) {
         this.tabInitiator = Objects.requireNonNull(tabInitiator);
@@ -121,6 +122,11 @@ public final class ETabulationWriter<T> implements Writer<T> {
         }
         //5. 写横幅
         tempalateBanners(tabulation, columnsContainer, sheet);
+        //6. 添加文本框
+        Textbox[] textboxes = tabulation.getTextboxes();
+        for (Textbox textbox : textboxes) {
+            tabulation.getParent().layouter().addTextBox(sheet, textbox);
+        }
     }
 
     private TbodyWriter getTemplateTbodyWriter(){
@@ -161,10 +167,6 @@ public final class ETabulationWriter<T> implements Writer<T> {
                     value = ReflectUtil.getFieldValue(col.getField(), data.get(datasIndex));
                 } catch (IllegalAccessException e) {
                     throw new IllegalArgumentException("Field value get error., field name: " + col.getFieldName());
-                }
-                //翻译 FIXME 去掉翻译功能
-                if (col.getInterpretor().isInterpretable()) {
-                    value = col.getInterpretor().interpreteOf(value);
                 }
                 col.getColWriter().setCellValue(bodyCell, value);
                 col.getColWriter().interrupt();
@@ -212,7 +214,16 @@ public final class ETabulationWriter<T> implements Writer<T> {
     }
 
     @Override
-    public Writer<T> addFormulaList(Map<String, List<String>> formulaListMap) {
+    public Writer<T> addFormulaList(String name, Set<String> formulaList) {
+        if (this.formulaListMap == null) {
+            this.formulaListMap = new HashMap<>();
+        }
+        this.formulaListMap.put(name, formulaList);
+        return this;
+    }
+
+    @Override
+    public Writer<T> addAllFormulaList(Map<String, Set<String>> formulaListMap) {
         if (this.formulaListMap == null) {
             this.formulaListMap = new HashMap<>();
         }

@@ -6,11 +6,15 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * @author Kern
  * @date 2020/4/9 11:58
  * @description
  */
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Style {
 
     int index();

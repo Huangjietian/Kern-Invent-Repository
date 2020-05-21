@@ -6,8 +6,6 @@ import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.config
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValid;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.opensource.data.templated.validation.DataValidationBuilderFactory;
-import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.dictionary.DictionaryInterpretor;
-import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.dictionary.DictionaryLibrary;
 import cn.kerninventor.tools.poibox.opensource.data.templated.writer.col.ColWriter;
 import cn.kerninventor.tools.poibox.opensource.exception.IllegalColumnConfigureException;
 import cn.kerninventor.tools.poibox.opensource.utils.ReflectUtil;
@@ -35,11 +33,6 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
     private DataValidationBuilder dataValidationBuilder;
     private ColWriter colWriter;
 
-
-
-    private DictionaryInterpretor interpretor;
-
-
     public EColumnInitiator(Field field, ExcelColumn excelColumn, CellStyle theadStyle, CellStyle tbodyStyle) {
         this.field = field;
         this.fieldName = field.getName();
@@ -54,8 +47,6 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
         if (annotation != null) {
             this.dataValidationBuilder = DataValidationBuilderFactory.getInstance(annotation);
         }
-        //FIXME 重新实现翻译功能， 建议以外部添加的形式指定字段的翻译器。
-        this.interpretor = DictionaryLibrary.getInterpretor(annotation);
         try {
             this.colWriter = excelColumn.colWriter().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
@@ -102,10 +93,6 @@ public class EColumnInitiator<T extends Object> implements Comparable<EColumnIni
 
     public DataValidationBuilder getDataValidationBuilder() {
         return dataValidationBuilder;
-    }
-
-    public DictionaryInterpretor getInterpretor() {
-        return interpretor;
     }
 
     public CellStyle getTheadStyle() {

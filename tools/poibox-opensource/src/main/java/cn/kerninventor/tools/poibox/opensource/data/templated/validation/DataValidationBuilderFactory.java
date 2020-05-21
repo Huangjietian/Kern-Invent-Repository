@@ -43,9 +43,6 @@ public class DataValidationBuilderFactory {
         else if (annotation instanceof TextLengthDataValid){
             return new TextLengthDataValidationBuilder((TextLengthDataValid) annotation);
         }
-        else if (annotation instanceof ArrayDataValid){
-            return new ArraysDataValidationBuilder((ArrayDataValid) annotation);
-        }
         else if (annotation instanceof FormulaListDataValid) {
             return new FormulaListDataValidationBuilder((FormulaListDataValid) annotation);
         }

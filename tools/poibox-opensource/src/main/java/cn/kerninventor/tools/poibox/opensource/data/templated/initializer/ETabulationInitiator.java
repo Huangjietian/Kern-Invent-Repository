@@ -7,6 +7,7 @@ import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelBanner;
 import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelColumn;
 import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelTabulation;
 import cn.kerninventor.tools.poibox.opensource.data.templated.element.Style;
+import cn.kerninventor.tools.poibox.opensource.data.templated.element.Textbox;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.configuration.BannerDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.configuration.TabConfiguration;
 import cn.kerninventor.tools.poibox.opensource.exception.IllegalSourceClassOfTabulationException;
@@ -40,6 +41,7 @@ public class ETabulationInitiator<T> extends BoxBracket implements TabConfigurat
     private int maxmunColumnsWidth;
     private List<EBannerInitiator> bannerContainer = new ArrayList<>();
     private List<EColumnInitiator> columnsContainer = new ArrayList<>();
+    private Textbox[] textboxes;
 
     public Class<T> getTabulationClass() {
         return tabulationClass;
@@ -96,6 +98,11 @@ public class ETabulationInitiator<T> extends BoxBracket implements TabConfigurat
     public EColumnInitiator getColumnInitializerByTitleName(final String fieldName) {
         return columnsContainer.stream().filter(e -> e.getFieldName().equals(fieldName)).findFirst().get();
     }
+
+    public Textbox[] getTextboxes() {
+        return textboxes;
+    }
+
     public ETabulationInitiator(Class<T> tableClass, Poibox poiBox) {
         super(poiBox);
         this.tabulationClass = tableClass;
@@ -123,6 +130,7 @@ public class ETabulationInitiator<T> extends BoxBracket implements TabConfigurat
         this.columnsContainer.addAll(initialzeColumns(getTabulationClass().getDeclaredFields(), getTheadStyleMap(), getTbodyStyleMap()));
         this.theadRowIndex = getRowIndexIncrementsByBanners(bannerContainer) + startRowIndex;
         this.tbodyFirstRowIndex = theadRowIndex + 1;
+        this.textboxes = excelTabulation.textboxes();
     }
 
     private Map<Integer, CellStyle> initStyles(Style[] styles, Styler styler) {
@@ -228,4 +236,5 @@ public class ETabulationInitiator<T> extends BoxBracket implements TabConfigurat
     public BannerDefinition getBannerAt(int index) {
         return this.bannerContainer.get(index);
     }
+
 }

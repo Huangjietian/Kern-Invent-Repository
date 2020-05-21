@@ -4,11 +4,15 @@ import cn.kerninventor.tools.poibox.opensource.style.enums.FontUnderline;
 import cn.kerninventor.tools.poibox.opensource.style.Fonter;
 import org.apache.poi.hssf.util.HSSFColor;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * @author Kern
  * @date 2020/4/9 12:29
  * @description
  */
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Font {
 
     String fontName() default Fonter.DEF_NAME_TEXTPART;

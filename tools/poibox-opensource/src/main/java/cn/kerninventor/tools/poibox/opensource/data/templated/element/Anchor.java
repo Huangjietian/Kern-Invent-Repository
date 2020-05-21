@@ -5,17 +5,25 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * @author Kern
- * @date 2020/4/9 16:19
+ * @date 2020/5/21 10:41
  * @description
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Range {
+public @interface Anchor {
 
-    int defaultVal = -1;
+    int left() default 0;
 
-    int fistRow() default defaultVal;
-    int firstCell() default defaultVal;
-    int lastRow() default defaultVal;
-    int lastCell() default defaultVal;
+    int top() default 0;
 
+    int right() default 0;
+
+    int bottom() default 0;
+
+    int col1();
+
+    int row1();
+
+    int col2();
+
+    int row2();
 }

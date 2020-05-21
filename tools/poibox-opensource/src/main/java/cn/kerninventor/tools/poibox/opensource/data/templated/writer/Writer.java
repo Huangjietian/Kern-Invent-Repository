@@ -7,6 +7,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Kern
@@ -26,7 +27,9 @@ public interface Writer<T> {
 
     Writer<T> writeTo(Sheet sheet, List<T> datas, String... ignore);
 
-    Writer<T> addFormulaList(Map<String, List<String>> formulaListMap);
+    Writer<T> addFormulaList(String name, Set<String> formulaList);
+
+    Writer<T> addAllFormulaList(Map<String, Set<String>> formulaListMap);
 
     TabConfiguration getConfiguration();
 
@@ -35,7 +38,5 @@ public interface Writer<T> {
     Writer addBanner(String value, CellStyle style, int row1, int row2);
 
     Writer addBanner(String value, CellStyle style, int row1, int row2, int col1, int col2);
-
-
 
 }
