@@ -2,7 +2,7 @@ package cn.kerninventor.tools.poibox.opensource.demo;
 
 import cn.kerninventor.tools.poibox.opensource.Poibox;
 import cn.kerninventor.tools.poibox.opensource.PoiboxFactory;
-import cn.kerninventor.tools.poibox.opensource.data.templated.writer.Writer;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.TabulationWriter;
 import cn.kerninventor.tools.poibox.opensource.layout.AnchorIndex;
 import cn.kerninventor.tools.poibox.opensource.layout.Palette;
 import cn.kerninventor.tools.poibox.opensource.layout.SimpleTextBox;
@@ -24,14 +24,14 @@ public class TestMain2 {
     public static void main(String[] args) throws IOException {
         Workbook wb = new XSSFWorkbook();
         Poibox poiBox = PoiboxFactory.open(wb);
-        Writer writer = poiBox.dataTabulator().writer(AthleteRosterEO.class);
+        TabulationWriter tabulationWriter = poiBox.dataTabulator().writer(AthleteRosterEO.class);
 
 //        CellStyle cellStyle = poiBox.styler().defaultHeadline(16);
 //        CellRangeAddress cellRangeAddress = new CellRangeAddress(0, 0, 0, 42);
 //        writer.getConfiguration()
 //                .addBanner("标题", cellStyle, cellRangeAddress)
 //                .addBanner("第二个标题", cellStyle, 1,1,0,42);
-        writer.writeTo("运动员");
+        tabulationWriter.writeTo("运动员");
 
         Sheet sheet = poiBox.getSheet("运动员");
         AnchorIndex index = new AnchorIndex(1, 26, 9, 32);

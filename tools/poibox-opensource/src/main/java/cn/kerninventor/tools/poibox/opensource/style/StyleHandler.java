@@ -2,7 +2,7 @@ package cn.kerninventor.tools.poibox.opensource.style;
 
 import cn.kerninventor.tools.poibox.opensource.BoxBracket;
 import cn.kerninventor.tools.poibox.opensource.Poibox;
-import cn.kerninventor.tools.poibox.opensource.data.templated.element.Style;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.element.Style;
 import cn.kerninventor.tools.poibox.opensource.style.enums.BorderDirection;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;

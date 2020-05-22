@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.opensource.data;
 
-import cn.kerninventor.tools.poibox.opensource.data.templated.reader.Reader;
-import cn.kerninventor.tools.poibox.opensource.data.templated.writer.Writer;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.reader.TabulationReader;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.TabulationWriter;
 
 /**
  * @author Kern
@@ -13,11 +13,11 @@ public interface DataTabulator {
     * @author Kern
     * @date 2020/4/10
     */
-    <T> Writer<T> writer(Class<T> sourceClass);
+    <T> TabulationWriter<T> writer(Class<T> sourceClass);
 
     /**
     * @author Kern
     * @date 2020/4/10
     */
-    <T> Reader<T> reader(Class<T> sourceClass);
+    <T> TabulationReader<T> reader(Class<T> sourceClass);
 }

@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.opensource.supportter;
 
-import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.dictionary.DictionaryLibrary;
-import cn.kerninventor.tools.poibox.opensource.data.templated.validation.array.dictionary.Dictionary;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.array.dictionary.DictionaryLibrary;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.array.dictionary.Dictionary;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

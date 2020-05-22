@@ -2,11 +2,11 @@ package cn.kerninventor.tools.poibox.opensource.data;
 
 import cn.kerninventor.tools.poibox.opensource.BoxBracket;
 import cn.kerninventor.tools.poibox.opensource.Poibox;
-import cn.kerninventor.tools.poibox.opensource.data.templated.initializer.ETabulationInitiator;
-import cn.kerninventor.tools.poibox.opensource.data.templated.reader.ETabulationReader;
-import cn.kerninventor.tools.poibox.opensource.data.templated.reader.Reader;
-import cn.kerninventor.tools.poibox.opensource.data.templated.writer.ETabulationWriter;
-import cn.kerninventor.tools.poibox.opensource.data.templated.writer.Writer;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.reader.ETabulationReader;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.reader.TabulationReader;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.ETabulationWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.TabulationWriter;
 
 /**
  * @author Kern
@@ -19,15 +19,15 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
     }
 
     @Override
-    public <T> Writer<T> writer(Class<T> sourceClass) {
-        ETabulationInitiator tabulationInitializer = new ETabulationInitiator(sourceClass, getParent());
-        return new ETabulationWriter(tabulationInitializer);
+    public <T> TabulationWriter<T> writer(Class<T> sourceClass) {
+        TableContext context = new TableContext(sourceClass, getParent());
+        return new ETabulationWriter(context);
     }
 
     @Override
-    public <T> Reader<T> reader(Class<T> sourceClass) {
-        ETabulationInitiator tabulationInitializer = new ETabulationInitiator(sourceClass, getParent());
-        return new ETabulationReader(tabulationInitializer);
+    public <T> TabulationReader<T> reader(Class<T> sourceClass) {
+        TableContext context = new TableContext(sourceClass, getParent());
+        return new ETabulationReader(context);
     }
 
 }

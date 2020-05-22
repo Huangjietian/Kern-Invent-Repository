@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.opensource.demo;
 
-import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelColumn;
-import cn.kerninventor.tools.poibox.opensource.data.templated.ExcelTabulation;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelColumn;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelTabulation;
 
 /**
  * @author Kern
