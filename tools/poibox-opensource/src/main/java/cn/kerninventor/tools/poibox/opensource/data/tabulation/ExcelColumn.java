@@ -1,5 +1,7 @@
 package cn.kerninventor.tools.poibox.opensource.data.tabulation;
 
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslate;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.UnmatchStrategy;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.ColWriter;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.GeneralColWriter;
 
@@ -34,4 +36,9 @@ public @interface ExcelColumn {
 
     Class<? extends ColWriter> colWriter() default GeneralColWriter.class;
 
+    /**
+     * 准备开发， 翻译器
+     * @return
+     */
+    ColumnDataTranslate dataTranslate() default @ColumnDataTranslate(translator = "", unmatchStrategy = UnmatchStrategy.IGNORE);
 }

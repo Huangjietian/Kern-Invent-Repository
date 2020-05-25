@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface ColumnDataTranslate {
 
-    String value();
+    String translator();
 
     UnmatchStrategy unmatchStrategy() default UnmatchStrategy.CONSOLE;
 
