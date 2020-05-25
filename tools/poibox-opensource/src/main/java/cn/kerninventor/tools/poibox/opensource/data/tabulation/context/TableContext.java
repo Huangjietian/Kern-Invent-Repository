@@ -28,7 +28,6 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     private Class<T> tabulationClass;
     private Map<Integer, CellStyle> theadStyleMap;
     private Map<Integer, CellStyle> tbodyStyleMap;
-    private volatile boolean initialized;
     private int theadRowIndex;
     private float theadRowHeight;
     private float tbodyRowHeight;
@@ -43,6 +42,7 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     public TableContext(Class<T> tableClass, Poibox poiBox) {
         super(poiBox);
         this.tabulationClass = tableClass;
+        init();
     }
 
     public Class<T> getTabulationClass() {
@@ -101,18 +101,14 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return textboxes;
     }
 
-    public synchronized void init(){
-        if (initialized) {
-            return;
-        }
-        initialized = true;
+    private void init(){
         Class tabulationClass = getTabulationClass();
         //element object init
         ExcelTabulation excelTabulation = dataTabulationSourceClassValidate(tabulationClass);
         this.theadStyleMap = initStyles(excelTabulation.theadStyles());
         this.tbodyStyleMap = initStyles(excelTabulation.tbodyStyles());
         this.bannerDefinitions = initialzeBanners(excelTabulation.banners());
-        this.columnDefinitions = initialzeColumns(tabulationClass, theadStyleMap, tbodyStyleMap);
+        this.columnDefinitions = initialzeColumns(tabulationClass);
         //mumerical value init
         this.startRowIndex = excelTabulation.startRowIndex();
         this.theadRowIndex = getRowIndexIncrementsByBanners(bannerDefinitions) + startRowIndex;
@@ -138,16 +134,14 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return Arrays.stream(banners).map(e -> new BannerDefinition(this, e)).collect(Collectors.toList());
     }
 
-    private List<ColumnDefinition> initialzeColumns(Class tabulationClass, Map<Integer, CellStyle> theadStyleMap, Map<Integer, CellStyle> tbodyStyleMap){
+    private List<ColumnDefinition> initialzeColumns(Class tabulationClass){
         Field[] fields = tabulationClass.getDeclaredFields();
         List<ColumnDefinition> columnDefinitions = new ArrayList(fields.length);
         Set<String> columnNameSet = new HashSet<>(fields.length);
         ExcelColumn excelColumn;
         for (Field field : fields){
             if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                CellStyle theadStyle = theadStyleMap.get(excelColumn.theadStyleIndex());
-                CellStyle tbodyCellStyle = tbodyStyleMap.get(excelColumn.tbodyStyleIndex());
-                ColumnDefinition columnInitializer = new ColumnDefinition(field, excelColumn, theadStyle, tbodyCellStyle);
+                ColumnDefinition columnInitializer = new ColumnDefinition(field, excelColumn, this);
                 columnDefinitions.add(columnInitializer);
                 columnNameSet.add(columnInitializer.getTitleName());
             }

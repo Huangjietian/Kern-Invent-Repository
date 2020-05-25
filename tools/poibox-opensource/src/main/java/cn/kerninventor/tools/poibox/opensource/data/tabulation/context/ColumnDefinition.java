@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
  */
 public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefinition>, ColumnDefinitionModifier {
 
+    private TableContext<T> tableContext;
     private Field field;
     private String fieldName;
     private String titleName;
@@ -32,7 +33,8 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
     private DataValidationBuilder dataValidationBuilder;
     private ColWriter colWriter;
 
-    public ColumnDefinition(Field field, ExcelColumn excelColumn, CellStyle theadStyle, CellStyle tbodyStyle) {
+    public ColumnDefinition(Field field, ExcelColumn excelColumn, TableContext<T> tableContext) {
+        this.tableContext = tableContext;
         this.field = field;
         this.fieldName = field.getName();
         this.titleName = excelColumn.value();
@@ -40,8 +42,8 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
         this.dataFormatEx = excelColumn.dataFormatEx();
         this.formula = excelColumn.formula();
         this.columnSort = excelColumn.columnSort();
-        this.theadStyle = theadStyle;
-        this.tbodyStyle = tbodyStyle;
+        this.theadStyle = tableContext.getTheadStyleMap().get(excelColumn.theadStyleIndex());
+        this.tbodyStyle = tableContext.getTbodyStyleMap().get(excelColumn.tbodyStyleIndex());
         Annotation annotation = ReflectUtil.getFirstMarkedAnnotation(field, DataValid.class);
         if (annotation != null) {
             this.dataValidationBuilder = DataValidationBuilderFactory.getInstance(annotation);
@@ -52,6 +54,10 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
             throw new IllegalColumnConfigureException("ColWriter lack of parameterless constructors! field : " + fieldName);
         }
         SupportedDataType.checkSupportability(field, colWriter);
+    }
+
+    public TableContext<T> getTableContext() {
+        return tableContext;
     }
 
     public void setColumnIndex(int columnIndex) {

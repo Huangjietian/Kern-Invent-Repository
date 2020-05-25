@@ -44,7 +44,6 @@ public class ETabulationReader<T> implements TabulationReader<T> {
 
     @Override
     public List<T> readFrom(Sheet sheet) {
-        tabContext.init();
         List<T> list = new ArrayList();
         List<ColumnDefinition> columnDefinitions = tabContext.getColumnDefinitions();
         for (int i = tabContext.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
