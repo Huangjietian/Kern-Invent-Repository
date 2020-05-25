@@ -136,7 +136,7 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
 
     private List<ColumnDefinition> initialzeColumns(Class tabulationClass){
         Field[] fields = tabulationClass.getDeclaredFields();
-        List<ColumnDefinition> columnDefinitions = new ArrayList(fields.length);
+        List<ColumnDefinition> columnDefinitions = new ArrayList<>(fields.length);
         Set<String> columnNameSet = new HashSet<>(fields.length);
         ExcelColumn excelColumn;
         for (Field field : fields){
@@ -160,7 +160,7 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         if (BeanUtil.isEmpty(bannerDefinitions)) {
             return 0;
         }
-        int maximum = bannerDefinitions.stream().mapToInt(e -> e.getLastRowIndex()).max().getAsInt();
+        int maximum = bannerDefinitions.stream().mapToInt(BannerDefinition::getLastRowIndex).max().getAsInt();
         if (maximum > 1) {
             maximum++;
         }

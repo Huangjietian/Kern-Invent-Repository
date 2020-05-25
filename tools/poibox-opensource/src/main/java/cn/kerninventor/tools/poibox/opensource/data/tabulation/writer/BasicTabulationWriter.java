@@ -8,7 +8,6 @@ import cn.kerninventor.tools.poibox.opensource.style.Styler;
 import cn.kerninventor.tools.poibox.opensource.utils.BeanUtil;
 import org.apache.poi.ss.usermodel.*;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,15 +29,14 @@ public class BasicTabulationWriter<T> {
         Workbook workbook = tableContext.getParent().workbook();
         DataFormat dataFormat = workbook.createDataFormat();
         Styler styler = tableContext.getParent().styler();
-        for (Iterator<ColumnDefinition<T>> iterator = columnDefinitionsTemporary.iterator(); iterator.hasNext() ; ) {
-            ColumnDefinition column = iterator.next();
+        for (ColumnDefinition column : columnDefinitionsTemporary) {
             Cell headRowCell = headRow.createCell(column.getColumnIndex());
             headRowCell.setCellValue(column.getTitleName());
             headRowCell.setCellStyle(column.getTheadStyle());
-            Short theadFontHeightInPoints = BoxGadget.getFontFrom(column.getTheadStyle(), workbook).getFontHeightInPoints();
+            short theadFontHeightInPoints = BoxGadget.getFontFrom(column.getTheadStyle(), workbook).getFontHeightInPoints();
             ETabulationWriter.setColumnWidth(tableContext, column, sheet, theadFontHeightInPoints);
             CellStyle tbodyStyle = column.getTbodyStyle();
-            if (BeanUtil.isNotEmpty(column.getDataFormatEx())){
+            if (BeanUtil.isNotEmpty(column.getDataFormatEx())) {
                 tbodyStyle = styler.copyStyle(tbodyStyle);
                 tbodyStyle.setDataFormat(dataFormat.getFormat(column.getDataFormatEx()));
                 column.setTbodyStyle(tbodyStyle);

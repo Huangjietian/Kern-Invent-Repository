@@ -121,8 +121,8 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
         int width;
         if (column.getColumnWidth() == ExcelColumn.DefaultColumnWidth){
             width = BoxGadget.getCellWidthByContent(column.getTitleName(), theadFontHeightInPoints);
-            width = width < tabulation.getMinimumColumnsWidth() ? tabulation.getMinimumColumnsWidth() : width;
-            width = width > tabulation.getMaximunColumnsWidth() ? tabulation.getMaximunColumnsWidth() : width;
+            width = Math.max(width, tabulation.getMinimumColumnsWidth());
+            width = Math.min(width, tabulation.getMaximunColumnsWidth());
         } else {
             width = BoxGadget.adjustCellWidth(column.getColumnWidth());
         }
