@@ -4,6 +4,7 @@ import cn.kerninventor.tools.poibox.opensource.BoxGadget;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.ColumnDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TableContext;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.ETabulationWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.ColWriter;
 import cn.kerninventor.tools.poibox.opensource.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -27,7 +28,8 @@ public class TableBodyDataWriter<T> implements TbodyWriter<T> {
     @Override
     public void templateTbody(ColumnDefinition<T> columnDefinition, Sheet sheet) {
         TableContext table = columnDefinition.getTableContext();
-        columnDefinition.getColWriter().pre();
+        ColWriter colWriter = columnDefinition.getColWriter();
+        colWriter.pre();
         for (int datasIndex = 0, rowIndex = table.getTbodyFirstRowIndex(); datasIndex < datas.size() ; datasIndex ++ , rowIndex++){
             Row bodyRow = BoxGadget.getRowForce(sheet, rowIndex);
             ETabulationWriter.setRowHeight(bodyRow, table.getTbodyRowHeight());
@@ -40,8 +42,8 @@ public class TableBodyDataWriter<T> implements TbodyWriter<T> {
             } catch (IllegalAccessException e) {
                 throw new IllegalArgumentException("Field value get error., field name: " + columnDefinition.getFieldName());
             }
-            columnDefinition.getColWriter().setCellValue(bodyCell, value);
+            colWriter.setCellValue(bodyCell, value);
         }
-        columnDefinition.getColWriter().flush();
+        colWriter.flush();
     }
 }

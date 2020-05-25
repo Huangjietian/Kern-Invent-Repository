@@ -19,7 +19,6 @@ public class TableBodyStyleWriter implements TbodyWriter {
     @Override
     public void templateTbody(ColumnDefinition columnDefinition, Sheet sheet) {
         TableContext table = columnDefinition.getTableContext();
-        columnDefinition.getColWriter().pre();
         for (int rowIndex = table.getTbodyFirstRowIndex() ; rowIndex < table.getEffectiveRows() + table.getTbodyFirstRowIndex(); rowIndex ++){
             Row bodyRow = BoxGadget.getRowForce(sheet, rowIndex);
             ETabulationWriter.setRowHeight(bodyRow, table.getTbodyRowHeight());
@@ -32,6 +31,5 @@ public class TableBodyStyleWriter implements TbodyWriter {
         if (columnDefinition.getDataValidationBuilder() != null) {
             columnDefinition.getDataValidationBuilder().addValidation(table, columnDefinition, sheet);
         }
-        columnDefinition.getColWriter().flush();
     }
 }
