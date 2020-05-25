@@ -19,7 +19,7 @@ public class BasicTabulationWriter implements WriteChain<Sheet> {
     private TbodyWriter tbodyWriter;
 
     @Override
-    public void writeTo(Sheet target) {
+    public void doWrite(Sheet target) {
 
     }
 }

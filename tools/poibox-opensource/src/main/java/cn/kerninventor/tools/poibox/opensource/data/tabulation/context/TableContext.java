@@ -29,17 +29,21 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     private Map<Integer, CellStyle> theadStyleMap;
     private Map<Integer, CellStyle> tbodyStyleMap;
     private volatile boolean initialized;
+    private int theadRowIndex;
     private float theadRowHeight;
     private float tbodyRowHeight;
+    private int maximunColumnsWidth;
+    private int minimunColumnsWidth;
     private int startRowIndex;
-    private int theadRowIndex;
-    private int tbodyFirstRowIndex;
     private int effectiveRows;
-    private int minimumColumnsWidth;
-    private int maxmunColumnsWidth;
-    private List<BannerDefinition> bannerContainer = new ArrayList<>();
-    private List<ColumnDefinition> columnsContainer = new ArrayList<>();
     private Textbox[] textboxes;
+    private List<BannerDefinition> bannerDefinitions;
+    private List<ColumnDefinition> columnDefinitions;
+
+    public TableContext(Class<T> tableClass, Poibox poiBox) {
+        super(poiBox);
+        this.tabulationClass = tableClass;
+    }
 
     public Class<T> getTabulationClass() {
         return tabulationClass;
@@ -69,12 +73,12 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return effectiveRows;
     }
 
-    public int getMinimumColumnsWidth() {
-        return BoxGadget.adjustCellWidth(minimumColumnsWidth);
+    public int getMaximunColumnsWidth() {
+        return BoxGadget.adjustCellWidth(maximunColumnsWidth);
     }
 
-    public int getMaxmunColumnsWidth() {
-        return BoxGadget.adjustCellWidth(maxmunColumnsWidth);
+    public int getMinimumColumnsWidth() {
+        return BoxGadget.adjustCellWidth(minimunColumnsWidth);
     }
 
     public int getTheadRowIndex() {
@@ -82,28 +86,19 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     }
 
     public int getTbodyFirstRowIndex(){
-        return tbodyFirstRowIndex;
+        return theadRowIndex + 1;
     }
 
-    public List<BannerDefinition> getBannerContainer() {
-        return bannerContainer;
+    public List<BannerDefinition> getBannerDefinitions() {
+        return bannerDefinitions;
     }
 
-    public List<ColumnDefinition> getColumnsContainer() {
-        return columnsContainer;
-    }
-
-    public ColumnDefinition getColumnInitializerByTitleName(final String fieldName) {
-        return columnsContainer.stream().filter(e -> e.getFieldName().equals(fieldName)).findFirst().get();
+    public List<ColumnDefinition> getColumnDefinitions() {
+        return columnDefinitions;
     }
 
     public Textbox[] getTextboxes() {
         return textboxes;
-    }
-
-    public TableContext(Class<T> tableClass, Poibox poiBox) {
-        super(poiBox);
-        this.tabulationClass = tableClass;
     }
 
     public synchronized void init(){
@@ -111,27 +106,27 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
             return;
         }
         initialized = true;
-        ExcelTabulation excelTabulation = dataTabulationSourceClassValidate(getTabulationClass());
-        //初始化风格
-        this.theadStyleMap = initStyles(excelTabulation.theadStyles(), getParent().styler());
-        this.tbodyStyleMap = initStyles(excelTabulation.tbodyStyles(), getParent().styler());
-        //行高
+        Class tabulationClass = getTabulationClass();
+        //element object init
+        ExcelTabulation excelTabulation = dataTabulationSourceClassValidate(tabulationClass);
+        this.theadStyleMap = initStyles(excelTabulation.theadStyles());
+        this.tbodyStyleMap = initStyles(excelTabulation.tbodyStyles());
+        this.bannerDefinitions = initialzeBanners(excelTabulation.banners());
+        this.columnDefinitions = initialzeColumns(tabulationClass, theadStyleMap, tbodyStyleMap);
+        //mumerical value init
+        this.startRowIndex = excelTabulation.startRowIndex();
+        this.theadRowIndex = getRowIndexIncrementsByBanners(bannerDefinitions) + startRowIndex;
         this.theadRowHeight = excelTabulation.theadRowHeight();
         this.tbodyRowHeight = excelTabulation.tbodyRowHeight();
-        //起始行和有效行数
-        this.startRowIndex = startRowIndexNotMinus(excelTabulation.startRowIndex());
-        this.effectiveRows = effectiveRowsNotLessThan1(excelTabulation.effectiveRows());
-        //最小列宽和最大列宽
-        this.minimumColumnsWidth = excelTabulation.minimumColumnsWidth();
-        this.maxmunColumnsWidth = excelTabulation.maximumColumnsWidth();
-        this.bannerContainer.addAll(initialzeBanners(excelTabulation.banners()));
-        this.columnsContainer.addAll(initialzeColumns(getTabulationClass().getDeclaredFields(), getTheadStyleMap(), getTbodyStyleMap()));
-        this.theadRowIndex = getRowIndexIncrementsByBanners(bannerContainer) + startRowIndex;
-        this.tbodyFirstRowIndex = theadRowIndex + 1;
+        this.effectiveRows = excelTabulation.effectiveRows();
+        this.maximunColumnsWidth = excelTabulation.maximumColumnsWidth();
+        this.minimunColumnsWidth = excelTabulation.minimumColumnsWidth();
+
         this.textboxes = excelTabulation.textboxes();
     }
 
-    private Map<Integer, CellStyle> initStyles(Style[] styles, Styler styler) {
+    private Map<Integer, CellStyle> initStyles(Style[] styles) {
+        Styler styler = getParent().styler();
         Map<Integer, CellStyle> styleMap = new HashMap<>();
         for (Style style : styles) {
             styleMap.put(style.index(), styler.generate(style));
@@ -139,37 +134,13 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return styleMap;
     }
 
-    private int startRowIndexNotMinus(int startRowIndex) {
-        if (startRowIndex < 0)
-            throw new IllegalTabulationConfigureException("StartRowIndex must be positive integer!");
-        return startRowIndex;
-    }
-
-    private int effectiveRowsNotLessThan1(int effectiveRows) {
-        if (effectiveRows < 1)
-            throw new IllegalTabulationConfigureException("EffectiveRows must be great than 1!");
-        return effectiveRows;
-    }
-
     private List<BannerDefinition> initialzeBanners(ExcelBanner... banners) {
         return Arrays.stream(banners).map(e -> new BannerDefinition(this, e)).collect(Collectors.toList());
     }
 
-    private int getRowIndexIncrementsByBanners(List<BannerDefinition> bannerContainer) {
-        if (BeanUtil.isEmpty(bannerContainer)) {
-            return 0;
-        }
-        int incremental = 1;
-        for (BannerDefinition bannerInitializer : bannerContainer) {
-            if (bannerInitializer.getLastRowIndex() >= incremental) {
-                incremental = bannerInitializer.getLastRowIndex() + 1;
-            }
-        }
-        return incremental;
-    }
-
-    private List<ColumnDefinition> initialzeColumns(Field[] fields, Map<Integer, CellStyle> theadStyleMap, Map<Integer, CellStyle> tbodyStyleMap){
-        List<ColumnDefinition> columnsContainer = new ArrayList(fields.length);
+    private List<ColumnDefinition> initialzeColumns(Class tabulationClass, Map<Integer, CellStyle> theadStyleMap, Map<Integer, CellStyle> tbodyStyleMap){
+        Field[] fields = tabulationClass.getDeclaredFields();
+        List<ColumnDefinition> columnDefinitions = new ArrayList(fields.length);
         Set<String> columnNameSet = new HashSet<>(fields.length);
         ExcelColumn excelColumn;
         for (Field field : fields){
@@ -177,33 +148,75 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
                 CellStyle theadStyle = theadStyleMap.get(excelColumn.theadStyleIndex());
                 CellStyle tbodyCellStyle = tbodyStyleMap.get(excelColumn.tbodyStyleIndex());
                 ColumnDefinition columnInitializer = new ColumnDefinition(field, excelColumn, theadStyle, tbodyCellStyle);
-                columnsContainer.add(columnInitializer);
+                columnDefinitions.add(columnInitializer);
                 columnNameSet.add(columnInitializer.getTitleName());
             }
         }
-        if (columnsContainer.size() == 0){
-            throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's fields!");
+        if (columnDefinitions.size() == 0){
+            throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's field!");
         }
-        if (columnNameSet.size() != columnsContainer.size()) {
+        if (columnNameSet.size() != columnDefinitions.size()) {
             throw new IllegalTabulationConfigureException("Column title name must be unique!");
         }
-        Collections.sort(columnsContainer);
-        setColumnsIndex(columnsContainer);
-        return columnsContainer;
+        setColumnsIndex(columnDefinitions);
+        return columnDefinitions;
     }
 
-    public void setColumnsIndex(List<ColumnDefinition> columnsContainer) {
-        for (int i = 0 ; i < columnsContainer.size() ; i ++) {
-            columnsContainer.get(i).setColumnIndex(i);
+    private int getRowIndexIncrementsByBanners(List<BannerDefinition> bannerDefinitions) {
+        if (BeanUtil.isEmpty(bannerDefinitions)) {
+            return 0;
+        }
+        int maximum = bannerDefinitions.stream().mapToInt(e -> e.getLastRowIndex()).max().getAsInt();
+        if (maximum > 1) {
+            maximum++;
+        }
+        return maximum;
+    }
+
+    public void setColumnsIndex(List<ColumnDefinition> columnDefinitions) {
+        Collections.sort(columnDefinitions);
+        for (int i = 0 ; i < columnDefinitions.size() ; i ++) {
+            columnDefinitions.get(i).setColumnIndex(i);
         }
     }
 
-    public static ExcelTabulation dataTabulationSourceClassValidate(Class tabulationClass) throws IllegalSourceClassOfTabulationException {
+    private ExcelTabulation dataTabulationSourceClassValidate(Class tabulationClass) throws IllegalSourceClassOfTabulationException {
         ExcelTabulation excelTabulation;
         if ( (excelTabulation = (ExcelTabulation) tabulationClass.getDeclaredAnnotation(ExcelTabulation.class)) == null){
             throw new IllegalSourceClassOfTabulationException("Data tabulation POJO need to annotated @ExcelTabulation annotation!");
         }
+        startRowIndexValidate(excelTabulation.startRowIndex());
+        effectiveRowsValidate(excelTabulation.effectiveRows());
+        rowHeightValidate(excelTabulation.tbodyRowHeight());
+        rowHeightValidate(excelTabulation.theadRowHeight());
+        minimumColumnsWidthValidate(excelTabulation.minimumColumnsWidth());
+        maximumColumnsWidthValidate(excelTabulation.maximumColumnsWidth(), excelTabulation.minimumColumnsWidth());
         return excelTabulation;
+    }
+
+    private void startRowIndexValidate(int startRowIndex) {
+        isIllegalTabulation(startRowIndex < 0, "StartRowIndex must be greater than or equal than 0!");
+    }
+
+    private void effectiveRowsValidate(int effectiveRows) {
+        isIllegalTabulation(effectiveRows < 1, "EffectiveRows must be greater than or equal than 1!");
+    }
+
+    private void rowHeightValidate(float rowHeight) {
+        isIllegalTabulation(rowHeight <= 0.0f, "Row height must be greater than 0.0!");
+    }
+
+    private void minimumColumnsWidthValidate(int minmunColumnsWidth) {
+        isIllegalTabulation(minmunColumnsWidth < 0, "MinimumColumnsWidth must be greater than or equal than 0!");
+    }
+
+    private void maximumColumnsWidthValidate(int maxmunColumnsWidth, int minmunColumnsWidth) {
+        isIllegalTabulation(maxmunColumnsWidth <= 0 || maxmunColumnsWidth < minmunColumnsWidth, "MaximumColumnsWidth must be greater than 0 and greater than minimumColumnsWidth!");
+    }
+
+    private void isIllegalTabulation(boolean isIllegal, String errorMsg) {
+        if (isIllegal)
+            throw new IllegalTabulationConfigureException(errorMsg);
     }
 
     @Override
@@ -221,18 +234,77 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     public TabContextModifier addBanner(String value, CellStyle cellStyle, CellRangeAddress cellRangeAddress) {
         value = value == null ? "" : value;
         BannerDefinition bannerDefinition = new BannerDefinition(cellStyle, cellRangeAddress, value);
-        bannerContainer.add(bannerDefinition);
+        bannerDefinitions.add(bannerDefinition);
         return this;
     }
 
     @Override
     public List<? extends BannerDefinitionModifier> getBanners() {
-        return this.bannerContainer;
+        return bannerDefinitions;
     }
 
     @Override
     public BannerDefinitionModifier getBannerAt(int index) {
-        return this.bannerContainer.get(index);
+        return bannerDefinitions.get(index);
     }
+
+    @Override
+    public List<? extends ColumnDefinitionModifier> getColumns() {
+        return columnDefinitions;
+    }
+
+    @Override
+    public ColumnDefinitionModifier getColumnByTitileName(String titleName) {
+        return columnDefinitions.stream().filter(e -> e.getTitleName().equals(titleName)).findFirst().get();
+    }
+
+    @Override
+    public ColumnDefinitionModifier getColumnByFieldName(String fieldName) {
+        return columnDefinitions.stream().filter(e -> e.getFieldName().equals(fieldName)).findFirst().get();
+    }
+
+    @Override
+    public TabContextModifier alterStartRowIndex(int startRowIndex) {
+        startRowIndexValidate(startRowIndex);
+        this.startRowIndex = startRowIndex;
+        this.theadRowIndex = getRowIndexIncrementsByBanners(getBannerDefinitions()) + startRowIndex;
+        return this;
+    }
+
+    @Override
+    public TabContextModifier alterTheadRowHeight(float theadRowHeight) {
+        rowHeightValidate(theadRowHeight);
+        this.theadRowHeight = theadRowHeight;
+        return this;
+    }
+
+    @Override
+    public TabContextModifier alterTbodyRowHeight(float tbodyRowHeight) {
+        rowHeightValidate(tbodyRowHeight);
+        this.tbodyRowHeight = tbodyRowHeight;
+        return this;
+    }
+
+    @Override
+    public TabContextModifier alterEffectiveRows(int effectiveRows) {
+        effectiveRowsValidate(effectiveRows);
+        this.effectiveRows = effectiveRows;
+        return this;
+    }
+
+    @Override
+    public TabContextModifier alterMaxmunColumnsWidth(int maximunColumnsWidth) {
+        maximumColumnsWidthValidate(maximunColumnsWidth, minimunColumnsWidth);
+        this.maximunColumnsWidth = maximunColumnsWidth;
+        return this;
+    }
+
+    @Override
+    public TabContextModifier alterMinmunColumnsWidth(int minmunColumnsWidth) {
+        minimumColumnsWidthValidate(minmunColumnsWidth);
+        this.minimunColumnsWidth = minmunColumnsWidth;
+        return this;
+    }
+
 
 }

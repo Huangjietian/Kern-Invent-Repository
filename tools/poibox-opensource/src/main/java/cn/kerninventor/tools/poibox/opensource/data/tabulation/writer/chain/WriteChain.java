@@ -8,5 +8,6 @@ package cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.chain;
 @FunctionalInterface
 public interface WriteChain<T> {
 
-    void writeTo(T target);
+    void doWrite(T target);
+
 }

@@ -22,46 +22,46 @@ import java.util.stream.Collectors;
  */
 public class ETabulationReader<T> implements TabulationReader<T> {
 
-    private TableContext tabInitiator;
+    private TableContext tabContext;
 
     private List<BeanValidator<T, ?>> beanValidators;
 
-    public ETabulationReader(TableContext tabInitiator) {
-        this.tabInitiator = Objects.requireNonNull(tabInitiator);
+    public ETabulationReader(TableContext tableContext) {
+        this.tabContext = Objects.requireNonNull(tableContext);
     }
 
     @Override
     public List<T> readFrom(String sheetName) {
-        Sheet sheet = tabInitiator.getParent().workbook().getSheet(sheetName);
+        Sheet sheet = tabContext.getParent().workbook().getSheet(sheetName);
         return readFrom(sheet);
     }
 
     @Override
     public List<T> readFrom(int sheetAt) {
-        Sheet sheet = tabInitiator.getParent().workbook().getSheetAt(sheetAt);
+        Sheet sheet = tabContext.getParent().workbook().getSheetAt(sheetAt);
         return readFrom(sheet);
     }
 
     @Override
     public List<T> readFrom(Sheet sheet) {
-        tabInitiator.init();
+        tabContext.init();
         List<T> list = new ArrayList();
-        List<ColumnDefinition> columnInitializers = tabInitiator.getColumnsContainer();
-        for (int i = tabInitiator.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
+        List<ColumnDefinition> columnDefinitions = tabContext.getColumnDefinitions();
+        for (int i = tabContext.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
             Class<T> tClass;
             try {
-                 tClass = tabInitiator.getTabulationClass();
+                 tClass = tabContext.getTabulationClass();
                 t = ReflectUtil.newInstance(tClass);
             } catch (Exception e) {
-                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + tabInitiator.getTabulationClass());
+                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + tabContext.getTabulationClass());
             }
             Row row = sheet.getRow(i);
             if (row == null){
                 continue;
             }
             int nullCount = 0;
-            for (ColumnDefinition column : columnInitializers){
+            for (ColumnDefinition column : columnDefinitions){
                 Cell cell = row.getCell(column.getColumnIndex());
                 if (cell == null){
                     nullCount++;
@@ -78,7 +78,7 @@ public class ETabulationReader<T> implements TabulationReader<T> {
                     throw new IllegalArgumentException("Set value to Field error! Field: " + column.getFieldName());
                 }
             }
-            if (nullCount < tabInitiator.getColumnsContainer().size()){
+            if (nullCount < tabContext.getColumnDefinitions().size()){
                 if (BeanUtil.isNotEmpty(beanValidators)) {
                     for (BeanValidator validator : beanValidators) {
                         validator.validate(t);
@@ -98,6 +98,5 @@ public class ETabulationReader<T> implements TabulationReader<T> {
         this.beanValidators.addAll(Arrays.stream(beanValidators).collect(Collectors.toList()));
         return this;
     }
-
 
 }

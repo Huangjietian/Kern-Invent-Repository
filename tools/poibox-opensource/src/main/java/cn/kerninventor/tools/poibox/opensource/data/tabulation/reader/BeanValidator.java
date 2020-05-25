@@ -9,4 +9,5 @@ public interface BeanValidator<T, R> {
     void validate(T t);
 
     R getResult();
+
 }

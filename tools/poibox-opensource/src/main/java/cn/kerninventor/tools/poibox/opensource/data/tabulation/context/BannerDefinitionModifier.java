@@ -10,6 +10,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
  */
 public interface BannerDefinitionModifier {
 
+    String  getContent();
+
     BannerDefinitionModifier setContent(String value);
 
     BannerDefinitionModifier setCellStyle(CellStyle style);

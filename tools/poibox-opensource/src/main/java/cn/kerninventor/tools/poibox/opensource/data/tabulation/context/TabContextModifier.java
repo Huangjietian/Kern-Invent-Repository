@@ -22,4 +22,24 @@ public interface TabContextModifier {
 
     BannerDefinitionModifier getBannerAt(int index);
 
+    List<? extends ColumnDefinitionModifier> getColumns();
+
+    ColumnDefinitionModifier getColumnByTitileName(String titleName);
+
+    ColumnDefinitionModifier getColumnByFieldName(String fieldName);
+
+    TabContextModifier alterStartRowIndex(int startRowIndex);
+
+    TabContextModifier alterTheadRowHeight(float theadRowHeight);
+
+    TabContextModifier alterTbodyRowHeight(float tbodyRowHeight);
+
+    TabContextModifier alterEffectiveRows(int effctiveRows);
+
+    TabContextModifier alterMaxmunColumnsWidth(int maxmunColumnsWidth);
+
+    TabContextModifier alterMinmunColumnsWidth(int minmunColumnsWidth);
+
+
+
 }

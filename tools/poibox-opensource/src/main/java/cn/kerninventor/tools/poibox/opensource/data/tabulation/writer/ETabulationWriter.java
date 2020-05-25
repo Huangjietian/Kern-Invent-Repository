@@ -3,12 +3,11 @@ package cn.kerninventor.tools.poibox.opensource.data.tabulation.writer;
 import cn.kerninventor.tools.poibox.opensource.BoxGadget;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelColumn;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelTabulation;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.element.Textbox;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.BannerDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TableContext;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.ReInitializer;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TabContextModifier;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.element.Textbox;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.array.FormulaListDataValid;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.TbodyWriter;
 import cn.kerninventor.tools.poibox.opensource.layout.MergedRange;
@@ -17,9 +16,9 @@ import cn.kerninventor.tools.poibox.opensource.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.opensource.utils.FormulaListUtil;
 import cn.kerninventor.tools.poibox.opensource.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -73,20 +72,12 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
          */
         TableContext tabulation = getTableContext();
         tabulation.init();
-        List<ColumnDefinition> columnsContainer = tabulation.getColumnsContainer();
+        List<ColumnDefinition> columnDefinitions = tabulation.getColumnDefinitions();
 
         //2. 过滤ignore 列
         if (BeanUtil.hasElement(igonre)) {
-            columnsContainer = ((ReInitializer<List<ColumnDefinition>>) colums -> {
-                List<ColumnDefinition> result = new ArrayList<>();
-                colums.forEach(column -> {
-                    if (Arrays.stream(igonre).noneMatch(e -> column.getTitleName().equals(e.trim()))) {
-                        result.add(column);
-                    }
-                });
-                return result;
-            }).reInit(columnsContainer);
-            tabulation.setColumnsIndex(columnsContainer);
+            columnDefinitions = columnDefinitions.stream().filter(e -> Arrays.stream(igonre).noneMatch(str -> e.getTitleName().equals(str.trim()))).collect(Collectors.toList());
+            tabulation.setColumnsIndex(columnDefinitions);
         }
 
         //1. 设置名称管理器 TODO 独立的
@@ -109,13 +100,13 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
         Workbook workbook = tabulation.getParent().workbook();
         DataFormat dataFormat = workbook.createDataFormat();
         Styler styler = tabulation.getParent().styler();
-        for (Iterator<ColumnDefinition> iterator = columnsContainer.iterator(); iterator.hasNext() ; ) {
+        for (Iterator<ColumnDefinition> iterator = columnDefinitions.iterator(); iterator.hasNext() ; ) {
             ColumnDefinition column = iterator.next();
             Cell headRowCell = headRow.createCell(column.getColumnIndex());
             headRowCell.setCellValue(column.getTitleName());
             headRowCell.setCellStyle(column.getTheadStyle());
             Short theadFontHeightInPoints = BoxGadget.getFontFrom(column.getTheadStyle(), workbook).getFontHeightInPoints();
-            setColumnWidth(tabulation, column, sheet, 0, theadFontHeightInPoints);
+            setColumnWidth(tabulation, column, sheet, theadFontHeightInPoints);
             CellStyle tbodyStyle = column.getTbodyStyle();
             if (BeanUtil.isNotEmpty(column.getDataFormatEx())){
                 tbodyStyle = styler.copyStyle(tbodyStyle);
@@ -128,7 +119,7 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
         /**
          *
          */
-        tempalateBanners(tabulation, columnsContainer, sheet);
+        tempalateBanners(tabulation, columnDefinitions, sheet);
 
 
         //6. 添加文本框 TODO 依赖于tabulation的初始化
@@ -194,11 +185,12 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
         }
     }
 
-    private void setColumnWidth(TableContext tabulation, ColumnDefinition column, Sheet sheet, int width, int var) {
+    private void setColumnWidth(TableContext tabulation, ColumnDefinition column, Sheet sheet, int var) {
+        int width;
         if (column.getColumnWidth() == ExcelColumn.DefaultColumnWidth){
             width = BoxGadget.getCellWidthByContent(column.getTitleName(), var);
             width = width < tabulation.getMinimumColumnsWidth() ? tabulation.getMinimumColumnsWidth() : width;
-            width = width > tabulation.getMaxmunColumnsWidth() ? tabulation.getMaxmunColumnsWidth() : width;
+            width = width > tabulation.getMaximunColumnsWidth() ? tabulation.getMaximunColumnsWidth() : width;
         } else {
             width = BoxGadget.adjustCellWidth(column.getColumnWidth());
         }
@@ -212,7 +204,7 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
     }
 
     private void tempalateBanners(TableContext tabulation, List<ColumnDefinition> columns, Sheet sheet) {
-        List<BannerDefinition> bannerContainer = tabulation.getBannerContainer();
+        List<BannerDefinition> bannerContainer = tabulation.getBannerDefinitions();
         bannerContainer.forEach(e -> {
             MergedRange mergedRange = tabulation.getParent().layouter().mergedRegion(
                     sheet,
@@ -241,25 +233,8 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
     }
 
     @Override
-    public TabContextModifier getConfiguration() {
+    public TabContextModifier getTabContextModifier() {
         return tableContext;
     }
 
-    @Override
-    public TabulationWriter addBanner(String value, CellStyle style, CellRangeAddress range) {
-        this.tableContext.addBanner(value, style, range);
-        return this;
-    }
-
-    @Override
-    public TabulationWriter addBanner(String value, CellStyle style, int row1, int row2) {
-        this.tableContext.addBanner(value, style, row1, row2);
-        return null;
-    }
-
-    @Override
-    public TabulationWriter addBanner(String value, CellStyle style, int row1, int row2, int col1, int col2) {
-        this.tableContext.addBanner(value, style, row1, row2, col1, col2);
-        return this;
-    }
 }

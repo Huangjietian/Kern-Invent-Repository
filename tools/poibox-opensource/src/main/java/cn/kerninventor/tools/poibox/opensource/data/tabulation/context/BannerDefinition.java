@@ -79,6 +79,11 @@ public class BannerDefinition implements BannerDefinitionModifier {
     }
 
     @Override
+    public String getContent() {
+        return value;
+    }
+
+    @Override
     public BannerDefinitionModifier setContent(String value) {
         this.value = value;
         return this;

@@ -1,9 +1,7 @@
 package cn.kerninventor.tools.poibox.opensource.data.tabulation.writer;
 
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TabContextModifier;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.List;
 import java.util.Map;
@@ -28,11 +26,5 @@ public interface TabulationWriter<T> {
     TabulationWriter<T> addAllFormulaList(Map<String, Set<String>> formulaListMap);
 
     TabContextModifier getTabContextModifier();
-
-    TabulationWriter addBanner(String value, CellStyle style, CellRangeAddress range);
-
-    TabulationWriter addBanner(String value, CellStyle style, int row1, int row2);
-
-    TabulationWriter addBanner(String value, CellStyle style, int row1, int row2, int col1, int col2);
 
 }
