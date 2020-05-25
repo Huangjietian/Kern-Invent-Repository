@@ -15,7 +15,6 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTextBox;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -220,12 +219,6 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
     }
 
     @Override
-    public Picture addPicture(Sheet sheet, MultipartFile file, AnchorIndex anchorIndex) throws IOException {
-        PictureFormat format = PictureFormat.getByFileName(file.getName());
-        InputStream source = file.getInputStream();
-        return addPicture(sheet, source, format, anchorIndex);
-    }
-
     public Picture addPicture(Sheet sheet, InputStream source, PictureFormat format, AnchorIndex anchorIndex) throws IOException {
         try {
             byte[] bytes = new byte[source.available()];
@@ -240,6 +233,7 @@ public final class LayoutHandler extends BoxBracket implements Layouter {
         }
     }
 
+    @Override
     public Picture addPicture(Sheet sheet, byte[] bytes, PictureFormat format, AnchorIndex anchorIndex) {
         int index = getParent().workbook().addPicture(bytes, format.getIndex());
         Drawing drawing = sheet.createDrawingPatriarch();

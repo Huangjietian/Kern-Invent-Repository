@@ -19,6 +19,7 @@ public @interface Textbox {
 
     VerticalAlignment verticalAlignment() default VerticalAlignment.CENTER;
 
+    @Deprecated
     Margins margins() default @Margins(left = 0, top = 0, right = 0, bottom = 0);
 
     Palette fillColor() default @Palette(red = 255, green = 255, bule = 255);

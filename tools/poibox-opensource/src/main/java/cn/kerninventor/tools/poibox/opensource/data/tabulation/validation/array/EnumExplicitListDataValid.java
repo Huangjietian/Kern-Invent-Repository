@@ -9,17 +9,15 @@ import java.lang.annotation.Target;
 
 /**
  * @author Kern
- * @date 2020/5/6 9:36
+ * @date 2020/5/25 15:48
  * @description
  */
 @DataValid
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExplicitListDataValid {
+public @interface EnumExplicitListDataValid {
 
-    int ALLOWED_MAX_LIST_BYTES_LENGTH = 255;
-
-    String[] list() default {};
+    Class<? extends EnumExplicitList> enumClass();
 
     String prompMessage() default "";
 

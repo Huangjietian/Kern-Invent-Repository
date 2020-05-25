@@ -27,7 +27,7 @@ public class ReflectUtil {
     public static Method specifiedGetMethod(Class clazz, String fieldName) throws NoSuchMethodException {
         Objects.requireNonNull(fieldName, "Field name can't be null!");
         Objects.requireNonNull(clazz, "clazz can't be null!");
-        return clazz.getDeclaredMethod(specifiedGetMethodName(fieldName), null);
+        return clazz.getDeclaredMethod(specifiedGetMethodName(fieldName));
     }
 
     public static Method specifiedSetMethod(Class clazz, String fieldName, Class argClass) throws NoSuchMethodException {

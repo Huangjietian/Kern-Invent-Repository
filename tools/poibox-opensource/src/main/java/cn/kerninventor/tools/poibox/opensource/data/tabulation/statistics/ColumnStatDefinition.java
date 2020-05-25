@@ -7,9 +7,9 @@ package cn.kerninventor.tools.poibox.opensource.data.tabulation.statistics;
  */
 public @interface ColumnStatDefinition {
 
-    String columnFieldName();
-
     int AUTO_MODE_PRECISION = -1;
+
+    String columnFieldName();
 
     NumberStatisticsMode statisticsMode();
 

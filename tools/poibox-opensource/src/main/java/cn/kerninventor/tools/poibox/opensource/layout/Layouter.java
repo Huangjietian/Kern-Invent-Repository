@@ -8,10 +8,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTextBox;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Kern
@@ -43,6 +43,7 @@ public interface Layouter {
 
     Picture addPicture(Sheet sheet, File file, AnchorIndex anchorIndex) throws IOException;
 
-    Picture addPicture(Sheet sheet, MultipartFile file, AnchorIndex anchorIndex) throws IOException;
+    Picture addPicture(Sheet sheet, InputStream source, PictureFormat format, AnchorIndex anchorIndex) throws IOException;
 
+    Picture addPicture(Sheet sheet, byte[] bytes, PictureFormat format, AnchorIndex anchorIndex);
 }
