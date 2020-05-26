@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Kern
  * @date 2019/10/29 14:16
  */
-public final class PoiboxDefaultImplement implements Poibox {
+public final class PoiboxImplement implements Poibox {
 
     private Workbook workbook;
     private DataTabulationHandler dataTabulationHandler;
@@ -28,11 +28,11 @@ public final class PoiboxDefaultImplement implements Poibox {
     private Fonter fonter;
     private Layouter layouter;
 
-    protected PoiboxDefaultImplement() {
+    protected PoiboxImplement() {
         workbook = new HSSFWorkbook();
     }
 
-    public PoiboxDefaultImplement(Workbook workbook) {
+    public PoiboxImplement(Workbook workbook) {
         this.workbook = workbook;
     }
 

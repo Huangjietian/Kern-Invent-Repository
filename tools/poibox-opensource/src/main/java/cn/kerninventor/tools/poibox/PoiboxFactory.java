@@ -16,7 +16,7 @@ import java.io.InputStream;
 public final class PoiboxFactory {
 
     public static Poibox open(Workbook workbook) {
-        return new PoiboxDefaultImplement(workbook);
+        return new PoiboxImplement(workbook);
     }
 
     public static Poibox open(InputStream source) throws IOException {
@@ -36,7 +36,7 @@ public final class PoiboxFactory {
     }
 
     public static Poibox open(){
-        return new PoiboxDefaultImplement();
+        return new PoiboxImplement();
     }
 
 }
