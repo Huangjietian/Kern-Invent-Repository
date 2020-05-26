@@ -1,8 +1,8 @@
 package cn.kerninventor.tools.poibox.opensource.data.tabulation;
 
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslate;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.ColWriter;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.GeneralColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.col.ColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.col.GeneralColWriter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -49,6 +49,9 @@ public class DataValidationBuilderFactory {
         else if (annotation instanceof ExplicitListDataValid) {
             return new ExplicitListDataValidationBuilder((ExplicitListDataValid) annotation);
         }
+        else if (annotation instanceof EnumExplicitListDataValid) {
+            return new EnumExplicitListDataValidationBuilder((EnumExplicitListDataValid) annotation);
+        }
         else if (annotation instanceof FormulaCustomDataValid) {
             return new FormulaCustomDataValidationBuilder((FormulaCustomDataValid) annotation);
         }

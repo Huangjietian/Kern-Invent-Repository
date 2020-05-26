@@ -1,7 +1,6 @@
 package cn.kerninventor.tools.poibox.opensource.data.tabulation.context;
 
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelBanner;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelTabulation;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.element.Range;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -38,7 +37,7 @@ public class BannerDefinition implements BannerDefinitionModifier {
                 banner.range().firstCell(),
                 banner.range().lastCell()
         );
-        this.rowHeight = banner.rowHeight() == ExcelTabulation.DefaultRowHeight ? null : banner.rowHeight();
+        this.rowHeight = banner.rowHeight();
     }
 
     public int getLastRowIndex(){

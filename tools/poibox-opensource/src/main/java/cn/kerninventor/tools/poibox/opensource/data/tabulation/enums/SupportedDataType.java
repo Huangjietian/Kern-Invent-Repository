@@ -1,9 +1,9 @@
 package cn.kerninventor.tools.poibox.opensource.data.tabulation.enums;
 
 
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.ColWriter;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.GeneralColWriter;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.MergeAbleColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.col.ColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.col.GeneralColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.col.MergeAbleColWriter;
 import cn.kerninventor.tools.poibox.opensource.exception.IllegalColumnConfigureException;
 import cn.kerninventor.tools.poibox.opensource.exception.UnSupportedDataTypeException;
 

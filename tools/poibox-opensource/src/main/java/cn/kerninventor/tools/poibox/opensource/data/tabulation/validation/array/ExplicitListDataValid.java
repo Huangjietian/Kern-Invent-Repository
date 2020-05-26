@@ -19,7 +19,7 @@ public @interface ExplicitListDataValid {
 
     int ALLOWED_MAX_LIST_BYTES_LENGTH = 255;
 
-    String[] list() default {};
+    String[] list();
 
     String prompMessage() default "";
 

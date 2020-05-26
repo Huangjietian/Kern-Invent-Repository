@@ -10,12 +10,7 @@ import java.util.stream.Collectors;
  * @date 2020/5/25 16:12
  * @description
  */
-public class NumberStatisticsHandler {
-
-    public void newStatisticsInstanceOf(NumberStatistics numberStatistics) {
-
-
-    }
+public class NumberStatisticsLogicHandler {
 
     public Number toStatistics(NumberStatisticsMode mode, Number... numbers) {
         switch (mode) {

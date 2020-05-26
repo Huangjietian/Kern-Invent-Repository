@@ -1,8 +1,5 @@
 package cn.kerninventor.tools.poibox.opensource.data.tabulation.writer;
 
-import cn.kerninventor.tools.poibox.opensource.BoxGadget;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelColumn;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelTabulation;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.BannerDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.ColumnDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TabContextModifier;
@@ -12,15 +9,14 @@ import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.Abstra
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslate;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslator;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.array.FormulaListDataValid;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.chain.WriteThread;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.TableBodyDataWriter;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.TableBodyStyleWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.TableBodyTemplateWriter;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.TbodyWriter;
-import cn.kerninventor.tools.poibox.opensource.layout.MergedRange;
+import cn.kerninventor.tools.poibox.opensource.layout.Layouter;
 import cn.kerninventor.tools.poibox.opensource.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.opensource.utils.FormulaListUtil;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,7 +48,7 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
 
     @Override
     public TabulationWriter<T> writeTo(Sheet sheet) {
-        TbodyWriter tbodyWriter = new TableBodyStyleWriter();
+        TbodyWriter tbodyWriter = new TableBodyTemplateWriter();
         BasicTabulationWriter basicTabulationWriter = new BasicTabulationWriter(tbodyWriter);
         doWrite(sheet, null, basicTabulationWriter);
         return this;
@@ -99,42 +95,21 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
     }
 
     private void writeBanners(TableContext tableContext, List<ColumnDefinition> columnDefinitions, Sheet sheet) {
-        new WriteThread(() -> {
-                List<BannerDefinition> bannerContainer = tableContext.getBannerDefinitions();
-                bannerContainer.forEach(e -> {
-                    MergedRange mergedRange = tableContext.getParent().layouter().mergedRegion(
-                            sheet,
-                            e.adjustCellRangeAddress(tableContext, columnDefinitions)
-                    );
-                    mergedRange.setRowHeight(e.getRowHeight()).setMergeRangeContent(e.getValue()).setMergeRangeStyle(e.getCellStyle());
-                });
-        }).start();
+        Layouter layouter = tableContext.getParent().layouter();
+        List<BannerDefinition> bannerDefinitions = tableContext.getBannerDefinitions();
+        for (BannerDefinition bannerDefinition : bannerDefinitions) {
+            CellRangeAddress cellAddresses = bannerDefinition.adjustCellRangeAddress(tableContext, columnDefinitions);
+            layouter.mergedRegion(sheet, cellAddresses)
+                    .setRowHeight(bannerDefinition.getRowHeight())
+                    .setMergeRangeContent(bannerDefinition.getValue())
+                    .setMergeRangeStyle(bannerDefinition.getCellStyle());
+        }
     }
 
     private void writeTextbox(TableContext tableContext, Sheet sheet) {
-        new WriteThread(() -> {
-            Textbox[] textboxes = tableContext.getTextboxes();
-            for (Textbox textbox : textboxes) {
-                tableContext.getParent().layouter().addTextBox(sheet, textbox);
-            }
-        }).start();
-    }
-
-    public static void setColumnWidth(TableContext tabulation, ColumnDefinition column, Sheet sheet, int theadFontHeightInPoints) {
-        int width;
-        if (column.getColumnWidth() == ExcelColumn.DefaultColumnWidth){
-            width = BoxGadget.getCellWidthByContent(column.getTitleName(), theadFontHeightInPoints);
-            width = Math.max(width, tabulation.getMinimumColumnsWidth());
-            width = Math.min(width, tabulation.getMaximunColumnsWidth());
-        } else {
-            width = BoxGadget.adjustCellWidth(column.getColumnWidth());
-        }
-        sheet.setColumnWidth(column.getColumnIndex(), width);
-    }
-
-    public static void setRowHeight(Row row, float height) {
-        if (ExcelTabulation.DefaultRowHeight != height) {
-            row.setHeightInPoints(height);
+        Textbox[] textboxes = tableContext.getTextboxes();
+        for (Textbox textbox : textboxes) {
+            tableContext.getParent().layouter().addTextBox(sheet, textbox);
         }
     }
 

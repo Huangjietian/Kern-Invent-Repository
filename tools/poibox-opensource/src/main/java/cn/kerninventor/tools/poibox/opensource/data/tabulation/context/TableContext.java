@@ -162,9 +162,9 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         }
         int maximum = bannerDefinitions.stream().mapToInt(BannerDefinition::getLastRowIndex).max().getAsInt();
         if (maximum > 1) {
-            maximum++;
+            return ++maximum;
         }
-        return maximum;
+        return 1;
     }
 
     public void setColumnsIndex(List<ColumnDefinition> columnDefinitions) {

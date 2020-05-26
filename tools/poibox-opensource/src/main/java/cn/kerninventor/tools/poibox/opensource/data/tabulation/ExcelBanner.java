@@ -25,7 +25,7 @@ public @interface ExcelBanner {
             wrapText = true
     );
 
-    float rowHeight() default ExcelTabulation.DefaultRowHeight;
+    float rowHeight() default 15.0f;
 
     Range range() default @Range;
 

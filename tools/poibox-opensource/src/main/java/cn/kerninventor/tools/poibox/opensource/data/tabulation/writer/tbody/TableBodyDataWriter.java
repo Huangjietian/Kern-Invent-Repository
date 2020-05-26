@@ -4,7 +4,7 @@ import cn.kerninventor.tools.poibox.opensource.BoxGadget;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.ColumnDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TableContext;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.ETabulationWriter;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.ColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.col.ColWriter;
 import cn.kerninventor.tools.poibox.opensource.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -29,12 +29,12 @@ public class TableBodyDataWriter<T> implements TbodyWriter<T> {
 
     @Override
     public void templateTbody(ColumnDefinition<T> columnDefinition, Sheet sheet) {
-        TableContext table = columnDefinition.getTableContext();
+        TableContext tableContext = columnDefinition.getTableContext();
         ColWriter colWriter = columnDefinition.getColWriter();
         colWriter.pre();
-        for (int datasIndex = 0, rowIndex = table.getTbodyFirstRowIndex(); datasIndex < datas.size() ; datasIndex ++ , rowIndex++){
+        for (int datasIndex = 0, rowIndex = tableContext.getTbodyFirstRowIndex(); datasIndex < datas.size() ; datasIndex ++ , rowIndex++){
             Row bodyRow = BoxGadget.getRowForce(sheet, rowIndex);
-            ETabulationWriter.setRowHeight(bodyRow, table.getTbodyRowHeight());
+            bodyRow.setHeightInPoints(tableContext.getTbodyRowHeight());
             Cell bodyCell = bodyRow.createCell(columnDefinition.getColumnIndex());
             //设置风格
             bodyCell.setCellStyle(columnDefinition.getTbodyStyle());
@@ -42,11 +42,16 @@ public class TableBodyDataWriter<T> implements TbodyWriter<T> {
             try {
                 value = ReflectUtil.getFieldValue(columnDefinition.getField(), datas.get(datasIndex));
             } catch (IllegalAccessException e) {
-                throw new IllegalArgumentException("Field value get error., field name: " + columnDefinition.getFieldName());
+                throw new IllegalArgumentException("Failed to get field value. Field name: " + columnDefinition.getFieldName());
             }
-            value = parentWriter.translate(columnDefinition.getColumnDataTranslate(), value);
+            value = this.parentWriter.translate(columnDefinition.getColumnDataTranslate(), value);
             colWriter.setCellValue(bodyCell, value);
+
         }
         colWriter.flush();
+    }
+
+    private void preNumberStatistics(String fieldName, Number number) {
+
     }
 }

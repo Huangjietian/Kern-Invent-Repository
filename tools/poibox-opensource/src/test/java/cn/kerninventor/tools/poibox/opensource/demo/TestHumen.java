@@ -2,7 +2,6 @@ package cn.kerninventor.tools.poibox.opensource.demo;
 
 import cn.kerninventor.tools.poibox.opensource.Poibox;
 import cn.kerninventor.tools.poibox.opensource.PoiboxFactory;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
 
@@ -14,7 +13,7 @@ import java.io.IOException;
 public class TestHumen {
 
     public static void main(String[] args) throws IOException {
-        Poibox poibox = PoiboxFactory.open(new XSSFWorkbook());
+        Poibox poibox = PoiboxFactory.open();
         poibox.dataTabulator().writer(Humen.class).writeTo("humen");
         poibox.writeToLocal("C:\\Users\\82576\\Desktop\\Humen.xls");
     }

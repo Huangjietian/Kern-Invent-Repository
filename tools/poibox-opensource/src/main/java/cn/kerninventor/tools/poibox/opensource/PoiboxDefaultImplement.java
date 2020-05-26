@@ -106,4 +106,9 @@ public final class PoiboxDefaultImplement implements Poibox {
         }
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        this.flush();
+    }
 }

@@ -15,19 +15,19 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelTabulation {
 
-    float DefaultRowHeight = -1.0f;
-
     int MaximumColumnWidthAllowed = 255;
 
     ExcelBanner[] banners() default {};
+
+    Textbox[] textboxes() default {};
 
     Style[] theadStyles() default {@Style(index = 0)};
 
     Style[] tbodyStyles() default {@Style(index = 0)};
 
-    float theadRowHeight() default DefaultRowHeight;
+    float theadRowHeight() default 15.0f;
 
-    float tbodyRowHeight() default DefaultRowHeight;
+    float tbodyRowHeight() default 15.0f;
 
     int startRowIndex() default 0;
 
@@ -37,5 +37,5 @@ public @interface ExcelTabulation {
 
     int maximumColumnsWidth() default MaximumColumnWidthAllowed;
 
-    Textbox[] textboxes() default {};
+
 }

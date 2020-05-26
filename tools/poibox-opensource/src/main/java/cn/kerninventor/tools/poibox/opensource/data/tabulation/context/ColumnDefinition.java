@@ -6,7 +6,7 @@ import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.Column
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.DataValid;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.DataValidationBuilderFactory;
-import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.col.ColWriter;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.col.ColWriter;
 import cn.kerninventor.tools.poibox.opensource.exception.IllegalColumnConfigureException;
 import cn.kerninventor.tools.poibox.opensource.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.CellStyle;
