@@ -1,6 +1,7 @@
 package cn.kerninventor.tools.poibox.opensource.data.tabulation.writer;
 
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TabContextModifier;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslator;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
@@ -21,9 +22,13 @@ public interface TabulationWriter<T> {
 
     TabulationWriter<T> writeTo(Sheet sheet, List<T> datas, String... ignore);
 
-    TabulationWriter<T> addFormulaList(String name, Set<String> formulaList);
+    TabulationWriter<T> withFormulaList(String name, Set<String> formulaList);
 
-    TabulationWriter<T> addAllFormulaList(Map<String, Set<String>> formulaListMap);
+    TabulationWriter<T> withAllFormulaList(Map<String, Set<String>> formulaListMap);
+
+    TabulationWriter<T> withColumnDataTranslator(String translatorName, ColumnDataTranslator columnDataTranslator);
+
+    TabulationWriter<T> withAllColumnDataTranslator(Map<String, ColumnDataTranslator> columnDataTranslatorMap);
 
     TabContextModifier getTabContextModifier();
 

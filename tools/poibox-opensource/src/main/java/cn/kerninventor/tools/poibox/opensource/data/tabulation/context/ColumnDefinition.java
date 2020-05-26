@@ -2,6 +2,7 @@ package cn.kerninventor.tools.poibox.opensource.data.tabulation.context;
 
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.ExcelColumn;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.enums.SupportedDataType;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslate;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.DataValid;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.DataValidationBuilderFactory;
@@ -32,6 +33,7 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
     private CellStyle tbodyStyle;
     private DataValidationBuilder dataValidationBuilder;
     private ColWriter colWriter;
+    private ColumnDataTranslate columnDataTranslate;
 
     public ColumnDefinition(Field field, ExcelColumn excelColumn, TableContext<T> tableContext) {
         this.tableContext = tableContext;
@@ -42,6 +44,7 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
         this.dataFormatEx = excelColumn.dataFormatEx();
         this.formula = excelColumn.formula();
         this.columnSort = excelColumn.columnSort();
+        this.columnDataTranslate = excelColumn.dataTranslate();
         this.theadStyle = tableContext.getTheadStyleMap().get(excelColumn.theadStyleIndex());
         this.tbodyStyle = tableContext.getTbodyStyleMap().get(excelColumn.tbodyStyleIndex());
         Annotation annotation = ReflectUtil.getFirstMarkedAnnotation(field, DataValid.class);
@@ -110,6 +113,10 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
 
     public ColWriter getColWriter() {
         return colWriter;
+    }
+
+    public ColumnDataTranslate getColumnDataTranslate() {
+        return columnDataTranslate;
     }
 
     @Override

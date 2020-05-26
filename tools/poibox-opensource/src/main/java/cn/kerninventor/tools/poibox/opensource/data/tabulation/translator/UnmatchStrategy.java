@@ -12,5 +12,8 @@ public enum UnmatchStrategy {
     EXCEPTION,
 
     CONSOLE,
+
+    DEFAULT,
+
     ;
 }

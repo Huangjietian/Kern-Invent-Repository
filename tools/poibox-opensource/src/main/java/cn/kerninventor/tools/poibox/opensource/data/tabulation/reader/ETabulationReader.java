@@ -2,6 +2,9 @@ package cn.kerninventor.tools.poibox.opensource.data.tabulation.reader;
 
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.ColumnDefinition;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.AbstractColumnDataTranslator;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslate;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslator;
 import cn.kerninventor.tools.poibox.opensource.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.opensource.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.opensource.utils.CellValueUtil;
@@ -10,17 +13,14 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * @author Kern
  * @date 2020/3/12 19:13
  */
-public class ETabulationReader<T> implements TabulationReader<T> {
+public class ETabulationReader<T> extends AbstractColumnDataTranslator implements TabulationReader<T> {
 
     private TableContext tabContext;
 
@@ -68,6 +68,7 @@ public class ETabulationReader<T> implements TabulationReader<T> {
                 }
                 Object value = null;
                 value = CellValueUtil.getCellValueBySpecifiedType(cell, column.getFieldType());
+                value = translate(column.getColumnDataTranslate(), value);
                 if (null == value) {
                     nullCount++;
                 }
@@ -90,7 +91,7 @@ public class ETabulationReader<T> implements TabulationReader<T> {
     }
 
     @Override
-    public TabulationReader addBeanValidator(BeanValidator<T, ?>... beanValidators) {
+    public TabulationReader withBeanValidator(BeanValidator<T, ?>... beanValidators) {
         if (this.beanValidators == null) {
             this.beanValidators = new ArrayList();
         }
@@ -98,4 +99,23 @@ public class ETabulationReader<T> implements TabulationReader<T> {
         return this;
     }
 
+    @Override
+    public TabulationReader<T> withColumnDataTranslator(String translatorName, ColumnDataTranslator columnDataTranslator) {
+        this.putTranslator(translatorName, columnDataTranslator);
+        return this;
+    }
+
+    @Override
+    public TabulationReader<T> withAllColumnDataTranslator(Map<String, ColumnDataTranslator> columnDataTranslatorMap) {
+        this.putAllTranslator(columnDataTranslatorMap);
+        return this;
+    }
+
+    @Override
+    public Object translate(ColumnDataTranslate translate, Object searchCondition) {
+        if (translate.open()) {
+            return getKey(translate.translator(), searchCondition, translate.tag(), translate.unmatchStrategy());
+        }
+        return searchCondition;
+    }
 }

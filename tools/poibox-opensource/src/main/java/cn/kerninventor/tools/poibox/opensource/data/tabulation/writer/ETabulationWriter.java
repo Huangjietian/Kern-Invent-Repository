@@ -8,6 +8,9 @@ import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.ColumnDef
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TabContextModifier;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.context.TableContext;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.element.Textbox;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.AbstractColumnDataTranslator;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslate;
+import cn.kerninventor.tools.poibox.opensource.data.tabulation.translator.ColumnDataTranslator;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.validation.array.FormulaListDataValid;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.chain.WriteThread;
 import cn.kerninventor.tools.poibox.opensource.data.tabulation.writer.tbody.TableBodyDataWriter;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
  * @author Kern
  * @date 2020/3/12 18:53
  */
-public final class ETabulationWriter<T> implements TabulationWriter<T> {
+public final class ETabulationWriter<T> extends AbstractColumnDataTranslator implements TabulationWriter<T> {
 
     private TableContext<T> tableContext;
 
@@ -63,7 +66,7 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
 
     @Override
     public TabulationWriter<T> writeTo(Sheet sheet, List<T> datas, String... ignore) {
-        TbodyWriter tbodyWriter = new TableBodyDataWriter(datas);
+        TbodyWriter tbodyWriter = new TableBodyDataWriter(datas, this);
         BasicTabulationWriter basicTabulationWriter = new BasicTabulationWriter(tbodyWriter);
         doWrite(sheet, ignore, basicTabulationWriter);
         return this;
@@ -136,7 +139,7 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
     }
 
     @Override
-    public TabulationWriter<T> addFormulaList(String name, Set<String> formulaList) {
+    public TabulationWriter<T> withFormulaList(String name, Set<String> formulaList) {
         if (this.formulaListMap == null) {
             this.formulaListMap = new HashMap<>();
         }
@@ -145,11 +148,23 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
     }
 
     @Override
-    public TabulationWriter<T> addAllFormulaList(Map<String, Set<String>> formulaListMap) {
+    public TabulationWriter<T> withAllFormulaList(Map<String, Set<String>> formulaListMap) {
         if (this.formulaListMap == null) {
             this.formulaListMap = new HashMap<>();
         }
         this.formulaListMap.putAll(formulaListMap);
+        return this;
+    }
+
+    @Override
+    public TabulationWriter<T> withColumnDataTranslator(String translatorName, ColumnDataTranslator columnDataTranslator) {
+        this.putTranslator(translatorName, columnDataTranslator);
+        return this;
+    }
+
+    @Override
+    public TabulationWriter<T> withAllColumnDataTranslator(Map<String, ColumnDataTranslator> columnDataTranslatorMap) {
+        this.putAllTranslator(columnDataTranslatorMap);
         return this;
     }
 
@@ -162,4 +177,11 @@ public final class ETabulationWriter<T> implements TabulationWriter<T> {
         return tableContext;
     }
 
+    @Override
+    public Object translate(ColumnDataTranslate translate, Object searchCondition) {
+        if (translate.open()) {
+            return getValue(translate.translator(), searchCondition, translate.tag(), translate.unmatchStrategy());
+        }
+        return searchCondition;
+    }
 }

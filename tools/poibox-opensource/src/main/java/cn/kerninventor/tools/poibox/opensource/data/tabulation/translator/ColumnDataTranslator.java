@@ -7,7 +7,15 @@ package cn.kerninventor.tools.poibox.opensource.data.tabulation.translator;
  */
 public interface ColumnDataTranslator<K, V> {
 
-    V getValue(String key);
+    V getValue(K key, String tag);
 
-    K getKey(String value);
+    K getKey(V value, String tag);
+
+    default V getDefaultValue() {
+        return null;
+    }
+
+    default K getDefaultKey() {
+        return null;
+    }
 }

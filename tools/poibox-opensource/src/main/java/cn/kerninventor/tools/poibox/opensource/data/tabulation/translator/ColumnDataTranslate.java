@@ -14,6 +14,10 @@ public @interface ColumnDataTranslate {
 
     String translator();
 
+    String tag() default "";
+
     UnmatchStrategy unmatchStrategy() default UnmatchStrategy.CONSOLE;
+
+    boolean open() default true;
 
 }

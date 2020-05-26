@@ -20,9 +20,11 @@ import java.util.List;
 public class TableBodyDataWriter<T> implements TbodyWriter<T> {
 
     private List<T> datas;
+    private ETabulationWriter parentWriter;
 
-    public TableBodyDataWriter(List<T> datas) {
+    public TableBodyDataWriter(List<T> datas, ETabulationWriter parentWriter) {
         this.datas = datas;
+        this.parentWriter = parentWriter;
     }
 
     @Override
@@ -42,6 +44,7 @@ public class TableBodyDataWriter<T> implements TbodyWriter<T> {
             } catch (IllegalAccessException e) {
                 throw new IllegalArgumentException("Field value get error., field name: " + columnDefinition.getFieldName());
             }
+            value = parentWriter.translate(columnDefinition.getColumnDataTranslate(), value);
             colWriter.setCellValue(bodyCell, value);
         }
         colWriter.flush();
