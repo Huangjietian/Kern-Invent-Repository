@@ -1,12 +1,8 @@
-package cn.kerninventor.tools.file.fileformat.enums;
+package cn.kerninventor.tools.file.fileformat;
 
 /**
- * @Title: FileFormatErrorEnum
- * @ProjectName fileformat
- * @Version 1.0.SNAPSHOT
- * @Description: TODO
- * @Author Kern
- * @Date 2019/10/22 18:48
+ * @author Kern
+ * @date 2019/10/22 18:48
  */
 public enum FileFormatErrorEnum {
 

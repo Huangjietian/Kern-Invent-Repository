@@ -1,14 +1,8 @@
-package cn.kerninventor.tools.file.fileformat.exception;
-
-import java.util.IllegalFormatException;
+package cn.kerninventor.tools.file.fileformat;
 
 /**
- * @Title: FileFormatException
- * @ProjectName fileformat
- * @Version 1.0.SNAPSHOT
- * @Description: TODO
- * @Author Kern
- * @Date 2019/10/22 17:01
+ * @uthor Kern
+ * @date 2019/10/22 17:01
  */
 public class FileFormatException extends RuntimeException {
 
