@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2020/5/22 18:12
  * @description
  */
-public class BasicTabulationWriter<T> {
+public final class BasicTabulationWriter<T> {
 
     private TbodyWriter<T> tbodyWriter;
 

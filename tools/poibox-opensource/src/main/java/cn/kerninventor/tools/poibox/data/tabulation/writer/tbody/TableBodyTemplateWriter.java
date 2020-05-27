@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
  * @date 2020/5/25 14:18
  * @description
  */
-public class TableBodyTemplateWriter implements TbodyWriter {
+public final class TableBodyTemplateWriter implements TbodyWriter {
 
     @Override
     public void templateTbody(ColumnDefinition columnDefinition, Sheet sheet) {

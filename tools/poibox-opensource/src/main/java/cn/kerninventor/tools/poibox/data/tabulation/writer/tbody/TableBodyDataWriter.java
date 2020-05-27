@@ -23,7 +23,7 @@ import java.util.Map;
  * @date 2020/5/25 14:19
  * @description
  */
-public class TableBodyDataWriter<T> implements TbodyWriter<T> {
+public final class TableBodyDataWriter<T> implements TbodyWriter<T> {
 
     private List<T> datas;
     private ETabulationWriter parentWriter;
