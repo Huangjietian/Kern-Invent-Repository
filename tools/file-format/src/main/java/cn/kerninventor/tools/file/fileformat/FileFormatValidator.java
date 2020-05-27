@@ -34,7 +34,7 @@ public final class FileFormatValidator {
         return matchHeader(header, fileTypes);
     }
 
-    public static String getFileHeader(InputStream stream) {
+    private static String getFileHeader(InputStream stream) {
         try {
             byte[] bytes = new byte[4];
             stream.read(bytes, 0, bytes.length);
