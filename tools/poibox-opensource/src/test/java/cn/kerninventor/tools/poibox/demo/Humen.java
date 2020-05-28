@@ -4,6 +4,7 @@ import cn.kerninventor.tools.poibox.data.tabulation.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.tabulation.ExcelColumn;
 import cn.kerninventor.tools.poibox.data.tabulation.ExcelTabulation;
 import cn.kerninventor.tools.poibox.data.tabulation.element.*;
+import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslate;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.array.EnumExplicitListDataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.array.ExplicitListDataValid;
 
@@ -42,7 +43,7 @@ public class Humen {
     private String name;
 
     @EnumExplicitListDataValid(enumClass = GenderEnum.class)
-    @ExcelColumn("性别")
+    @ExcelColumn(value = "性别", dataTranslate = @ColumnDataTranslate(translator = "gender"))
     private String gender;
 
     public Humen(String country, String name, String gender) {

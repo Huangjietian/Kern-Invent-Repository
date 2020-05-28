@@ -161,7 +161,7 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
             return 0;
         }
         int maximum = bannerDefinitions.stream().mapToInt(BannerDefinition::getLastRowIndex).max().getAsInt();
-        if (maximum > 1) {
+        if (maximum > 0) {
             return ++maximum;
         }
         return 1;
