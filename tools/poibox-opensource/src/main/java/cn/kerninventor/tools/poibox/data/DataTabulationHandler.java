@@ -20,14 +20,14 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
 
     @Override
     public <T> TabulationWriter<T> writer(Class<T> sourceClass) {
-        TableContext context = new TableContext(sourceClass, getParent());
-        return new ETabulationWriter(context);
+        TableContext<T> context = new TableContext<T>(sourceClass, getParent());
+        return new ETabulationWriter<T>(context);
     }
 
     @Override
     public <T> TabulationReader<T> reader(Class<T> sourceClass) {
-        TableContext context = new TableContext(sourceClass, getParent());
-        return new ETabulationReader(context);
+        TableContext<T> context = new TableContext<T>(sourceClass, getParent());
+        return new ETabulationReader<T>(context);
     }
 
 }
