@@ -3,6 +3,9 @@ package cn.kerninventory.tools.common.chronograph;
 import com.sun.istack.internal.NotNull;
 
 /**
+ * <p>
+ *     使用装饰者模式封装的 计时器 接口
+ * </p>
  * @author Kern
  * @date 2020/6/3 16:01
  * @description
