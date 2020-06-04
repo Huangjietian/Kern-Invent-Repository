@@ -4,7 +4,7 @@ package cn.kerninventor.tools.file.fileformat;
  * @author Kern
  * @date 2019/10/22 16:34
  */
-public enum FileType {
+public enum FileFormatType {
 
     JPG("FFD8FF", ".jpg"),
     JPEG("FFD8FF", ".jpeg"),
@@ -29,7 +29,7 @@ public enum FileType {
     private String header;
     private String suffix;
 
-    FileType(String header, String suffix) {
+    FileFormatType(String header, String suffix) {
         this.header = header;
         this.suffix = suffix;
     }
@@ -42,13 +42,13 @@ public enum FileType {
         return suffix;
     }
 
-    public static boolean isCorrectSuffix(String path, FileType... fileTypes) {
+    public static boolean isCorrectSuffix(String path, FileFormatType... fileFormatTypes) {
         int index;
         if (path == null || (index = path.lastIndexOf("."))== -1){
             return false;
         }
-        for (FileType fileType : fileTypes){
-            if (path.substring(index).equals(fileType.getSuffix())){
+        for (FileFormatType fileFormatType : fileFormatTypes){
+            if (path.substring(index).equals(fileFormatType.getSuffix())){
                 return true;
             }
         }

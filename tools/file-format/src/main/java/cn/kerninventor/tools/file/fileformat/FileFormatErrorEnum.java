@@ -6,9 +6,9 @@ package cn.kerninventor.tools.file.fileformat;
  */
 public enum FileFormatErrorEnum {
 
-    FORMAT_ERROR_MSG(501,"文件格式错误!"),
-    FILE_BLANK_MSG(502,"空文件错误!"),
-    FILE_RESOLVE_ERROR_MSG(503,"文件解析错误"),
+    FORMAT_ERROR_MSG(501,"File format error!"),
+    FILE_BLANK_MSG(502,"Empty file error!"),
+    FILE_RESOLVE_ERROR_MSG(503,"File resolution error"),
     ;
     private int code;
     private String msg;

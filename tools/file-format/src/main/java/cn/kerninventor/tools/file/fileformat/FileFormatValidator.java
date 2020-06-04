@@ -19,34 +19,34 @@ import java.io.*;
  */
 public final class FileFormatValidator {
 
-    public static boolean validate(File file, FileType... fileTypes) throws FileNotFoundException {
+    public static boolean validate(File file, FileFormatType... fileFormatTypes) throws FileNotFoundException, IllegalFileFormatException {
         FileInputStream stream = new FileInputStream(file);
-        return validate(stream, file.getName(), fileTypes);
+        return validate(stream, file.getName(), fileFormatTypes);
     }
 
-    public static boolean validate(InputStream stream, String fileName, FileType... fileTypes) {
-        return validate(stream, fileTypes) && FileType.isCorrectSuffix(fileName, fileTypes);
+    public static boolean validate(InputStream stream, String fileName, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
+        return validate(stream, fileFormatTypes) && FileFormatType.isCorrectSuffix(fileName, fileFormatTypes);
     }
 
-    public static boolean validate(InputStream stream, FileType... fileTypes) {
+    public static boolean validate(InputStream stream, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
         String header = getFileHeader(stream);
         notBlank(header);
-        return matchHeader(header, fileTypes);
+        return matchHeader(header, fileFormatTypes);
     }
 
-    private static String getFileHeader(InputStream stream) {
+    private static String getFileHeader(InputStream stream) throws IllegalFileFormatException {
         try {
             byte[] bytes = new byte[4];
             stream.read(bytes, 0, bytes.length);
             return bytesToHexString(bytes);
         } catch (IOException e) {
-            throw new FileFormatException(FileFormatErrorEnum.FILE_RESOLVE_ERROR_MSG.getMsg(), e);
+            throw new IllegalFileFormatException(FileFormatErrorEnum.FILE_RESOLVE_ERROR_MSG.getMsg(), e);
         } finally {
             if (stream != null){
                 try {
                     stream.close();
                 } catch (IOException e) {
-                    throw new FileFormatException(FileFormatErrorEnum.FILE_RESOLVE_ERROR_MSG.getMsg(), e);
+                    throw new IllegalFileFormatException(FileFormatErrorEnum.FILE_RESOLVE_ERROR_MSG.getMsg(), e);
                 }
             }
         }
@@ -68,16 +68,16 @@ public final class FileFormatValidator {
         return builder.toString();
     }
 
-    private static String notBlank(String header){
+    private static String notBlank(String header) throws IllegalFileFormatException {
         if (header == null || "".equals(header.replace("0", "").trim())){
-            throw new FileFormatException(FileFormatErrorEnum.FILE_BLANK_MSG.getMsg());
+            throw new IllegalFileFormatException(FileFormatErrorEnum.FILE_BLANK_MSG.getMsg());
         }
         return header;
     }
 
-    private static boolean matchHeader(String header, FileType... fileTypes){
-        for (FileType fileType : fileTypes){
-            if (header.contains(fileType.getHeader())){
+    private static boolean matchHeader(String header, FileFormatType... fileFormatTypes){
+        for (FileFormatType fileFormatType : fileFormatTypes){
+            if (header.contains(fileFormatType.getHeader())){
                 return true;
             }
         }
