@@ -1,8 +1,8 @@
 package cn.kerninventor.tools.romance;
 
 /**
- * @Author Kern
- * @Date 2020/2/27 14:08
+ * @author Kern
+ * @date 2020/2/27 14:08
  */
 @FunctionalInterface
 public interface Lover {
