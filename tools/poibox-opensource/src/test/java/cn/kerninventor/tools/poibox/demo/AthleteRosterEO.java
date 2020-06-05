@@ -7,6 +7,7 @@ import cn.kerninventor.tools.poibox.data.tabulation.element.Font;
 import cn.kerninventor.tools.poibox.data.tabulation.element.Range;
 import cn.kerninventor.tools.poibox.data.tabulation.element.Style;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.CompareType;
+import cn.kerninventor.tools.poibox.data.tabulation.validation.array.ExplicitListDataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.date.DateDataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.decimal.DecimalDataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.integer.IntDataValid;
@@ -61,9 +62,9 @@ public class AthleteRosterEO {
     @ExcelColumn(value = "序号", columnWidth = 5)
     private Integer serial;
 
-    @ExcelColumn("共建单位")
-    @TextLengthDataValid(value = 50)
-    private String cooperativeUnit;
+    @ExplicitListDataValid(list = {"单位1", "单位2", "单位3"})
+    @ExcelColumn(value = "共建单位", dataFormatEx = "0.00")
+    private Long cooperativeUnit;
 
     @ExcelColumn(value = "1管理模式", columnWidth = 16, theadStyleIndex = 1)
     private String managementModeName;

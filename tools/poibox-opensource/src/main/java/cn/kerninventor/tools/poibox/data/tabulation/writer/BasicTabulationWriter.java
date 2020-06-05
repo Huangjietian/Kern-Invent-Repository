@@ -51,7 +51,7 @@ public final class BasicTabulationWriter<T> {
         int width;
         if (column.getColumnWidth() == ExcelColumn.DefaultColumnWidth){
             width = BoxGadget.getCellWidthByContent(column.getTitleName(), theadFontHeightInPoints);
-            width = Math.max(width, tabulation.getMinimumColumnsWidth());
+            width = Math.max(width, tabulation.getMinimunColumnsWidth());
             width = Math.min(width, tabulation.getMaximunColumnsWidth());
         } else {
             width = BoxGadget.adjustCellWidth(column.getColumnWidth());

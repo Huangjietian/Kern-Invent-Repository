@@ -28,7 +28,8 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     private Class<T> tabulationClass;
     private Map<Integer, CellStyle> theadStyleMap;
     private Map<Integer, CellStyle> tbodyStyleMap;
-    private int theadRowIndex;
+    private List<BannerDefinition> bannerDefinitions;
+    private List<ColumnDefinition> columnDefinitions;
     private float theadRowHeight;
     private float tbodyRowHeight;
     private int maximunColumnsWidth;
@@ -36,13 +37,12 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     private int startRowIndex;
     private int effectiveRows;
     private Textbox[] textboxes;
-    private List<BannerDefinition> bannerDefinitions;
-    private List<ColumnDefinition> columnDefinitions;
+
 
     public TableContext(Class<T> tableClass, Poibox poiBox) {
         super(poiBox);
         this.tabulationClass = tableClass;
-        init();
+        this.init();
     }
 
     public Class<T> getTabulationClass() {
@@ -77,16 +77,16 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return BoxGadget.adjustCellWidth(maximunColumnsWidth);
     }
 
-    public int getMinimumColumnsWidth() {
+    public int getMinimunColumnsWidth() {
         return BoxGadget.adjustCellWidth(minimunColumnsWidth);
     }
 
     public int getTheadRowIndex() {
-        return theadRowIndex;
+        return getRowIndexIncrementsByBanners(getBannerDefinitions()) + getStartRowIndex();
     }
 
     public int getTbodyFirstRowIndex(){
-        return theadRowIndex + 1;
+        return getTheadRowIndex() + 1;
     }
 
     public List<BannerDefinition> getBannerDefinitions() {
@@ -103,21 +103,19 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
 
     private void init(){
         Class tabulationClass = getTabulationClass();
-        //element object init
         ExcelTabulation excelTabulation = dataTabulationSourceClassValidate(tabulationClass);
+        //element object init
         this.theadStyleMap = initStyles(excelTabulation.theadStyles());
         this.tbodyStyleMap = initStyles(excelTabulation.tbodyStyles());
         this.bannerDefinitions = initialzeBanners(excelTabulation.banners());
         this.columnDefinitions = initialzeColumns(tabulationClass);
         //mumerical value init
         this.startRowIndex = excelTabulation.startRowIndex();
-        this.theadRowIndex = getRowIndexIncrementsByBanners(bannerDefinitions) + startRowIndex;
         this.theadRowHeight = excelTabulation.theadRowHeight();
         this.tbodyRowHeight = excelTabulation.tbodyRowHeight();
         this.effectiveRows = excelTabulation.effectiveRows();
         this.maximunColumnsWidth = excelTabulation.maximumColumnsWidth();
         this.minimunColumnsWidth = excelTabulation.minimumColumnsWidth();
-
         this.textboxes = excelTabulation.textboxes();
     }
 
@@ -261,7 +259,6 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     public TabContextModifier alterStartRowIndex(int startRowIndex) {
         startRowIndexValidate(startRowIndex);
         this.startRowIndex = startRowIndex;
-        this.theadRowIndex = getRowIndexIncrementsByBanners(getBannerDefinitions()) + startRowIndex;
         return this;
     }
 
