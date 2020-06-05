@@ -13,10 +13,10 @@ import org.apache.poi.ss.usermodel.Sheet;
  * @date 2020/5/25 14:18
  * @description
  */
-public final class TableBodyTemplateWriter implements TbodyWriter {
+public final class TableBodyTemplateWriter<T> implements TbodyWriter<T> {
 
     @Override
-    public void templateTbody(ColumnDefinition columnDefinition, Sheet sheet) {
+    public void templateTbody(ColumnDefinition<T> columnDefinition, Sheet sheet) {
         TableContext tableContext = columnDefinition.getTableContext();
         for (int rowIndex = tableContext.getTbodyFirstRowIndex() ; rowIndex < tableContext.getEffectiveRows() + tableContext.getTbodyFirstRowIndex(); rowIndex ++){
             Row bodyRow = BoxGadget.getRowForce(sheet, rowIndex);

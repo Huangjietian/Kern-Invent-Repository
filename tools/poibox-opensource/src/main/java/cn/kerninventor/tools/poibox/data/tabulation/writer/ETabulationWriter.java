@@ -4,14 +4,13 @@ import cn.kerninventor.tools.poibox.data.tabulation.context.BannerDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.context.TabContextModifier;
 import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.element.Textbox;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.AbstractColumnDataTranslator;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslate;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslator;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.array.FormulaListDataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.TbodyWriter;
-import cn.kerninventor.tools.poibox.data.tabulation.element.Textbox;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.TableBodyDataWriter;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.TableBodyTemplateWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.TbodyWriterFactory;
 import cn.kerninventor.tools.poibox.layout.Layouter;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.utils.FormulaListUtil;
@@ -48,8 +47,8 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
 
     @Override
     public TabulationWriter<T> writeTo(Sheet sheet) {
-        TbodyWriter tbodyWriter = new TableBodyTemplateWriter();
-        BasicTabulationWriter basicTabulationWriter = new BasicTabulationWriter(tbodyWriter);
+        TbodyWriter<T> tbodyWriter = TbodyWriterFactory.getTbodyWriter(this,null);
+        BasicTabulationWriter basicTabulationWriter = new BasicTabulationWriter<T>(tbodyWriter);
         doWrite(sheet, null, basicTabulationWriter);
         return this;
     }
@@ -62,8 +61,8 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
 
     @Override
     public TabulationWriter<T> writeTo(Sheet sheet, List<T> datas, String... ignore) {
-        TbodyWriter tbodyWriter = new TableBodyDataWriter(datas, this);
-        BasicTabulationWriter basicTabulationWriter = new BasicTabulationWriter(tbodyWriter);
+        TbodyWriter<T> tbodyWriter = TbodyWriterFactory.getTbodyWriter(this, datas);
+        BasicTabulationWriter basicTabulationWriter = new BasicTabulationWriter<T>(tbodyWriter);
         doWrite(sheet, ignore, basicTabulationWriter);
         return this;
     }

@@ -3,20 +3,14 @@ package cn.kerninventor.tools.poibox.data.tabulation.writer.tbody;
 import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
-import cn.kerninventor.tools.poibox.data.tabulation.statistics.NumberStatisticsLogicHandler;
-import cn.kerninventor.tools.poibox.data.tabulation.statistics.NumberStatisticsMode;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.ETabulationWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.translator.AbstractColumnDataTranslator;
 import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.col.ColWriter;
-import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Kern
@@ -26,11 +20,11 @@ import java.util.Map;
 public final class TableBodyDataWriter<T> implements TbodyWriter<T> {
 
     private List<T> datas;
-    private ETabulationWriter parentWriter;
+    private AbstractColumnDataTranslator translator;
 
-    public TableBodyDataWriter(List<T> datas, ETabulationWriter parentWriter) {
+    public TableBodyDataWriter(List<T> datas, AbstractColumnDataTranslator AbstractColumnDataTranslator) {
         this.datas = datas;
-        this.parentWriter = parentWriter;
+        this.translator = AbstractColumnDataTranslator;
     }
 
     @Override
@@ -50,44 +44,44 @@ public final class TableBodyDataWriter<T> implements TbodyWriter<T> {
             } catch (IllegalAccessException e) {
                 throw new IllegalArgumentException("Failed to get field value. Field name: " + columnDefinition.getFieldName());
             }
-            value = this.parentWriter.translate(columnDefinition.getColumnDataTranslate(), value);
+            value = this.translator.translate(columnDefinition.getColumnDataTranslate(), value);
             colWriter.setCellValue(bodyCell, value);
 
         }
         colWriter.flush();
     }
-
-    private void preNumberStatistics() {
-        //大致思路， 在获得字段值后 收集到 数组中
-    }
-
-    private void writeNumberStatistics() {
-        //大致思路， 对收集的结果进行汇总计算。
-    }
-    private class StatisticsTask {
-
-        private Map<String, List<Number>> columnsNumberValue;
-        private NumberStatisticsLogicHandler handler;
-        private NumberStatisticsMode mode;
-
-        public StatisticsTask(String[] fieldsName, NumberStatisticsMode mode) {
-            columnsNumberValue = new HashMap<>(fieldsName.length);
-            for (String fieldName : fieldsName) {
-                columnsNumberValue.put(fieldName, new ArrayList<>(16));
-            }
-            handler = new NumberStatisticsLogicHandler();
-        }
-
-        public void collect(String fieldName, Number number) {
-            columnsNumberValue.get(fieldName).add(number);
-        }
-
-        public Number doStatistics(String fieldName){
-            List<Number> numberList = columnsNumberValue.get(fieldName);
-            if (BeanUtil.isEmpty(numberList)) {
-                return 0;
-            }
-            return handler.toStatistics(mode, numberList.toArray(new Number[numberList.size()]));
-        }
-    }
+//
+//    private void preNumberStatistics() {
+//        //大致思路， 在获得字段值后 收集到 数组中
+//    }
+//
+//    private void writeNumberStatistics() {
+//        //大致思路， 对收集的结果进行汇总计算。
+//    }
+//    private class StatisticsTask {
+//
+//        private Map<String, List<Number>> columnsNumberValue;
+//        private NumberStatisticsLogicHandler handler;
+//        private NumberStatisticsMode mode;
+//
+//        public StatisticsTask(String[] fieldsName, NumberStatisticsMode mode) {
+//            columnsNumberValue = new HashMap<>(fieldsName.length);
+//            for (String fieldName : fieldsName) {
+//                columnsNumberValue.put(fieldName, new ArrayList<>(16));
+//            }
+//            handler = new NumberStatisticsLogicHandler();
+//        }
+//
+//        public void collect(String fieldName, Number number) {
+//            columnsNumberValue.get(fieldName).add(number);
+//        }
+//
+//        public Number doStatistics(String fieldName){
+//            List<Number> numberList = columnsNumberValue.get(fieldName);
+//            if (BeanUtil.isEmpty(numberList)) {
+//                return 0;
+//            }
+//            return handler.toStatistics(mode, numberList.toArray(new Number[numberList.size()]));
+//        }
+//    }
 }
