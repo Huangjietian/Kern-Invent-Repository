@@ -1,5 +1,7 @@
 package cn.kerninventory.tools.common;
 
+import java.math.BigDecimal;
+
 /**
  * @author Kern
  * @date 2020/6/8 16:12
@@ -16,19 +18,11 @@ public class MathUtil {
      * @param powersOfTen 位数（可以为负数）
      * @return
      */
-    public static int roundOf(double number, int powersOfTen) {
-        double d = Math.pow(10.0d, powersOfTen);
-        number = number / d;
+    public static double roundOf(double number, int powersOfTen) {
+        BigDecimal bd = BigDecimal.valueOf(Math.pow(10.0d, powersOfTen));
+        number = BigDecimal.valueOf(number).divide(bd).doubleValue();
         int it = roundDecimals(number);
-        if (powersOfTen >= 0) {
-            it = (int) (it * d);
-        } else {
-            for (int i = 0 ; i > powersOfTen ; i --) {
-                d = it / 10.0d;
-                it = roundDecimals(d);
-            }
-        }
-        return it;
+        return it * bd.doubleValue();
     }
 
     /**
