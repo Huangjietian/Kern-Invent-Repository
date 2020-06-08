@@ -28,6 +28,7 @@ public class LuhnUtil {
             throw new IllegalArgumentException("No is null or Empty");
         }
     }
+
     /**
      * 校验
      * @return
@@ -38,6 +39,7 @@ public class LuhnUtil {
         }
         return isValidate;
     }
+
     /**
      * 获取全部id
      * @return
