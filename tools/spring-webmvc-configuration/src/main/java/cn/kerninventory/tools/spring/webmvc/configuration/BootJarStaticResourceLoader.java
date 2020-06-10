@@ -9,9 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * <h1>中文描述</h1>
+ * <p>
+ *     springboot项目下static文件夹下资源加载类
+ * </p>
  * @author Kern
- * @date 2020/5/13 11:09
- * @description
+ * @version 1.0
  */
 public class BootJarStaticResourceLoader {
 
