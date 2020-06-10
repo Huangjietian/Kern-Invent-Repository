@@ -1,14 +1,20 @@
 package cn.kerninventory.tools.common;
 
 /**
+ * <h1</h1>
+ * <p>
+ *     字符串工具类
+ * </p>
  * @author Kern
- * @date 2020/5/11 18:32
- * @description
+ * @version 1.0
  */
 public class StringUtil {
 
     /**
-     * 字符串截取=========================================================================
+     * <h1>中文注释</h1>
+     * <p>
+     *     截取下标函数
+     * </p>
      */
     @FunctionalInterface
     private interface SubIndex {
@@ -16,7 +22,9 @@ public class StringUtil {
     }
 
     /**
-     * 截取指定坐标之前的字符串
+     * <p>
+     *     截取指定坐标之前的字符串
+     * </p>
      * @param str
      * @param subIndex
      * @return
@@ -30,7 +38,9 @@ public class StringUtil {
     }
 
     /**
-     * 截取指定坐标之后的字符串
+     * <p>
+     *     截取指定坐标之后的字符串
+     * </p>
      * @param str
      * @param subIndex
      * @return
@@ -44,7 +54,9 @@ public class StringUtil {
     }
 
     /**
-     * 截取指定字符第一次出现位置之前的字符
+     * <p>
+     *     截取指定字符第一次出现位置之前的字符
+     * </p>
      * @param str
      * @param symbol
      * @return
@@ -54,7 +66,9 @@ public class StringUtil {
     }
 
     /**
-     * 截取指定字符第一次出现位置之后的字符
+     * <p>
+     *     截取指定字符第一次出现位置之后的字符
+     * </p>
      * @param str
      * @param symbol
      * @return
@@ -65,7 +79,9 @@ public class StringUtil {
 
 
     /**
-     * 截取指定字符最后一次出现位置之前的字符
+     * <p>
+     *     截取指定字符最后一次出现位置之前的字符
+     * </p>
      * @param str
      * @param symbol
      * @return
@@ -75,7 +91,9 @@ public class StringUtil {
     }
 
     /**
-     * 截取指定字符最后一次出现位置之后的字符
+     * <p>
+     *     截取指定字符最后一次出现位置之后的字符
+     * </p>
      * @param str
      * @param symbol
      * @return
@@ -85,7 +103,9 @@ public class StringUtil {
     }
 
     /**
-     * 字符长度匹配
+     * <p>
+     *     字符长度匹配
+     * </p>
      * @param str
      * @param len
      * @return
@@ -98,7 +118,9 @@ public class StringUtil {
     }
 
     /**
-     *
+     * <p>
+     *     字符串 null 判断
+     * </p>
      * @param str
      * @return
      */
@@ -107,7 +129,9 @@ public class StringUtil {
     }
 
     /**
-     *
+     * <p>
+     *     字符串非null和非空串判断
+     * </p>
      * @param str
      * @return
      */
@@ -116,7 +140,9 @@ public class StringUtil {
     }
 
     /**
-     *
+     * <p>
+     *     字符串非null和非空集判断
+     * </p>
      * @param str
      * @return
      */
@@ -125,6 +151,13 @@ public class StringUtil {
     }
 
     /**
+     * <p>
+     *     字符串空则置为null <br/>
+     *     example：
+     *     str == null                                      ： null; <br/>
+     *     "".equals(str.trim()) == true                    :  null; <br/>
+     *     othler case                                      : str.trim().
+     * </p>
      * @param str
      * @return
      */
@@ -136,10 +169,17 @@ public class StringUtil {
     }
 
     /**
+     * <p>
+     *     字符串空则置为空串 <br/>
+     *     example：
+     *     str == null                                      ： ""; <br/>
+     *     othler case                                      : str.trim().
+     * </p>
      * @param str
      * @return
      */
     public static String trim2Empty(String str) {
         return isNull(str) ? "" : str.trim();
     }
+
 }

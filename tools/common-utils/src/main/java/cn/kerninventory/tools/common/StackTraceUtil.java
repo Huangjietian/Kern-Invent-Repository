@@ -1,69 +1,82 @@
 package cn.kerninventory.tools.common;
 
 /**
+ * <h1>堆栈跟踪工具类</h1>
+ * <p>
+ *      通过jdk提供堆栈跟踪元素实现的堆栈跟踪工具。
+ * </p>
  * @author Kern
- * @date 2020/5/11 16:08
- * @description 栈追踪工具
+ * @version 1.0
  */
 public class StackTraceUtil {
 
     /**
-     * 获取类名
-     * @param mainBody
+     * <p>
+     *     获取类名
+     * </p>
+     * @param fetcher
      * @return
      */
-    public static String getClassName(MainBody mainBody) {
+    public static String getClassName(Fetcher fetcher) {
         StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-        StackTraceElement e = stacktrace[mainBody.getStacktraceIndex()];
+        StackTraceElement e = stacktrace[fetcher.getStacktraceIndex()];
         String className = e.getClassName();
         return className;
     }
 
     /**
-     * 获取方法名
-     * @param mainBody
+     * <p>
+     *     获取方法名
+     * </p>
+     * @param fetcher
      * @return
      */
-    public static String getMethodName(MainBody mainBody) {
+    public static String getMethodName(Fetcher fetcher) {
         StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-        StackTraceElement e = stacktrace[mainBody.getStacktraceIndex()];
+        StackTraceElement e = stacktrace[fetcher.getStacktraceIndex()];
         String methodName = e.getMethodName();
         return methodName;
     }
 
     /**
-     * 获取类文件名
-     * @param mainBody
+     * <p>
+     *     获取类文件名
+     * </p>
+     * @param fetcher
      * @return
      */
-    public static String getFileName(MainBody mainBody) {
+    public static String getFileName(Fetcher fetcher) {
         StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-        StackTraceElement e = stacktrace[mainBody.getStacktraceIndex()];
+        StackTraceElement e = stacktrace[fetcher.getStacktraceIndex()];
         String methodName = e.getFileName();
         return methodName;
     }
 
     /**
-     * 获取当前行号
-     * @param mainBody
+     * <p>
+     *     获取当前行号
+     * </p>
+     * @param fetcher
      * @return
      */
-    public static int getLineNumber(MainBody mainBody) {
+    public static int getLineNumber(Fetcher fetcher) {
         StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-        StackTraceElement e = stacktrace[mainBody.getStacktraceIndex()];
+        StackTraceElement e = stacktrace[fetcher.getStacktraceIndex()];
         int line = e.getLineNumber();
         return line;
     }
 
     /**
-     * 关于MainBody的说明
-     * 主体枚举 有两个枚举值
-     * caller 表示调用类， 调用类的信息存储于StackTrace的第一个元素中。
-     * Current 表示当前类， 当前类的信息存储于StackTrace的第二个元素中。
-     * 为了防止不了解该固定形式的调用者传参错误导致可能出现的程序错误，以枚举类的形式进行参数的约束。
-     *
+     * <h1>主要访问体</h1>
+     * <p>
+     *     关于Fetcher的说明:
+     *     为了防止不了解该固定形式的调用者传参错误导致可能出现的程序错误，以枚举类的形式进行参数的约束。<br/>
+     *     有两个枚举值<br/>
+     *     Caller 表示调用类， 调用类的信息存储于StackTrace的第一个元素中。<br/>
+     *     Current 表示当前类， 当前类的信息存储于StackTrace的第二个元素中。
+     * </p>
      */
-    public enum MainBody {
+    public enum Fetcher {
 
         Caller(1),
         Current(2),
@@ -71,7 +84,7 @@ public class StackTraceUtil {
 
         private int stacktraceIndex;
 
-        MainBody(int stacktraceIndex) {
+        Fetcher(int stacktraceIndex) {
             this.stacktraceIndex = stacktraceIndex;
         }
 

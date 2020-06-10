@@ -1,9 +1,13 @@
 package cn.kerninventory.tools.common.chronograph;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     代码计时器工厂类<br/>
+ *     基于 Simple Factory Pattern 和 Decorator Pattern 构思和实现
+ * </p>
  * @author Kern
- * @date 2020/6/3 16:05
- * @description
+ * @version 1.0
  */
 public class RuntimeChronographShop {
 

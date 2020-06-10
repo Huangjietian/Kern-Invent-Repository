@@ -7,9 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     代码运行时间计时器基础实现
+ * </p>
  * @author Kern
- * @date 2020/6/3 11:37
- * @description  代码运行时间计时器
+ * @version 1.0
  */
 public class RuntimeChronograph implements Chronograph {
 
@@ -22,6 +25,12 @@ public class RuntimeChronograph implements Chronograph {
         this.recordConcurrentMap = new ConcurrentHashMap<>(16);
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     * @param message
+     * @return
+     */
     public double click(Object marker, String message) {
         List<Long> times = recordConcurrentMap.computeIfAbsent(marker, k -> new ArrayList<>(16));
         times.add(System.nanoTime());
@@ -31,6 +40,12 @@ public class RuntimeChronograph implements Chronograph {
         return formula(times.get(times.size() -2), times.get(times.size() -1));
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     * @param message
+     * @return
+     */
     public double calculate(Object marker, String message) {
         List<Long> times = recordConcurrentMap.get(marker);
         if (times == null || times.isEmpty()) {
@@ -40,6 +55,14 @@ public class RuntimeChronograph implements Chronograph {
         return formula(nano1, System.nanoTime());
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     * @param message
+     * @param firstTime
+     * @param lastTime
+     * @return
+     */
     @Override
     public double calculate(Object marker, String message, int firstTime, int lastTime) {
         List<Long> times = recordConcurrentMap.get(marker);
@@ -49,11 +72,19 @@ public class RuntimeChronograph implements Chronograph {
         return formula(times.get(firstTime), times.get(lastTime));
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     */
     @Override
     public void reset(Object marker) {
         recordConcurrentMap.remove(marker);
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @return
+     */
     @Override
     public RuntimeUnit getUnit() {
         return unit;

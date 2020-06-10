@@ -4,9 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * <h1>中文描述</h1>
+ * <p>
+ *     配置类，引入{@code BeanValidator}类到spring bean容器中。
+ * </p>
  * @author Kern
- * @date 2020/5/19 10:18
- * @description
+ * @version 1.0
  */
 @Configuration
 public class BeanValidatorImporter {

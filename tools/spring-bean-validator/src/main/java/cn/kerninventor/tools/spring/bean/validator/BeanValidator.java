@@ -11,9 +11,12 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 /**
+ * <h1>中文描述</h1>
+ * <p>
+ *     校验切面实现
+ * </p>
  * @author Kern
- * @date 2020/5/11 19:18
- * @description
+ * @version 1.0
  */
 @Aspect
 public class BeanValidator {

@@ -7,9 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     具备SLF4J日志输出功能的代码运行时间计时器, 将所计算值由当前系统的SLF4J日志框架进行输出<br/>
+ *     注： 系统需要引入SLF4J日志API框架和及实现
+ * </p>
  * @author Kern
- * @date 2020/6/3 16:30
- * @description   具备SLF4J日志输出功能的代码运行时间计时器
+ * @version 1.0
  */
 public class LogApiSlf4jRuntimeChronograph implements Chronograph {
 
@@ -22,6 +26,12 @@ public class LogApiSlf4jRuntimeChronograph implements Chronograph {
         this.logger = LoggerFactory.getLogger(logName);
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     * @param message
+     * @return
+     */
     @Override
     public double click(Object marker, String message) {
         double result = chronograph.click(marker, message);
@@ -29,6 +39,12 @@ public class LogApiSlf4jRuntimeChronograph implements Chronograph {
         return result;
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     * @param message
+     * @return
+     */
     @Override
     public double calculate(Object marker, String message) {
         double result = chronograph.calculate(marker, message);
@@ -36,6 +52,14 @@ public class LogApiSlf4jRuntimeChronograph implements Chronograph {
         return result;
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     * @param message
+     * @param firstTime
+     * @param lastTime
+     * @return
+     */
     @Override
     public double calculate(Object marker, String message, int firstTime, int lastTime) {
         double result = chronograph.calculate(marker, message, firstTime, lastTime);
@@ -43,11 +67,20 @@ public class LogApiSlf4jRuntimeChronograph implements Chronograph {
         return result;
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @param marker
+     * @return
+     */
     @Override
     public void reset(Object marker) {
         chronograph.reset(marker);
     }
 
+    /**
+     * 参考 {@link Chronograph}
+     * @return
+     */
     @Override
     public RuntimeUnit getUnit() {
         return chronograph.getUnit();

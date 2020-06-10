@@ -4,9 +4,12 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 /**
+ * <h1>中文描述</h1>
+ * <p>
+ *     抛出异常回调， 将表单校验的结果作为异常信息抛出IllegalArgumentException， 这是默认的回调实现。
+ * </p>
  * @author Kern
- * @date 2020/5/11 19:43
- * @description
+ * @version 1.0
  */
 public class ThrowingCallback implements ValidateCallback {
 

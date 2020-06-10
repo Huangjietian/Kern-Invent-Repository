@@ -1,17 +1,22 @@
 package cn.kerninventory.tools.common;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Objects;
 
 /**
+ * <h1>中文</h1>
+ * <p>
+ *     反射工具类, 待完善
+ * </p>
  * @author Kern
- * @date 2019/12/16 16:39
+ * @version 1.0
  */
 public class ReflectUtil {
 
     /**
-     * 获取标准的get方法名
+     * <p>
+     *     获取标准的get方法名
+     * </p>
      * @param fieldName
      * @return
      */
@@ -23,7 +28,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 获取标准的set方法名
+     * <p>
+     *     获取标准的set方法名
+     * </p>
      * @param fieldName
      * @return
      */
@@ -35,7 +42,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 获取标准的get method
+     * <p>
+     *     获取标准的get Method 实例
+     * </p>
      * @param clazz
      * @param fieldName
      * @return
@@ -48,7 +57,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 获取标准的set method
+     * <p>
+     *     获取标准的set Method 实例
+     * </p>
      * @param clazz
      * @param fieldName
      * @param argClass
@@ -62,7 +73,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 获取字段值
+     * <p>
+     *     获取字段值
+     * </p>
      * @param field
      * @param target
      * @return
@@ -74,7 +87,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 设置字段值
+     * <p>
+     *     设置字段值
+     * </p>
      * @param field
      * @param target
      * @param value
@@ -86,7 +101,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 指定类的class类型，并获取一个实例
+     * <p>
+     *     指定类的class类型，并获取一个实例
+     * </p>
      * @param clazz
      * @param paramters
      * @param <T>
@@ -105,7 +122,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 判断Class 所表示的数据类型是否为基础数据类型
+     * <p>
+     *     判断Class 所表示的数据类型是否为基础数据类型
+     * </p>
      * @param clazz
      * @return
      */
@@ -118,24 +137,9 @@ public class ReflectUtil {
     }
 
     /**
-     * 获取字段上指定的注解实例
-     * @param field
-     * @param marker
-     * @param <T>
-     * @return
-     */
-    public static <T extends Annotation> Annotation getFirstMarkedAnnotation(Field field, Class<T> marker) {
-        Annotation[] annotations = field.getDeclaredAnnotations();
-        for (Annotation annotation : annotations){
-            if (annotation.annotationType().isAnnotationPresent(marker)){
-                return annotation;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 获取类的泛型类型数组
+     * <p>
+     *     获取类的泛型类型数组
+     * </p>
      * @param clazz
      * @return
      */

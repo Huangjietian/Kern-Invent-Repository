@@ -3,9 +3,12 @@ package cn.kerninventory.tools.common;
 import java.util.Arrays;
 
 /**
+ * <h1>中文描述</h1>
+ * <p>
+ *     luhn算法/模10法的java实现, 常用于校验银行卡号的正确性。
+ * </p>
  * @author Kern
- * @date 2020/5/12 17:08
- * @description luhn算法/模10法 校验工具
+ * @version 1.0
  */
 public class LuhnUtil {
     private int[] no;
@@ -28,7 +31,6 @@ public class LuhnUtil {
             throw new IllegalArgumentException("No is null or Empty");
         }
     }
-
     /**
      * 校验
      * @return
@@ -39,7 +41,6 @@ public class LuhnUtil {
         }
         return isValidate;
     }
-
     /**
      * 获取全部id
      * @return
@@ -47,6 +48,7 @@ public class LuhnUtil {
     public int[] getCardNoArr() {
         return Arrays.copyOf(no, no.length);
     }
+
     /**
      * 计算校验和的算法
      * @return
@@ -66,7 +68,6 @@ public class LuhnUtil {
         for(int i=0;i<cardNoArr.length;i++)
         {
             sum += cardNoArr[i];
-            //System.out.print(cardNoArr[i]);
         }
         return sum * 9 % 10;
     }
@@ -96,7 +97,6 @@ public class LuhnUtil {
         int sum = 0;
         for(int i=0;i<cardNoArr.length;i++) {
             sum += cardNoArr[i];
-            //System.out.print(cardNoArr[i]);
         }
         return sum % 10 == 0;
     }

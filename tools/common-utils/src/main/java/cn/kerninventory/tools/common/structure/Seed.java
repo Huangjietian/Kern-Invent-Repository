@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author Kern
- * @date 2020/5/18 8:43
- * @description
+ * @version 1.0
  */
 public interface Seed extends Serializable {
 

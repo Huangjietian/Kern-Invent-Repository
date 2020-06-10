@@ -1,19 +1,22 @@
 package cn.kerninventory.tools.common.http;
 
-import cn.kerninventory.tools.common.StringUtil;
+import com.onesport.common.utils.StringUtil;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     响应文件流的ContentType枚举
+ * </p>
  * @author Kern
- * @date 2020/5/13 11:51
- * @description
+ * @version 1.0
  */
-public enum  ContentType {
+public enum ResponseFileStreamContentType {
 
-        _("*","application/octet-stream"),
+        _ALL("*","application/octet-stream"),
         _001( ".001","application/x-001"),
         _301( ".301","application/x-301" ),
         _323( ".323","text/h323"),
@@ -357,7 +360,7 @@ public enum  ContentType {
         _xap( ".xap","application/x-silverlight-app"),
     ;
 
-    ContentType(String suffix, String expression) {
+    ResponseFileStreamContentType(String suffix, String expression) {
         this.suffix = suffix;
         this.expression = expression;
     }
@@ -375,12 +378,22 @@ public enum  ContentType {
         return expression;
     }
 
-    public static Set<ContentType> getContentTypesBySuffix(String suffix) {
-        ContentType[] contentTypes = ContentType.values();
-        return Arrays.stream(contentTypes).filter(e -> e.getSuffix().equals(suffix)).collect(Collectors.toSet());
+    /**
+     * 根据后缀获取contentType
+     * @param suffix
+     * @return
+     */
+    public static Set<ResponseFileStreamContentType> getContentTypesBySuffix(String suffix) {
+        ResponseFileStreamContentType[] responseFileStreamContentTypes = ResponseFileStreamContentType.values();
+        return Arrays.stream(responseFileStreamContentTypes).filter(e -> e.getSuffix().equals(suffix)).collect(Collectors.toSet());
     }
 
-    public static Set<ContentType> getContentTypesByFileName(String fileName) {
+    /**
+     * 根据文件名获取contentType
+     * @param fileName
+     * @return
+    */
+    public static Set<ResponseFileStreamContentType> getContentTypesByFileName(String fileName) {
         String suffix = StringUtil.subFrontByLastIndexOf(fileName, ".");
         return getContentTypesBySuffix(suffix);
     }

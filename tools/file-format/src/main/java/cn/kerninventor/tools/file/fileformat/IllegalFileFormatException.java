@@ -1,8 +1,12 @@
 package cn.kerninventor.tools.file.fileformat;
 
 /**
- * @uthor Kern
- * @date 2019/10/22 17:01
+ * <h1>中文注释</h1>
+ * <p>
+ *     错误文件格式异常，编译时异常
+ * </p>
+ * @author Kern
+ * @version 1.0
  */
 public class IllegalFileFormatException extends Exception {
 

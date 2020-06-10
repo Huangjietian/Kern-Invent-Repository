@@ -1,8 +1,13 @@
 package cn.kerninventor.tools.file.fileformat;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     文件格式类型枚举类<br/>
+ *     注：保留了自定义COSTOM枚举，支持set方法。如果非COSTOM调用了set方法将得到一个异常。
+ * </p>
  * @author Kern
- * @date 2019/10/22 16:34
+ * @version 1.0
  */
 public enum FileFormatType {
 
@@ -24,6 +29,7 @@ public enum FileFormatType {
     EXE("4D5A9000", ".exe"),
     DLL("4D5A9000", ".dll"),
     TXT("75736167", ".txt"),
+    COSTOM("----------", "----");
     ;
 
     private String header;
@@ -42,6 +48,30 @@ public enum FileFormatType {
         return suffix;
     }
 
+    public FileFormatType setHeader(String header) {
+        if (!"COSTOM".equals(this.name())) {
+            throw new IllegalArgumentException("Modifying enumeration values is not supported");
+        }
+        this.header = header;
+        return this;
+    }
+
+    public FileFormatType setSuffix(String suffix) {
+        if (!"COSTOM".equals(this.name())) {
+            throw new IllegalArgumentException("Modifying enumeration values is not supported");
+        }
+        this.suffix = suffix;
+        return this;
+    }
+
+    /**
+     * <p>
+     *     匹配后缀
+     * </p>
+     * @param path
+     * @param fileFormatTypes
+     * @return
+     */
     public static boolean isCorrectSuffix(String path, FileFormatType... fileFormatTypes) {
         int index;
         if (path == null || (index = path.lastIndexOf("."))== -1){

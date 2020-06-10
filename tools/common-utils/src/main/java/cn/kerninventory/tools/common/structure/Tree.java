@@ -4,9 +4,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     树状结构封装类
+ * </p>
  * @author Kern
- * @date 2020/5/18 9:01
- * @description
+ * @version 1.0
  */
 public class Tree<T extends Sapling> {
 
@@ -14,40 +17,71 @@ public class Tree<T extends Sapling> {
 
     private List<Tree<T>> branches;
 
-    public Tree(T trunk) {
+    private Tree(T trunk) {
         this.trunk = trunk;
     }
 
+    /**
+     * 获取当前结构的主体
+     * @return
+     */
     public T getTrunk() {
         return trunk;
     }
 
+    /**
+     * 重设当前结构的主体
+     * @param trunk
+     * @return
+     */
     public Tree<T> setTrunk(T trunk) {
         this.trunk = trunk;
         return this;
     }
 
+    /**
+     * 获取当前结构的分支
+     * @return
+     */
     public List<Tree<T>> getBranches() {
         return branches;
     }
 
+    /**
+     * 重设当前结构的分支
+     * @param branches
+     * @return
+     */
     public Tree<T> setBranches(List<Tree<T>> branches) {
         this.branches = branches;
         return this;
     }
 
-    private void addBranche(Tree<T> tree) {
-        if (branches == null) {
-            branches = new ArrayList<>();
-        }
-        branches.add(tree);
-    }
-
+    /**
+     * <p>
+     *     传入实现了{@link Sapling}接口的对象集合，可以获得一个Tree实例，表示了该集合的树状结构。<br/>
+     *     可以通过rootStrategy参数指定根部策略
+     * </p>
+     * @param collection
+     * @param rootStrategy
+     * @param <T>
+     * @return
+     */
     public static <T extends Sapling> Tree<T> of(Collection<T> collection, RootStrategy rootStrategy) {
         T root = findRoot(collection, rootStrategy);
         return of(collection, root);
     }
 
+    /**
+     * <p>
+     *     传入实现了{@link Sapling}接口的对象集合，可以获得一个Tree实例，表示了该集合的树状结构。<br/>
+     *     可以通过root参数指定根部
+     * </p>
+     * @param collection
+     * @param root
+     * @param <T>
+     * @return
+     */
     public static <T extends Sapling> Tree<T> of(Collection<T> collection, Sapling root) {
         if (root == null) {
             root = findRoot(collection, e -> e.rootNode() == null);
@@ -60,18 +94,25 @@ public class Tree<T extends Sapling> {
         return tree;
     }
 
-    public void decorate(Collection<T> collection) {
+    private void decorate(Collection<T> collection) {
         Iterator<T> iterator = collection.iterator();
         while (iterator.hasNext()) {
             T t = iterator.next();
             if (trunk.subNode().equals(t.rootNode())) {
                 Tree tree = new Tree(t);
                 tree.decorate(collection);
-                addBranche(tree);
+                addBranches(tree);
                 //FIXME 下面的代码将导致  ConcurrentModificationException
 //                iterator.remove();
             }
         }
+    }
+
+    private void addBranches(Tree<T> tree) {
+        if (branches == null) {
+            branches = new ArrayList<>();
+        }
+        branches.add(tree);
     }
 
     private static <T extends Sapling> T findRoot(Collection<T> collection, RootStrategy rootStrategy) {
@@ -82,11 +123,16 @@ public class Tree<T extends Sapling> {
         return roots.iterator().next();
     }
 
+    /**
+     * <h1>中文注释</h1>
+     * <p>
+     *     根部策略函数接口
+     * </p>
+     */
     @FunctionalInterface
     public interface RootStrategy {
 
         boolean rule(Sapling root);
 
     }
-
 }

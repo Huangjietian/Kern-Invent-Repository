@@ -6,50 +6,100 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     响应文件写入器
+ * </p>
  * @author Kern
- * @date 2020/5/13 14:35
- * @description
+ * @version 1.0
  */
 public class ResponseFileWriter {
 
     private HttpServletResponse response;
     private volatile boolean isClose;
-    private static Object lock = new Object();
+    private static final Object lock = new Object();
 
+    /**
+     * <p>
+     *     构造器, 需要传入一个{@link HttpServletResponse}对象构建
+     * </p>
+     * @param response
+     */
     public ResponseFileWriter(HttpServletResponse response) {
         this.response = response;
     }
 
+    /**
+     * <p>
+     *     {@link MultipartFile}对象写入响应<br/>
+     *     {@link Map}中的key作为头部元素名称，value作为头部元素值写入到响应
+     * </p>
+     * @param multipartFile
+     * @param responseHeader
+     * @throws IOException
+     */
     public void write(MultipartFile multipartFile, Map<String, String> responseHeader) throws IOException {
         if (isClose) return;
         write(multipartFile.getBytes(), multipartFile.getOriginalFilename(), responseHeader);
     }
 
+    /**
+     * <p>
+     *     {@link File}对象写入响应<br/>
+     *     {@link Map}中的key作为头部元素名称，value作为头部元素值写入到响应
+     * </p>
+     * @param file
+     * @param responseHeader
+     * @throws IOException
+     */
     public void write(File file, Map<String, String> responseHeader) throws IOException {
         if (isClose) return;
         FileInputStream in = new FileInputStream(file);
         write(in, file.getPath(), responseHeader);
     }
 
+    /**
+     * <p>
+     *     {@link InputStream}对象写入响应<br/>
+     *     指定头部 filename=参数fileFullName <br/>
+     *     {@link Map}中的key作为头部元素名称，value作为头部元素值写入到响应
+     * </p>
+     * @param in
+     * @param fileFullName
+     * @param responseHeader
+     * @throws IOException
+     */
     public void write(InputStream in, String fileFullName, Map<String, String> responseHeader) throws IOException {
         if (isClose) return;
         byte[] bytes = new byte[in.available()];
-        in.read(bytes);
+        in.read(bytes, 0, bytes.length);
         write(bytes, fileFullName, responseHeader);
     }
 
+    /**
+     * <p>
+     *     将字节数组写入响应<br/>
+     *     指定头部 filename=参数fileFullName <br/>
+     *     {@link Map}中的key作为头部元素名称，value作为头部元素值写入到响应
+     * </p>
+     * @param bytes
+     * @param fileFullName
+     * @param responseHeader
+     * @throws IOException
+     */
     public void write(byte[] bytes, String fileFullName, Map<String, String> responseHeader) throws IOException {
         if (isClose) return;
         synchronized (lock) {
             response.reset();
-            ContentType contentType = ContentType.getContentTypesByFileName(fileFullName).iterator().next();
-            if (contentType == null) {
+            ResponseFileStreamContentType responseFileStreamContentType = ResponseFileStreamContentType.getContentTypesByFileName(fileFullName).iterator().next();
+            if (responseFileStreamContentType == null) {
                 throw new IllegalArgumentException("Unable to match contentType with fileFullName :" + fileFullName);
             }
-            response.setContentType(contentType.getExpression());
+            response.setContentType(responseFileStreamContentType.getExpression());
             addDefaultHeader(response, fileFullName, "UTF-8","*");
             addHeader(response, responseHeader);
             OutputStream out = null;
@@ -60,23 +110,23 @@ public class ResponseFileWriter {
             } catch (IOException e) {
                 throw e;
             } finally {
+                isClose = true;
                 if (out != null) {
                     out.close();
                 }
-                isClose = true;
             }
         }
     }
 
-    public void addDefaultHeader(HttpServletResponse response, String fileFullName, String charset, String accessControlAllowOrigin) throws UnsupportedEncodingException {
-        fileFullName = encode(fileFullName, charset, "ISO-8859-1");
+    private void addDefaultHeader(HttpServletResponse response, String fileFullName, String charset, String accessControlAllowOrigin) {
+        fileFullName = IsoEncoding(fileFullName, charset);
         fileFullName = StringUtil.subFrontByLastIndexOf(fileFullName, System.lineSeparator());
         response.addHeader("Content-Disposition", "attachment;filename=" + fileFullName);
         response.addHeader("charset", charset);
         response.addHeader("Access-Control-Allow-Origin", accessControlAllowOrigin);
     }
 
-    public void addHeader(HttpServletResponse response, Map<String, String> responseHeader) {
+    private void addHeader(HttpServletResponse response, Map<String, String> responseHeader) {
         if (BeanUtil.isEmpty(responseHeader)) {
             return;
         }
@@ -85,8 +135,11 @@ public class ResponseFileWriter {
         }
     }
 
-    public String encode(String str, String decodeCharset, String encodeCharset) throws UnsupportedEncodingException {
-        return new String(str.getBytes(decodeCharset), encodeCharset);
+    private String IsoEncoding(String str, String decodeCharset) {
+        Charset charset = Charset.forName(decodeCharset);
+        byte[] decodeBytes = str.getBytes(charset);
+        return new String(decodeBytes, Charset.forName("ISO-8859-1"));
     }
+
 
 }

@@ -1,9 +1,12 @@
 package cn.kerninventory.tools.common.chronograph;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     运行时间单位枚举类
+ * </p>
  * @author Kern
- * @date 2020/6/3 16:07
- * @description
+ * @version 1.0
  */
 public enum RuntimeUnit {
 

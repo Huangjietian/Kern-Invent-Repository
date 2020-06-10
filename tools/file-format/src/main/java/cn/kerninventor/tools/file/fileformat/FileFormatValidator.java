@@ -15,19 +15,49 @@ import java.io.*;
  * </p>
  *
  * @author Kern
- * @ate 2019/10/22 16:53
+ * @version 1.0
  */
 public final class FileFormatValidator {
 
+    /**
+     * <p>
+     *     通过传入的文件，文件格式枚举数组，判断该文件是否符合该文件格式枚举数组中的其中一个格式，符合的话返回true
+     * </p>
+     * @param file
+     * @param fileFormatTypes
+     * @return boolean 校验结果
+     * @throws FileNotFoundException
+     * @throws IllegalFileFormatException
+     */
     public static boolean validate(File file, FileFormatType... fileFormatTypes) throws FileNotFoundException, IllegalFileFormatException {
         FileInputStream stream = new FileInputStream(file);
         return validate(stream, file.getName(), fileFormatTypes);
     }
 
+    /**
+     * <p>
+     *     通过传入的文件输入流，文件名，文件格式枚举数组，判断该文件是否符合该文件格式枚举数组中的其中一个格式，符合的话返回true
+     * </p>
+     * @param stream
+     * @param fileName
+     * @param fileFormatTypes
+     * @return
+     * @throws IllegalFileFormatException
+     */
     public static boolean validate(InputStream stream, String fileName, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
         return validate(stream, fileFormatTypes) && FileFormatType.isCorrectSuffix(fileName, fileFormatTypes);
     }
 
+    /**
+     * <p>
+     *     通过传入的文件输入流，文件格式枚举数组，判断该文件是否符合该文件格式枚举数组中的其中一个格式，符合的话返回true<br/>
+     *     如果已知文件名的情况下，建议调用含文件名参数的validate方法，本方法仅校验了文件流头部字节，缺少了文件后缀校验。
+     * </p>
+     * @param stream
+     * @param fileFormatTypes
+     * @return
+     * @throws IllegalFileFormatException
+     */
     public static boolean validate(InputStream stream, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
         String header = getFileHeader(stream);
         notBlank(header);
@@ -40,13 +70,13 @@ public final class FileFormatValidator {
             stream.read(bytes, 0, bytes.length);
             return bytesToHexString(bytes);
         } catch (IOException e) {
-            throw new IllegalFileFormatException(FileFormatErrorEnum.FILE_RESOLVE_ERROR_MSG.getMsg(), e);
+            throw new IllegalFileFormatException("File resolution error! " + e.getMessage(), e);
         } finally {
             if (stream != null){
                 try {
                     stream.close();
                 } catch (IOException e) {
-                    throw new IllegalFileFormatException(FileFormatErrorEnum.FILE_RESOLVE_ERROR_MSG.getMsg(), e);
+                    throw new IllegalFileFormatException("File resolution error! " + e.getMessage(), e);
                 }
             }
         }
@@ -70,7 +100,7 @@ public final class FileFormatValidator {
 
     private static String notBlank(String header) throws IllegalFileFormatException {
         if (header == null || "".equals(header.replace("0", "").trim())){
-            throw new IllegalFileFormatException(FileFormatErrorEnum.FILE_BLANK_MSG.getMsg());
+            throw new IllegalFileFormatException("Empty file error!");
         }
         return header;
     }
