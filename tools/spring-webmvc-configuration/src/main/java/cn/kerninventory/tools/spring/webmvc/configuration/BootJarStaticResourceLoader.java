@@ -21,7 +21,10 @@ public class BootJarStaticResourceLoader {
     private ClassPathResource resource;
 
     public BootJarStaticResourceLoader(String classpath) {
-        if (!classpath.startsWith("/static") && classpath.startsWith("static")) {
+        if (!classpath.startsWith("/")) {
+            classpath = "/" + classpath;
+        }
+        if (!classpath.startsWith("/static")) {
             classpath = "/static" + classpath;
         }
         resource = new ClassPathResource(classpath);
