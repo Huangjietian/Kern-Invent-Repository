@@ -1,6 +1,7 @@
 package cn.kerninventory.tools.common.http;
 
-import com.onesport.common.utils.StringUtil;
+
+import cn.kerninventory.tools.common.StringUtil;
 
 import java.util.Arrays;
 import java.util.Set;

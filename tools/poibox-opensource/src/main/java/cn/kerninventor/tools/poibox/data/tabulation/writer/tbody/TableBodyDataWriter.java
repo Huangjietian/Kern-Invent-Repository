@@ -1,8 +1,8 @@
 package cn.kerninventor.tools.poibox.data.tabulation.writer.tbody;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.AbstractColumnDataTranslator;
 import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.col.ColWriter;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
@@ -28,23 +28,23 @@ public final class TableBodyDataWriter<T> implements TbodyWriter<T> {
     }
 
     @Override
-    public void templateTbody(ColumnDefinition<T> columnDefinition, Sheet sheet) {
-        TableContext tableContext = columnDefinition.getTableContext();
-        ColWriter colWriter = columnDefinition.getColWriter();
+    public void templateTbody(ClassFileColumnDefinition<T> classFileColumnDefinition, Sheet sheet) {
+        ClassFileTableContext classFileTableContext = classFileColumnDefinition.getClassFileTableContext();
+        ColWriter colWriter = classFileColumnDefinition.getColWriter();
         colWriter.pre();
-        for (int datasIndex = 0, rowIndex = tableContext.getTbodyFirstRowIndex(); datasIndex < datas.size() ; datasIndex ++ , rowIndex++){
+        for (int datasIndex = 0, rowIndex = classFileTableContext.getTbodyFirstRowIndex(); datasIndex < datas.size() ; datasIndex ++ , rowIndex++){
             Row bodyRow = BoxGadget.getRowForce(sheet, rowIndex);
-            bodyRow.setHeightInPoints(tableContext.getTbodyRowHeight());
-            Cell bodyCell = bodyRow.createCell(columnDefinition.getColumnIndex());
+            bodyRow.setHeightInPoints(classFileTableContext.getTbodyRowHeight());
+            Cell bodyCell = bodyRow.createCell(classFileColumnDefinition.getColumnIndex());
             //设置风格
-            bodyCell.setCellStyle(columnDefinition.getTbodyStyle());
+            bodyCell.setCellStyle(classFileColumnDefinition.getTbodyStyle());
             Object value = null;
             try {
-                value = ReflectUtil.getFieldValue(columnDefinition.getField(), datas.get(datasIndex));
+                value = ReflectUtil.getFieldValue(classFileColumnDefinition.getField(), datas.get(datasIndex));
             } catch (IllegalAccessException e) {
-                throw new IllegalArgumentException("Failed to get field value. Field name: " + columnDefinition.getFieldName());
+                throw new IllegalArgumentException("Failed to get field value. Field name: " + classFileColumnDefinition.getFieldName());
             }
-            value = this.translator.translate(columnDefinition.getColumnDataTranslate(), value);
+            value = this.translator.translate(classFileColumnDefinition.getColumnDataTranslate(), value);
             colWriter.setCellValue(bodyCell, value);
 
         }

@@ -18,9 +18,9 @@ import java.lang.reflect.Field;
  * @author Kern
  * @date 2019/12/9 15:52
  */
-public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefinition>, ColumnDefinitionModifier {
+public final class ClassFileColumnDefinition<T extends Object> implements Comparable<ClassFileColumnDefinition>, ColumnDefinitionModifier {
 
-    private TableContext<T> tableContext;
+    private ClassFileTableContext<T> classFileTableContext;
     private Field field;
     private String fieldName;
     private String titleName;
@@ -35,8 +35,8 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
     private ColWriter colWriter;
     private ColumnDataTranslate columnDataTranslate;
 
-    public ColumnDefinition(Field field, ExcelColumn excelColumn, TableContext<T> tableContext) {
-        this.tableContext = tableContext;
+    ClassFileColumnDefinition(Field field, ExcelColumn excelColumn, ClassFileTableContext<T> classFileTableContext) {
+        this.classFileTableContext = classFileTableContext;
         this.field = field;
         this.fieldName = field.getName();
         this.titleName = excelColumn.value();
@@ -45,8 +45,8 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
         this.formula = excelColumn.formula();
         this.columnSort = excelColumn.columnSort();
         this.columnDataTranslate = excelColumn.dataTranslate();
-        this.theadStyle = tableContext.getTheadStyleMap().get(excelColumn.theadStyleIndex());
-        this.tbodyStyle = tableContext.getTbodyStyleMap().get(excelColumn.tbodyStyleIndex());
+        this.theadStyle = classFileTableContext.getTheadStyleMap().get(excelColumn.theadStyleIndex());
+        this.tbodyStyle = classFileTableContext.getTbodyStyleMap().get(excelColumn.tbodyStyleIndex());
         Annotation annotation = ReflectUtil.getFirstMarkedAnnotation(field, DataValid.class);
         if (annotation != null) {
             this.dataValidationBuilder = DataValidationBuilderFactory.getInstance(annotation);
@@ -59,11 +59,11 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
         SupportedDataType.checkSupportability(field, colWriter);
     }
 
-    public TableContext<T> getTableContext() {
-        return tableContext;
+    public ClassFileTableContext<T> getClassFileTableContext() {
+        return classFileTableContext;
     }
 
-    public void setColumnIndex(int columnIndex) {
+    void setColumnIndex(int columnIndex) {
         this.columnIndex = columnIndex;
     }
 
@@ -125,7 +125,7 @@ public class ColumnDefinition<T extends Object> implements Comparable<ColumnDefi
     }
 
     @Override
-    public int compareTo(ColumnDefinition o) {
+    public int compareTo(ClassFileColumnDefinition o) {
         if (this.columnSort > o.columnSort) {
             return 1;
         } else if (this.columnSort == o.columnSort) {

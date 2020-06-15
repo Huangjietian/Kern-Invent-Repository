@@ -2,8 +2,8 @@ package cn.kerninventor.tools.poibox.data.tabulation.writer;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
 import cn.kerninventor.tools.poibox.data.tabulation.ExcelColumn;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.TbodyWriter;
 import cn.kerninventor.tools.poibox.style.Styler;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
@@ -24,35 +24,35 @@ public final class BasicTabulationWriter<T> {
         this.tbodyWriter = tbodyWriter;
     }
 
-    public void doWrite(TableContext tableContext, List<ColumnDefinition<T>> columnDefinitions, Sheet sheet) {
-        Row headRow = sheet.createRow(tableContext.getTheadRowIndex());
-        headRow.setHeightInPoints(tableContext.getTheadRowHeight());
-        Workbook workbook = tableContext.getParent().workbook();
+    public void doWrite(ClassFileTableContext classFileTableContext, List<ClassFileColumnDefinition<T>> classFileColumnDefinitions, Sheet sheet) {
+        Row headRow = sheet.createRow(classFileTableContext.getTheadRowIndex());
+        headRow.setHeightInPoints(classFileTableContext.getTheadRowHeight());
+        Workbook workbook = classFileTableContext.getParent().workbook();
         DataFormat dataFormat = workbook.createDataFormat();
-        Styler styler = tableContext.getParent().styler();
-        for (ColumnDefinition<T> columnDefinition : columnDefinitions) {
-            Cell headRowCell = headRow.createCell(columnDefinition.getColumnIndex());
-            headRowCell.setCellValue(columnDefinition.getTitleName());
-            headRowCell.setCellStyle(columnDefinition.getTheadStyle());
-            short theadFontHeightInPoints = BoxGadget.getFontFrom(columnDefinition.getTheadStyle(), workbook).getFontHeightInPoints();
-            setColumnWidth(tableContext, columnDefinition, sheet, theadFontHeightInPoints);
-            CellStyle tbodyStyle = columnDefinition.getTbodyStyle();
-            if (BeanUtil.isNotEmpty(columnDefinition.getDataFormatEx())) {
+        Styler styler = classFileTableContext.getParent().styler();
+        for (ClassFileColumnDefinition<T> classFileColumnDefinition : classFileColumnDefinitions) {
+            Cell headRowCell = headRow.createCell(classFileColumnDefinition.getColumnIndex());
+            headRowCell.setCellValue(classFileColumnDefinition.getTitleName());
+            headRowCell.setCellStyle(classFileColumnDefinition.getTheadStyle());
+            short theadFontHeightInPoints = BoxGadget.getFontFrom(classFileColumnDefinition.getTheadStyle(), workbook).getFontHeightInPoints();
+            setColumnWidth(classFileTableContext, classFileColumnDefinition, sheet, theadFontHeightInPoints);
+            CellStyle tbodyStyle = classFileColumnDefinition.getTbodyStyle();
+            if (BeanUtil.isNotEmpty(classFileColumnDefinition.getDataFormatEx())) {
                 tbodyStyle = styler.copyStyle(tbodyStyle);
-                tbodyStyle.setDataFormat(dataFormat.getFormat(columnDefinition.getDataFormatEx()));
-                columnDefinition.setTbodyStyle(tbodyStyle);
+                tbodyStyle.setDataFormat(dataFormat.getFormat(classFileColumnDefinition.getDataFormatEx()));
+                classFileColumnDefinition.setTbodyStyle(tbodyStyle);
             }
             //4. 绘制表体
-            this.tbodyWriter.templateTbody(columnDefinition, sheet);
+            this.tbodyWriter.templateTbody(classFileColumnDefinition, sheet);
         }
     }
 
-    private void setColumnWidth(TableContext tabulation, ColumnDefinition column, Sheet sheet, int theadFontHeightInPoints) {
+    private void setColumnWidth(ClassFileTableContext tabulation, ClassFileColumnDefinition column, Sheet sheet, int theadFontHeightInPoints) {
         int width;
         if (column.getColumnWidth() == ExcelColumn.DefaultColumnWidth){
             width = BoxGadget.getCellWidthByContent(column.getTitleName(), theadFontHeightInPoints);
-            width = Math.max(width, tabulation.getMinimunColumnsWidth());
-            width = Math.min(width, tabulation.getMaximunColumnsWidth());
+            width = Math.max(width, tabulation.getMinimumColumnsWidth());
+            width = Math.min(width, tabulation.getMaximumColumnsWidth());
         } else {
             width = BoxGadget.adjustCellWidth(column.getColumnWidth());
         }

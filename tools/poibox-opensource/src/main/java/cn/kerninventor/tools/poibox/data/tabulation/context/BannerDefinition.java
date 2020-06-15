@@ -28,7 +28,7 @@ public class BannerDefinition implements BannerDefinitionModifier {
         this.value = value;
     }
 
-    public BannerDefinition(TableContext tabulation, ExcelBanner banner) {
+    public BannerDefinition(ClassFileTableContext tabulation, ExcelBanner banner) {
         this.value = banner.value();
         this.cellStyle = tabulation.getParent().styler().generate(banner.style());
         this.rangeAddress = new CellRangeAddress(
@@ -60,7 +60,7 @@ public class BannerDefinition implements BannerDefinitionModifier {
         return rowHeight;
     }
 
-    public CellRangeAddress adjustCellRangeAddress(TableContext tabulation, List<ColumnDefinition> columns) {
+    public CellRangeAddress adjustCellRangeAddress(ClassFileTableContext tabulation, List<ClassFileColumnDefinition> columns) {
         CellRangeAddress address = rangeAddress.copy();
         if (rangeAddress.getFirstRow() == Range.defaultVal) {
             address.setFirstRow(tabulation.getStartRowIndex());

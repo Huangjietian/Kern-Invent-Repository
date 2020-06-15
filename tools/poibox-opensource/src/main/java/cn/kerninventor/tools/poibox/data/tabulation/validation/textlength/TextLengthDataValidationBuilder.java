@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.textlength;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.MessageBoxSetter;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -23,7 +23,7 @@ public class TextLengthDataValidationBuilder implements DataValidationBuilder<Te
     }
 
     @Override
-    public void addValidation(TableContext tabulationInit, ColumnDefinition columnInit, Sheet sheet) {
+    public void addValidation(ClassFileTableContext tabulationInit, ClassFileColumnDefinition columnInit, Sheet sheet) {
         annotationValid(columnInit);
         String var1 = dataValid.value() + "";
         String var2 = dataValid.optionalVal() == -1 ? null : dataValid.optionalVal() + "";
@@ -45,7 +45,7 @@ public class TextLengthDataValidationBuilder implements DataValidationBuilder<Te
         sheet.addValidationData(dataValidation);
     }
 
-    private void annotationValid(ColumnDefinition columnInit) {
+    private void annotationValid(ClassFileColumnDefinition columnInit) {
         if (dataValid.compareType().isOptionalValueValidity()){
             if (dataValid.value() > dataValid.optionalVal()){
                 throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + columnInit.getFieldName());

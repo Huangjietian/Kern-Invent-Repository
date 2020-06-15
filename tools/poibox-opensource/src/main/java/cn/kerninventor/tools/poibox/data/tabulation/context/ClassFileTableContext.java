@@ -23,23 +23,23 @@ import java.util.stream.Collectors;
  * @author Kern
  * @date 2019/12/9 15:25
  */
-public class TableContext<T> extends BoxBracket implements TabContextModifier {
+public class ClassFileTableContext<T> extends BoxBracket implements TabContextModifier {
 
     private Class<T> tabulationClass;
     private Map<Integer, CellStyle> theadStyleMap;
     private Map<Integer, CellStyle> tbodyStyleMap;
     private List<BannerDefinition> bannerDefinitions;
-    private List<ColumnDefinition> columnDefinitions;
+    private List<ClassFileColumnDefinition> classFileColumnDefinitions;
     private float theadRowHeight;
     private float tbodyRowHeight;
-    private int maximunColumnsWidth;
-    private int minimunColumnsWidth;
+    private int maximumColumnsWidth;
+    private int minimumColumnsWidth;
     private int startRowIndex;
     private int effectiveRows;
-    private Textbox[] textboxes;
+    private Textbox[] textnodes;
 
 
-    public TableContext(Class<T> tableClass, Poibox poiBox) {
+    public ClassFileTableContext(Class<T> tableClass, Poibox poiBox) {
         super(poiBox);
         this.tabulationClass = tableClass;
         this.init();
@@ -73,12 +73,12 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return effectiveRows;
     }
 
-    public int getMaximunColumnsWidth() {
-        return BoxGadget.adjustCellWidth(maximunColumnsWidth);
+    public int getMaximumColumnsWidth() {
+        return BoxGadget.adjustCellWidth(maximumColumnsWidth);
     }
 
-    public int getMinimunColumnsWidth() {
-        return BoxGadget.adjustCellWidth(minimunColumnsWidth);
+    public int getMinimumColumnsWidth() {
+        return BoxGadget.adjustCellWidth(minimumColumnsWidth);
     }
 
     public int getTheadRowIndex() {
@@ -93,30 +93,28 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return bannerDefinitions;
     }
 
-    public List<ColumnDefinition> getColumnDefinitions() {
-        return columnDefinitions;
+    public List<ClassFileColumnDefinition> getClassFileColumnDefinitions() {
+        return classFileColumnDefinitions;
     }
 
-    public Textbox[] getTextboxes() {
-        return textboxes;
+    public Textbox[] getTextnodes() {
+        return textnodes;
     }
 
     private void init(){
         Class tabulationClass = getTabulationClass();
         ExcelTabulation excelTabulation = dataTabulationSourceClassValidate(tabulationClass);
-        //element object init
         this.theadStyleMap = initStyles(excelTabulation.theadStyles());
         this.tbodyStyleMap = initStyles(excelTabulation.tbodyStyles());
         this.bannerDefinitions = initialzeBanners(excelTabulation.banners());
-        this.columnDefinitions = initialzeColumns(tabulationClass);
-        //mumerical value init
+        this.classFileColumnDefinitions = initialzeColumns(tabulationClass);
         this.startRowIndex = excelTabulation.startRowIndex();
         this.theadRowHeight = excelTabulation.theadRowHeight();
         this.tbodyRowHeight = excelTabulation.tbodyRowHeight();
         this.effectiveRows = excelTabulation.effectiveRows();
-        this.maximunColumnsWidth = excelTabulation.maximumColumnsWidth();
-        this.minimunColumnsWidth = excelTabulation.minimumColumnsWidth();
-        this.textboxes = excelTabulation.textboxes();
+        this.maximumColumnsWidth = excelTabulation.maximumColumnsWidth();
+        this.minimumColumnsWidth = excelTabulation.minimumColumnsWidth();
+        this.textnodes = excelTabulation.textboxes();
     }
 
     private Map<Integer, CellStyle> initStyles(Style[] styles) {
@@ -132,26 +130,26 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return Arrays.stream(banners).map(e -> new BannerDefinition(this, e)).collect(Collectors.toList());
     }
 
-    private List<ColumnDefinition> initialzeColumns(Class tabulationClass){
+    private List<ClassFileColumnDefinition> initialzeColumns(Class tabulationClass){
         Field[] fields = tabulationClass.getDeclaredFields();
-        List<ColumnDefinition> columnDefinitions = new ArrayList<>(fields.length);
+        List<ClassFileColumnDefinition> classFileColumnDefinitions = new ArrayList<>(fields.length);
         Set<String> columnNameSet = new HashSet<>(fields.length);
         ExcelColumn excelColumn;
         for (Field field : fields){
             if ((excelColumn = field.getDeclaredAnnotation(ExcelColumn.class)) != null) {
-                ColumnDefinition columnInitializer = new ColumnDefinition(field, excelColumn, this);
-                columnDefinitions.add(columnInitializer);
+                ClassFileColumnDefinition columnInitializer = new ClassFileColumnDefinition(field, excelColumn, this);
+                classFileColumnDefinitions.add(columnInitializer);
                 columnNameSet.add(columnInitializer.getTitleName());
             }
         }
-        if (columnDefinitions.size() == 0){
+        if (classFileColumnDefinitions.size() == 0){
             throw new IllegalSourceClassOfTabulationException("Data table lack column definition, you should use @ExcelColumn to annotate object's field!");
         }
-        if (columnNameSet.size() != columnDefinitions.size()) {
+        if (columnNameSet.size() != classFileColumnDefinitions.size()) {
             throw new IllegalTabulationConfigureException("Column title name must be unique!");
         }
-        setColumnsIndex(columnDefinitions);
-        return columnDefinitions;
+        setColumnsIndex(classFileColumnDefinitions);
+        return classFileColumnDefinitions;
     }
 
     private int getRowIndexIncrementsByBanners(List<BannerDefinition> bannerDefinitions) {
@@ -165,10 +163,10 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
         return 1;
     }
 
-    public void setColumnsIndex(List<ColumnDefinition> columnDefinitions) {
-        Collections.sort(columnDefinitions);
-        for (int i = 0 ; i < columnDefinitions.size() ; i ++) {
-            columnDefinitions.get(i).setColumnIndex(i);
+    public void setColumnsIndex(List<ClassFileColumnDefinition> classFileColumnDefinitions) {
+        Collections.sort(classFileColumnDefinitions);
+        for (int i = 0; i < classFileColumnDefinitions.size() ; i ++) {
+            classFileColumnDefinitions.get(i).setColumnIndex(i);
         }
     }
 
@@ -242,17 +240,17 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
 
     @Override
     public List<? extends ColumnDefinitionModifier> getColumns() {
-        return columnDefinitions;
+        return classFileColumnDefinitions;
     }
 
     @Override
     public ColumnDefinitionModifier getColumnByTitileName(String titleName) {
-        return columnDefinitions.stream().filter(e -> e.getTitleName().equals(titleName)).findFirst().get();
+        return classFileColumnDefinitions.stream().filter(e -> e.getTitleName().equals(titleName)).findFirst().get();
     }
 
     @Override
     public ColumnDefinitionModifier getColumnByFieldName(String fieldName) {
-        return columnDefinitions.stream().filter(e -> e.getFieldName().equals(fieldName)).findFirst().get();
+        return classFileColumnDefinitions.stream().filter(e -> e.getFieldName().equals(fieldName)).findFirst().get();
     }
 
     @Override
@@ -284,16 +282,16 @@ public class TableContext<T> extends BoxBracket implements TabContextModifier {
     }
 
     @Override
-    public TabContextModifier alterMaxmunColumnsWidth(int maximunColumnsWidth) {
-        maximumColumnsWidthValidate(maximunColumnsWidth, minimunColumnsWidth);
-        this.maximunColumnsWidth = maximunColumnsWidth;
+    public TabContextModifier alterMaximumColumnsWidth(int maximunColumnsWidth) {
+        maximumColumnsWidthValidate(maximunColumnsWidth, minimumColumnsWidth);
+        this.maximumColumnsWidth = maximunColumnsWidth;
         return this;
     }
 
     @Override
-    public TabContextModifier alterMinmunColumnsWidth(int minmunColumnsWidth) {
+    public TabContextModifier alterMinimumColumnsWidth(int minmunColumnsWidth) {
         minimumColumnsWidthValidate(minmunColumnsWidth);
-        this.minimunColumnsWidth = minmunColumnsWidth;
+        this.minimumColumnsWidth = minmunColumnsWidth;
         return this;
     }
 

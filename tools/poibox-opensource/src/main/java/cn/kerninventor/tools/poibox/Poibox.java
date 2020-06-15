@@ -11,88 +11,76 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     Poibox, excel处理工具盒子接口。<br/>
+ *     底层基于 org.apache.poi 实现
+ * </p>
 * @author Kern
-* @date 2019/10/29 19:06
 */
 public interface Poibox {
 
     /**
+     * <p>
+     *     中文注释:<br/>
+     *     数据处理器
      *
-     *
-     * @author Kern
-     * @date 2020/5/6
-    */
+     * </p>
+     * @return
+     */
     DataTabulator dataTabulator();
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     Styler styler();
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     Fonter fonter();
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     Layouter layouter();
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     Workbook workbook();
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     Sheet getSheet(String sheetName);
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     Sheet getSheet(int sheetAt);
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     void writeToHttp(HttpServletResponse response, String fileName) throws IOException;
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     void writeToLocal(String fileFullName) throws IOException;
 
     /**
      *
      *
-     * @author Kern
-     * @date 2020/5/6
     */
     void flush();
 }

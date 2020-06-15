@@ -10,8 +10,6 @@ import java.io.InputStream;
 
 /**
  * @author Kern
- * @date 2020/4/9 9:17
- * @description factory
  */
 public final class PoiboxFactory {
 

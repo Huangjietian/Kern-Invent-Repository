@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.tabulation.writer.tbody;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
 import org.apache.poi.ss.usermodel.Sheet;
 
 /**
@@ -10,6 +10,6 @@ import org.apache.poi.ss.usermodel.Sheet;
  */
 public interface TbodyWriter<T> {
 
-    void templateTbody(ColumnDefinition<T> columnDefinition, Sheet sheet);
+    void templateTbody(ClassFileColumnDefinition<T> classFileColumnDefinition, Sheet sheet);
 
 }

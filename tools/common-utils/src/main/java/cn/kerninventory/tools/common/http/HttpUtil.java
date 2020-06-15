@@ -1,7 +1,7 @@
 package cn.kerninventory.tools.common.http;
 
 
-import com.onesport.common.utils.BeanUtil;
+import cn.kerninventory.tools.common.BeanUtil;
 
 import javax.servlet.http.HttpServletRequest;
 

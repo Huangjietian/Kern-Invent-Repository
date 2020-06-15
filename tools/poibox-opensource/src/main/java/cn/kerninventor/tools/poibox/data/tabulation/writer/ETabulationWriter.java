@@ -1,9 +1,9 @@
 package cn.kerninventor.tools.poibox.data.tabulation.writer;
 
 import cn.kerninventor.tools.poibox.data.tabulation.context.BannerDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.context.TabContextModifier;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import cn.kerninventor.tools.poibox.data.tabulation.element.Textbox;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.AbstractColumnDataTranslator;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslate;
@@ -27,21 +27,21 @@ import java.util.stream.Collectors;
  */
 public final class ETabulationWriter<T> extends AbstractColumnDataTranslator implements TabulationWriter<T> {
 
-    private TableContext<T> tableContext;
+    private ClassFileTableContext<T> classFileTableContext;
 
     private Map<String, Set<String>> formulaListMap;
 
-    public ETabulationWriter(TableContext<T> context) {
-        this.tableContext = Objects.requireNonNull(context);
+    public ETabulationWriter(ClassFileTableContext<T> context) {
+        this.classFileTableContext = Objects.requireNonNull(context);
     }
 
-    private TableContext getTableContext() {
-        return this.tableContext;
+    private ClassFileTableContext getClassFileTableContext() {
+        return this.classFileTableContext;
     }
 
     @Override
     public TabulationWriter<T> writeTo(String sheetName) {
-        Sheet sheet = tableContext.getParent().getSheet(sheetName);
+        Sheet sheet = classFileTableContext.getParent().getSheet(sheetName);
         return writeTo(sheet);
     }
 
@@ -55,7 +55,7 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
 
     @Override
     public TabulationWriter<T> writeTo(String sheetName, List<T> datas, String... ignore) {
-        Sheet sheet = tableContext.getParent().getSheet(sheetName);
+        Sheet sheet = classFileTableContext.getParent().getSheet(sheetName);
         return writeTo(sheet, datas, ignore);
     }
 
@@ -68,21 +68,21 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
     }
 
     private void doWrite(Sheet sheet, final String[] igonre, final BasicTabulationWriter basicTabulationWriter) {
-        TableContext tableContext = getTableContext();
-        List<ColumnDefinition> columnDefinitions = adaptIgonreColumns(igonre);
+        ClassFileTableContext classFileTableContext = getClassFileTableContext();
+        List<ClassFileColumnDefinition> classFileColumnDefinitions = adaptIgonreColumns(igonre);
         writeformulaList(sheet);
-        writeTextbox(tableContext, sheet);
-        writeBanners(tableContext, columnDefinitions, sheet);
-        basicTabulationWriter.doWrite(tableContext, columnDefinitions, sheet);
+        writeTextbox(classFileTableContext, sheet);
+        writeBanners(classFileTableContext, classFileColumnDefinitions, sheet);
+        basicTabulationWriter.doWrite(classFileTableContext, classFileColumnDefinitions, sheet);
     }
 
-    private List<ColumnDefinition> adaptIgonreColumns(String[] igonre) {
-        List<ColumnDefinition> columnDefinitions = getTableContext().getColumnDefinitions();
+    private List<ClassFileColumnDefinition> adaptIgonreColumns(String[] igonre) {
+        List<ClassFileColumnDefinition> classFileColumnDefinitions = getClassFileTableContext().getClassFileColumnDefinitions();
         if (BeanUtil.hasElement(igonre)) {
-            columnDefinitions = columnDefinitions.stream().filter(e -> Arrays.stream(igonre).noneMatch(str -> e.getTitleName().equals(str.trim()))).collect(Collectors.toList());
-            getTableContext().setColumnsIndex(columnDefinitions);
+            classFileColumnDefinitions = classFileColumnDefinitions.stream().filter(e -> Arrays.stream(igonre).noneMatch(str -> e.getTitleName().equals(str.trim()))).collect(Collectors.toList());
+            getClassFileTableContext().setColumnsIndex(classFileColumnDefinitions);
         }
-        return columnDefinitions;
+        return classFileColumnDefinitions;
     }
 
     private void writeformulaList(Sheet sheet) {
@@ -93,11 +93,11 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
         }
     }
 
-    private void writeBanners(TableContext tableContext, List<ColumnDefinition> columnDefinitions, Sheet sheet) {
-        Layouter layouter = tableContext.getParent().layouter();
-        List<BannerDefinition> bannerDefinitions = tableContext.getBannerDefinitions();
+    private void writeBanners(ClassFileTableContext classFileTableContext, List<ClassFileColumnDefinition> classFileColumnDefinitions, Sheet sheet) {
+        Layouter layouter = classFileTableContext.getParent().layouter();
+        List<BannerDefinition> bannerDefinitions = classFileTableContext.getBannerDefinitions();
         for (BannerDefinition bannerDefinition : bannerDefinitions) {
-            CellRangeAddress cellAddresses = bannerDefinition.adjustCellRangeAddress(tableContext, columnDefinitions);
+            CellRangeAddress cellAddresses = bannerDefinition.adjustCellRangeAddress(classFileTableContext, classFileColumnDefinitions);
             layouter.mergedRegion(sheet, cellAddresses)
                     .setRowHeight(bannerDefinition.getRowHeight())
                     .setMergeRangeContent(bannerDefinition.getValue())
@@ -105,10 +105,10 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
         }
     }
 
-    private void writeTextbox(TableContext tableContext, Sheet sheet) {
-        Textbox[] textboxes = tableContext.getTextboxes();
+    private void writeTextbox(ClassFileTableContext classFileTableContext, Sheet sheet) {
+        Textbox[] textboxes = classFileTableContext.getTextnodes();
         for (Textbox textbox : textboxes) {
-            tableContext.getParent().layouter().addTextBox(sheet, textbox);
+            classFileTableContext.getParent().layouter().addTextBox(sheet, textbox);
         }
     }
 
@@ -148,7 +148,7 @@ public final class ETabulationWriter<T> extends AbstractColumnDataTranslator imp
 
     @Override
     public TabContextModifier getTabContextModifier() {
-        return tableContext;
+        return classFileTableContext;
     }
 
     @Override

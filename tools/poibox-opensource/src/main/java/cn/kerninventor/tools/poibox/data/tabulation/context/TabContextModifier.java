@@ -36,9 +36,9 @@ public interface TabContextModifier {
 
     TabContextModifier alterEffectiveRows(int effctiveRows);
 
-    TabContextModifier alterMaxmunColumnsWidth(int maxmunColumnsWidth);
+    TabContextModifier alterMaximumColumnsWidth(int maxmunColumnsWidth);
 
-    TabContextModifier alterMinmunColumnsWidth(int minmunColumnsWidth);
+    TabContextModifier alterMinimumColumnsWidth(int minmunColumnsWidth);
 
 
 

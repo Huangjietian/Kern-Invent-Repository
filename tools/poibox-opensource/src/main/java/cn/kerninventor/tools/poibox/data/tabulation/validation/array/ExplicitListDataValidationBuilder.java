@@ -1,8 +1,8 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.array;
 
 import cn.kerninventor.tools.poibox.data.tabulation.validation.DataValidationBuilder;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.MessageBoxSetter;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -25,7 +25,7 @@ public class ExplicitListDataValidationBuilder implements DataValidationBuilder<
     }
 
     @Override
-    public void addValidation(TableContext tabulationInit, ColumnDefinition columnInit, Sheet sheet) {
+    public void addValidation(ClassFileTableContext tabulationInit, ClassFileColumnDefinition columnInit, Sheet sheet) {
         if (!BeanUtil.hasElement(explicitListDataValid.list())) {
             return;
         }

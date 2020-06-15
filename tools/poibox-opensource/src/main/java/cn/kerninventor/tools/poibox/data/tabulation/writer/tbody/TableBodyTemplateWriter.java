@@ -1,8 +1,8 @@
 package cn.kerninventor.tools.poibox.data.tabulation.writer.tbody;
 
 import cn.kerninventor.tools.poibox.BoxGadget;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,19 +16,19 @@ import org.apache.poi.ss.usermodel.Sheet;
 public final class TableBodyTemplateWriter<T> implements TbodyWriter<T> {
 
     @Override
-    public void templateTbody(ColumnDefinition<T> columnDefinition, Sheet sheet) {
-        TableContext tableContext = columnDefinition.getTableContext();
-        for (int rowIndex = tableContext.getTbodyFirstRowIndex() ; rowIndex < tableContext.getEffectiveRows() + tableContext.getTbodyFirstRowIndex(); rowIndex ++){
+    public void templateTbody(ClassFileColumnDefinition<T> classFileColumnDefinition, Sheet sheet) {
+        ClassFileTableContext classFileTableContext = classFileColumnDefinition.getClassFileTableContext();
+        for (int rowIndex = classFileTableContext.getTbodyFirstRowIndex(); rowIndex < classFileTableContext.getEffectiveRows() + classFileTableContext.getTbodyFirstRowIndex(); rowIndex ++){
             Row bodyRow = BoxGadget.getRowForce(sheet, rowIndex);
-            bodyRow.setHeightInPoints(tableContext.getTbodyRowHeight());
-            Cell bodyCell = bodyRow.createCell(columnDefinition.getColumnIndex());
-            bodyCell.setCellStyle(columnDefinition.getTbodyStyle());
-            if (BeanUtil.isNotEmpty(columnDefinition.getFormula())) {
-                bodyCell.setCellFormula(columnDefinition.getFormula());
+            bodyRow.setHeightInPoints(classFileTableContext.getTbodyRowHeight());
+            Cell bodyCell = bodyRow.createCell(classFileColumnDefinition.getColumnIndex());
+            bodyCell.setCellStyle(classFileColumnDefinition.getTbodyStyle());
+            if (BeanUtil.isNotEmpty(classFileColumnDefinition.getFormula())) {
+                bodyCell.setCellFormula(classFileColumnDefinition.getFormula());
             }
         }
-        if (columnDefinition.getDataValidationBuilder() != null) {
-            columnDefinition.getDataValidationBuilder().addValidation(tableContext, columnDefinition, sheet);
+        if (classFileColumnDefinition.getDataValidationBuilder() != null) {
+            classFileColumnDefinition.getDataValidationBuilder().addValidation(classFileTableContext, classFileColumnDefinition, sheet);
         }
     }
 }

@@ -80,7 +80,7 @@ public final class PoiboxImplement implements Poibox {
 
     @Override
     public Sheet getSheet(int sheetAt) {
-        return BoxGadget.getSheetForce(workbook, sheetAt);
+        return workbook.getSheetAt(sheetAt);
     }
 
     @Override

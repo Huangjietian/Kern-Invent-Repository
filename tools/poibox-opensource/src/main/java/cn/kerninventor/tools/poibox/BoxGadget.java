@@ -6,8 +6,10 @@ import org.apache.poi.ss.usermodel.*;
 import java.io.UnsupportedEncodingException;
 
 /**
+ * <p>
+ *     gadget
+ * </p>
  * @uthor Kern
- * @date 2019/10/30 17:58
  */
 public class BoxGadget {
 

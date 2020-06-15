@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.lang.annotation.Annotation;
@@ -16,6 +16,6 @@ public interface DataValidationBuilder<T extends Annotation> {
     /**
      * handler main method.
      */
-    void addValidation(TableContext tabulationInit, ColumnDefinition columnInit, Sheet sheet);
+    void addValidation(ClassFileTableContext tabulationInit, ClassFileColumnDefinition columnInit, Sheet sheet);
 
 }

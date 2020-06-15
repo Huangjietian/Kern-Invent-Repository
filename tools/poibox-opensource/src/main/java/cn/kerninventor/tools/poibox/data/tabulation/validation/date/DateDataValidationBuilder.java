@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.date;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.DataValidationBuilder;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.MessageBoxSetter;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -64,7 +64,7 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
         this.optionalDate = optionalDate;
     }
 
-    public void addValidation(TableContext tabulationInit, ColumnDefinition columnInit, Sheet sheet) {
+    public void addValidation(ClassFileTableContext tabulationInit, ClassFileColumnDefinition columnInit, Sheet sheet) {
         annotationValid(columnInit);
         DataValidationHelper dvHelper = sheet.getDataValidationHelper();
         DataValidationConstraint dvConstraint = dvHelper.createDateConstraint(
@@ -86,7 +86,7 @@ public class DateDataValidationBuilder implements DataValidationBuilder<DateData
     }
 
 
-    private void annotationValid(ColumnDefinition columnInit) {
+    private void annotationValid(ClassFileColumnDefinition columnInit) {
         try {
             sdf = new SimpleDateFormat(dataValid.parseFormat());
             Date current = new Date();
