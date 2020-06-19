@@ -1,11 +1,11 @@
 package cn.kerninventor.tools.poibox.demo;
 
-import cn.kerninventor.tools.poibox.data.tabulation.ExcelBanner;
-import cn.kerninventor.tools.poibox.data.tabulation.ExcelColumn;
-import cn.kerninventor.tools.poibox.data.tabulation.ExcelTabulation;
-import cn.kerninventor.tools.poibox.data.tabulation.element.Font;
-import cn.kerninventor.tools.poibox.data.tabulation.element.Range;
-import cn.kerninventor.tools.poibox.data.tabulation.element.Style;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelBanner;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelColumn;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelTabulation;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.Font;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.Range;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.Style;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.CompareType;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.array.ExplicitListDataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.date.DateDataValid;

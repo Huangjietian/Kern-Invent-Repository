@@ -1,7 +1,7 @@
 package cn.kerninventor.tools.poibox.data.tabulation.context;
 
-import cn.kerninventor.tools.poibox.data.tabulation.ExcelBanner;
-import cn.kerninventor.tools.poibox.data.tabulation.element.Range;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelBanner;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.Range;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 
@@ -28,7 +28,7 @@ public class BannerDefinition implements BannerDefinitionModifier {
         this.value = value;
     }
 
-    public BannerDefinition(ClassFileTableContext tabulation, ExcelBanner banner) {
+    public BannerDefinition(TabulationBeanConfiguration tabulation, ExcelBanner banner) {
         this.value = banner.value();
         this.cellStyle = tabulation.getParent().styler().generate(banner.style());
         this.rangeAddress = new CellRangeAddress(
@@ -60,7 +60,7 @@ public class BannerDefinition implements BannerDefinitionModifier {
         return rowHeight;
     }
 
-    public CellRangeAddress adjustCellRangeAddress(ClassFileTableContext tabulation, List<ClassFileColumnDefinition> columns) {
+    public CellRangeAddress adjustCellRangeAddress(TabulationBeanConfiguration tabulation, List<ColumnDefinition> columns) {
         CellRangeAddress address = rangeAddress.copy();
         if (rangeAddress.getFirstRow() == Range.defaultVal) {
             address.setFirstRow(tabulation.getStartRowIndex());

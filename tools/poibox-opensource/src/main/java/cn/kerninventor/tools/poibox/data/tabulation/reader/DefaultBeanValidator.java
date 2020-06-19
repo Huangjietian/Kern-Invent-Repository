@@ -9,11 +9,11 @@ import java.util.Set;
  * @date 2020/5/25 11:01
  * @description
  */
-public class DefaultBeanValidator<T> implements BeanValidator<T, DefaultValidateResult>{
+public class DefaultBeanValidator<T> implements BeanValidator<T, DefaultBeanValidateResult>{
 
     private Validator validator;
 
-    private DefaultValidateResult defaultValidateResult;
+    private DefaultBeanValidateResult defaultBeanValidateResult;
 
     public DefaultBeanValidator(Validator validator) {
         this.validator = validator;
@@ -22,11 +22,11 @@ public class DefaultBeanValidator<T> implements BeanValidator<T, DefaultValidate
     @Override
     public void validate(T t) {
         Set<ConstraintViolation<T>> constraintViolations = validator.validate(t);
-        defaultValidateResult = new DefaultValidateResult(constraintViolations);
+        defaultBeanValidateResult = new DefaultBeanValidateResult(constraintViolations);
     }
 
     @Override
-    public DefaultValidateResult getResult() {
-        return defaultValidateResult;
+    public DefaultBeanValidateResult getResult() {
+        return defaultBeanValidateResult;
     }
 }

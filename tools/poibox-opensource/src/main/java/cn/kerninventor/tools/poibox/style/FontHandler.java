@@ -49,7 +49,7 @@ public final class FontHandler extends BoxBracket implements Fonter {
     }
 
     @Override
-    public Font generate(cn.kerninventor.tools.poibox.data.tabulation.element.Font font) {
+    public Font generate(cn.kerninventor.tools.poibox.data.tabulation.annotations.Font font) {
         return producer()
                 .setFontName(font.fontName()).setFontSize(font.fontSize())
                 .setBold(font.bold()).setFontColor(font.color())

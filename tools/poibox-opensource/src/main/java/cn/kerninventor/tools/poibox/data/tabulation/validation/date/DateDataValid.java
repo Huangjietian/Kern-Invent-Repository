@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @author Kern
  * @date 2019/12/13 11:10
  */
-@DataValid
+@DataValid(dvBuilder = DateDataValidationBuilder.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateDataValid {
@@ -25,7 +25,7 @@ public @interface DateDataValid {
 
     String optionalDate() default "";
 
-    String prompMessage() default "";
+    String promptMessage() default "";
 
     String errorMessage() default "";
 

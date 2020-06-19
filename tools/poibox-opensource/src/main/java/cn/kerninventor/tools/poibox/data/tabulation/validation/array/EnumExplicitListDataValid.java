@@ -12,14 +12,14 @@ import java.lang.annotation.Target;
  * @date 2020/5/25 15:48
  * @description
  */
-@DataValid
+@DataValid(dvBuilder = EnumExplicitListDataValidationBuilder.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EnumExplicitListDataValid {
 
     Class<? extends EnumExplicitList> enumClass();
 
-    String prompMessage() default "";
+    String promptMessage() default "";
 
     String errorMessage() default "";
 

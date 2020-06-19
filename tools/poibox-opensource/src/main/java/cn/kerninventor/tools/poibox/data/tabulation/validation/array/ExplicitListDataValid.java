@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @date 2020/5/6 9:36
  * @description
  */
-@DataValid
+@DataValid(dvBuilder = ExplicitListDataValidationBuilder.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExplicitListDataValid {
@@ -21,7 +21,7 @@ public @interface ExplicitListDataValid {
 
     String[] list();
 
-    String prompMessage() default "";
+    String promptMessage() default "";
 
     String errorMessage() default "";
 

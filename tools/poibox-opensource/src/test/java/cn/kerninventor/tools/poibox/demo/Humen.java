@@ -1,9 +1,9 @@
 package cn.kerninventor.tools.poibox.demo;
 
-import cn.kerninventor.tools.poibox.data.tabulation.ExcelBanner;
-import cn.kerninventor.tools.poibox.data.tabulation.ExcelColumn;
-import cn.kerninventor.tools.poibox.data.tabulation.ExcelTabulation;
-import cn.kerninventor.tools.poibox.data.tabulation.element.*;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelBanner;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelColumn;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelTabulation;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.*;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslate;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.array.EnumExplicitListDataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.array.ExplicitListDataValid;

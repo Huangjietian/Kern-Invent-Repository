@@ -1,54 +1,52 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.integer;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
-import cn.kerninventor.tools.poibox.data.tabulation.validation.DataValidationBuilder;
-import cn.kerninventor.tools.poibox.data.tabulation.validation.MessageBoxSetter;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationBeanConfiguration;
+import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddressList;
 
 /**
  * @author Kern
  * @date 2019/12/13 14:31
  */
-public class IntDataValidationBuilder implements DataValidationBuilder<IntDataValid> {
+public class IntDataValidationBuilder extends AbstractDvBuilder<IntDataValid> {
 
-    private IntDataValid dataValid;
-
-    public IntDataValidationBuilder(IntDataValid dataValid) {
-        this.dataValid = dataValid;
+    public IntDataValidationBuilder(IntDataValid intDataValid) {
+        super(intDataValid);
     }
 
     @Override
-    public void addValidation(ClassFileTableContext tabulationInit, ClassFileColumnDefinition columnInit, Sheet sheet) {
-        annotationValid(columnInit);
-        String var1 = dataValid.value() + "";
-        String var2 = dataValid.optionalVal() == -1 ? null : dataValid.optionalVal() + "";
-        DataValidationHelper dvHelper = sheet.getDataValidationHelper();
+    protected DataValidationConstraint createDvConstraint(DataValidationHelper dvHelper) {
+        IntDataValid intDataValid = getAnnotation();
+        String var1 = intDataValid.value() + "";
+        String var2 = intDataValid.optionalVal() == -1 ? null : intDataValid.optionalVal() + "";
         DataValidationConstraint dvConstraint = dvHelper.createIntegerConstraint(
-                dataValid.compareType().getCode(),
+                intDataValid.compareType().getCode(),
                 var1,
                 var2
         );
-        CellRangeAddressList dvRange = new CellRangeAddressList(
-                tabulationInit.getTbodyFirstRowIndex() ,
-                tabulationInit.getTbodyFirstRowIndex() + tabulationInit.getEffectiveRows() - 1,
-                columnInit.getColumnIndex(),
-                columnInit.getColumnIndex()
-        );
-        DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
-        MessageBoxSetter.setPrompBoxMessage(dataValidation, dataValid.prompMessage());
-        MessageBoxSetter.setErrorBoxMessage(dataValidation, dataValid.errorMessage());
-        sheet.addValidationData(dataValidation);
+        return dvConstraint;
     }
 
-    private void annotationValid(ClassFileColumnDefinition columnInit) {
-        if (dataValid.compareType().isOptionalValueValidity()){
-            if (dataValid.value() > dataValid.optionalVal()){
-                throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + columnInit.getFieldName());
+    @Override
+    protected void setBoxMessage(DataValidation dataValidation) {
+        dataValidation.createPromptBox(getPromptBoxName(), getAnnotation().promptMessage());
+        dataValidation.createPromptBox(getErrorBoxName(), getAnnotation().errorMessage());
+    }
+
+    @Override
+    public void setDataValidation(TabulationBeanConfiguration tableContext, ColumnDefinition columnDefinition, Sheet sheet) {
+        annotationValid(columnDefinition, getAnnotation());
+        super.setDataValidation(tableContext, columnDefinition, sheet);
+    }
+
+    private void annotationValid(ColumnDefinition columnDefinition, IntDataValid intDataValid) {
+        if (intDataValid.compareType().isOptionalValueValidity()){
+            if (intDataValid.value() > intDataValid.optionalVal()){
+                throw new IllegalArgumentException("The optionalVal() must be greater than or equal to value()! Field:" + columnDefinition.getFieldName());
             }
         }
     }

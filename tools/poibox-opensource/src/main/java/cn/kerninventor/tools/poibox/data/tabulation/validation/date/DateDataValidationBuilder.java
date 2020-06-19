@@ -1,14 +1,12 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.date;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
-import cn.kerninventor.tools.poibox.data.tabulation.validation.DataValidationBuilder;
-import cn.kerninventor.tools.poibox.data.tabulation.validation.MessageBoxSetter;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationBeanConfiguration;
+import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddressList;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,97 +17,66 @@ import java.util.Objects;
  * @author Kern
  * @date 2019/12/13 11:30
  */
-public class DateDataValidationBuilder implements DataValidationBuilder<DateDataValid> {
+public class DateDataValidationBuilder extends AbstractDvBuilder<DateDataValid> {
 
-    private DateDataValid dataValid;
     private SimpleDateFormat sdf;
     private String dateEx;
     private String optionalDateEx;
     private Date date;
     private Date optionalDate;
 
-    public DateDataValidationBuilder(DateDataValid dataValid) {
-        this.dataValid = dataValid;
+    public DateDataValidationBuilder(DateDataValid dateDataValid) {
+        super(dateDataValid);
     }
 
-    public static DateDataValidationBuilder getInstance(DateDataValid dateDataValid) {
-        SimpleDateFormat sdf = new SimpleDateFormat(dateDataValid.parseFormat());
-        Date current = new Date();
-//        if (DateDataValid.NOW.equals(dataValid.date())) {
-//            date = current;
-//            dateEx = sdf.format(date);
-//        } else {
-//            date = sdf.parse(dateEx = dataValid.date().trim());
-//        }
-//        if (DateDataValid.NOW.equals(dataValid.optionalDate().trim())) {
-//            optionalDate = current;
-//            optionalDateEx = sdf.format(optionalDate);
-//        } else if (!"".equals(dataValid.optionalDate().trim())){
-//            optionalDate = sdf.parse(optionalDateEx = dataValid.optionalDate().trim());
-//        }
-//        if (dataValid.compareType().isOptionalValueValidity()){
-//            Objects.requireNonNull(optionalDate, "The optionalDate() is not be Empty when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
-//            if (date.after(optionalDate)){
-//                throw new IllegalArgumentException("The optionalDate() is must be less than date() when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
-//            }
-//        }
-        return null;
-    }
-
-    public DateDataValidationBuilder(SimpleDateFormat sdf, String dateEx, String optionalDateEx, Date date, Date optionalDate) {
-        this.sdf = sdf;
-        this.dateEx = dateEx;
-        this.optionalDateEx = optionalDateEx;
-        this.date = date;
-        this.optionalDate = optionalDate;
-    }
-
-    public void addValidation(ClassFileTableContext tabulationInit, ClassFileColumnDefinition columnInit, Sheet sheet) {
-        annotationValid(columnInit);
-        DataValidationHelper dvHelper = sheet.getDataValidationHelper();
+    @Override
+    protected DataValidationConstraint createDvConstraint(DataValidationHelper dvHelper) {
+        DateDataValid dateDataValid = getAnnotation();
         DataValidationConstraint dvConstraint = dvHelper.createDateConstraint(
-                dataValid.compareType().getCode(),
+                dateDataValid.compareType().getCode(),
                 dateEx,
                 optionalDateEx,
-                dataValid.parseFormat()
+                dateDataValid.parseFormat()
         );
-        CellRangeAddressList dvRange = new CellRangeAddressList(
-                tabulationInit.getTbodyFirstRowIndex(),
-                tabulationInit.getTbodyFirstRowIndex()+ tabulationInit.getEffectiveRows() - 1,
-                columnInit.getColumnIndex(),
-                columnInit.getColumnIndex()
-        );
-        DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
-        MessageBoxSetter.setPrompBoxMessage(dataValidation, dataValid.prompMessage());
-        MessageBoxSetter.setErrorBoxMessage(dataValidation, dataValid.errorMessage());
-        sheet.addValidationData(dataValidation);
+        return dvConstraint;
     }
 
+    @Override
+    protected void setBoxMessage(DataValidation dataValidation) {
+        dataValidation.createPromptBox(getPromptBoxName(), getAnnotation().promptMessage());
+        dataValidation.createPromptBox(getErrorBoxName(), getAnnotation().errorMessage());
+    }
 
-    private void annotationValid(ClassFileColumnDefinition columnInit) {
+    @Override
+    public void setDataValidation(TabulationBeanConfiguration tableContext, ColumnDefinition columnDefinition, Sheet sheet) {
+        annotationValid(columnDefinition, getAnnotation());
+        super.setDataValidation(tableContext, columnDefinition, sheet);
+    }
+
+    private void annotationValid(ColumnDefinition columnDefinition, DateDataValid dateDataValid) {
         try {
-            sdf = new SimpleDateFormat(dataValid.parseFormat());
+            sdf = new SimpleDateFormat(dateDataValid.parseFormat());
             Date current = new Date();
-            if (DateDataValid.NOW.equals(dataValid.date())) {
+            if (DateDataValid.NOW.equals(dateDataValid.date())) {
                 date = current;
                 dateEx = sdf.format(date);
             } else {
-                date = sdf.parse(dateEx = dataValid.date().trim());
+                date = sdf.parse(dateEx = dateDataValid.date().trim());
             }
-            if (DateDataValid.NOW.equals(dataValid.optionalDate().trim())) {
+            if (DateDataValid.NOW.equals(dateDataValid.optionalDate().trim())) {
                 optionalDate = current;
                 optionalDateEx = sdf.format(optionalDate);
-            } else if (!"".equals(dataValid.optionalDate().trim())){
-                optionalDate = sdf.parse(optionalDateEx = dataValid.optionalDate().trim());
+            } else if (!"".equals(dateDataValid.optionalDate().trim())){
+                optionalDate = sdf.parse(optionalDateEx = dateDataValid.optionalDate().trim());
             }
-            if (dataValid.compareType().isOptionalValueValidity()){
-                Objects.requireNonNull(optionalDate, "The optionalDate() is not be Empty when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
+            if (dateDataValid.compareType().isOptionalValueValidity()){
+                Objects.requireNonNull(optionalDate, "The optionalDate() is not be Empty when compareType is bettwen or notBettwen! Field: " + columnDefinition.getFieldName());
                 if (date.after(optionalDate)){
-                    throw new IllegalArgumentException("The optionalDate() is must be less than date() when compareType is bettwen or notBettwen! Field: " + columnInit.getFieldName());
+                    throw new IllegalArgumentException("The optionalDate() is must be less than date() when compareType is bettwen or notBettwen! Field: " + columnDefinition.getFieldName());
                 }
             }
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Date parse failed! parseFormat, please check your configuration of field : " + columnInit.getFieldName());
+            throw new IllegalArgumentException("Date parse failed! parseFormat, please check your configuration of field : " + columnDefinition.getFieldName());
         }
     }
 

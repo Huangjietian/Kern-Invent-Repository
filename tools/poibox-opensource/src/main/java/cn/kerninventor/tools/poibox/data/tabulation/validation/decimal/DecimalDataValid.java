@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @author Kern
  * @date 2019/12/13 15:18
  */
-@DataValid
+@DataValid(dvBuilder = DecimalDataValidationBuilder.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DecimalDataValid {
@@ -21,7 +21,7 @@ public @interface DecimalDataValid {
 
     double optionalVal() default -1.00;
 
-    String prompMessage() default "";
+    String promptMessage() default "";
 
     String errorMessage() default "";
 

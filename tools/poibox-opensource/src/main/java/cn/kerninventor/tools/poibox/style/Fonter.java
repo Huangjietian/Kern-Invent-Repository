@@ -29,6 +29,6 @@ public interface Fonter {
 
     Font simpleFont(String fontName, int fontSize, boolean bold);
 
-    Font generate(cn.kerninventor.tools.poibox.data.tabulation.element.Font font);
+    Font generate(cn.kerninventor.tools.poibox.data.tabulation.annotations.Font font);
 
 }

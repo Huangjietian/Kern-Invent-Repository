@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.layout;
 
-import cn.kerninventor.tools.poibox.data.tabulation.element.Textbox;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.Textbox;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFTextbox;
 import org.apache.poi.ss.usermodel.Picture;

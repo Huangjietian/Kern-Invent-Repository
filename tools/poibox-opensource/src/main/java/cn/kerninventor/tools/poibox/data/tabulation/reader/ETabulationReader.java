@@ -3,8 +3,8 @@ package cn.kerninventor.tools.poibox.data.tabulation.reader;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.AbstractColumnDataTranslator;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslate;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslator;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
+import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationBeanConfiguration;
 import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
  */
 public class ETabulationReader<T> extends AbstractColumnDataTranslator implements TabulationReader<T> {
 
-    private ClassFileTableContext tabContext;
+    private TabulationBeanConfiguration tabContext;
 
     private List<BeanValidator<T, ?>> beanValidators;
 
-    public ETabulationReader(ClassFileTableContext classFileTableContext) {
-        this.tabContext = Objects.requireNonNull(classFileTableContext);
+    public ETabulationReader(TabulationBeanConfiguration tableConfiguration) {
+        this.tabContext = Objects.requireNonNull(tableConfiguration);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ETabulationReader<T> extends AbstractColumnDataTranslator implement
     @Override
     public List<T> readFrom(Sheet sheet) {
         List<T> list = new ArrayList();
-        List<ClassFileColumnDefinition> classFileColumnDefinitions = tabContext.getClassFileColumnDefinitions();
+        List<ColumnDefinition> columnDefinitions = tabContext.getColumnDefinitions();
         for (int i = tabContext.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
             Class<T> tClass;
@@ -60,7 +60,7 @@ public class ETabulationReader<T> extends AbstractColumnDataTranslator implement
                 continue;
             }
             int nullCount = 0;
-            for (ClassFileColumnDefinition column : classFileColumnDefinitions){
+            for (ColumnDefinition column : columnDefinitions){
                 Cell cell = row.getCell(column.getColumnIndex());
                 if (cell == null){
                     nullCount++;
@@ -78,7 +78,7 @@ public class ETabulationReader<T> extends AbstractColumnDataTranslator implement
                     throw new IllegalArgumentException("Set value to Field error! Field: " + column.getFieldName());
                 }
             }
-            if (nullCount < tabContext.getClassFileColumnDefinitions().size()){
+            if (nullCount < tabContext.getColumnDefinitions().size()){
                 if (BeanUtil.isNotEmpty(beanValidators)) {
                     for (BeanValidator validator : beanValidators) {
                         validator.validate(t);

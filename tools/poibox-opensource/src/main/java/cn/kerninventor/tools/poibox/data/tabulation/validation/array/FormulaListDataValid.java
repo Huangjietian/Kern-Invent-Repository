@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @author Kern
  * @date 2020/4/15 12:23
  */
-@DataValid
+@DataValid(dvBuilder = FormulaListDataValidationBuilder.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FormulaListDataValid {
@@ -20,7 +20,7 @@ public @interface FormulaListDataValid {
 
     String value();
 
-    String prompMessage() default "";
+    String promptMessage() default "";
 
     String errorMessage() default "";
 

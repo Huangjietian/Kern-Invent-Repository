@@ -1,44 +1,32 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.formula;
 
-import cn.kerninventor.tools.poibox.data.tabulation.validation.DataValidationBuilder;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ClassFileTableContext;
-import cn.kerninventor.tools.poibox.data.tabulation.validation.MessageBoxSetter;
-import cn.kerninventor.tools.poibox.utils.BeanUtil;
+import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddressList;
 
 /**
  * @author Kern
  * @date 2020/5/6 10:18
  */
-public class FormulaCustomDataValidationBuilder implements DataValidationBuilder<FormulaCustomDataValid> {
+public class FormulaCustomDataValidationBuilder extends AbstractDvBuilder<FormulaCustomDataValid> {
 
-    private FormulaCustomDataValid formulaCustomDataValid;
 
     public FormulaCustomDataValidationBuilder(FormulaCustomDataValid formulaCustomDataValid) {
-        this.formulaCustomDataValid = formulaCustomDataValid;
+        super(formulaCustomDataValid);
     }
 
     @Override
-    public void addValidation(ClassFileTableContext tabulationInit, ClassFileColumnDefinition columnInit, Sheet sheet) {
-        if (BeanUtil.isEmpty(formulaCustomDataValid.formula())) {
-            return;
-        }
-        DataValidationHelper dvHelper = sheet.getDataValidationHelper();
+    protected DataValidationConstraint createDvConstraint(DataValidationHelper dvHelper) {
+        FormulaCustomDataValid formulaCustomDataValid = getAnnotation();
         DataValidationConstraint dvConstraint = dvHelper.createCustomConstraint(formulaCustomDataValid.formula());
-        CellRangeAddressList dvRange = new CellRangeAddressList(
-                tabulationInit.getTbodyFirstRowIndex(),
-                (tabulationInit.getTbodyFirstRowIndex() + tabulationInit.getEffectiveRows() - 1),
-                columnInit.getColumnIndex(),
-                columnInit.getColumnIndex()
-        );
-        DataValidation dataValidation = dvHelper.createValidation(dvConstraint, dvRange);
-        MessageBoxSetter.setPrompBoxMessage(dataValidation, formulaCustomDataValid.prompMessage());
-        MessageBoxSetter.setErrorBoxMessage(dataValidation, formulaCustomDataValid.errorMessage());
-        sheet.addValidationData(dataValidation);
+        return dvConstraint;
     }
+
+    @Override
+    protected void setBoxMessage(DataValidation dataValidation) {
+        dataValidation.createPromptBox(getPromptBoxName(), getAnnotation().promptMessage());
+        dataValidation.createPromptBox(getErrorBoxName(), getAnnotation().errorMessage());
+    }
+
 }

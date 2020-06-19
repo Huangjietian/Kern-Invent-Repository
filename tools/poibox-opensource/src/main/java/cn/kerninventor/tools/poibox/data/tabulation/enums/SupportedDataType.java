@@ -1,11 +1,11 @@
 package cn.kerninventor.tools.poibox.data.tabulation.enums;
 
 
-import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.col.ColWriter;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.col.GeneralColWriter;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.tbody.col.MergeAbleColWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.CellsWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.cells.GeneralCellsWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.cells.MergeAbleCellsWriter;
 import cn.kerninventor.tools.poibox.exception.IllegalColumnConfigureException;
+import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -65,11 +65,11 @@ public enum SupportedDataType {
      * If you need to query for the supported data type, check SupportedDataType.class.
      *
      * @param field
-     * @param colWriter
+     * @param cellsWriter
      */
-    public static void checkSupportability(Field field, ColWriter colWriter) {
+    public static void checkSupportability(Field field, CellsWriter cellsWriter) {
         boolean isSupportedType = SupportedDataType.isSupportedType(field);
-        if (!isSupportedType && (colWriter instanceof GeneralColWriter || colWriter instanceof MergeAbleColWriter)) {
+        if (!isSupportedType && (cellsWriter instanceof GeneralCellsWriter || cellsWriter instanceof MergeAbleCellsWriter)) {
             throw new UnSupportedDataTypeException("" +
                     "The Field data type is not supported when using the GeneralColWriter or MergeAbleColWriter!" +
                     System.lineSeparator() +

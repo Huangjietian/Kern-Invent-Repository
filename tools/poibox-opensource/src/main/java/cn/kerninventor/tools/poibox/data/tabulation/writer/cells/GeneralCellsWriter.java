@@ -1,0 +1,34 @@
+package cn.kerninventor.tools.poibox.data.tabulation.writer.cells;
+
+import cn.kerninventor.tools.poibox.data.tabulation.enums.SupportedDataType;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.CellsWriter;
+import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
+import cn.kerninventor.tools.poibox.utils.CellValueUtil;
+import org.apache.poi.ss.usermodel.Cell;
+
+import java.lang.reflect.Field;
+
+/**
+ * @author Kern
+ * @date 2020/3/17 11:00
+ * @description TODO
+ */
+public class GeneralCellsWriter implements CellsWriter {
+
+    @Override
+    public void supportedDataType(Field field) {
+        boolean isSupportedType = SupportedDataType.isSupportedType(field);
+        if (!isSupportedType) {
+            throw new UnSupportedDataTypeException("" +
+                    "The Field data type is not supported when using the GeneralColWriter!" +
+                    System.lineSeparator() +
+                    "Please check the enumeration values in SupportedDataType class! Field name: " + field.getName());
+        }
+    }
+
+    @Override
+    public void setCellValue(Cell cell, Object value) {
+        CellValueUtil.setCellObjectValue(cell, value);
+    }
+
+}

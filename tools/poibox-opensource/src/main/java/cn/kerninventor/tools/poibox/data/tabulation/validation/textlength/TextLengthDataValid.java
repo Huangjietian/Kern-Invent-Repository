@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @author Kern
  * @date 2019/12/13 14:25
  */
-@DataValid
+@DataValid(dvBuilder = TextLengthDataValidationBuilder.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TextLengthDataValid {
@@ -21,7 +21,7 @@ public @interface TextLengthDataValid {
 
     int optionalVal() default -1;
 
-    String prompMessage() default "";
+    String promptMessage() default "";
 
     String errorMessage() default "";
 

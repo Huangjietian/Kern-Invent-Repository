@@ -20,6 +20,8 @@ import java.io.IOException;
 */
 public interface Poibox {
 
+
+
     /**
      * <p>
      *     中文注释:<br/>

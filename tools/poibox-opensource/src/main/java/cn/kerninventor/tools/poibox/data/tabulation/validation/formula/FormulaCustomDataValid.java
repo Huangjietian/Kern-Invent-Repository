@@ -11,14 +11,14 @@ import java.lang.annotation.Target;
  * @author Kern
  * @date 2020/3/11 11:07
  */
-@DataValid
+@DataValid(dvBuilder = FormulaCustomDataValidationBuilder.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FormulaCustomDataValid {
 
     String formula();
 
-    String prompMessage() default "";
+    String promptMessage() default "";
 
     String errorMessage() default "";
 

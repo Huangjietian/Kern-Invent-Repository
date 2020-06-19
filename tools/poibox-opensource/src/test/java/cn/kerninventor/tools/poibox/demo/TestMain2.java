@@ -21,8 +21,7 @@ public class TestMain2 {
         Workbook wb = new XSSFWorkbook();
         Poibox poiBox = PoiboxFactory.open(wb);
         TabulationWriter tabulationWriter = poiBox.dataTabulator().writer(AthleteRosterEO.class);
-        tabulationWriter.getTabContextModifier().addBanner("第三个标题", poiBox.styler().defaultHeadline(15), 6, 9 );
-        tabulationWriter.getTabContextModifier().getBannerAt(1).setContent("当前日期: " + new SimpleDateFormat("yyyy-MM-dd").format(new Date())).setCellStyle(poiBox.styler().producer().setAlignment(HorizontalAlignment.LEFT).get());
+        tabulationWriter.getConfiguration().addBanner("第三个标题", poiBox.styler().defaultHeadline(15), 6, 9 );
         tabulationWriter.writeTo("运动员");
         poiBox.writeToLocal("C:\\Users\\82576\\Desktop\\国家集训队运动员花名册模板.xls");
     }

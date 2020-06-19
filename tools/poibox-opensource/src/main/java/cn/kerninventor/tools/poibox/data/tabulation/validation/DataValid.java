@@ -9,7 +9,9 @@ import java.lang.annotation.*;
 @Inherited
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
 public @interface DataValid {
 
+    Class<? extends AbstractDvBuilder> dvBuilder();
 
 }
