@@ -6,7 +6,7 @@ import org.apache.poi.ss.usermodel.DataValidationHelper;
 
 /**
  * @author Kern
- * @date 2020/5/6 10:18
+ * @version 1.0
  */
 public class FormulaCustomDataValidationBuilder extends AbstractDvBuilder<FormulaCustomDataValid> {
 

@@ -13,8 +13,7 @@ import java.util.List;
 
 /**
  * @author Kern
- * @date 2020/5/25 14:19
- * @description
+ * @version 1.0
  */
 public final class BodyDataWriter<T> implements BodyWriter<T> {
 

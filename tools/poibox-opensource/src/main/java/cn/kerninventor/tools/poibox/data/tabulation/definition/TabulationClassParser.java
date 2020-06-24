@@ -8,9 +8,9 @@ import cn.kerninventor.tools.poibox.data.tabulation.annotations.Style;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.DataValid;
 import cn.kerninventor.tools.poibox.data.tabulation.writer.basic.CellsWriter;
-import cn.kerninventor.tools.poibox.exception.IllegalColumnConfigureException;
-import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
-import cn.kerninventor.tools.poibox.exception.IllegalTabulationConfigureException;
+import cn.kerninventor.tools.poibox.exception.IllegalColumnFieldException;
+import cn.kerninventor.tools.poibox.exception.IllegalSourceClassException;
+import cn.kerninventor.tools.poibox.exception.IllegalTabulationBeanException;
 import cn.kerninventor.tools.poibox.style.Styler;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -60,7 +60,7 @@ public class TabulationClassParser {
 
     private Map<Integer, CellStyle> parseStyles(Style[] styles, final Styler styler) {
         if (styles == null || styles.length == 0) {
-            throw new IllegalTabulationConfigureException("Undefined style at @ExcelTabulation!");
+            throw new IllegalTabulationBeanException("Undefined style at @ExcelTabulation!");
         }
         Map<Integer, CellStyle> styleMap = new HashMap<>();
         for (Style style : styles) {
@@ -89,10 +89,10 @@ public class TabulationClassParser {
             }
         }
         if (columnDefinitions.size() == 0){
-            throw new IllegalSourceClassOfTabulationException("ExcelTabulation bean lack column definition, you should use @ExcelColumn to annotate object's field!");
+            throw new IllegalSourceClassException("ExcelTabulation bean lack column definition, you should use @ExcelColumn to annotate object's field!");
         }
         if (ColumnsTitleNameSet.size() != columnDefinitions.size()) {
-            throw new IllegalTabulationConfigureException("@ExcelColumn value must be unique!");
+            throw new IllegalTabulationBeanException("@ExcelColumn value must be unique!");
         }
         setColumnsIndexBySort(columnDefinitions);
         return columnDefinitions;
@@ -103,7 +103,7 @@ public class TabulationClassParser {
         try {
             cellsWriter = excelColumn.cellsWriter().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            throw new IllegalColumnConfigureException("CellsWriter lack of parameterless constructors! field : " + field.getName());
+            throw new IllegalColumnFieldException("CellsWriter lack of parameterless constructors! field : " + field.getName());
         }
         cellsWriter.supportedDataType(field);
         return cellsWriter;

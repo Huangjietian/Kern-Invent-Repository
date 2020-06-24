@@ -5,8 +5,7 @@ import java.util.Map;
 
 /**
  * @author Kern
- * @date 2020/5/26 9:05
- * @description
+ * @version 1.0
  */
 public abstract class TranslatorManager {
 

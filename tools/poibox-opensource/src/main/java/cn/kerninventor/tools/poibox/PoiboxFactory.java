@@ -9,7 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     Poibox工厂类
+ * </p>
  * @author Kern
+ * @version 1.0
  */
 public final class PoiboxFactory {
 

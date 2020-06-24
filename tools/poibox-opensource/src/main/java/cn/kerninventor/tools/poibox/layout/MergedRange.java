@@ -32,7 +32,6 @@ public final class MergedRange {
     }
 
     public MergedRange setMergeRangeContent(double d) {
-//        sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()).setCellValue(d);
         BoxGadget.getCellForce(BoxGadget.getRowForce(sheet, range.getFirstRow()), range.getFirstColumn()).setCellValue(d);
         return this;
     }

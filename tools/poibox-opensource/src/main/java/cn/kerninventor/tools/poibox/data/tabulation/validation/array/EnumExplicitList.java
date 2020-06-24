@@ -2,11 +2,14 @@ package cn.kerninventor.tools.poibox.data.tabulation.validation.array;
 
 /**
  * @author Kern
- * @date 2020/5/25 15:49
- * @description
+ * @version 1.0
  */
 public interface EnumExplicitList {
 
+    /**
+     * @see EnumExplicitListDataValid
+     * @return
+     */
     String explicitList();
 
 }

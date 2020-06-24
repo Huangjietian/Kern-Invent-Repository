@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.tabulation.writer.basic;
 
-import cn.kerninventor.tools.poibox.exception.IllegalColumnConfigureException;
+import cn.kerninventor.tools.poibox.exception.IllegalColumnFieldException;
 import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
 import org.apache.poi.ss.usermodel.Cell;
 
@@ -10,8 +10,7 @@ import java.util.StringJoiner;
 
 /**
  * @author Kern
- * @date 2020/5/6 11:36
- * @description
+ * @version 1.0
  */
 public class CellsCollection2CharsWriter implements CellsWriter {
 
@@ -43,7 +42,7 @@ public class CellsCollection2CharsWriter implements CellsWriter {
             });
             cell.setCellValue(joiner.toString());
         } else {
-            throw new IllegalColumnConfigureException("Collection2CharsColWriter must be used on the Collection field ");
+            throw new IllegalColumnFieldException("Collection2CharsColWriter must be used on the Collection field ");
         }
     }
 

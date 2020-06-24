@@ -10,9 +10,13 @@ import org.apache.poi.xssf.usermodel.XSSFShape;
 import org.apache.poi.xssf.usermodel.XSSFTextBox;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     为解决 {@link HSSFTextbox} 和 {@link XSSFTextBox}的不兼容，通过桥接的形式设计了该对象。<br/>
+ *     提供了关于 Textbox 的几个通用方法。如果已知 Textbox对象的实际类型，建议调用精确泛型的相关方法
+ * </p>
  * @author Kern
- * @date 2020/5/7 9:48
- * @description
+ * @version 1.0
  */
 public final class SimpleTextBox<Agent extends Shape> {
 
@@ -25,6 +29,11 @@ public final class SimpleTextBox<Agent extends Shape> {
         this.agent = agent;
     }
 
+    /**
+     * 设置文本框内容
+     * @param str
+     * @return
+     */
     public SimpleTextBox setString(String str) {
         if (agent instanceof HSSFTextbox) {
             ((HSSFTextbox)agent).setString(new HSSFRichTextString(str));
@@ -35,6 +44,11 @@ public final class SimpleTextBox<Agent extends Shape> {
         return this;
     }
 
+    /**
+     * 设置文本框的垂直居中
+     * @param verticalAlignment
+     * @return
+     */
     public SimpleTextBox setVerticalAlignment(VerticalAlignment verticalAlignment) {
         if (agent instanceof HSSFTextbox) {
             ((HSSFTextbox)agent).setVerticalAlignment(verticalAlignment.getCode());
@@ -44,6 +58,14 @@ public final class SimpleTextBox<Agent extends Shape> {
         return this;
     }
 
+    /**
+     * 设置边缘留白区域
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     * @return
+     */
     @Deprecated
     public SimpleTextBox setMargins(int left, int top, int right, int bottom) {
         boolean b = JsMathUtil.up2Standard(0, JsMathUtil.JsSimpleComparison.greaterThanOrEqualTo, left, top, right, bottom);
@@ -67,16 +89,33 @@ public final class SimpleTextBox<Agent extends Shape> {
         return this;
     }
 
+    /**
+     * 设置填充颜色
+     * @param red
+     * @param green
+     * @param blue
+     * @return
+     */
     public SimpleTextBox setFillColor(int red, int green, int blue) {
         agent.setFillColor(red, green, blue);
         return this;
     }
 
+    /**
+     * 设置填充颜色
+     * @param palette
+     * @return
+     */
     public SimpleTextBox setFillColor(Palette palette) {
         agent.setFillColor(palette.getRed(), palette.getGreen(), palette.getBlue());
         return this;
     }
 
+    /**
+     * 设置边框风格
+     * @param lineStyle
+     * @return
+     */
     public SimpleTextBox setLineStyle(int lineStyle){
         if (agent instanceof HSSFShape) {
             ((HSSFShape)agent).setLineStyle(lineStyle);
@@ -86,11 +125,23 @@ public final class SimpleTextBox<Agent extends Shape> {
         return this;
     }
 
+    /**
+     * 设置边框颜色
+     * @param red
+     * @param green
+     * @param blue
+     * @return
+     */
     public SimpleTextBox setLineColor(int red, int green, int blue){
         agent.setLineStyleColor(red, green, blue);
         return this;
     }
 
+    /**
+     * 设置边框颜色
+     * @param palette
+     * @return
+     */
     public SimpleTextBox setLineColor(Palette palette){
         agent.setLineStyleColor(palette.getRed(), palette.getGreen(), palette.getBlue());
         return this;

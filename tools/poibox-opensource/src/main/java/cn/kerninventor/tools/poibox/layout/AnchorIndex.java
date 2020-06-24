@@ -1,25 +1,34 @@
 package cn.kerninventor.tools.poibox.layout;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     锚坐标对象
+ * </p>
  * @author Kern
- * @date 2020/4/14 11:08
+ * @version 1.0
  */
 public class AnchorIndex {
 
     private int left;
-
     private int top;
-
     private int right;
-
     private int bottom;
-
+    /**
+     * 起始列 ： left
+     */
     private int col1;
-
+    /**
+     * 起始行 ： top
+     */
     private int row1;
-
+    /**
+     * 结束列 ： right
+     */
     private int col2;
-
+    /**
+     * 结束行 ： bottom
+     */
     private int row2;
 
     public AnchorIndex(int col1, int row1, int col2, int row2) {

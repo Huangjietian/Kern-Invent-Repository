@@ -18,7 +18,7 @@ import java.io.IOException;
 
 /**
  * @author Kern
- * @date 2019/10/29 14:16
+ * @version 1.0
  */
 public final class PoiboxImplement implements Poibox {
 

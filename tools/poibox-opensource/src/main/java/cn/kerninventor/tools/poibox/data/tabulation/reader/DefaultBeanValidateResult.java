@@ -5,8 +5,7 @@ import java.util.Set;
 
 /**
  * @author Kern
- * @date 2020/5/25 11:01
- * @description
+ * @version 1.0
  */
 public class DefaultBeanValidateResult<T> {
 

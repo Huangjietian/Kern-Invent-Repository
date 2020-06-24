@@ -2,7 +2,7 @@ package cn.kerninventor.tools.poibox.style.enums;
 
 /**
 * @author Kern
-* @date 2020/4/9
+* @version 1.0
 */
 public enum BorderDirection {
     SURROUND,

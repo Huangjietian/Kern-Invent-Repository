@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /**
  * @author Kern
- * @date 2019/12/13 11:30
+ * @version 1.0
  */
 public class DateDataValidationBuilder extends AbstractDvBuilder<DateDataValid> {
 

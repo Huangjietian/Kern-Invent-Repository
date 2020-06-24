@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * @author Kern
- * @date 2019/10/30 18:34
+ * @version 1.0
  */
 public final class LayoutHandler extends BoxBracket implements Layouter {
 

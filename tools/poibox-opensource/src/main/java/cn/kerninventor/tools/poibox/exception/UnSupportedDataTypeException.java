@@ -1,9 +1,12 @@
 package cn.kerninventor.tools.poibox.exception;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *      不支持的数据类型异常
+ * </p>
  * @author Kern
- * @date 2020/5/9 12:30
- * @description
+ * @version 1.0
  */
 public class UnSupportedDataTypeException extends RuntimeException {
 

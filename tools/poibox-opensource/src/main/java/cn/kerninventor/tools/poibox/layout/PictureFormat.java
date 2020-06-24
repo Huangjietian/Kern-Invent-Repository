@@ -1,9 +1,11 @@
 package cn.kerninventor.tools.poibox.layout;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     支持的图片格式枚举
+ * </p>
  * @author Kern
- * @date 2020/5/7 11:25
- * @description
  */
 public enum  PictureFormat {
     PICTURE_TYPE_EMF(2, ".emf"),

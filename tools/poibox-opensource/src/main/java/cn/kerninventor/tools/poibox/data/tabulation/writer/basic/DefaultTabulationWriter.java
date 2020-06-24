@@ -12,8 +12,7 @@ import java.util.List;
 
 /**
  * @author Kern
- * @date 2020/5/22 18:12
- * @description
+ * @version 1.0
  */
 public final class DefaultTabulationWriter<T> {
 

@@ -6,8 +6,7 @@ import java.util.List;
 
 /**
  * @author Kern
- * @date 2020/6/5 11:54
- * @description
+ * @version 1.0
  */
 public class BodyWriterFactory {
 

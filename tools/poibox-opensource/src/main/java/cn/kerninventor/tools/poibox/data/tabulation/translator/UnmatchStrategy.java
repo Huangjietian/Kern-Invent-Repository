@@ -1,9 +1,12 @@
 package cn.kerninventor.tools.poibox.data.tabulation.translator;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     翻译器匹配失败处理策略
+ * </p>
  * @author Kern
- * @date 2020/5/21 9:18
- * @description
+ * @version 1.0
  */
 public enum UnmatchStrategy {
 

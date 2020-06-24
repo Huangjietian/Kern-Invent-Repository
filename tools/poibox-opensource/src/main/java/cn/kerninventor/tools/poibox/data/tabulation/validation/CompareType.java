@@ -4,7 +4,7 @@ import org.apache.poi.ss.usermodel.DataValidationConstraint;
 
 /**
  * @author Kern
- * @date 2019/12/13 11:17
+ * @version 1.0
  */
 public enum CompareType {
 

@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  * @author Kern
- * @date 2019/12/18 10:14
+ * @version 1.0
  */
 public class DataTypeGroupUtil {
 

@@ -12,8 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     表格Bean定义实现
+ * </p>
  * @author Kern
- * @date 2019/12/9 15:25
+ * @version 1.0
  */
 public class TabulationBeanDefinition<T> extends BoxBracket implements TabulationDefinition {
 

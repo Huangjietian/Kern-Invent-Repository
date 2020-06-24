@@ -1,9 +1,11 @@
 package cn.kerninventor.tools.poibox.layout;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     调色盘枚举，提供几种常用颜色的枚举
+ * </p>
  * @author Kern
- * @date 2020/5/7 12:36
- * @description
  */
 public enum Palette {
 
@@ -41,4 +43,5 @@ public enum Palette {
     public int getBlue() {
         return blue;
     }
+
 }

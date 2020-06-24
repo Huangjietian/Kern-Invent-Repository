@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Kern
+ * @version 1.0
  */
 public final class ExcelTabulationWriter<T> implements TabulationWriter<T> {
 

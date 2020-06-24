@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  * @author Kern
- * @date 2019/12/13 14:31
+ * @version 1.0
  */
 public class TextLengthDataValidationBuilder extends AbstractDvBuilder<TextLengthDataValid> {
 

@@ -10,7 +10,12 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import java.util.List;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     横幅定义
+ * </p>
  * @author Kern
+ * @version 1.0
  */
 public class BannerDefinition {
 

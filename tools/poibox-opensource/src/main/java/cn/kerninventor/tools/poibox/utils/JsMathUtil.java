@@ -6,7 +6,7 @@ import javax.script.ScriptException;
 
 /**
  * @author Kern
- * @date 2020/5/7 10:40
+ * @version 1.0
  */
 public final class JsMathUtil {
 

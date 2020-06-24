@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 
 /**
  * @author Kern
- * @date 2020/3/17 10:28
+ * @version 1.0
  */
 public class CellsMergeColumnsWriter implements CellsWriter {
 

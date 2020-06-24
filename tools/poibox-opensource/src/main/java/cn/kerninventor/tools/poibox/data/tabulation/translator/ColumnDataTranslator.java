@@ -1,9 +1,12 @@
 package cn.kerninventor.tools.poibox.data.tabulation.translator;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     所有自定义的字段值翻译器都需要实现该接口。
+ * </p>
  * @author Kern
- * @date 2020/5/25 18:36
- * @description
+ * @version 1.0
  */
 public interface ColumnDataTranslator<K, V> {
 

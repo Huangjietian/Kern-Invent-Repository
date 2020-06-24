@@ -5,7 +5,7 @@ import cn.kerninventor.tools.poibox.data.tabulation.definition.TabulationDefinit
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslator;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ReadTranslatorManager;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.TranslatorManager;
-import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
+import cn.kerninventor.tools.poibox.exception.IllegalSourceClassException;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
 import cn.kerninventor.tools.poibox.utils.ReflectUtil;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Kern
- * @date 2020/3/12 19:13
+ * @version 1.0
  */
 public class ExcelTabulationReader<T> implements TabulationReader<T> {
 
@@ -56,7 +56,7 @@ public class ExcelTabulationReader<T> implements TabulationReader<T> {
                  tClass = tabulationDefinition.getTabulationClass();
                 t = ReflectUtil.newInstance(tClass);
             } catch (Exception e) {
-                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + tabulationDefinition.getTabulationClass());
+                throw new IllegalSourceClassException("The tabulation Class Missing parameterless constructor! Class: " + tabulationDefinition.getTabulationClass());
             }
             Row row = sheet.getRow(i);
             if (row == null){

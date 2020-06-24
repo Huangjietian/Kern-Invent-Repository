@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Font;
 
 /**
  * @author Kern
- * @date 2019/10/29 19:53
+ * @version 1.0
  */
 public final class FontHandler extends BoxBracket implements Fonter {
 

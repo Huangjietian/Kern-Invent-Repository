@@ -9,8 +9,12 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import java.lang.reflect.Field;
 
 /**
+ * <h1>中文注释</h1>
+ * <p>
+ *     列字段定义
+ * </p>
  * @author Kern
- * @date 2019/12/9 15:52
+ * @version 1.0
  */
 public final class ColumnDefinition implements Comparable<ColumnDefinition> {
 

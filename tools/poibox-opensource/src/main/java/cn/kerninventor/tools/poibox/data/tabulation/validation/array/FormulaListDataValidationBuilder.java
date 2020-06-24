@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * @author Kern
- * @date 2020/4/15 12:25
+ * @version 1.0
  */
 public class FormulaListDataValidationBuilder extends AbstractDvBuilder<FormulaListDataValid> {
 

@@ -6,8 +6,7 @@ import org.apache.poi.ss.usermodel.DataValidationHelper;
 
 /**
  * @author Kern
- * @date 2020/5/6 9:37
- * @description
+ * @version 1.0
  */
 public class ExplicitListDataValidationBuilder extends AbstractDvBuilder<ExplicitListDataValid> {
 

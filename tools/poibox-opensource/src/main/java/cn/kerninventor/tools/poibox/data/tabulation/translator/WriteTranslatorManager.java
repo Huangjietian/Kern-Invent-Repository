@@ -2,7 +2,9 @@ package cn.kerninventor.tools.poibox.data.tabulation.translator;
 
 /**
  * <h1>中文注释</h1>
- * <p>一句话描述</p>
+ * <p>
+ *     写入时翻译器管理器
+ * </p>
  *
  * @author Kern
  * @version 1.0

@@ -2,6 +2,7 @@ package cn.kerninventor.tools.poibox.style;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.Poibox;
+import cn.kerninventor.tools.poibox.data.tabulation.annotations.Border;
 import cn.kerninventor.tools.poibox.data.tabulation.annotations.Style;
 import cn.kerninventor.tools.poibox.style.enums.BorderDirection;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -11,7 +12,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * @author Kern
- * @date 2019/10/29 17:25
+ * @version 1.0
  */
 public final class StyleHandler extends BoxBracket implements Styler {
 
@@ -31,7 +32,7 @@ public final class StyleHandler extends BoxBracket implements Styler {
         Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize, true);
         return producer()
                 .setWholeCenter()
-                .setBorder(BorderDirection.SURROUND, BorderStyle.DOUBLE)
+                .setBorder(BorderDirection.SURROUND, BorderStyle.THIN, null)
                 .setFont(font)
                 .get();
     }
@@ -42,7 +43,7 @@ public final class StyleHandler extends BoxBracket implements Styler {
         Font font = getParent().fonter().simpleFont(Fonter.DEF_NAME_HEADER, fontSize);
         return producer()
                 .setWholeCenter()
-                .setBorder(BorderDirection.SURROUND, BorderStyle.THIN)
+                .setBorder(BorderDirection.SURROUND, BorderStyle.THIN, null)
                 .setFont(font)
                 .get();
     }
@@ -54,15 +55,18 @@ public final class StyleHandler extends BoxBracket implements Styler {
         return producer()
                 .setWholeCenter()
                 .setWrapText(true)
-                .setBorder(BorderDirection.SURROUND, BorderStyle.THIN)
+                .setBorder(BorderDirection.SURROUND, BorderStyle.THIN, null)
                 .setFont(font)
                 .get();
     }
 
     @Override
     public CellStyle generate(Style style) {
-        return producer()
-                .setBorder(style.border().direction(), style.border().borderStyle())
+        StyleProducer producer = producer();
+        for (Border border : style.borders()) {
+            producer.setBorder(border.direction(), border.borderStyle(), border.color());
+        }
+        return producer
                 .setFont(getParent().fonter().generate(style.font()))
                 .setFillPattern(style.fillPatternType())
                 .setFillForegroundColor(style.foregroudColor())

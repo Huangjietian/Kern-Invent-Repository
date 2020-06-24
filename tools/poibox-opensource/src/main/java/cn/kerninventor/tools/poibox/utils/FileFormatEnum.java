@@ -2,7 +2,7 @@ package cn.kerninventor.tools.poibox.utils;
 
 /**
  * @author Kern
- * @date 2019/10/22 16:34
+ * @version 1.0
  */
 public enum FileFormatEnum {
 

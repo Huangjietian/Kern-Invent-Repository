@@ -4,14 +4,18 @@ import java.lang.annotation.*;
 
 /**
  * @author Kern
- * @date 2019/12/13 11:32
+ * @version 1.0
  */
 @Inherited
+@Documented
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
 public @interface DataValid {
 
+    /**
+     * @see AbstractDvBuilder
+     * @return
+     */
     Class<? extends AbstractDvBuilder> dvBuilder();
 
 }

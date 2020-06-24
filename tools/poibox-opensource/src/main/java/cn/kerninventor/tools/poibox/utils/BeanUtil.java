@@ -5,7 +5,7 @@ import java.util.Collection;
 
 /**
  * @author Kern
- * @date 2020/4/14 23:37
+ * @version 1.0
  */
 public class BeanUtil {
 

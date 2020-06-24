@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 /**
  * @author Kern
- * @date 2019/12/13 17:08
+ * @version 1.0
  */
 public class FormulaListUtil {
 
