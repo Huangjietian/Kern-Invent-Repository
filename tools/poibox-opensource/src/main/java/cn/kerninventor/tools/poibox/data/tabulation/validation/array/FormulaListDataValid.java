@@ -18,6 +18,8 @@ public @interface FormulaListDataValid {
 
     String NAME_PRIFIIX = "NAME_";
 
+    String CASECADE_TAG = "casecade:";
+
     String value();
 
     String promptMessage() default "";

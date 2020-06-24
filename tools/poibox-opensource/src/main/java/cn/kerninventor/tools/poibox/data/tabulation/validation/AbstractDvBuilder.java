@@ -75,14 +75,14 @@ public abstract class AbstractDvBuilder<A extends Annotation> {
 
     public static AbstractDvBuilder getInstance(Annotation annotation) {
         Objects.requireNonNull(annotation);
-        DataValid dataValid = annotation.getClass().getDeclaredAnnotation(DataValid.class);
+        DataValid dataValid = annotation.annotationType().getAnnotation(DataValid.class);
         if (dataValid == null){
             throw new AnnotationFormatError("@DataValid was not present on the Data validation configuration annotation! Annotation name: " + annotation.getClass().getName());
         }
         Class<? extends AbstractDvBuilder> dvBuilderClass = dataValid.dvBuilder();
         AbstractDvBuilder abstractDvBuilder = null;
         try {
-            Constructor<? extends AbstractDvBuilder> constructor = dvBuilderClass.getDeclaredConstructor(Annotation.class);
+            Constructor<? extends AbstractDvBuilder> constructor = dvBuilderClass.getDeclaredConstructor(annotation.annotationType());
             abstractDvBuilder = constructor.newInstance(annotation);
         } catch (Exception e) {
             throw new IllegalArgumentException("The DvBuilder construction failed. Check that a constructor was provided as required!", e);

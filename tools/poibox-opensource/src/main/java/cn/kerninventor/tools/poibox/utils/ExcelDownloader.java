@@ -27,10 +27,10 @@ public class ExcelDownloader {
         }
         OutputStream out = null;
         try {
-            fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
             response.reset();
             response.setContentType("application/vnd.ms-excel");
             if (fileName != null && !"".equals(fileName)){
+                fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
                 response.addHeader("Content-Disposition", "attachment;filename=" + fileName + fileSuffix);
             }
             response.addHeader("charset", "UTF-8");
@@ -52,11 +52,20 @@ public class ExcelDownloader {
      * @throws IOException
      */
     public static void wirteToLocal(Workbook wb, String fileFullName) throws IOException {
+        if (BeanUtil.isEmpty(fileFullName)){
+            throw new IllegalArgumentException("A filename must be specified for download!");
+        }
         String fileSuffix = FileFormatEnum.XLS_EXCEL.getSuffix();
         if (wb instanceof XSSFWorkbook) {
             fileSuffix = FileFormatEnum.XLSX_EXCEL.getSuffix();
         }
-        fileFullName = fileFullName.substring(0, fileFullName.lastIndexOf(".")) + fileSuffix;
+        int lastIndex = fileFullName.lastIndexOf(".");
+        if (lastIndex != -1) {
+            fileFullName = fileFullName.substring(0, lastIndex) + fileSuffix;
+        } else {
+            fileFullName += fileSuffix;
+        }
+
         FileOutputStream os = null;
         try {
             File file = createNewFile(fileFullName);
