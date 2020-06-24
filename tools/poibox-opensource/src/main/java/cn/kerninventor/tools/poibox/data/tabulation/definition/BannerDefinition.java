@@ -1,7 +1,9 @@
-package cn.kerninventor.tools.poibox.data.tabulation.context;
+package cn.kerninventor.tools.poibox.data.tabulation.definition;
 
 import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.tabulation.annotations.Range;
+import cn.kerninventor.tools.poibox.style.Styler;
+import com.sun.istack.internal.Nullable;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 
@@ -9,10 +11,8 @@ import java.util.List;
 
 /**
  * @author Kern
- * @date 2020/4/10 10:35
- * @description
  */
-public class BannerDefinition implements BannerDefinitionModifier {
+public class BannerDefinition {
 
     private CellStyle cellStyle;
 
@@ -22,22 +22,25 @@ public class BannerDefinition implements BannerDefinitionModifier {
 
     private Float rowHeight;
 
-    public BannerDefinition(CellStyle cellStyle, CellRangeAddress rangeAddress, String value) {
+    public BannerDefinition(CellStyle cellStyle, String value, @Nullable Float rowHeight, int firstRow, int lastRow, int firstCell, int lastCell) {
+        this.cellStyle = cellStyle;
+        this.value = value;
+        this.rowHeight = rowHeight;
+        this.rangeAddress = new CellRangeAddress(firstRow, lastRow, firstCell, lastCell);
+    }
+
+    public BannerDefinition(CellStyle cellStyle, String value, @Nullable Float rowHeight, CellRangeAddress rangeAddress) {
         this.cellStyle = cellStyle;
         this.rangeAddress = rangeAddress;
+        this.rowHeight = rowHeight;
         this.value = value;
     }
 
-    public BannerDefinition(TabulationBeanConfiguration tabulation, ExcelBanner banner) {
+    public BannerDefinition(Styler styler, ExcelBanner banner) {
         this.value = banner.value();
-        this.cellStyle = tabulation.getParent().styler().generate(banner.style());
-        this.rangeAddress = new CellRangeAddress(
-                banner.range().fistRow(),
-                banner.range().lastRow(),
-                banner.range().firstCell(),
-                banner.range().lastCell()
-        );
+        this.cellStyle = styler.generate(banner.style());
         this.rowHeight = banner.rowHeight();
+        this.rangeAddress = new CellRangeAddress(banner.range().fistRow(), banner.range().lastRow(), banner.range().firstCell(), banner.range().lastCell());
     }
 
     public int getLastRowIndex(){
@@ -60,13 +63,13 @@ public class BannerDefinition implements BannerDefinitionModifier {
         return rowHeight;
     }
 
-    public CellRangeAddress adjustCellRangeAddress(TabulationBeanConfiguration tabulation, List<ColumnDefinition> columns) {
+    public CellRangeAddress adjustCellRangeAddress(int startRowIndex, List<ColumnDefinition> columns) {
         CellRangeAddress address = rangeAddress.copy();
         if (rangeAddress.getFirstRow() == Range.defaultVal) {
-            address.setFirstRow(tabulation.getStartRowIndex());
+            address.setFirstRow(startRowIndex);
         }
         if (rangeAddress.getLastRow() == Range.defaultVal) {
-            address.setLastRow(tabulation.getStartRowIndex());
+            address.setLastRow(startRowIndex);
         }
         if (rangeAddress.getFirstColumn() == Range.defaultVal) {
             address.setFirstColumn(columns.get(0).getColumnIndex());
@@ -77,31 +80,26 @@ public class BannerDefinition implements BannerDefinitionModifier {
         return address;
     }
 
-    @Override
     public String getContent() {
         return value;
     }
 
-    @Override
-    public BannerDefinitionModifier setContent(String value) {
+    public BannerDefinition setContent(String value) {
         this.value = value;
         return this;
     }
 
-    @Override
-    public BannerDefinitionModifier setCellStyle(CellStyle style) {
+    public BannerDefinition setCellStyle(CellStyle style) {
         this.cellStyle = style;
         return this;
     }
 
-    @Override
-    public BannerDefinitionModifier setRange(CellRangeAddress cellRangeAddress) {
+    public BannerDefinition setRange(CellRangeAddress cellRangeAddress) {
         this.rangeAddress = cellRangeAddress;
         return this;
     }
 
-    @Override
-    public BannerDefinitionModifier setRange(int row1, int row2, int col1, int col2) {
+    public BannerDefinition setRange(int row1, int row2, int col1, int col2) {
         this.rangeAddress = new CellRangeAddress(row1, row2, col1, col2);
         return null;
     }

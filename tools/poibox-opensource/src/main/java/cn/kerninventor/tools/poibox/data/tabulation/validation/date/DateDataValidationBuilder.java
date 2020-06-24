@@ -1,9 +1,8 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.date;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationBeanConfiguration;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.TabulationDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
-import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -30,6 +29,16 @@ public class DateDataValidationBuilder extends AbstractDvBuilder<DateDataValid> 
     }
 
     @Override
+    protected String getPromptBoxMessage() {
+        return getAnnotation().promptMessage();
+    }
+
+    @Override
+    protected String getErrorBoxMessage() {
+        return getAnnotation().errorMessage();
+    }
+
+    @Override
     protected DataValidationConstraint createDvConstraint(DataValidationHelper dvHelper) {
         DateDataValid dateDataValid = getAnnotation();
         DataValidationConstraint dvConstraint = dvHelper.createDateConstraint(
@@ -42,15 +51,9 @@ public class DateDataValidationBuilder extends AbstractDvBuilder<DateDataValid> 
     }
 
     @Override
-    protected void setBoxMessage(DataValidation dataValidation) {
-        dataValidation.createPromptBox(getPromptBoxName(), getAnnotation().promptMessage());
-        dataValidation.createPromptBox(getErrorBoxName(), getAnnotation().errorMessage());
-    }
-
-    @Override
-    public void setDataValidation(TabulationBeanConfiguration tableContext, ColumnDefinition columnDefinition, Sheet sheet) {
+    public void setDataValidation(TabulationDefinition tabulationDefinition, ColumnDefinition columnDefinition, Sheet sheet) {
         annotationValid(columnDefinition, getAnnotation());
-        super.setDataValidation(tableContext, columnDefinition, sheet);
+        super.setDataValidation(tabulationDefinition, columnDefinition, sheet);
     }
 
     private void annotationValid(ColumnDefinition columnDefinition, DateDataValid dateDataValid) {

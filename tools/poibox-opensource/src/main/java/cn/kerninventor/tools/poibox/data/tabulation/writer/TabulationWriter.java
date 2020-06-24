@@ -1,6 +1,6 @@
 package cn.kerninventor.tools.poibox.data.tabulation.writer;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationConfiguration;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.TabulationDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslator;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -30,6 +30,6 @@ public interface TabulationWriter<T> {
 
     TabulationWriter<T> withAllColumnDataTranslator(Map<String, ColumnDataTranslator> columnDataTranslatorMap);
 
-    TabulationConfiguration getConfiguration();
+    TabulationDefinition getTabulationDefinition();
 
 }

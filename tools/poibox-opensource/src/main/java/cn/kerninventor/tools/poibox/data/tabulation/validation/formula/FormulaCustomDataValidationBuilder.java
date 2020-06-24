@@ -1,7 +1,6 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.formula;
 
 import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
-import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 
@@ -17,16 +16,20 @@ public class FormulaCustomDataValidationBuilder extends AbstractDvBuilder<Formul
     }
 
     @Override
+    protected String getPromptBoxMessage() {
+        return getAnnotation().promptMessage();
+    }
+
+    @Override
+    protected String getErrorBoxMessage() {
+        return getAnnotation().errorMessage();
+    }
+
+    @Override
     protected DataValidationConstraint createDvConstraint(DataValidationHelper dvHelper) {
         FormulaCustomDataValid formulaCustomDataValid = getAnnotation();
         DataValidationConstraint dvConstraint = dvHelper.createCustomConstraint(formulaCustomDataValid.formula());
         return dvConstraint;
-    }
-
-    @Override
-    protected void setBoxMessage(DataValidation dataValidation) {
-        dataValidation.createPromptBox(getPromptBoxName(), getAnnotation().promptMessage());
-        dataValidation.createPromptBox(getErrorBoxName(), getAnnotation().errorMessage());
     }
 
 }

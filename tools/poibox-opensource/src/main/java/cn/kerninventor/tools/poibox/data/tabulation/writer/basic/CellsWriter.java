@@ -1,4 +1,4 @@
-package cn.kerninventor.tools.poibox.data.tabulation.writer;
+package cn.kerninventor.tools.poibox.data.tabulation.writer.basic;
 
 import org.apache.poi.ss.usermodel.Cell;
 

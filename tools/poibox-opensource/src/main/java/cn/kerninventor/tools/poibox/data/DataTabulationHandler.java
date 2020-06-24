@@ -2,10 +2,11 @@ package cn.kerninventor.tools.poibox.data;
 
 import cn.kerninventor.tools.poibox.BoxBracket;
 import cn.kerninventor.tools.poibox.Poibox;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationBeanConfiguration;
-import cn.kerninventor.tools.poibox.data.tabulation.reader.ETabulationReader;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.TabulationClassParser;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.TabulationDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.reader.ExcelTabulationReader;
 import cn.kerninventor.tools.poibox.data.tabulation.reader.TabulationReader;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.table.ETabulationWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.ExcelTabulationWriter;
 import cn.kerninventor.tools.poibox.data.tabulation.writer.TabulationWriter;
 
 /**
@@ -20,14 +21,14 @@ public final class DataTabulationHandler extends BoxBracket implements DataTabul
 
     @Override
     public <T> TabulationWriter<T> writer(Class<T> sourceClass) {
-        TabulationBeanConfiguration<T> context = new TabulationBeanConfiguration<T>(sourceClass, getParent());
-        return new ETabulationWriter<T>(context);
+        TabulationDefinition<T> tabulationDefinition = new TabulationClassParser().parse(sourceClass, getParent());
+        return new ExcelTabulationWriter<T>(tabulationDefinition);
     }
 
     @Override
     public <T> TabulationReader<T> reader(Class<T> sourceClass) {
-        TabulationBeanConfiguration<T> context = new TabulationBeanConfiguration<T>(sourceClass, getParent());
-        return new ETabulationReader<T>(context);
+        TabulationDefinition<T> tabulationDefinition = new TabulationClassParser().parse(sourceClass, getParent());
+        return new ExcelTabulationReader<T>(tabulationDefinition);
     }
 
 }

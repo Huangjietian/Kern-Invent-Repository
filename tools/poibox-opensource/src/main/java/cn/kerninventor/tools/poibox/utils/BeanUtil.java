@@ -40,4 +40,10 @@ public class BeanUtil {
     public static boolean isNull(Object obj) {
         return obj == null;
     }
+
+    public static void isTrue(boolean trueStatement, String errorMessage) {
+        if (!trueStatement) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+    }
 }

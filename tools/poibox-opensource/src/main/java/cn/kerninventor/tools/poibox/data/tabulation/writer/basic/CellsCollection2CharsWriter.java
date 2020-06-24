@@ -1,6 +1,5 @@
-package cn.kerninventor.tools.poibox.data.tabulation.writer.cells;
+package cn.kerninventor.tools.poibox.data.tabulation.writer.basic;
 
-import cn.kerninventor.tools.poibox.data.tabulation.writer.CellsWriter;
 import cn.kerninventor.tools.poibox.exception.IllegalColumnConfigureException;
 import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -14,7 +13,7 @@ import java.util.StringJoiner;
  * @date 2020/5/6 11:36
  * @description
  */
-public class Collection2CharsCellsWriter implements CellsWriter {
+public class CellsCollection2CharsWriter implements CellsWriter {
 
     @Override
     public void supportedDataType(Field field) {

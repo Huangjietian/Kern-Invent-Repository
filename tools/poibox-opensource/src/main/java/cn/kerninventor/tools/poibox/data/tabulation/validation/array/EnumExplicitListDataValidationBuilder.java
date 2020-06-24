@@ -2,7 +2,6 @@ package cn.kerninventor.tools.poibox.data.tabulation.validation.array;
 
 import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
 import cn.kerninventor.tools.poibox.exception.IllegalColumnConfigureException;
-import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 
@@ -20,6 +19,16 @@ public class EnumExplicitListDataValidationBuilder extends AbstractDvBuilder<Enu
     }
 
     @Override
+    protected String getPromptBoxMessage() {
+        return getAnnotation().promptMessage();
+    }
+
+    @Override
+    protected String getErrorBoxMessage() {
+        return getAnnotation().errorMessage();
+    }
+
+    @Override
     protected DataValidationConstraint createDvConstraint(DataValidationHelper dvHelper) {
         EnumExplicitListDataValid enumExplicitListDataValid = getAnnotation();
         Class enumClazz = enumExplicitListDataValid.enumClass();
@@ -30,12 +39,6 @@ public class EnumExplicitListDataValidationBuilder extends AbstractDvBuilder<Enu
         String[] list = Arrays.stream(explicitLists).map(EnumExplicitList::explicitList).toArray(String[]::new);
         DataValidationConstraint dvConstraint = dvHelper.createExplicitListConstraint(list);
         return dvConstraint;
-    }
-
-    @Override
-    protected void setBoxMessage(DataValidation dataValidation) {
-        dataValidation.createPromptBox(getPromptBoxName(), getAnnotation().promptMessage());
-        dataValidation.createErrorBox(getErrorBoxName(), getAnnotation().errorMessage());
     }
 
 }

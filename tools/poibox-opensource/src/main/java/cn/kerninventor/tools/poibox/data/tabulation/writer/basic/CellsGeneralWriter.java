@@ -1,7 +1,6 @@
-package cn.kerninventor.tools.poibox.data.tabulation.writer.cells;
+package cn.kerninventor.tools.poibox.data.tabulation.writer.basic;
 
 import cn.kerninventor.tools.poibox.data.tabulation.enums.SupportedDataType;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.CellsWriter;
 import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
 import org.apache.poi.ss.usermodel.Cell;
@@ -13,7 +12,7 @@ import java.lang.reflect.Field;
  * @date 2020/3/17 11:00
  * @description TODO
  */
-public class GeneralCellsWriter implements CellsWriter {
+public class CellsGeneralWriter implements CellsWriter {
 
     @Override
     public void supportedDataType(Field field) {

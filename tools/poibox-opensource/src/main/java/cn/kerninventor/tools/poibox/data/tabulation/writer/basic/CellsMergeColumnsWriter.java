@@ -1,7 +1,6 @@
-package cn.kerninventor.tools.poibox.data.tabulation.writer.cells;
+package cn.kerninventor.tools.poibox.data.tabulation.writer.basic;
 
 import cn.kerninventor.tools.poibox.data.tabulation.enums.SupportedDataType;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.CellsWriter;
 import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
 import cn.kerninventor.tools.poibox.layout.LayoutHandler;
 import cn.kerninventor.tools.poibox.layout.Layouter;
@@ -16,7 +15,7 @@ import java.lang.reflect.Field;
  * @author Kern
  * @date 2020/3/17 10:28
  */
-public class MergeAbleCellsWriter implements CellsWriter {
+public class CellsMergeColumnsWriter implements CellsWriter {
 
     private Sheet sheet;
     private Integer columnIdx;

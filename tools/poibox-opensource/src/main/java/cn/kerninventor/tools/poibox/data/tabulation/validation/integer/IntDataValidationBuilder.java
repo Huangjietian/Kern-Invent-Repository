@@ -1,9 +1,8 @@
 package cn.kerninventor.tools.poibox.data.tabulation.validation.integer;
 
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationBeanConfiguration;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.TabulationDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.validation.AbstractDvBuilder;
-import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,6 +15,16 @@ public class IntDataValidationBuilder extends AbstractDvBuilder<IntDataValid> {
 
     public IntDataValidationBuilder(IntDataValid intDataValid) {
         super(intDataValid);
+    }
+
+    @Override
+    protected String getPromptBoxMessage() {
+        return getAnnotation().promptMessage();
+    }
+
+    @Override
+    protected String getErrorBoxMessage() {
+        return getAnnotation().errorMessage();
     }
 
     @Override
@@ -32,13 +41,7 @@ public class IntDataValidationBuilder extends AbstractDvBuilder<IntDataValid> {
     }
 
     @Override
-    protected void setBoxMessage(DataValidation dataValidation) {
-        dataValidation.createPromptBox(getPromptBoxName(), getAnnotation().promptMessage());
-        dataValidation.createPromptBox(getErrorBoxName(), getAnnotation().errorMessage());
-    }
-
-    @Override
-    public void setDataValidation(TabulationBeanConfiguration tableContext, ColumnDefinition columnDefinition, Sheet sheet) {
+    public void setDataValidation(TabulationDefinition tableContext, ColumnDefinition columnDefinition, Sheet sheet) {
         annotationValid(columnDefinition, getAnnotation());
         super.setDataValidation(tableContext, columnDefinition, sheet);
     }

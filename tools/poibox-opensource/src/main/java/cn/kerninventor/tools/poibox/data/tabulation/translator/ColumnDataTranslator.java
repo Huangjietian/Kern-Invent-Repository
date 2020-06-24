@@ -11,11 +11,12 @@ public interface ColumnDataTranslator<K, V> {
 
     K getKey(V value, String tag);
 
+    default K getDefaultKey() {
+        return null;
+    }
+
     default V getDefaultValue() {
         return null;
     }
 
-    default K getDefaultKey() {
-        return null;
-    }
 }

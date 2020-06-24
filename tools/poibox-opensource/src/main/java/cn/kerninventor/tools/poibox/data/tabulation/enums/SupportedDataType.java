@@ -1,9 +1,9 @@
 package cn.kerninventor.tools.poibox.data.tabulation.enums;
 
 
-import cn.kerninventor.tools.poibox.data.tabulation.writer.CellsWriter;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.cells.GeneralCellsWriter;
-import cn.kerninventor.tools.poibox.data.tabulation.writer.cells.MergeAbleCellsWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.basic.CellsWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.basic.CellsGeneralWriter;
+import cn.kerninventor.tools.poibox.data.tabulation.writer.basic.CellsMergeColumnsWriter;
 import cn.kerninventor.tools.poibox.exception.IllegalColumnConfigureException;
 import cn.kerninventor.tools.poibox.exception.UnSupportedDataTypeException;
 
@@ -69,7 +69,7 @@ public enum SupportedDataType {
      */
     public static void checkSupportability(Field field, CellsWriter cellsWriter) {
         boolean isSupportedType = SupportedDataType.isSupportedType(field);
-        if (!isSupportedType && (cellsWriter instanceof GeneralCellsWriter || cellsWriter instanceof MergeAbleCellsWriter)) {
+        if (!isSupportedType && (cellsWriter instanceof CellsGeneralWriter || cellsWriter instanceof CellsMergeColumnsWriter)) {
             throw new UnSupportedDataTypeException("" +
                     "The Field data type is not supported when using the GeneralColWriter or MergeAbleColWriter!" +
                     System.lineSeparator() +

@@ -1,10 +1,10 @@
 package cn.kerninventor.tools.poibox.data.tabulation.reader;
 
-import cn.kerninventor.tools.poibox.data.tabulation.translator.AbstractColumnDataTranslator;
-import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslate;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.ColumnDefinition;
+import cn.kerninventor.tools.poibox.data.tabulation.definition.TabulationDefinition;
 import cn.kerninventor.tools.poibox.data.tabulation.translator.ColumnDataTranslator;
-import cn.kerninventor.tools.poibox.data.tabulation.context.ColumnDefinition;
-import cn.kerninventor.tools.poibox.data.tabulation.context.TabulationBeanConfiguration;
+import cn.kerninventor.tools.poibox.data.tabulation.translator.ReadTranslatorManager;
+import cn.kerninventor.tools.poibox.data.tabulation.translator.TranslatorManager;
 import cn.kerninventor.tools.poibox.exception.IllegalSourceClassOfTabulationException;
 import cn.kerninventor.tools.poibox.utils.BeanUtil;
 import cn.kerninventor.tools.poibox.utils.CellValueUtil;
@@ -20,40 +20,43 @@ import java.util.stream.Collectors;
  * @author Kern
  * @date 2020/3/12 19:13
  */
-public class ETabulationReader<T> extends AbstractColumnDataTranslator implements TabulationReader<T> {
+public class ExcelTabulationReader<T> implements TabulationReader<T> {
 
-    private TabulationBeanConfiguration tabContext;
+    private TabulationDefinition tabulationDefinition;
+
+    private TranslatorManager translatorManager;
 
     private List<BeanValidator<T, ?>> beanValidators;
 
-    public ETabulationReader(TabulationBeanConfiguration tableConfiguration) {
-        this.tabContext = Objects.requireNonNull(tableConfiguration);
+    public ExcelTabulationReader(TabulationDefinition tabulationDefinition) {
+        this.tabulationDefinition = Objects.requireNonNull(tabulationDefinition);
+        this.translatorManager = new ReadTranslatorManager();
     }
 
     @Override
     public List<T> readFrom(String sheetName) {
-        Sheet sheet = tabContext.getParent().workbook().getSheet(sheetName);
+        Sheet sheet = tabulationDefinition.getParent().workbook().getSheet(sheetName);
         return readFrom(sheet);
     }
 
     @Override
     public List<T> readFrom(int sheetAt) {
-        Sheet sheet = tabContext.getParent().workbook().getSheetAt(sheetAt);
+        Sheet sheet = tabulationDefinition.getParent().workbook().getSheetAt(sheetAt);
         return readFrom(sheet);
     }
 
     @Override
     public List<T> readFrom(Sheet sheet) {
         List<T> list = new ArrayList();
-        List<ColumnDefinition> columnDefinitions = tabContext.getColumnDefinitions();
-        for (int i = tabContext.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
+        List<ColumnDefinition> columnDefinitions = tabulationDefinition.getColumnDefinitions();
+        for (int i = tabulationDefinition.getTbodyFirstRowIndex(); i <= sheet.getLastRowNum() ; i ++) {
             T t = null;
             Class<T> tClass;
             try {
-                 tClass = tabContext.getTabulationClass();
+                 tClass = tabulationDefinition.getTabulationClass();
                 t = ReflectUtil.newInstance(tClass);
             } catch (Exception e) {
-                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + tabContext.getTabulationClass());
+                throw new IllegalSourceClassOfTabulationException("The tabulation Class Missing parameterless constructor! Class: " + tabulationDefinition.getTabulationClass());
             }
             Row row = sheet.getRow(i);
             if (row == null){
@@ -67,8 +70,8 @@ public class ETabulationReader<T> extends AbstractColumnDataTranslator implement
                     continue;
                 }
                 Object value = null;
-                value = CellValueUtil.getCellValueBySpecifiedType(cell, column.getFieldType());
-                value = translate(column.getColumnDataTranslate(), value);
+                value = CellValueUtil.getCellValueBySpecifiedType(cell, column.getField().getType());
+                value = translatorManager.translate(column.getColumnDataTranslate(), value);
                 if (null == value) {
                     nullCount++;
                 }
@@ -78,7 +81,7 @@ public class ETabulationReader<T> extends AbstractColumnDataTranslator implement
                     throw new IllegalArgumentException("Set value to Field error! Field: " + column.getFieldName());
                 }
             }
-            if (nullCount < tabContext.getColumnDefinitions().size()){
+            if (nullCount < tabulationDefinition.getColumnDefinitions().size()){
                 if (BeanUtil.isNotEmpty(beanValidators)) {
                     for (BeanValidator validator : beanValidators) {
                         validator.validate(t);
@@ -101,21 +104,14 @@ public class ETabulationReader<T> extends AbstractColumnDataTranslator implement
 
     @Override
     public TabulationReader<T> withColumnDataTranslator(String translatorName, ColumnDataTranslator columnDataTranslator) {
-        this.putTranslator(translatorName, columnDataTranslator);
+        this.translatorManager.putTranslator(translatorName, columnDataTranslator);
         return this;
     }
 
     @Override
     public TabulationReader<T> withAllColumnDataTranslator(Map<String, ColumnDataTranslator> columnDataTranslatorMap) {
-        this.putAllTranslator(columnDataTranslatorMap);
+        this.translatorManager.putAllTranslator(columnDataTranslatorMap);
         return this;
     }
 
-    @Override
-    public Object translate(ColumnDataTranslate translate, Object searchCondition) {
-        if (translate.open()) {
-            return getKey(translate.translator(), searchCondition, translate.tag(), translate.unmatchStrategy());
-        }
-        return searchCondition;
-    }
 }
