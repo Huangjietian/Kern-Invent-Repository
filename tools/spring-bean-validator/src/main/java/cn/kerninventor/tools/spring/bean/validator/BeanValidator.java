@@ -21,7 +21,7 @@ import java.util.Set;
 @Aspect
 public class BeanValidator {
 
-    @Around("@annotation(com.onesport.common.spring.beans.validator.BeanValidate)")
+    @Around("@annotation(BeanValidate)")
     public Object catching(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
