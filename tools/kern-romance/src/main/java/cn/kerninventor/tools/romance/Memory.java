@@ -16,8 +16,7 @@ import java.util.Objects;
  *                                                  --- Gabriel García Márquez
  * </p>
  *
- * @Author Kern
- * @Date 2020/2/27 14:25
+ * @author Kern
  */
 public abstract class Memory {
 
