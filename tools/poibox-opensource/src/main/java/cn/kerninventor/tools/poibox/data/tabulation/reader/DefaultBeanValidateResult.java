@@ -15,22 +15,12 @@ public class DefaultBeanValidateResult<T> {
         this.constraintViolations = constraintViolations;
     }
 
-    public void throwing(String separator){
-        if (separator == null) {
-            separator = "";
-        }
-        StringBuilder builder = new StringBuilder();
-        String finalSeparator = separator;
-        constraintViolations.forEach(e -> {
-            builder.append(e.getMessage()).append(finalSeparator);
-        });
-        throw new IllegalArgumentException(builder.toString());
+    public void throwing(String separator) throws Throwable {
+        throwing(separator, new IllegalArgumentException());
     }
 
     public void throwing(String separator, Throwable throwable) throws Throwable {
-        if (separator == null) {
-            separator = "";
-        }
+        separator = separator == null ? "" : separator;
         StringBuilder builder = new StringBuilder();
         String finalSeparator = separator;
         constraintViolations.forEach(e -> {
@@ -40,12 +30,8 @@ public class DefaultBeanValidateResult<T> {
         throw throwable;
     }
 
-    public void throwingLine(){
-        StringBuilder builder = new StringBuilder();
-        constraintViolations.forEach(e -> {
-            builder.append(e.getMessage()).append(" ").append(System.lineSeparator());
-        });
-        throw new IllegalArgumentException(builder.toString());
+    public void throwingLine() throws Throwable {
+        throwing(System.lineSeparator());
     }
 
     public Set<ConstraintViolation<T>> getConstraintViolations() {
