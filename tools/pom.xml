@@ -20,7 +20,7 @@
 
     <modules>
         <module>file-format</module>
-        <module>poibox-opensource</module>
+        <module>poibox</module>
         <module>data-structure</module>
         <module>web-image-uploader</module>
         <module>web-develop-utils</module>
@@ -30,6 +30,7 @@
         <module>kern-romance</module>
         <module>bean-convert</module>
         <module>common-utils</module>
+        <module>anno</module>
     </modules>
 
     <build>
