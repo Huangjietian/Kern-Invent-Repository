@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentMap;
 public class RuntimeChronograph implements Chronograph {
 
     private RuntimeUnit unit;
-
     private ConcurrentMap<Object, List<Long>> recordConcurrentMap;
 
     public RuntimeChronograph(RuntimeUnit unit) {
@@ -25,12 +24,22 @@ public class RuntimeChronograph implements Chronograph {
         this.recordConcurrentMap = new ConcurrentHashMap<>(16);
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     * @param message
-     * @return
-     */
+    @Override
+    public double click(String message) {
+        return click(this, message);
+    }
+
+    @Override
+    public double calculate(String message) {
+        return calculate(this, message);
+    }
+
+    @Override
+    public double calculate(String message, int firstTime, int lastTime) {
+        return calculate(this, message, firstTime, lastTime);
+    }
+
+    @Override
     public double click(Object marker, String message) {
         List<Long> times = recordConcurrentMap.computeIfAbsent(marker, k -> new ArrayList<>(16));
         times.add(System.nanoTime());
@@ -40,12 +49,7 @@ public class RuntimeChronograph implements Chronograph {
         return formula(times.get(times.size() -2), times.get(times.size() -1));
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     * @param message
-     * @return
-     */
+    @Override
     public double calculate(Object marker, String message) {
         List<Long> times = recordConcurrentMap.get(marker);
         if (times == null || times.isEmpty()) {
@@ -55,14 +59,6 @@ public class RuntimeChronograph implements Chronograph {
         return formula(nano1, System.nanoTime());
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     * @param message
-     * @param firstTime
-     * @param lastTime
-     * @return
-     */
     @Override
     public double calculate(Object marker, String message, int firstTime, int lastTime) {
         List<Long> times = recordConcurrentMap.get(marker);
@@ -72,19 +68,15 @@ public class RuntimeChronograph implements Chronograph {
         return formula(times.get(firstTime), times.get(lastTime));
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     */
-    @Override
     public void reset(Object marker) {
         recordConcurrentMap.remove(marker);
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @return
-     */
+    @Override
+    public void clear() {
+        recordConcurrentMap.clear();
+    }
+
     @Override
     public RuntimeUnit getUnit() {
         return unit;

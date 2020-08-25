@@ -25,12 +25,21 @@ public class ConsoleRuntimeChronograph implements Chronograph {
         return this;
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     * @param message
-     * @return
-     */
+    @Override
+    public double click(String message) {
+        return click(chronograph, message);
+    }
+
+    @Override
+    public double calculate(String message) {
+        return calculate(chronograph, message);
+    }
+
+    @Override
+    public double calculate(String message, int firstTime, int lastTime) {
+        return calculate(chronograph, message, firstTime, lastTime);
+    }
+
     @Override
     public double click(Object marker, String message) {
         double result = chronograph.click(marker, message);
@@ -38,12 +47,6 @@ public class ConsoleRuntimeChronograph implements Chronograph {
         return result;
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     * @param message
-     * @return
-     */
     @Override
     public double calculate(Object marker, String message) {
         double result = chronograph.calculate(marker, message);
@@ -51,14 +54,6 @@ public class ConsoleRuntimeChronograph implements Chronograph {
         return result;
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     * @param message
-     * @param firstTime
-     * @param lastTime
-     * @return
-     */
     @Override
     public double calculate(Object marker, String message, int firstTime, int lastTime) {
         double result = chronograph.calculate(marker, message, firstTime, lastTime);
@@ -66,19 +61,16 @@ public class ConsoleRuntimeChronograph implements Chronograph {
         return result;
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @param marker
-     */
     @Override
     public void reset(Object marker) {
         chronograph.reset(marker);
     }
 
-    /**
-     * 参考 {@link Chronograph}
-     * @return
-     */
+    @Override
+    public void clear() {
+        chronograph.clear();
+    }
+
     @Override
     public RuntimeUnit getUnit() {
         return chronograph.getUnit();
