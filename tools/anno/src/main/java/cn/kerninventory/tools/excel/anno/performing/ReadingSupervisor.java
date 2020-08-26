@@ -1,4 +1,4 @@
-package cn.kerninventory.tools.excel.anno.supervisor;
+package cn.kerninventory.tools.excel.anno.performing;
 
 /**
  * <p>
@@ -8,4 +8,6 @@ package cn.kerninventory.tools.excel.anno.supervisor;
  * @author Kern
  */
 public interface ReadingSupervisor extends PerformingSupervisor {
+
+    WritingSupervisor convert();
 }

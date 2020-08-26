@@ -10,4 +10,8 @@ package cn.kerninventory.tools.excel.anno.element;
 public @interface Caption {
 
     String value();
+
+    int subscribeStyle() default -1;
+
+    int subscribeFont() default -1;
 }

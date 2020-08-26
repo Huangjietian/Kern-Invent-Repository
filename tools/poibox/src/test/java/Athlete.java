@@ -67,6 +67,8 @@ public class Athlete {
 
     public static void main(String[] args) throws IOException {
         Poibox poibox = PoiboxFactory.open();
+
+
         poibox.dataTabulator().writer(Athlete.class)
                 .withFormulaList("country", Country.getCountries().stream().map(e -> e.getName()).collect(Collectors.toSet()))
                 .withFormulaList("sport", Sport.getSports().stream().map(e -> e.getName()).collect(Collectors.toSet()))

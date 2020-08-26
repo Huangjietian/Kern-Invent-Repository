@@ -10,9 +10,7 @@ import cn.kerninventory.tools.excel.anno.writer.Writer;
  */
 public interface ExcelKit {
 
-    <T> Writer callWriter(Class<T> excelBeanClass, SteamTarget steamTarget);
+    <T> Writer<T> callWriter(Class<T> tClass);
 
-    <T> Reader callReader(Class<T> excelBeanClass, SteamSource steamSource);
-
-    ExcelToolbox toolbox();
+    <T> Reader<T> callReader(Class<T> tClass, SteamSource source);
 }

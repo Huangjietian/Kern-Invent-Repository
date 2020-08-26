@@ -5,7 +5,7 @@ package cn.kerninventory.tools.excel.anno.reader;
  *
  * @author Kern
  */
-public class ReadResult {
+public class ReadResult <T> {
 
 
     class TextBoxReadResult {

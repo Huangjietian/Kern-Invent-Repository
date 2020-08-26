@@ -1,4 +1,4 @@
-package cn.kerninventory.tools.excel.anno.supervisor;
+package cn.kerninventory.tools.excel.anno.performing;
 
 /**
  * <p>一句话描述</p>
@@ -6,6 +6,8 @@ package cn.kerninventory.tools.excel.anno.supervisor;
  * @author Kern
  */
 public interface PerformingSupervisor {
+
+
 
     /**
      * 通用的布局和样式

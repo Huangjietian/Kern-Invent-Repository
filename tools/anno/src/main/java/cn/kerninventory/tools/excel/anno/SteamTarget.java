@@ -14,14 +14,13 @@ public abstract class SteamTarget {
         return new HttpResponseSteamTarget(httpServletResponse);
     }
 
-    public abstract void output();
-
     public static SteamTarget of(String localFilePath) {
         //TODO 校验文件名是否具有正常的后缀
         File file = new File(localFilePath);
         return new LocalFileSteamTarget(file);
     }
 
+    public abstract void output();
 
     static class HttpResponseSteamTarget extends SteamTarget {
         HttpServletResponse response;

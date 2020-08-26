@@ -8,4 +8,5 @@ package cn.kerninventory.tools.excel.anno;
  * @author Kern
  */
 public class ExcelToolbox {
+
 }

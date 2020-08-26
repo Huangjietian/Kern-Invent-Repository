@@ -10,8 +10,19 @@ package cn.kerninventory.tools.excel.anno.element;
 public @interface Column {
 
     /**
-     * TODO 借鉴easy-excel，采用多级表头的形式
+     * <p>
+     *     Content of the header.
+     * </p>
+     * <p>
+     *     Using easy- Excel for reference, adopt the form of multi - stage header.
+     * </p>
      * @return
      */
     String[] value();
+
+    int subscribeStyle() default -1;
+
+    int subscribeFont() default -1;
+
+
 }
