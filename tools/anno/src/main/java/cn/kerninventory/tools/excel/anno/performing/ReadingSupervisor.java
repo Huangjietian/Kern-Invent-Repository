@@ -7,7 +7,13 @@ package cn.kerninventory.tools.excel.anno.performing;
  *
  * @author Kern
  */
-public interface ReadingSupervisor extends PerformingSupervisor {
+public class ReadingSupervisor extends PerformingSupervisorHolder {
 
-    WritingSupervisor convert();
+    public ReadingSupervisor(PerformingSupervisor performingSupervisor) {
+        super(performingSupervisor);
+    }
+
+    public WritingSupervisor convert() {
+        return new WritingSupervisor(performingSupervisor);
+    }
 }

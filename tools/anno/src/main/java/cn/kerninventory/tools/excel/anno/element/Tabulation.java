@@ -10,22 +10,34 @@ package cn.kerninventory.tools.excel.anno.element;
 public @interface Tabulation {
 
     /**
+     * 默认的sheet页名
+     * @return
+     */
+    String value() default "sheet1";
+
+    /**
      * 定义表头行行高
      * @return
      */
-    float theadRowHeight() default 15.0f;
+    float headRowHeight() default 15.0f;
 
     /**
      * 定义表体行行高
      * @return
      */
-    float tbodyRowHeight() default 15.0f;
+    float bodyRowHeight() default 15.0f;
 
     /**
      * 定义起始行
      * @return
      */
     int startRowIndex() default 0;
+
+    /**
+     * 定义起始列
+     * @return
+     */
+    int startColumnIndex() default 0;
 
     /**
      * 定义表体配置有效行数

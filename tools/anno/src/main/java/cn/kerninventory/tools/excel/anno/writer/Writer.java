@@ -14,6 +14,15 @@ import java.util.List;
  */
 public interface Writer <T> {
 
+    /**
+     * 是否在写入时覆盖已有的sheet页
+     * true -> 删除重名的sheet页，重新创建
+     * false -> throw new Exception();
+     * @param cover
+     * @return
+     */
+    Writer<T> setCovered(boolean cover);
+
     Workbook getWorkbook();
 
     Reader<T> convert();
