@@ -38,4 +38,5 @@ public interface Writer <T> {
     Writer<T> write(String sheetName, List<T> tList, WritingSupervisor supervisor);
 
     Writer<T> output(SteamTarget target);
+
 }
