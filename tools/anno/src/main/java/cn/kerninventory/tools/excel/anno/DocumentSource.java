@@ -13,11 +13,11 @@ import java.io.InputStream;
  *
  * @author Kern
  */
-public class SteamSource {
+public final class DocumentSource {
 
     private Workbook workbook;
 
-    private SteamSource(Workbook workbook) {
+    private DocumentSource(Workbook workbook) {
         this.workbook = workbook;
     }
 
@@ -25,19 +25,19 @@ public class SteamSource {
         return workbook;
     }
 
-    public static SteamSource of(String filePath) throws IOException {
+    public static DocumentSource of(String filePath) throws IOException {
         return of(new File(filePath));
     }
 
-    public static SteamSource of(File file) throws IOException {
+    public static DocumentSource of(File file) throws IOException {
         return of(new FileInputStream(file));
     }
 
-    public static SteamSource of(InputStream inputStream) throws IOException {
+    public static DocumentSource of(InputStream inputStream) throws IOException {
         return of(WorkbookFactory.create(inputStream));
     }
 
-    public static SteamSource of(Workbook workbook) {
-        return new SteamSource(workbook);
+    public static DocumentSource of(Workbook workbook) {
+        return new DocumentSource(workbook);
     }
 }

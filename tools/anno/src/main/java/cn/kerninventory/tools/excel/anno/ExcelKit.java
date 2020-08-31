@@ -1,6 +1,6 @@
 package cn.kerninventory.tools.excel.anno;
 
-import cn.kerninventory.tools.excel.anno.enums.ExcelType;
+import cn.kerninventory.tools.excel.anno.constants.DocumentType;
 import cn.kerninventory.tools.excel.anno.reader.Reader;
 import cn.kerninventory.tools.excel.anno.writer.Writer;
 
@@ -11,7 +11,7 @@ import cn.kerninventory.tools.excel.anno.writer.Writer;
  */
 public interface ExcelKit {
 
-    <T> Writer<T> callWriter(Class<T> tClass, ExcelType excelType);
+    <T> Writer<T> callWriter(Class<T> tClass, DocumentType documentType);
 
-    <T> Reader<T> callReader(Class<T> tClass, SteamSource source);
+    <T> Reader<T> callReader(Class<T> tClass, DocumentSource source);
 }
