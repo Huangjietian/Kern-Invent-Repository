@@ -8,7 +8,7 @@ import cn.kerninventory.tools.excel.anno.reader.Reader;
  *
  * @author Kern
  */
-public interface Writer <T> {
+public interface Writer<T> extends WriteBreakpoint {
 
     /**
      * 是否在写入时覆盖已有的sheet页
@@ -21,8 +21,6 @@ public interface Writer <T> {
 
     Reader<T> convert();
 
-    <E> Writer<E> rebind(Class<E> tClass);
-
 //    Writer<T> write(WritingSupervisor supervisor);
 //
 //    Writer<T> write(List<T> tList, WritingSupervisor supervisor);
@@ -31,6 +29,8 @@ public interface Writer <T> {
 //
 //    Writer<T> write(String sheetName, List<T> tList, WritingSupervisor supervisor);
 
-    Writer<T> output(Appender... appenders);
+    WriteBreakpoint output(Appender... appenderArr);
+
+
 
 }

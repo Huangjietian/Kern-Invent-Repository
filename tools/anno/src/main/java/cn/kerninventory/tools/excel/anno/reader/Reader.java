@@ -7,11 +7,9 @@ import cn.kerninventory.tools.excel.anno.writer.Writer;
  *
  * @author Kern
  */
-public interface Reader <T> {
+public interface Reader<T> {
 
     Writer<T> convert();
-
-    <E> Reader<E> rebind(Class<E> tClass);
 
 //    Reader<T> read(ReadingSupervisor supervisor, ReadResult<T> readResult);
 //
@@ -19,5 +17,5 @@ public interface Reader <T> {
 //
 //    Reader<T> read(String sheetName, ReadingSupervisor supervisor, ReadResult<T> readResult);
 
-
+    ReadBreakpoint breakOff();
 }

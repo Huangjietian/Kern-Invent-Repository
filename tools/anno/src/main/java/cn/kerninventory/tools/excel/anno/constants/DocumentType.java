@@ -1,5 +1,9 @@
 package cn.kerninventory.tools.excel.anno.constants;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  * <p>
  *     Excel document type enums.
@@ -23,10 +27,18 @@ public enum  DocumentType {
         return description;
     }
 
+    public Workbook createWorkbook() {
+        if (DocumentType.XLSX == this) {
+            return new XSSFWorkbook();
+        } else {
+            return new HSSFWorkbook();
+        }
+    }
+
     @Override
     public String toString() {
         return "DocumentType{" +
-                "description='" + description + '\'' +
+                "description='" + getDescription() + '\'' +
                 '}';
     }
 }
