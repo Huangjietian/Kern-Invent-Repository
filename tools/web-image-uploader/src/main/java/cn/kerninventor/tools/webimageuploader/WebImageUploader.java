@@ -85,7 +85,7 @@ public class WebImageUploader {
         //读取
         byte[] buffer = readSource(source);
         //写入
-        File file = coverWirteToFile(imagePath, buffer);
+        File file = coverWriteToFile(imagePath, buffer);
         image.setOriginalName(file.getName());
         image.setOriginalPath(imagePath);//原图路径
         image.setOriginalSize(buffer.length);//原图大小
@@ -132,7 +132,7 @@ public class WebImageUploader {
         }
     }
 
-    public File coverWirteToFile(String path, byte[] buffer) throws IOException {
+    public File coverWriteToFile(String path, byte[] buffer) throws IOException {
         if (maxFileSize != null && ByteSize.compareTo(maxFileSize, buffer.length) < 0){
             throw new IOException("图片大小超过最大限制:" + maxFileSize + "MB");
         }
