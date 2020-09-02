@@ -7,6 +7,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.Validator;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -20,6 +21,8 @@ import java.util.Set;
  */
 @Aspect
 public class BeanValidator {
+
+    private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Around("@annotation(BeanValidate)")
     public Object catching(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -55,6 +58,6 @@ public class BeanValidator {
     }
 
     public static <T> Set<ConstraintViolation<T>> validating(T bean) {
-        return Validation.buildDefaultValidatorFactory().getValidator().validate(bean);
+        return validator.validate(bean);
     }
 }
