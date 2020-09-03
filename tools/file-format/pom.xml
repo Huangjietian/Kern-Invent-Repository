@@ -17,19 +17,19 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <!--        以下配置和properties块中的效果一致，properties中的配置是该配置的简单写法-->
-                <!--                <configuration>-->
-                <!--                    <source>1.8</source>-->
-                <!--                    <target>1.8</target>-->
-                <!--                    <encoding>utf-8</encoding>-->
-                <!--                </configuration>-->
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                &lt;!&ndash;        以下配置和properties块中的效果一致，properties中的配置是该配置的简单写法&ndash;&gt;-->
+<!--                &lt;!&ndash;                <configuration>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <source>1.8</source>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <target>1.8</target>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <encoding>utf-8</encoding>&ndash;&gt;-->
+<!--                &lt;!&ndash;                </configuration>&ndash;&gt;-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>
