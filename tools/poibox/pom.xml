@@ -12,7 +12,7 @@ License:
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.kerninventor</groupId>
-    <artifactId>poibox-opensource</artifactId>
+    <artifactId>poibox</artifactId>
     <version>1.0.0-RELEASE</version>
 
     <properties>
