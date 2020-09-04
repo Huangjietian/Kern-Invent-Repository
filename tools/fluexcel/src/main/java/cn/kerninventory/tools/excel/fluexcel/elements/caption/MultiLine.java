@@ -17,9 +17,4 @@ public @interface MultiLine {
      */
     Style globalStyle() default @Style;
 
-    /**
-     * 是否位于底部
-     * @return
-     */
-    boolean bottom() default false;
 }

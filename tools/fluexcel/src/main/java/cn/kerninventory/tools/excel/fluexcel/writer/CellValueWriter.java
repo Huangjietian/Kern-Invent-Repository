@@ -9,6 +9,8 @@ import javafx.scene.control.Cell;
  */
 public interface CellValueWriter {
 
-    void doWrite(Cell cell, Object value);
+
+
+    void setCellValue(Cell cell, Object value);
 
 }

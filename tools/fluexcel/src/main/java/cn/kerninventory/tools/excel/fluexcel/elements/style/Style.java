@@ -86,10 +86,4 @@ public @interface Style {
      */
     boolean hidden() default false;
 
-    /**
-     * 应用于caption->line->multiLine 元素内时，使用该权值判断元素有限采用何种风格
-     * @return
-     */
-    int priority() default 0;
-
 }

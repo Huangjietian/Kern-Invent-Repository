@@ -13,8 +13,8 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Caption {
+@Target({ElementType.PARAMETER})
+public @interface Section {
 
     /**
      * 内容
@@ -23,16 +23,10 @@ public @interface Caption {
     String value();
 
     /**
-     * 风格订阅
+     * 风格
      * @return
      */
     Style style() default @Style;
-
-    /**
-     * 起始列
-     * @return
-     */
-    int colStart() default 0;
 
     /**
      * 结束列
@@ -40,21 +34,4 @@ public @interface Caption {
      */
     int colEnd() default Integer.MAX_VALUE;
 
-    /**
-     * 长度
-     * @return
-     */
-    int length() default 0;
-
-    /**
-     * 占据的行数
-     * @return
-     */
-    int height() default 1;
-
-    /**
-     * 是否位于底部
-     * @return
-     */
-    boolean bottom() default false;
 }
