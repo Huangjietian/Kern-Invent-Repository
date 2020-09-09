@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
 /**
+ * <p>
+ *     spring cloud 项目下， 服务间消息转发时头部参数的复制
+ * </p>
  * @author Kern
- * @date 2020/5/12 16:17
- * @description
  */
 public abstract class ArgumentsOverRequestInterceptAdapter implements RequestInterceptor {
 
