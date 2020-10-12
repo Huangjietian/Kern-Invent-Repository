@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class RegularUtil {
 
-    public static boolean matche(String str, String regex) {
+    public static boolean match(String str, String regex) {
         return Pattern.compile(regex).matcher(str).matches();
     }
 
@@ -26,7 +26,7 @@ public class RegularUtil {
      */
     public static boolean isEmail(String email) {
         String regex = "^([a-z0-9_.-]+)@([\\da-z.-]+)\\.([a-z.]{2,6})$";
-        return matche(email, regex);
+        return match(email, regex);
     }
 
     /**
@@ -38,7 +38,7 @@ public class RegularUtil {
      */
     public static boolean isMobileNumber(String phone) {
         String regex = "^1([3-8])\\d{9}$";
-        return matche(phone, regex);
+        return match(phone, regex);
     }
 
     /**
@@ -50,7 +50,7 @@ public class RegularUtil {
      */
     public static boolean isTelPhone(String tel) {
         String regex = "^(0[0-9]{2,3}-)?([2-9][0-9]{6,7})+(-[0-9]{1,4})?$";
-        return matche(tel, regex);
+        return match(tel, regex);
     }
 
     /**
@@ -62,7 +62,7 @@ public class RegularUtil {
      */
     public static boolean isPostCode(String postCode) {
         String regex = "^\\d{6}$";
-        return matche(postCode, regex);
+        return match(postCode, regex);
     }
 
     /**
@@ -74,7 +74,7 @@ public class RegularUtil {
      */
     public static boolean isNumber(String number) {
         String regex = "^(-?\\d+)(\\.\\d+)?$";
-        return matche(number, regex);
+        return match(number, regex);
     }
 
     /**
@@ -87,8 +87,8 @@ public class RegularUtil {
     public static boolean isZhIdentityCard(String identityCard) {
         String regex = "(^[1-9]\\d{5}(18|19|20)\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|" +
                 "(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}$)";
-        boolean matches = matche(identityCard, regex);
-        if (matches) {
+        boolean matchs = match(identityCard, regex);
+        if (matchs) {
             if (StringUtil.matchLength(identityCard, 18)) {
                 try {
                     char[] charArray = identityCard.toCharArray();
@@ -113,7 +113,7 @@ public class RegularUtil {
                 }
             }
         }
-        return matches;
+        return matchs;
     }
 
     /**
@@ -169,6 +169,6 @@ public class RegularUtil {
     public static boolean isHttpUrl(String httpUrl) {
         String regex = "(((https|http)?://)?([a-z0-9]+[.])|(www.))"
                 + "\\w+[.|\\/]([a-z0-9]{0,})?[[.]([a-z0-9]{0,})]+((/[\\S&&[^,;\u4E00-\u9FA5]]+)+)?([.][a-z0-9]{0,}+|/?)";
-        return matche(httpUrl, regex);
+        return match(httpUrl, regex);
     }
 }

@@ -45,7 +45,22 @@ public final class FileFormatValidator {
      * @throws IllegalFileFormatException
      */
     public static boolean validate(InputStream stream, String fileName, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
-        return validate(stream, fileFormatTypes) && FileFormatType.isCorrectSuffix(fileName, fileFormatTypes);
+        return validate(stream, false, fileFormatTypes) && FileFormatType.isCorrectSuffix(fileName, fileFormatTypes);
+    }
+
+    /**
+     * <p>
+     *     通过传入的文件输入流，文件名，文件格式枚举数组，判断该文件是否符合该文件格式枚举数组中的其中一个格式，符合的话返回true
+     * </p>
+     * @param stream
+     * @param keepStream 是否保留输入流, 如果true, InputStream的实际类型将转换为 {@link ByteArrayInputStream}
+     * @param fileName
+     * @param fileFormatTypes
+     * @return
+     * @throws IllegalFileFormatException
+     */
+    public static boolean validate(InputStream stream, boolean keepStream, String fileName, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
+        return validate(stream, keepStream, fileFormatTypes) && FileFormatType.isCorrectSuffix(fileName, fileFormatTypes);
     }
 
     /**
@@ -59,9 +74,46 @@ public final class FileFormatValidator {
      * @throws IllegalFileFormatException
      */
     public static boolean validate(InputStream stream, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
-        String header = getFileHeader(stream);
+        return validate(stream, false, fileFormatTypes);
+    }
+
+    /**
+     * <p>
+     *     通过传入的文件输入流，文件格式枚举数组，判断该文件是否符合该文件格式枚举数组中的其中一个格式，符合的话返回true<br/>
+     *     如果已知文件名的情况下，建议调用含文件名参数的validate方法，本方法仅校验了文件流头部字节，缺少了文件后缀校验。
+     * </p>
+     * @param stream
+     * @param keepStream  是否保留输入流, 如果true, InputStream的实际类型将转换为 {@link ByteArrayInputStream}
+     * @param fileFormatTypes
+     * @return
+     * @throws IllegalFileFormatException
+     */
+    public static boolean validate(InputStream stream, boolean keepStream, FileFormatType... fileFormatTypes) throws IllegalFileFormatException {
+        InputStream stream1;
+        if (keepStream) {
+            stream1 = backupInputStream(stream);
+        } else {
+            stream1 = stream;
+        }
+        String header = getFileHeader(stream1);
         notBlank(header);
         return matchHeader(header, fileFormatTypes);
+    }
+
+    private static InputStream backupInputStream(InputStream source) throws IllegalFileFormatException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = source.read(buffer)) > -1) {
+                baos.write(buffer, 0, len);
+            }
+            baos.flush();
+        } catch (IOException e) {
+            throw new IllegalFileFormatException("File resolution error! " + e.getMessage(), e);
+        }
+        source = new ByteArrayInputStream(baos.toByteArray());
+        return new ByteArrayInputStream(baos.toByteArray());
     }
 
     private static String getFileHeader(InputStream stream) throws IllegalFileFormatException {
@@ -76,7 +128,7 @@ public final class FileFormatValidator {
                 try {
                     stream.close();
                 } catch (IOException e) {
-                    throw new IllegalFileFormatException("File resolution error! " + e.getMessage(), e);
+                    e.printStackTrace();
                 }
             }
         }
@@ -88,8 +140,8 @@ public final class FileFormatValidator {
             return null;
         }
         String hv;
-        for (int i = 0; i < src.length; i++) {
-            hv = Integer.toHexString(src[i] & 0xFF).toUpperCase();
+        for (byte b : src) {
+            hv = Integer.toHexString(b & 0xFF).toUpperCase();
             if (hv.length() < 2) {
                 builder.append(0);
             }
@@ -98,11 +150,10 @@ public final class FileFormatValidator {
         return builder.toString();
     }
 
-    private static String notBlank(String header) throws IllegalFileFormatException {
+    private static void notBlank(String header) throws IllegalFileFormatException {
         if (header == null || "".equals(header.replace("0", "").trim())){
             throw new IllegalFileFormatException("Empty file error!");
         }
-        return header;
     }
 
     private static boolean matchHeader(String header, FileFormatType... fileFormatTypes){
