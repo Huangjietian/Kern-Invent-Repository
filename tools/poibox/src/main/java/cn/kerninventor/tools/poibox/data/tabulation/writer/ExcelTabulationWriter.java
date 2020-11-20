@@ -85,7 +85,7 @@ public final class ExcelTabulationWriter<T> implements TabulationWriter<T> {
     private void writeformulaList(Sheet sheet) {
         Map<String, Set<String>> formulaListMap = getFormulaListMap();
         if (formulaListMap != null && !formulaListMap.isEmpty()){
-            formulaListMap.keySet().forEach(e -> FormulaListUtil.addFormulaList(sheet, FormulaListDataValid.NAME_PRIFIIX + e, formulaListMap.get(e)));
+            formulaListMap.keySet().forEach(e -> FormulaListUtil.addFormulaList(sheet, FormulaListDataValid.NAME_PREFIX + e, formulaListMap.get(e)));
             formulaListMap.clear();
         }
     }

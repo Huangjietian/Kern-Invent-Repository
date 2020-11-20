@@ -69,20 +69,19 @@ public class BannerDefinition {
     }
 
     public CellRangeAddress adjustCellRangeAddress(int startRowIndex, List<ColumnDefinition> columns) {
-        CellRangeAddress address = rangeAddress.copy();
         if (rangeAddress.getFirstRow() == Range.defaultVal) {
-            address.setFirstRow(startRowIndex);
+            rangeAddress.setFirstRow(startRowIndex);
         }
         if (rangeAddress.getLastRow() == Range.defaultVal) {
-            address.setLastRow(startRowIndex);
+            rangeAddress.setLastRow(startRowIndex);
         }
         if (rangeAddress.getFirstColumn() == Range.defaultVal) {
-            address.setFirstColumn(columns.get(0).getColumnIndex());
+            rangeAddress.setFirstColumn(columns.get(0).getColumnIndex());
         }
         if (rangeAddress.getLastColumn() == Range.defaultVal) {
-            address.setLastColumn(columns.get(columns.size() - 1).getColumnIndex());
+            rangeAddress.setLastColumn(columns.get(columns.size() - 1).getColumnIndex());
         }
-        return address;
+        return rangeAddress;
     }
 
     public String getContent() {

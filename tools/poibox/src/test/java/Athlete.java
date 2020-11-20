@@ -61,7 +61,7 @@ public class Athlete {
     @ExcelColumn("运动大项")
     private String sportCode;
 
-    @FormulaListDataValid(value = FormulaListDataValid.CASECADE_TAG + "sportCode")
+    @FormulaListDataValid(value = FormulaListDataValid.CASCADE_TAG + "sportCode")
     @ExcelColumn(value = "运动小项")
     private String discipilineCode;
 

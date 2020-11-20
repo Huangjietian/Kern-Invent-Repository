@@ -24,9 +24,9 @@ import java.util.Set;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FormulaListDataValid {
 
-    String NAME_PRIFIIX = "NAME_";
+    String NAME_PREFIX = "NAME_";
 
-    String CASECADE_TAG = "casecade:";
+    String CASCADE_TAG = "cascade:";
 
     /**
      * 指定一个函数列表的名称，该函数列表将在运行时由 {@link cn.kerninventor.tools.poibox.data.tabulation.writer.TabulationWriter#withFormulaList(String, Set)}方法输入，<br/>

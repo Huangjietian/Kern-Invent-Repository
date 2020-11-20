@@ -37,8 +37,8 @@ public class FormulaListDataValidationBuilder extends AbstractDvBuilder<FormulaL
         FormulaListDataValid formulaListDataValid = getAnnotation();
         String value = formulaListDataValid.value();
         DataValidationConstraint dvConstraint;
-        if (value.startsWith(FormulaListDataValid.CASECADE_TAG)){
-            String fieldName = value.replace(FormulaListDataValid.CASECADE_TAG,"");
+        if (value.startsWith(FormulaListDataValid.CASCADE_TAG)){
+            String fieldName = value.replace(FormulaListDataValid.CASCADE_TAG,"");
             List<ColumnDefinition> columnDefinitions = tabulationDefinition.getColumnDefinitions();
             ColumnDefinition columnDefinition = columnDefinitions.stream().filter(e -> e.getFieldName().equalsIgnoreCase(fieldName)).findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("No column field named" + fieldName + " was found, cannot set formulaList(casecade)"));
@@ -46,7 +46,7 @@ public class FormulaListDataValidationBuilder extends AbstractDvBuilder<FormulaL
             String casecadeExpression = getCasecadeExpression(columnIndex);
             dvConstraint = dvHelper.createFormulaListConstraint(casecadeExpression);
         } else {
-            dvConstraint = dvHelper.createFormulaListConstraint(FormulaListDataValid.NAME_PRIFIIX + formulaListDataValid.value());
+            dvConstraint = dvHelper.createFormulaListConstraint(FormulaListDataValid.NAME_PREFIX + formulaListDataValid.value());
         }
         return dvConstraint;
     }
@@ -56,7 +56,7 @@ public class FormulaListDataValidationBuilder extends AbstractDvBuilder<FormulaL
         StringBuilder formulaListExpressionBuilder = new StringBuilder();
         formulaListExpressionBuilder
                 .append("INDIRECT(CONCATENATE(\"")
-                .append(FormulaListDataValid.NAME_PRIFIIX)
+                .append(FormulaListDataValid.NAME_PREFIX)
                 .append("\",INDIRECT(CONCATENATE(\"")
                 .append("$")
                 .append(columnEnIndex)
