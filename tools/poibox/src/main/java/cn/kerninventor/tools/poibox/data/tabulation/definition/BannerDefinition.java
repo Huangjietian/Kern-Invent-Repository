@@ -3,7 +3,6 @@ package cn.kerninventor.tools.poibox.data.tabulation.definition;
 import cn.kerninventor.tools.poibox.data.tabulation.annotations.ExcelBanner;
 import cn.kerninventor.tools.poibox.data.tabulation.annotations.Range;
 import cn.kerninventor.tools.poibox.style.Styler;
-import com.sun.istack.internal.Nullable;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 
@@ -27,14 +26,14 @@ public class BannerDefinition {
 
     private Float rowHeight;
 
-    public BannerDefinition(CellStyle cellStyle, String value, @Nullable Float rowHeight, int firstRow, int lastRow, int firstCell, int lastCell) {
+    public BannerDefinition(CellStyle cellStyle, String value, Float rowHeight, int firstRow, int lastRow, int firstCell, int lastCell) {
         this.cellStyle = cellStyle;
         this.value = value;
         this.rowHeight = rowHeight;
         this.rangeAddress = new CellRangeAddress(firstRow, lastRow, firstCell, lastCell);
     }
 
-    public BannerDefinition(CellStyle cellStyle, String value, @Nullable Float rowHeight, CellRangeAddress rangeAddress) {
+    public BannerDefinition(CellStyle cellStyle, String value, Float rowHeight, CellRangeAddress rangeAddress) {
         this.cellStyle = cellStyle;
         this.rangeAddress = rangeAddress;
         this.rowHeight = rowHeight;
