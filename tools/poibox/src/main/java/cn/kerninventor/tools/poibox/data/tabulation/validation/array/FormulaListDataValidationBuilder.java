@@ -43,15 +43,15 @@ public class FormulaListDataValidationBuilder extends AbstractDvBuilder<FormulaL
             ColumnDefinition columnDefinition = columnDefinitions.stream().filter(e -> e.getFieldName().equalsIgnoreCase(fieldName)).findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("No column field named" + fieldName + " was found, cannot set formulaList(casecade)"));
             int columnIndex = columnDefinition.getColumnIndex() + 1;
-            String casecadeExpression = getCasecadeExpression(columnIndex);
-            dvConstraint = dvHelper.createFormulaListConstraint(casecadeExpression);
+            String cascadeExpression = getCascadeExpression(columnIndex);
+            dvConstraint = dvHelper.createFormulaListConstraint(cascadeExpression);
         } else {
             dvConstraint = dvHelper.createFormulaListConstraint(FormulaListDataValid.NAME_PREFIX + formulaListDataValid.value());
         }
         return dvConstraint;
     }
 
-    private String getCasecadeExpression(int columnIndex) {
+    private String getCascadeExpression(int columnIndex) {
         String columnEnIndex = BoxGadget.transferExcelColumnIndex(columnIndex);
         StringBuilder formulaListExpressionBuilder = new StringBuilder();
         formulaListExpressionBuilder
