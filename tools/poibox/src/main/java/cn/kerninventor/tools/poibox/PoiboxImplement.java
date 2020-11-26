@@ -91,7 +91,7 @@ public final class PoiboxImplement implements Poibox {
 
     @Override
     public void writeToLocal(String fileFullName) throws IOException {
-        ExcelDownloader.wirteToLocal(workbook, fileFullName);
+        ExcelDownloader.writeToLocal(workbook, fileFullName);
         flush();
     }
 

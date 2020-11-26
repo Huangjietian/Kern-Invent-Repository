@@ -29,7 +29,7 @@ public enum FileFormatType {
     EXE("4D5A9000", ".exe"),
     DLL("4D5A9000", ".dll"),
     TXT("75736167", ".txt"),
-    COSTOM("----------", "----");
+    CUSTOM("----------", "----");
     ;
 
     private String header;
@@ -49,7 +49,7 @@ public enum FileFormatType {
     }
 
     public FileFormatType setHeader(String header) {
-        if (!"COSTOM".equals(this.name())) {
+        if (!"CUSTOM".equals(this.name())) {
             throw new IllegalArgumentException("Modifying enumeration values is not supported");
         }
         this.header = header;
@@ -57,7 +57,7 @@ public enum FileFormatType {
     }
 
     public FileFormatType setSuffix(String suffix) {
-        if (!"COSTOM".equals(this.name())) {
+        if (!"CUSTOM".equals(this.name())) {
             throw new IllegalArgumentException("Modifying enumeration values is not supported");
         }
         this.suffix = suffix;

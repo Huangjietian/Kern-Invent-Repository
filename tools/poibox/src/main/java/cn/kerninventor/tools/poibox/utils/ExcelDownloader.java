@@ -51,7 +51,7 @@ public class ExcelDownloader {
      * @param fileFullName
      * @throws IOException
      */
-    public static void wirteToLocal(Workbook wb, String fileFullName) throws IOException {
+    public static void writeToLocal(Workbook wb, String fileFullName) throws IOException {
         if (BeanUtil.isEmpty(fileFullName)){
             throw new IllegalArgumentException("A filename must be specified for download!");
         }
