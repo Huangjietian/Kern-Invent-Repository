@@ -32,7 +32,7 @@ public @interface ExcelColumn {
      * 定义列排序
      * @return
      */
-    int columnSort() default -1;
+    int columnSort() default Integer.MAX_VALUE;
 
     /**
      * 定义列宽

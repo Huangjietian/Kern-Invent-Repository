@@ -24,15 +24,6 @@ License:
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -50,6 +41,7 @@ License:
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
             <version>9.0.29</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -70,5 +62,7 @@ License:
             <version>1.2.73</version>
         </dependency>
     </dependencies>
+
+
 
 </project>

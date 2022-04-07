@@ -22,8 +22,6 @@
         <module>file-format</module>
         <module>poibox</module>
         <module>data-structure</module>
-<!--        <module>spring-async-transaction-manager</module>-->
-        <module>spring-bean-validator</module>
         <module>spring-webmvc-configuration</module>
         <module>kern-romance</module>
         <module>common-utils</module>
