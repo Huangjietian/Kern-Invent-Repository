@@ -75,6 +75,6 @@ public class Athlete {
                 .withFormulaList("滑雪", Discipiline.getSkiingDiscipilines().stream().map(e -> e.getName()).collect(Collectors.toSet()))
                 .withFormulaList("滑冰", Discipiline.getSkatingDiscipilines().stream().map(e -> e.getName()).collect(Collectors.toSet()))
                 .writeTo("运动员");
-        poibox.writeToLocal("C:\\Users\\82576\\Desktop\\运动员信息");
+        poibox.writeToLocal("C:\\Users\\FF\\Desktop\\运动员信息");
     }
 }
