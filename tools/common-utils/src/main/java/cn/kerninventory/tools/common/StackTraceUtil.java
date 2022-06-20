@@ -72,13 +72,13 @@ public class StackTraceUtil {
      *     关于Fetcher的说明:
      *     为了防止不了解该固定形式的调用者传参错误导致可能出现的程序错误，以枚举类的形式进行参数的约束。<br/>
      *     有两个枚举值<br/>
-     *     Caller 表示调用类， 调用类的信息存储于StackTrace的第一个元素中。<br/>
-     *     Current 表示当前类， 当前类的信息存储于StackTrace的第二个元素中。
+     *     Caller 表示调用类， 调用类的信息存储于StackTrace的第3个元素中。<br/>
+     *     Current 表示当前类， 当前类的信息存储于StackTrace的第2个元素中。
      * </p>
      */
     public enum Fetcher {
 
-        Caller(1),
+        Caller(3),
         Current(2),
         ;
 
@@ -92,5 +92,7 @@ public class StackTraceUtil {
             return stacktraceIndex;
         }
     }
+
+
 
 }
